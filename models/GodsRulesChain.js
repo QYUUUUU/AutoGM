@@ -11,7 +11,7 @@ import { CallbackManagerForChainRun } from "langchain/callbacks";
 import { BaseChain } from "langchain/chains";
 import { BaseMemory } from "langchain/memory";
 
-export class GODSLoreChain extends BaseChain {
+export class GodsRulesChain extends BaseChain {
   _chainType() {
     throw new Error("Method not implemented.");
   }
@@ -50,7 +50,7 @@ export class GODSLoreChain extends BaseChain {
       context += document["pageContent"];
     });
 
-    var QA_PROMPT = `Les informations de contexte sont ci-dessous. 
+    var QA_PROMPT = `Tu es un assistant des règles du jeu GODS. Les informations de contexte sont ci-dessous. 
       ---------------------
       ${context}
       ---------------------
@@ -66,7 +66,7 @@ export class GODSLoreChain extends BaseChain {
 
 async function getVectorStore() {
   // Load the vector store from the same directory
-  const directory = "data/VectorStores/rules/";
+  const directory = "data/VectorStores/pdf/";
   const loadedVectorStore = await HNSWLib.load(
     directory,
     new OpenAIEmbeddings({
