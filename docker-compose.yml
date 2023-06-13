@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  web:
+    image: gitlab.alienor.net:5050/dev-interne/chatvulcain
+    build: .docker
+    volumes: 
+      - .:/app/
+    ports:
+      - 3000:3000
+    command: ["yarn", "--cwd=/app", "start"]  
