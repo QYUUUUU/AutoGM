@@ -20,6 +20,8 @@ import { GodsLoreTool } from "../tools/GodsLoreTool.js";
 
 import { GodsRulesTool } from "../tools/GodsRulesTool.js";
 
+import { GodsEncounterTool } from "../tools/GodsEncounterTool.js";
+
 import { RandomNumberGeneratorTool } from "../tools/RandomNumberGeneratorTool.js";
 
 const PREFIX = `You try to answer the questions as best as you can. You are an assistant for the tabletop rpg game named GODS. You have access to the following tools:`;
@@ -116,6 +118,7 @@ const run = async (question) => {
     // new Calculator(),
     new GodsLoreTool(),
     new GodsRulesTool(),
+    new GodsEncounterTool(),
     new RandomNumberGeneratorTool(),
   ];
 
