@@ -1,0 +1,27 @@
+{% extends '/layouts/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        Assistant GODS
+    </div>
+    
+    <div class="card-body chat-body">
+    </div>
+    <div id="error" class="error"></div>
+    <div class="card-footer">
+        <div id="prompt-form">
+            <div class="row align-items-center">
+                <div class="d-flex justify-content-between">
+                    <textarea id="prompt-field" class="form-control" style="flex:1;" placeholder="Écrire un message"></textarea>
+                    <button id="send" class="send-button"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
