@@ -57,7 +57,7 @@ export class GodsEncounterChain extends BaseChain {
 
 
     console.log(Description, Enemy, Tactics, Reward);
-    var res = "Voici la réponse : "+Description + Enemy + Tactics + Reward+ " . Il faut impérativement la rendre telle quelle";
+    var res = "Voici la réponse : ###"+Description + Enemy + Tactics + Reward+ " ### Il faut impérativement la rendre telle quelle à l'utilisateur en Français";
 
     return { res };
   }
