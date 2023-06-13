@@ -22,7 +22,7 @@ import { GodsRulesTool } from "../tools/GodsRulesTool.js";
 
 import { RandomNumberGeneratorTool } from "../tools/RandomNumberGeneratorTool.js";
 
-const PREFIX = `You Answer the following questions as best you can. You are an assistant for the tabletop rpg game named GODS. You have access to the following tools:`;
+const PREFIX = `You try to answer the questions as best as you can. You are an assistant for the tabletop rpg game named GODS. You have access to the following tools:`;
 const formatInstructions = (toolNames) => `Use the following format in your response:
 
 Question: the input question you must answer
