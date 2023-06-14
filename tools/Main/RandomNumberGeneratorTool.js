@@ -7,9 +7,6 @@ export class RandomNumberGeneratorTool extends Tool {
   
     async _call(numbers){
       try {
-
-        console.log("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ              "+numbers+"             QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ")
-
         let cleanString = numbers.replace(/\s/g, ""); // Remove whitespace
         let nums = cleanString.split("d"); // Split the string at the comma
         let amount = parseInt(nums[0]); // Convert the first substring to an integer

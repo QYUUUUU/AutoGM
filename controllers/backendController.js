@@ -1,11 +1,7 @@
-import { OpenAI } from "langchain/llms/openai";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { DocxLoader } from "langchain/document_loaders/fs/docx";
-import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { Document } from "langchain/document";
 
 export async function getEmbedding(req, res) {
     try {
