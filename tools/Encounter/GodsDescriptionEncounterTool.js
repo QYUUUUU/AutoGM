@@ -1,15 +1,15 @@
 import { Tool } from "langchain/tools";
-import { GodsRulesChain } from "../models/GodsRulesChain.js";
+import { GodsDescriptionEncounterChain } from "../../models/Encounter/GodsDescriptionEncounterChain.js";
 
-export class GodsRulesTool extends Tool {
-    name = "gods-rules";
+export class GodsDescriptionEncounterTool extends Tool {
+    name = "encounter-description";
   
-    description = "This tool answer questions about the Rules of GODS a Tabletop RPG Game.";
+    description = "This tool uses an environment string to create a description for an encounter";
   
     async _call(arg){
       try {
         // Perform your custom tool logic here with the input text
-        var chain = await new GodsRulesChain().call(arg);
+        var chain = await new GodsDescriptionEncounterChain().call(arg);
         // and return the output text
         return `Réponse: ${chain.res}`;
       } catch (error) {
@@ -18,3 +18,4 @@ export class GodsRulesTool extends Tool {
       }
     }
   }
+  

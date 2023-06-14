@@ -1,15 +1,5 @@
 import { OpenAI } from "langchain/llms/openai";
-import { HNSWLib } from "langchain/vectorstores/hnswlib";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { DocxLoader } from "langchain/document_loaders/fs/docx";
-import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { Document } from "langchain/document";
-
-import { CallbackManagerForChainRun } from "langchain/callbacks";
 import { BaseChain } from "langchain/chains";
-import { BaseMemory } from "langchain/memory";
 
 export class GodsEncounterChain extends BaseChain {
   _chainType() {
@@ -27,7 +17,7 @@ export class GodsEncounterChain extends BaseChain {
 
     const model = new OpenAI({
       temperature: 1,
-      modelName: "gpt-3.5-turbo",
+      modelName: "gpt-3.5-turbo-16k-0613",
       verbose: false,
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
@@ -37,9 +27,6 @@ export class GodsEncounterChain extends BaseChain {
       console.log(inputs[key]);
       sanitizedQuestion += inputs[key];
     }
-
-
-    console.log(sanitizedQuestion)
 
     var loreGods = "GODS is a dark fantasy role-playing game where players embody heroes in the Savage Lands, a brutal and forsaken continent. They must cooperate to survive in this world of adventure, where magic is scarce and rare, reminiscent of the medieval era. It's a realm of epic and lethal battles, where exploration and the struggle for survival take precedence.   ";
 
@@ -57,7 +44,7 @@ export class GodsEncounterChain extends BaseChain {
 
 
     console.log(Description, Enemy, Tactics, Reward);
-    var res = "Voici la réponse : ###"+Description + Enemy + Tactics + Reward+ " ### Il faut impérativement la rendre telle quelle à l'utilisateur en Français";
+    var res = "Voici la réponse : ###"+Description + Enemy + Tactics + Reward+ " ### Il faut impérativement la rendre mot pour mot à l'utilisateur traduis en Français";
 
     return { res };
   }

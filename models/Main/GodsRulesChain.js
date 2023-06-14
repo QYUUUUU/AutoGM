@@ -1,17 +1,9 @@
 import { OpenAI } from "langchain/llms/openai";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { DocxLoader } from "langchain/document_loaders/fs/docx";
-import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { Document } from "langchain/document";
-
-import { CallbackManagerForChainRun } from "langchain/callbacks";
 import { BaseChain } from "langchain/chains";
-import { BaseMemory } from "langchain/memory";
 
-export class GodsLoreChain extends BaseChain {
+export class GodsRulesChain extends BaseChain {
   _chainType() {
     throw new Error("Method not implemented.");
   }
@@ -26,8 +18,8 @@ export class GodsLoreChain extends BaseChain {
 
     const model = new OpenAI({
       temperature: 0,
-      maxTokens: 300,
-      modelName: "gpt-3.5-turbo",
+      maxTokens: 800,
+      modelName: "gpt-3.5-turbo-16k-0613",
       verbose: false,
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
@@ -50,7 +42,7 @@ export class GodsLoreChain extends BaseChain {
       context += document["pageContent"];
     });
 
-    var QA_PROMPT = `Les informations de contexte sont ci-dessous. 
+    var QA_PROMPT = `Tu es un assistant des règles du jeu GODS. Les informations de contexte sont ci-dessous. 
       ---------------------
       ${context}
       ---------------------
