@@ -1,5 +1,5 @@
 import { Tool } from "langchain/tools";
-import { GodsLoreChain } from "../../models/Main/GodsLoreChain.js";
+import { GodsLoreChain } from "../../chains/Main/GodsLoreChain.js";
 
 export class GodsLoreTool extends Tool {
     name = "gods-lore";
