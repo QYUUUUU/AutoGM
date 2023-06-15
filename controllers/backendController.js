@@ -4,6 +4,7 @@ import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 export async function getEmbedding(req, res) {
+  if (req.session.userId != "undefined" && req.session.userId != ""  && req.session.userId != null){
     try {
 
         await embedPDF();
@@ -16,7 +17,10 @@ export async function getEmbedding(req, res) {
       console.error(error);
       res.status(500).send("Error processing request");
     }
+  }else{
+    res.render('../views/login.html.twig');
   }
+}
 
   async function embedPDF(){
     const loaderpdf = new PDFLoader("Documentation/docJDR.pdf");

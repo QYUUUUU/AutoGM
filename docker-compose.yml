@@ -2,7 +2,6 @@ version: "3.9"
 
 services:
   web:
-    image: gitlab.alienor.net:5050/dev-interne/chatvulcain
     build: .docker
     volumes: 
       - .:/app/
@@ -10,14 +9,47 @@ services:
       - 3000:3000
     command: ["yarn", "--cwd=/app", "start"]  
 
-  db:
-    image: postgres
-    environment:
-      POSTGRES_USER: your_username
-      POSTGRES_PASSWORD: your_password
-      POSTGRES_DB: your_database
+  mariadb:
+    image: mariadb:latest  
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - ../.data_mysql:/var/lib/mysql
+    command:
+      - "--default-authentication-plugin=mysql_native_password"
+      - "--lower_case_table_names=1"       
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: anetdb
+      MYSQL_USER: userdb
+      MYSQL_PASSWORD: passdb
+    ports:
+      - "3306:3306"
+    labels:
+      com.symfony.server.service-prefix: 'DATABASE'
 
-volumes:
-  db_data:
+# ~~~~~~ PHPMYADMIN ~~~~~~
+ 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: userdb
+      PMA_PASSWORD: passdb
+    ports:
+      - "8081:80"
+    links:
+      - mariadb
+
+# ~~~~~~ MAILDEV ~~~~~~
+
+  maildev:
+    image: maildev/maildev
+    ports:
+      - "1080:80"
+      - "1025:25"
+
+# ~~~~~~ REDIS ~~~~~~
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
