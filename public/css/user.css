@@ -166,3 +166,9 @@ tr > td{
   padding: 7px;
   border-radius: 4px;
 }
+
+@media (max-width: 1000px) {
+  .navbar-nav.flex-row .nav-item:not(:last-child) {
+      margin-right: 10px;
+  }
+}
