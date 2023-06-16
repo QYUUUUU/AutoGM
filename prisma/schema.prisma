@@ -22,8 +22,6 @@ model User {
     service    String?
     enabled    Boolean  @default(false)
     role       String?  @default("user")
-
-    @@map("user")
 }
 
 model Session {
@@ -31,6 +29,4 @@ model Session {
     sid       String   @unique
     data      String
     expiresAt DateTime
-
-    @@map("session")
 }
