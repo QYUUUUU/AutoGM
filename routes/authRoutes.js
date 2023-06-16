@@ -24,7 +24,11 @@ router.post('/register', async (req, res) => {
       },
     });
 
-    res.json({ message: 'User registered successfully' });
+    // Create a session for the user
+    req.session.userId = user.id;
+
+    res.redirect('/');
+
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ error: 'Failed to register user' });
