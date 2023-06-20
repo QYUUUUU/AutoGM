@@ -5,9 +5,16 @@
 {% endblock %}
 
 {% block body %}
+<script type="module" src="js/user.js"></script>
+
 <div class="card">
     <div class="card-header">
-        Assistant GODS
+        Assistant GODS - Selected Character : 
+        <select id="favoriteCharacter" class="select">
+{% for character in characters %}
+        <option value="{{ character.id_Character }}">{{ character.nom }}</h2>
+{% endfor %}
+</select>
     </div>
     
     <div class="card-body chat-body">
