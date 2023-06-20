@@ -1,10 +1,10 @@
 import { Tool } from "langchain/tools";
 import { GodsDiceChain } from "../../chains/Main/GodsDiceChain.js";
 
-export class GodsLoreTool extends Tool {
+export class GodsDiceTool extends Tool {
     name = "gods-throws";
   
-    description = "This tool is used to generate throws from characteristics and skills of the user (ex :précision, lance)";
+    description = "This tool is used to help know from a characteristic and a skill of the user and a modifier (ex :précision, lance, default is 0) the number of dices to throw for the user";
   
     async _call(arg){
       try {
