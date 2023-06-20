@@ -22,9 +22,13 @@ import { GodsRulesTool } from "../tools/Main/GodsRulesTool.js";
 
 import { GodsEncounterTool } from "../tools/Main/GodsEncounterTool.js";
 
+import { GodsDiceTool } from "../tools/Main/GodsDiceTool.js";
+
 import { RandomNumberGeneratorTool } from "../tools/Main/RandomNumberGeneratorTool.js";
 
-const PREFIX = `You try to answer the questions if you can, if you can't, make it your final answer. You are an assistant for the tabletop rpg game named GODS. You have access to the following tools:`;
+import { setUserId } from "../controllers/globals.js";
+
+const PREFIX = `You try to answer the questions if you can, if you can't, make it your final answer. You are an assistant for the tabletop rpg game named GODS. If you decide to throw dices give the individual dices as result. You have access to the following tools:`;
 const formatInstructions = (toolNames) => `Use the following format in your response:
 
 Question: the input question you must answer
@@ -107,7 +111,11 @@ class CustomOutputParser extends AgentActionOutputParser {
   }
 }
 
-export const startMain = async (question) => {
+export const startMain = async (question, userId) => {
+  
+  // Set the userId value
+  setUserId(userId);
+
   const model = new ChatOpenAI({ temperature: 0, verbose: true, modelName: "gpt-3.5-turbo-16k-0613" });
   const tools = [
     // new SerpAPI(process.env.SERPAPI_API_KEY, {
@@ -119,6 +127,7 @@ export const startMain = async (question) => {
     new GodsLoreTool(),
     new GodsRulesTool(),
     new GodsEncounterTool(),
+    new GodsDiceTool(),
     new RandomNumberGeneratorTool(),
   ];
 

@@ -253,8 +253,28 @@ router.get('/Character/Favorite/set/:id_Character', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
-  } finally {
-    await prisma.$disconnect();
+  }
+});
+
+router.get('/Favorite/Character/get', async (req, res) => {
+  const id_User = req.session.userId; // Assuming you have the user ID stored in req.session.userId
+
+  try {
+    const prisma = new PrismaClient();
+
+    const favoriteCharacter = await prisma.favoriteCharacter.findFirst({
+      where: { userId: id_User },
+      include: { character: true },
+    });
+
+    if (!favoriteCharacter) {
+      return res.status(404).json({ error: 'Favorite character not found for the user' });
+    }
+
+    res.json(favoriteCharacter.character);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
