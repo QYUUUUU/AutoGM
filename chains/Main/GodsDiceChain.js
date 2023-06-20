@@ -16,24 +16,28 @@ export class GodsDiceChain extends BaseChain {
 
   async _call(inputs) {
 
+    var userId = getUserId();
+
+    console.log(userId);
+
     const model = new OpenAI({
       temperature: 0,
       modelName: "gpt-3.5-turbo-16k-0613",
       verbose: false,
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
-    console.log(inputs)
 
     var data = {}
     try {
-      const response = await fetch(`http://localhost:3000/Favorite/Character/get`);
+      const response = await fetch(`http://localhost:3000/Favorite/Character/get/${userId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       data = await response.json();
       console.log(data)
     } catch (error) {
-      console.error(error);
+      console.error(error)
+      return { res:"Dire à l'utilisateur qu'il n'a pas sélectionné de personnage."}
     }
 
 
@@ -97,22 +101,22 @@ export class GodsDiceChain extends BaseChain {
       return await model.call(QA_PROMPT);
     }
     var [diceAmount, malusAmount] = await Promise.all([getDiceAmount(),getMalusAmount()]);
-    console.log("Dice amount :"+diceAmount+"Malus Amount"+ malusAmount);
 
     diceAmount = extractValuesFromString(diceAmount);
-    console.log("Dice amount splitted :"+diceAmount);
-    console.log("Dice amount modifieur splitted :"+diceAmount.modifieur);
-    console.log("Dice amount caracteristique splitted :"+diceAmount.caracteristique);
     malusAmount = extractValuesFromString(malusAmount);
 
     var { lancers, relances } = calculerLancersEtRelances(diceAmount.competence);
     var totalDice = diceAmount.modifieur + diceAmount.caracteristique + lancers + malusAmount.dice + malusAmount.throw;
-    
+    console.log(totalDice)
     if (totalDice <1){
       return { res:"Jet impossible, il y a trop de malus." };
+    }else if (!Number.isInteger(totalDice)) {
+      return { res:"Les données du personnage sont probablement mal remplies. Vérifiez les caractéristiques, compétences, malus et blessures de votre personnage." };
+    } else {
+      return { res:"Les dés à lancer "+totalDice+"d10 et "+relances+"d10 à relancer." };
     }
 
-    return { res:"Les dés à lancer "+totalDice+"d10 et "+relances+"d10 à relancer." };
+    
   }
 }
 
@@ -128,9 +132,6 @@ function extractValuesFromString(str) {
 
   pairs.forEach(pair => {
     const [key, value] = pair.split(':');
-
-    console.log("PAIRE")
-    console.log(pair, key, value)
     const cleanedKey = key.trim().replace(/['"]/g, ''); // Supprimer les guillemets simples ou doubles des clés
     const cleanedValue = parseInt(value.trim());
     values[cleanedKey] = cleanedValue;
