@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   const id_User = req.session.userId; // Assuming you have the user ID stored in req.session.userId
-
+  console.log(id_User);
   try {
     const prisma = new PrismaClient();
 
@@ -15,10 +15,8 @@ router.get('/', async (req, res) => {
     });
 
     if (!characters || characters.length === 0) {
-      return res.status(404).json({ error: 'No characters found for the user' });
-    }
-
-    if (id_User !== "undefined" && id_User !== "" && id_User !== null) {
+      res.redirect('/Character/create/new/');
+    } else if (id_User !== "undefined" && id_User !== "" && id_User !== null) {
       const favoriteCharacter = await prisma.favoriteCharacter.findFirst({
         where: { userId: id_User },
         include: { character: true },
@@ -150,25 +148,35 @@ router.put('/Character/:id/:field/:value', async (req, res) => {
 
 
 router.get('/Character/create/new/', async (req, res) => {
-  const id_User = req.session.userId;
-  const { userId } = req.session; // Assuming you have the user ID stored in req.session.userId
+  const userId = req.session.userId;
   const prisma = new PrismaClient();
 
   try {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const user = await prisma.user.findUnique({ where: { id: userId }, include: { characters: true } });
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
     // Check if the connected user is the same as the user creating the character or has the role "admin"
-    if (user.id === id_User || req.session.role === 'admin') {
+    if (user.id === userId || req.session.role === 'admin') {
+      const isUserFirstCharacter = user.characters.length === 0;
+
       const character = await prisma.character.create({
         data: {
           User: { connect: { id: userId } },
           // Add other properties for the character here
         },
       });
+
+      if (isUserFirstCharacter) {
+        await prisma.favoriteCharacter.create({
+          data: {
+            user: { connect: { id: userId } },
+            character: { connect: { id_Character: character.id_Character } },
+          },
+        });
+      }
 
       res.redirect('/Characters');
     } else {
@@ -256,9 +264,10 @@ router.get('/Character/Favorite/set/:id_Character', async (req, res) => {
   }
 });
 
-router.get('/Favorite/Character/get', async (req, res) => {
-  const id_User = req.session.userId; // Assuming you have the user ID stored in req.session.userId
-
+router.get('/Favorite/Character/get/:userId', async (req, res) => {
+  var { userId } = req.params;
+  var id_User = parseInt(userId);
+  console.log(id_User)
   try {
     const prisma = new PrismaClient();
 
@@ -268,7 +277,7 @@ router.get('/Favorite/Character/get', async (req, res) => {
     });
 
     if (!favoriteCharacter) {
-      return res.status(404).json({ error: 'Favorite character not found for the user' });
+      return res.status(404).json({ error: 'Favorite character not selected' });
     }
 
     res.json(favoriteCharacter.character);
