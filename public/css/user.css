@@ -14,7 +14,7 @@ footer {
   text-align: center;
 }
 
-.container.mt-3.px-3{
+.container-fluid{
   height: 100%;
 }
 
@@ -171,4 +171,27 @@ tr > td{
   .navbar-nav.flex-row .nav-item:not(:last-child) {
       margin-right: 10px;
   }
+}
+
+.custom-container {
+  max-width: 90%; /* Default maximum width for monitor screens */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 767.98px) {
+  /* Media query for mobile devices */
+  .custom-container {
+    max-width: 100%; /* Maximum width for mobile devices */
+  }
+}
+
+.select{
+  max-width: 200px;
+  width:fit-content;
+  border-radius: 4px;
+  border: none;
+  background-color: #343a40;
+  color: white;
+  padding: 3px;
 }

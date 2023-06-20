@@ -13,15 +13,17 @@ datasource db {
 }
 
 model User {
-    id         Int      @id @default(autoincrement())
-    created_at DateTime @default(now())
-    firstname  String?
-    lastname   String?
-    email      String   @unique
-    password   String
-    service    String?
-    enabled    Boolean  @default(false)
-    role       String?  @default("user")
+    id                Int                 @id @default(autoincrement())
+    created_at        DateTime            @default(now())
+    firstname         String?
+    lastname          String?
+    email             String              @unique
+    password          String
+    service           String?
+    enabled           Boolean             @default(false)
+    role              String?             @default("user")
+    characters        Character[]
+    FavoriteCharacter FavoriteCharacter[]
 }
 
 model Session {
@@ -29,4 +31,85 @@ model Session {
     sid       String   @unique
     data      String
     expiresAt DateTime
+}
+
+model Character {
+    id_Character        Int                 @id @default(autoincrement())
+    nom                 String?
+    age                 String?
+    genre               String?
+    instinct            String?
+    signeastro          String?
+    origine             String?
+    reputation          String?
+    depensee            Int?
+    totale              Int?
+    puissance           Int?
+    resistance          Int?
+    precicion           Int?
+    reflexes            Int?
+    connaissance        Int?
+    perception          Int?
+    volonte             Int?
+    arts                Int?
+    cite                Int?
+    civilisations       Int?
+    relationnel         Int?
+    soins               Int?
+    animalisme          Int?
+    faune               Int?
+    montures            Int?
+    pistage             Int?
+    territoire          Int?
+    adresse             Int?
+    armurerie           Int?
+    artisanat           Int?
+    mecanisme           Int?
+    runes               Int?
+    athletisme          Int?
+    discretion          Int?
+    flore               Int?
+    vigilance           Int?
+    voyage              Int?
+    bouclier            Int?
+    cac                 Int?
+    lancer              Int?
+    melee               Int?
+    tir                 Int?
+    eclats              Int?
+    lunes               Int?
+    mythes              Int?
+    pantheons           Int?
+    rituels             Int?
+    malusphysique       Int?
+    malusmanuel         Int?
+    malussocial         Int?
+    malushumain         Int?
+    malusanimal         Int?
+    malusoutils         Int?
+    malusterres         Int?
+    malusarme           Int?
+    malusinconnu        Int?
+    malusmental         Int?
+    empathie            Int?
+    maxblessurelegere   Int?
+    blessurelegere      Int?
+    maxblessuregrave    Int?
+    blessuregrave       Int?
+    maxblessuremortelle Int?
+    blessuremortelle    Int?
+    maxeffort           Int?
+    effort              Int?
+    maxsangfroid        Int?
+    sangfroid           Int?
+    User                User?               @relation(fields: [userId], references: [id])
+    userId              Int?
+    FavoriteCharacter   FavoriteCharacter[]
+}
+
+model FavoriteCharacter {
+    user        User      @relation(fields: [userId], references: [id])
+    userId      Int       @unique
+    character   Character @relation(fields: [characterId], references: [id_Character])
+    characterId Int
 }

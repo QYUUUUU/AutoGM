@@ -187,3 +187,21 @@ function getCurrentTime() {
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+
+
+// Favorite Character Handling
+
+const favoriteSelect = document.getElementById("favoriteCharacter");
+
+favoriteSelect.addEventListener("change", async ()=>{
+  const characterId = favoriteSelect.value;
+  try {
+    const response = await fetch(`/Character/Favorite/set/${characterId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});

@@ -1,0 +1,437 @@
+html{
+    overflow-x: hidden;
+  }
+  
+  .card-sheet {
+    position: relative;
+    height: 1700px;
+    width: 1200px;
+    background-image: url("/images/yes.png");
+    background-repeat: no-repeat;
+  }
+  
+  .card-body-sheet {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1700px;
+    width: 1200px;
+    background-image: url("/images/background.png");
+    background-repeat: no-repeat;
+    z-index: 1; /* Set a higher z-index to make it overlap */
+  }
+  
+  
+  .nomage {
+    margin-top: 200px;
+  }
+  #nom {
+    height: 1.5rem;
+    width: 150px;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  #age {
+    text-align: right;
+    height: 1.5rem;
+    width: 150px;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  .age {
+    justify-content: right;
+    margin-left: 300px;
+  }
+  
+  #genre {
+    height: 1.5rem;
+    width: 235px;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  #instinct {
+    text-align: right;
+    height: 1.5rem;
+    width: 215x;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  .instinct {
+    justify-content: right;
+    margin-left: -95px;
+  }
+  
+  #signeastro {
+    height: 1.5rem;
+    width: 253px;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  #origine {
+    text-align: right;
+    height: 1.5rem;
+    width: 320px;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  .origine {
+    justify-content: right;
+    margin-left: -295px;
+  }
+  
+  .reputexp {
+    margin-top: 20px;
+  }
+  
+  .experience {
+    justify-content: right;
+    margin-left: -50px;
+  }
+  .exp {
+    justify-content: right;
+    margin-left: -210px;
+  }
+  
+  #depensee {
+    height: 1.5rem;
+    width: 40px;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  #totale {
+    height: 1.5rem;
+    width: 40px;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  .pointsexp {
+    margin-top: -20px;
+  }
+  
+  .caracteristiques {
+    margin-top: 40px;
+  }
+  
+  .losange {
+    height: 20px;
+    width: 20px;
+  }
+  .circle {
+    height: 20px;
+    width: 20px;
+  }
+  .losangecarac{
+    height: 17px;
+    width: 17px;
+  }
+  .form-control {
+    border-radius: unset;
+    height: 1.5rem;
+    width: 40px;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  .malus {
+    height: 1.5rem;
+    width: 40px;
+    background-color: unset;
+    border: unset;
+    border-bottom: solid 1px black;
+  }
+  
+  .infosymbole {
+    margin-top: 95px;
+    margin-right: -60px;
+  }
+  .humainanimal {
+    margin-top: -45px;
+  }
+  
+  .animal {
+    margin-left: 100px;
+  }
+  .arts {
+    margin-top: 5px;
+  }
+  .lilhigher {
+    margin-top: -7px;
+  }
+  
+  .modal-body{
+    border: unset;
+    padding-left:80px;
+  }
+  .modal-footer{
+    border: unset;
+  }
+  .modal-header{
+    border: unset;
+  }
+  .modal-dialog{
+    max-width: 983px;
+  }
+  
+  .bleres{
+    margin-top: 7px;
+  }
+  .reserves{
+    margin-left: 150px;
+  }
+  
+  .blessurestype{
+    margin-right: -200px;
+  }
+  
+  .blessurestypebless{
+    margin-right: -170px;
+  }
+  
+  .totheright{
+    margin-left: 30px;
+  }
+  
+  #original-content {
+    position: relative;
+    top: 50px;
+    outline: none;
+    background-color: none;
+  }
+  
+  .ui-controls {
+    position: absolute;
+    z-index: 1;
+    background-color: none;
+  }
+  
+  canvas {
+    outline: none;
+    position: relative;
+    z-index: 0;
+    background-color: none;
+  }
+  
+  .button {
+    background-size: cover;
+    color: #000000;
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    border: none;
+    padding: 10px 20px;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    font-family: 'Marker Felt', cursive;
+  }
+  
+  .button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+  }
+  
+  .button:hover:before {
+    opacity: 0.7;
+  }
+  
+  #blessurelegere{
+    max-width: 143px;
+  }
+  
+  #blessuregrave{
+    max-width: 143px;
+  }
+  
+  #blessuremortelle{
+    max-width: 143px;
+  }
+  
+  .circleblessure {
+    height: 20px;
+    width: 20px;
+    position: relative;
+    z-index: 99;
+  }
+  
+  .circlereserve {
+    height: 20px;
+    width: 20px;
+    position: relative;
+    z-index: 99;
+  }
+  
+  
+  .dual-button {
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 0;
+    width: 10px;
+    height: 10px;
+    font-size: 10px;
+  }
+  
+  
+  .left-button:hover {
+    background-color: #aaa;
+  }
+  
+  .right-button:hover {
+    background-color: #aaa;
+  }
+  
+  .blessurestype {
+    text-align: center;
+  }
+  
+  .increments{
+    width: 10px;
+    height: 10px;
+    font-size: 10px;
+    padding: none;
+    position: relative;
+    z-index: 99;
+  }
+  
+  .incrementsreserve{
+    width: 10px;
+    height: 10px;
+    font-size: 10px;
+    padding: none;
+    position: relative;
+    z-index: 99;
+  }
+  
+  .alilhigher{
+    margin-top: -10px;
+  }
+  
+  #original-content > div.container-fluid > div > div > div.card > div > div:nth-child(36) > div.col-6.blessurestype.row.justify-content-center > div:nth-child(3){
+    min-width: 170px;
+  }
+  
+  .rightside {
+    position: absolute;
+    top: -50px;
+    left: 0;
+    bottom: 0;
+    width: 30px; /* adjust this to your desired width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #aaa;
+    transition: all 0.5s ease-in-out;
+    z-index: 9999;
+  }
+  
+  #overlay {
+    position: fixed;
+    top: 50px;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-image: url(".images/backgroundArt.png");
+    z-index: 99;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  #overlay.show {
+    left: 0;
+  }
+  
+  .rightside.show {
+    left: calc(100% - 20px);
+  }
+  
+  .rightside > .button {
+    border-radius: 30px 30px 30px 30px;
+    height: 100px;
+    background-color: #aaa;
+    outline: none;
+    border: 1px solid #aaa;
+  }
+  
+  .redcross{
+    position: absolute;
+    height: 35px;
+    width: 35px;
+    z-index: 99;
+  }
+  
+  #modifierDices{
+    width: 50px;
+  }
+  
+  .content .modal-content{
+    background-color: none;
+  }
+  .rollingbox {
+    background-color: #f2f2f2;
+    flex-grow: 1;
+    height: fit-content;
+    max-height: 70vh;
+    max-width: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .throw-box {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 300ms ease;
+  }
+  
+  .throw-box.pop {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .scrolling{
+    overflow: hidden;
+  }
+  
+  .diceResult{
+    width: 40px;
+    height: 40px;
+  }
+  
+  .connexioninput{
+    width: 200px;
+    justify-content: center;
+    display:inline;
+    border: unset;
+    border-bottom: solid 1px white;
+    outline: none;
+    background-color: #ffffff;
+  }
+  
+  .cardconnexion{
+    width: 400px;
+    height: 500px;
+    text-align: center;
+    background-color: #212529;
+    border-radius: 10px;
+    color: #ffffff;
+  }
