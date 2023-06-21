@@ -195,3 +195,12 @@ tr > td{
   color: white;
   padding: 3px;
 }
+
+
+#prompt-field{
+  width: 100%;
+}
+
+.textarea-chat{
+  width: 100%;
+}
