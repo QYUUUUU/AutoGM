@@ -107,7 +107,6 @@ export class GodsDiceChain extends BaseChain {
 
     var { lancers, relances } = calculerLancersEtRelances(diceAmount.competence);
     var totalDice = diceAmount.modifieur + diceAmount.caracteristique + lancers + malusAmount.dice + malusAmount.throw;
-    console.log(totalDice)
     if (totalDice <1){
       return { res:"Jet impossible, il y a trop de malus." };
     }else if (!Number.isInteger(totalDice)) {
