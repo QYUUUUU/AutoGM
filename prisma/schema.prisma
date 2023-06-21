@@ -41,67 +41,67 @@ model Character {
     instinct            String?
     signeastro          String?
     origine             String?
-    reputation          String?
-    depensee            Int?
-    totale              Int?
-    puissance           Int?
-    resistance          Int?
-    precicion           Int?
-    reflexes            Int?
-    connaissance        Int?
-    perception          Int?
-    volonte             Int?
-    arts                Int?
-    cite                Int?
-    civilisations       Int?
-    relationnel         Int?
-    soins               Int?
-    animalisme          Int?
-    faune               Int?
-    montures            Int?
-    pistage             Int?
-    territoire          Int?
-    adresse             Int?
-    armurerie           Int?
-    artisanat           Int?
-    mecanisme           Int?
-    runes               Int?
-    athletisme          Int?
-    discretion          Int?
-    flore               Int?
-    vigilance           Int?
-    voyage              Int?
-    bouclier            Int?
-    cac                 Int?
-    lancer              Int?
-    melee               Int?
-    tir                 Int?
-    eclats              Int?
-    lunes               Int?
-    mythes              Int?
-    pantheons           Int?
-    rituels             Int?
-    malusphysique       Int?
-    malusmanuel         Int?
-    malussocial         Int?
-    malushumain         Int?
-    malusanimal         Int?
-    malusoutils         Int?
-    malusterres         Int?
-    malusarme           Int?
-    malusinconnu        Int?
-    malusmental         Int?
-    empathie            Int?
-    maxblessurelegere   Int?
-    blessurelegere      Int?
-    maxblessuregrave    Int?
-    blessuregrave       Int?
-    maxblessuremortelle Int?
-    blessuremortelle    Int?
-    maxeffort           Int?
-    effort              Int?
-    maxsangfroid        Int?
-    sangfroid           Int?
+    reputation          String?             @default("1")
+    depensee            Int?                @default(0)
+    totale              Int?                @default(0)
+    puissance           Int?                @default(1)
+    resistance          Int?                @default(1)
+    precicion           Int?                @default(1)
+    reflexes            Int?                @default(1)
+    connaissance        Int?                @default(1)
+    perception          Int?                @default(1)
+    volonte             Int?                @default(1)
+    empathie            Int?                @default(1)
+    arts                Int?                @default(0)
+    cite                Int?                @default(0)
+    civilisations       Int?                @default(0)
+    relationnel         Int?                @default(0)
+    soins               Int?                @default(0)
+    animalisme          Int?                @default(0)
+    faune               Int?                @default(0)
+    montures            Int?                @default(0)
+    pistage             Int?                @default(0)
+    territoire          Int?                @default(0)
+    adresse             Int?                @default(0)
+    armurerie           Int?                @default(0)
+    artisanat           Int?                @default(0)
+    mecanisme           Int?                @default(0)
+    runes               Int?                @default(0)
+    athletisme          Int?                @default(0)
+    discretion          Int?                @default(0)
+    flore               Int?                @default(0)
+    vigilance           Int?                @default(0)
+    voyage              Int?                @default(0)
+    bouclier            Int?                @default(0)
+    cac                 Int?                @default(0)
+    lancer              Int?                @default(0)
+    melee               Int?                @default(0)
+    tir                 Int?                @default(0)
+    eclats              Int?                @default(0)
+    lunes               Int?                @default(0)
+    mythes              Int?                @default(0)
+    pantheons           Int?                @default(0)
+    rituels             Int?                @default(0)
+    malusphysique       Int?                @default(0)
+    malusmanuel         Int?                @default(0)
+    malussocial         Int?                @default(0)
+    malushumain         Int?                @default(0)
+    malusanimal         Int?                @default(0)
+    malusoutils         Int?                @default(0)
+    malusterres         Int?                @default(0)
+    malusarme           Int?                @default(0)
+    malusinconnu        Int?                @default(0)
+    malusmental         Int?                @default(0)
+    maxblessurelegere   Int?                @default(5)
+    blessurelegere      Int?                @default(0)
+    maxblessuregrave    Int?                @default(3)
+    blessuregrave       Int?                @default(0)
+    maxblessuremortelle Int?                @default(2)
+    blessuremortelle    Int?                @default(0)
+    maxeffort           Int?                @default(15)
+    effort              Int?                @default(15)
+    maxsangfroid        Int?                @default(8)
+    sangfroid           Int?                @default(8)
     User                User?               @relation(fields: [userId], references: [id])
     userId              Int?
     FavoriteCharacter   FavoriteCharacter[]
