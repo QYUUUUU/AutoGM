@@ -19,11 +19,14 @@ html{
     background-image: url("/images/background.png");
     background-repeat: no-repeat;
     z-index: 1; /* Set a higher z-index to make it overlap */
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
   }
   
   
   .nomage {
-    margin-top: 200px;
+    margin-top: 225px;
   }
   #nom {
     height: 1.5rem;
