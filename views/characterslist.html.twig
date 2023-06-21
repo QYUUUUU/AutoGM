@@ -16,12 +16,12 @@
                 </div>
             </div>
             {% for character in characters %}
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div id="{{ character.id_Character }}" class="character-card bg-dark charactersheet" onclick="redirectToCharacterPage({{ character.id_Character }})">
-                <h2>{{ character.nom }}</h2>
-                <p>ID: {{ character.id_Character }}</p>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div id="{{ character.id_Character }}" class="character-card bg-dark charactersheet" onclick="redirectToCharacterPage({{ character.id_Character }})">
+                    <h2>{{ character.nom }}</h2>
+                    <p>ID: {{ character.id_Character }}</p>
+                    </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     </div>

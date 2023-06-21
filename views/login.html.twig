@@ -15,6 +15,11 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <form action="/auth/login" method="POST">
+                        {% if error %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endif %}
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" name="email" id="email" class="form-control" required>
