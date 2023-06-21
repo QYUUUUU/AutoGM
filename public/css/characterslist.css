@@ -1,13 +1,22 @@
 .character-card {
-    background-color: #232323;
-    border: 1px solid #000;
-    border-radius: 5px;
-    margin: 20px 10px;
-    overflow: hidden;
-    position: relative;
-    width: 200px;
-    height: 300px;
-    transition: transform 0.3s ease-in-out;
+  background-color: #232323;
+  border: 1px solid #000;
+  border-radius: 5px;
+  margin: 20px 10px;
+  overflow: hidden;
+  position: relative;
+  flex: 0 0 calc(25% - 20px); /* Adjust the width as needed */
+  height: 300px;
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+  #charabox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
   
   .character-card:before {
@@ -17,9 +26,9 @@
     left: 0;
     width: 100%;
     height: 100%;
-  
+
     z-index: -1;
-    transform: rotate(-5deg);
+    transform: rotate(-1deg);
   }
   
   .character-card h2 {
@@ -42,7 +51,7 @@
   }
   
   .character-card:hover {
-    transform: scale(1.1);
+    transform: scale(1.03);
   }
   
   .character-card:hover:before {
@@ -54,5 +63,6 @@
   }
   
   .plussign {
-    width: 100%;
+    height: 70%;
+    width: auto;
   }
