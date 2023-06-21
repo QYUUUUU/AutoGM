@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import express, { static as expressStatic } from 'express';
+import helmet from 'helmet';
 import userRoutes from './routes/userRoutes.js';
 import backendRoutes from './routes/backendRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -12,6 +13,7 @@ import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 dotenv.config({ path: `.env.local`, override: true });
 
 const app = express();
+app.use(helmet());
 
 app.use(
   expressSession({
