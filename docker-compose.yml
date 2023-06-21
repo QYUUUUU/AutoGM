@@ -23,8 +23,6 @@ services:
       MYSQL_PASSWORD: passdb
     ports:
       - "3306:3306"
-    labels:
-      com.symfony.server.service-prefix: 'DATABASE'
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -37,8 +35,6 @@ services:
       - mariadb
     depends_on:
       - mariadb
-    labels:
-      com.symfony.server.service-prefix: 'PHPMYADMIN'
 
   maildev:
     image: maildev/maildev
