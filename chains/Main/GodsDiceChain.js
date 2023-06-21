@@ -37,14 +37,25 @@ export class GodsDiceChain extends BaseChain {
       console.log(data)
     } catch (error) {
       console.error(error)
-      return { res:"Dire à l'utilisateur qu'il n'a pas sélectionné de personnage."}
+      return { res:"Bot, dis à l'utilisateur qu'il n'a pas sélectionné de personnage."}
     }
-
-
 
     let sanitizedQuestion = '';
     for (const key in inputs) {
       sanitizedQuestion += inputs[key];
+    }
+
+    const blessurelegere = data.blessurelegere
+    const blessuregrave = data.blessuregrave
+    const blessuremortelle = data.blessuremortelle
+
+    var blessureModifier = 0;
+    if(blessuremortelle && blessuremortelle > 0){
+      blessureModifier=-3;
+    }else if(blessuregrave && blessuremortelle > 0){
+      blessureModifier=-2;
+    }else if(blessurelegere && blessurelegere > 0){
+      blessureModifier=-1;
     }
 
     const characterInfo = JSON.stringify(data);
@@ -106,16 +117,14 @@ export class GodsDiceChain extends BaseChain {
     malusAmount = extractValuesFromString(malusAmount);
 
     var { lancers, relances } = calculerLancersEtRelances(diceAmount.competence);
-    var totalDice = diceAmount.modifieur + diceAmount.caracteristique + lancers + malusAmount.dice + malusAmount.throw;
+    var totalDice = diceAmount.modifieur + diceAmount.caracteristique + lancers + malusAmount.dice + malusAmount.throw + blessureModifier;
     if (totalDice <1){
       return { res:"Jet impossible, il y a trop de malus." };
     }else if (!Number.isInteger(totalDice)) {
-      return { res:"Les données du personnage sont probablement mal remplies. Vérifiez les caractéristiques, compétences, malus et blessures de votre personnage." };
+      return { res:"Bot, Les données du personnage sont probablement mal remplies. Vérifiez les caractéristiques, compétences, malus et blessures de votre personnage." };
     } else {
-      return { res:"Les dés à lancer "+totalDice+"d10 et "+relances+"d10 à relancer." };
+      return { res:"Bot, les dés à lancer sont "+totalDice+"d10 et "+relances+"d10 à relancer possibles. S'il te plait Bot fait les lancers pour le joueur et informe lui des possibilités de relance." };
     }
-
-    
   }
 }
 
@@ -140,8 +149,37 @@ function extractValuesFromString(str) {
 }
 
 function calculerLancersEtRelances(entier) {
-  let lancers = Math.floor((entier + 1) / 2); // Nombre de lancers
-  let relances = Math.max(0, lancers - 1); // Nombre de relances (au moins 0)
+  let lancers = 0;
+  let relances = 0;
 
-  return { lancers, relances };
+  switch (entier) {
+    case 1:
+      lancers = 1;
+      relances = 0;
+      break;
+    case 2:
+      lancers = 1;
+      relances = 1;
+      break;
+    case 3:
+      lancers = 2;
+      relances = 1;
+      break;
+    case 4:
+      lancers = 2;
+      relances = 2;
+      break;
+    case 5:
+      lancers = 3;
+      relances = 2;
+      break;
+    case 6:
+      lancers = 3;
+      relances = 3;
+      break;
+    default:
+      break;
+  }
+
+  return { lancers, relances }
 }
