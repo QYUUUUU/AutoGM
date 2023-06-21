@@ -28,7 +28,7 @@ import { RandomNumberGeneratorTool } from "../tools/Main/RandomNumberGeneratorTo
 
 import { setUserId } from "../controllers/globals.js";
 
-const PREFIX = `You try to answer the questions if you can, if you can't, make it your final answer. You are an assistant for the tabletop rpg game named GODS. If you decide to throw dices give the individual dices as result. You have access to the following tools:`;
+const PREFIX = `Your name is bot. You try to answer the questions if you can, if you can't, make it your final answer. You are an assistant for the tabletop rpg game named GODS. If you decide to throw dices give the individual dices as result. You have access to the following tools:`;
 const formatInstructions = (toolNames) => `Use the following format in your response:
 
 Question: the input question you must answer
