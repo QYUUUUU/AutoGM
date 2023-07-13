@@ -59,6 +59,11 @@ router.get('/register', (req, res) => {
   res.render('../views/register.html.twig');
 });
 
+// Render the login page
+router.get('/maps', (req, res) => {
+  res.render('../views/maps.html.twig');
+});
+
 
 router.get('/Characters/', async (req, res) => {
   const id_User  = req.session.userId; // Assuming you have the user ID stored in req.session.userId
