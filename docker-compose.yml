@@ -47,12 +47,12 @@ services:
     ports:
       - "6379:6379"
 
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./.htpasswd:/etc/nginx/.htpasswd
-    ports:
-      - "8081:80"
-    links:
-      - phpmyadmin
+  # nginx:
+  #   image: nginx:latest
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/conf.d/default.conf
+  #     - ./.htpasswd:/etc/nginx/.htpasswd
+  #   ports:
+  #     - "8081:80"
+  #   links:
+  #     - phpmyadmin
