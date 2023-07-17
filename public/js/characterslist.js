@@ -20,4 +20,3 @@ async function apiNewCharacter() {
 function redirectToCharacterPage(id) {
     window.location.href = `/Character/show/${id}`;
 }
-  

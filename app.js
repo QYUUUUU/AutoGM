@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import userRoutes from './routes/userRoutes.js';
 import backendRoutes from './routes/backendRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import expressSession from 'express-session';
 import { PrismaClient } from '@prisma/client';
 
@@ -43,6 +44,7 @@ app.use('/Documentation', expressStatic('Documentation'));
 app.use('/auth', authRoutes); // Add this line for authentication routes
 app.use('/', userRoutes);
 app.use('/backend', backendRoutes);
+app.use('/admin', adminRoutes);
 
 app.listen(80, () => {
   console.log('Server started on port 80');

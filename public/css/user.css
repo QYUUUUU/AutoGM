@@ -1,19 +1,5 @@
 @import "bootstrap.min.css";
 
-
-body {
-  padding-top: 60px; /* Set the top padding to match the navbar height */
-  height: 90vh; /* Subtract 20px from the total height to allow for margin */
-  margin-bottom: 10px; /* Add 10px margin at the bottom */
-  
-}
-
-footer {
-  background-color: #f5f5f5;
-  padding: 10px;
-  text-align: center;
-}
-
 .container-fluid{
   height: 100%;
 }
@@ -34,13 +20,18 @@ footer {
 }
 
 .card-body {
-  background-color: #f2f2f2;
+
   padding: 10px;
   flex-grow: 1;
   overflow-y: auto;
   height: fit-content;
   max-height: max-content; /* hauteur maximale */
   overflow-y: scroll;
+}
+
+#main-body{
+  height:fit-content;
+  
 }
   
 .chat-message {
@@ -49,7 +40,7 @@ footer {
 }
 
 .chat-message-content {
-  background-color: #fff;
+  background-color: #f2f2f2;
   border-radius: 5px;
   padding: 10px;
   max-width: 70%;
@@ -77,7 +68,7 @@ footer {
 }
 
 .chat-message-right .chat-message-content {
-  background-color: #fdb8b5;
+  background-color: #c7e4ff;
 }
 
 .chat-message-right .chat-message-info {
@@ -162,7 +153,6 @@ tr > td{
 }
 
 .groupgrey{
-  background-color: #f3f3f3;
   padding: 7px;
   border-radius: 4px;
 }
@@ -173,25 +163,12 @@ tr > td{
   }
 }
 
-.custom-container {
-  max-width: 90%; /* Default maximum width for monitor screens */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-@media (max-width: 767.98px) {
-  /* Media query for mobile devices */
-  .custom-container {
-    max-width: 100%; /* Maximum width for mobile devices */
-  }
-}
-
 .select{
   max-width: 200px;
   width:fit-content;
   border-radius: 4px;
   border: none;
-  background-color: #343a40;
+  background-color: #6d7782;
   color: white;
   padding: 3px;
 }
@@ -203,4 +180,45 @@ tr > td{
 
 .textarea-chat{
   width: 100%;
+}
+
+body {
+  background-color: #fbfbfb;
+  
+}
+@media (min-width: 991.98px) {
+  main {
+    padding-left: 240px;
+  }
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 58px 0 0; /* Height of navbar */
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+  width: 240px;
+  z-index: 600;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: 100%;
+  }
+}
+.sidebar .active {
+  border-radius: 5px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }

@@ -5,49 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Assistant GODS{% endblock %}</title>
     <link rel="stylesheet" href="/css/user.css">
+
     <script type="module" src="/js/jquery-3.5.1.slim.min.js"></script>
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
 </head>
-<body class="navbar-dark bg-dark">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-            <div class="navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav d-flex flex-row">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/characters">Characters</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/maps">Maps</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-
-    <div class="container-fluid custom-container-fluid mt-3 px-3">
-        {% block body %}{% endblock %}
+<header>
+  <!-- Sidebar -->
+  <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+    <div class="position-sticky">
+      <div class="list-group list-group-flush mx-3 mt-4">
+      HELKLO
+    </div>    
     </div>
+  </nav>
+  <!-- Sidebar -->
 
-    <footer class="bg-dark text-light py-1">
-        <div class="container text-center">
-            &copy; QYUUUUU ltd
-        </div>
-    </footer>
+  <!-- Navbar -->
+  <nav
+    id="main-navbar"
+    class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
+  >
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+      <!-- Toggle button -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        aria-controls="sidebarMenu"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
 
-    {% block footer %}
-    {% endblock %}
-</body>
+      <!-- Brand -->
+      <a class="navbar-brand" href="#">
+        LOGO
+      </a>
+      <!-- Search form -->
+      <div class="d-none d-md-flex input-group w-auto my-auto">
+         <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/characters">Characters</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/maps">Maps</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/panel">Admin</a>
+        </li>
+      </div>
+      </ul>
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
+</header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main style="margin-top: 58px">
+  <div id="main-body" class="container pt-4">{% block body %}{% endblock %}</div>
+</main>
 </html>
