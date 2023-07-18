@@ -30,17 +30,21 @@ body{
 }
 
 .card-body {
-  padding: 10px;
-  flex-grow: 1;
-  overflow-y: auto;
-  height: 100%;
-  max-height: max-content; /* hauteur maximale */
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 1.25rem;
+  height: fit-content;
+  max-height: max-content;
   overflow-y: scroll;
 }
 
 #main-body{
-  height:100%;
-  overflow: hidden;
+  height: 880px;
+  max-height: 880px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
 }
 
 main{
@@ -246,6 +250,9 @@ body {
   left: 0;
   bottom: 0;
   z-index: 4;
+  background-image: linear-gradient(to top, rgb(255, 255, 255), rgba(255, 255, 255, 0.4));
+  margin-top: 15px;
+  overflow: auto;
 }
 
 .items-chat{
