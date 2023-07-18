@@ -1,11 +1,21 @@
 @import "bootstrap.min.css";
 
+html{
+  height: 100%;
+
+}
+
+
+body{
+  height: 100%;
+}
+
 .container-fluid{
   height: 100%;
 }
 
 .card{
-  height: 100%;
+  height: 100%-58px;
   margin-bottom: 10px;
 }
 
@@ -20,18 +30,22 @@
 }
 
 .card-body {
-
   padding: 10px;
   flex-grow: 1;
   overflow-y: auto;
-  height: fit-content;
+  height: 100%;
   max-height: max-content; /* hauteur maximale */
   overflow-y: scroll;
 }
 
 #main-body{
-  height:fit-content;
-  
+  height:100%;
+  overflow: hidden;
+}
+
+main{
+  overflow: hidden;
+  display: flex;
 }
   
 .chat-message {
@@ -182,9 +196,12 @@ tr > td{
   width: 100%;
 }
 
+.card-footer{
+  background-color: #fff
+}
+
 body {
-  background-color: #fbfbfb;
-  
+  background-color: #fff;
 }
 @media (min-width: 991.98px) {
   main {
@@ -221,4 +238,31 @@ body {
   padding-top: 0.5rem;
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.chat-area{
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  z-index: 4;
+}
+
+.items-chat{
+  width: 60%;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 1500px) {
+  .chat-area {
+    padding-left: 240px;
+  }
+}
+@media (min-width: 992px) and (max-width: 1500px) {
+  .chat-area {
+    padding-left: 30%;
+    width: 80%;
+  }
 }
