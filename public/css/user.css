@@ -273,3 +273,42 @@ body {
     width: 80%;
   }
 }
+
+#newchat{
+  background-color: white;
+  color: black;
+  text-decoration: none;  
+}
+
+#newchat:hover{
+  color: #6d7782;
+  text-decoration: none;  
+}
+
+.new-chat{
+  background-color: white;
+  color: black;
+  text-decoration: none;  
+}
+
+.new-chat:hover{
+  color: #6d7782;
+  text-decoration: none;
+  cursor: pointer; 
+}
+
+.scrollable-container {
+  /* Add any custom styling you want here */
+  height: calc(100% - 100px);
+  overflow-y: scroll;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.position-sticky{
+  height: 100%;
+}
+
+.list-group.list-group-flush.mx-3.mt-4{
+  height: 100%
+}

@@ -14,6 +14,13 @@ router.get('/', async (req, res) => {
       const characters = await prisma.character.findMany({
         where: { userId: id_User },
       });
+
+      const conversations = await prisma.conversation.findMany({
+        where: { userId: id_User },
+      });
+      
+      // Sort conversations in reverse order based on their index in the array
+      conversations.sort((a, b) => b.id - a.id);
   
       if (!characters || characters.length === 0) {
         res.redirect('/Character/create/new/');
@@ -35,7 +42,7 @@ router.get('/', async (req, res) => {
           }
         });
   
-        res.render('index.html.twig', { characters: sortedCharacters }); // Pass sortedCharacters as an object
+        res.render('index.html.twig', { characters: sortedCharacters, conversations: conversations }); // Pass sortedCharacters as an object
       } else {
         res.render('../views/login.html.twig');
       }
@@ -312,6 +319,61 @@ router.get('/Favorite/Character/get/:userId', async (req, res) => {
     }
 
     res.json(favoriteCharacter.character);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+router.get('/Conversation/new/', async (req, res) => {
+  const userId = req.session.userId;
+  const prisma = new PrismaClient();
+  if(userId){
+    try {
+      const user = await prisma.user.findUnique({ where: { id: userId }, include: { characters: true } });
+  
+      // Check if the connected user is the same as the user creating the character or has the role "admin"
+      if (user.id === userId || req.session.role === 'admin') {
+        const isUserFirstCharacter = user.characters.length === 0;
+  
+        const conversation = await prisma.conversation.create({
+          data: {
+            User: { connect: { id: userId } },
+            // Add other properties for the character here
+          },
+        });
+  
+        res.redirect('/');
+      } else {
+        res.status(403).json({ error: 'Unauthorized access' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    } finally {
+      await prisma.$disconnect();
+    }
+  }else{
+    res.render('../views/login.html.twig');
+  }
+  
+});
+
+router.get('/Conversation/get/:conversationId', async (req, res) => {
+  var { conversationId } = req.params;
+  conversationId = parseInt(conversationId);
+  const userId = req.session.userId;
+  try {
+    const prisma = new PrismaClient();
+
+    const messages = await prisma.message.findMany({
+      where: {
+        conversationId: conversationId,
+      },
+    });
+
+    res.json(messages);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });

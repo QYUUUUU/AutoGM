@@ -117,6 +117,7 @@ model FavoriteCharacter {
 
 model Conversation {
     id      Int       @id @default(autoincrement())
+    Name    String?
     User    User?     @relation(fields: [userId], references: [id])
     userId  Int?
     Message Message[]
@@ -124,7 +125,7 @@ model Conversation {
 
 model Message {
     id             Int           @id @default(autoincrement())
-    content        String?
+    content        String?       @db.VarChar(500) // Change the number to your desired maximum length
     sender         String?
     Conversation   Conversation? @relation(fields: [conversationId], references: [id])
     conversationId Int?
@@ -134,14 +135,14 @@ model Message {
 
 model Roll {
     id        Int      @id @default(autoincrement())
-    content   String?
+    content   String?  @db.VarChar(500)
     Message   Message? @relation(fields: [messageid], references: [id])
     messageid Int?
 }
 
 model Context {
     id        Int      @id @default(autoincrement())
-    content   String?
+    content   String?  @db.VarChar(500)
     Message   Message? @relation(fields: [messageid], references: [id])
     messageid Int?
 }

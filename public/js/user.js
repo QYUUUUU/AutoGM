@@ -1,6 +1,60 @@
 import './bootstrap.min.js';
 
-const init= "Bonjour, je suis programmé pour t'aider à jouer à GODS. Tu peux me demander de lancer les dés de ton choix 'Lance cinq dés 20 s'il te plait', ou directement depuis la fiche de personnage sélectionnée au dessus ↑ ('jette précision et tir avec modifieur à -2'). Je connais aussi les livres par coeur alors n'hésite pas à me poser des questions ('Parle moi d'Aon') ! 😎";
+
+
+//Conversation selection
+const conversations = document.getElementsByClassName("new-chat");
+var conversationId = 0;
+
+
+// Define the event listener function
+async function eventListenerFunction(event) {
+  // Your event handling code goes here
+  conversationId = event.target.id;
+  conversationId = parseInt(conversationId);
+  const link = `/Conversation/get/${conversationId}`;
+
+  try {
+    const response = await fetch(link);
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    // Parse the JSON data
+    const data = await response.json();
+
+    // Use the JSON data here
+    console.log(data);
+    displayConversation(data);
+  } catch (error) {
+    // Handle errors here
+    console.error("Error:", error);
+  }
+}
+
+
+// Loop through the collection and attach the event listener to each element
+for (let i = 0; i < conversations.length; i++) {
+  conversations[i].addEventListener("click", eventListenerFunction);
+  conversationId = i+1;
+}
+
+// Create an object called 'init'
+var setupConversation = {};
+
+// Assign 'conversationId' to the 'id' property inside the nested 'target' object
+setupConversation["target"] = {};
+setupConversation["target"]["id"] = conversationId;
+
+eventListenerFunction(setupConversation);
+
+
+
+
+
+const init= "Bonjour, je suis programmé pour t'aider à jouer à GODS. Tu peux me demander de lancer les dés de ton choix 'Lance cinq dés 20 s'il te plait', ou directement depuis la fiche de personnage sélectionnée dans la sidebar ('jette précision et tir avec modifieur à -2'). Je connais aussi les livres par coeur alors n'hésite pas à me poser des questions ('Parle moi d'Aon') ! 😎";
 addMessage(init, "assistant");
 
 const button = document.getElementById("send");
@@ -54,7 +108,7 @@ async function lancementAPI() {
   promptField.value = "";
   
   // Add the user prompt message to the conversation
-  addMessage(prompt, "user");
+  addMessage(prompt, "User");
   
   // Define a variable outside the setTimeout() function to assign a value later
   var typingMessage;
@@ -70,21 +124,21 @@ async function lancementAPI() {
   headers: {
   "Content-Type": "application/json",
   },
-  body: JSON.stringify({ prompt }),
+  body: JSON.stringify({ prompt,conversationId }),
   });
+
+    // Remove the typing message after the response is received
+    removeTypingMessage();
+    
+    // Enable user inputs after the API has finished processing
+    enableInputs()
   
   // Parse the response as JSON
   const data = await response.json();
   
-  // Remove the typing message after the response is received
-  removeTypingMessage();
-
   addMessage(data["output"], "assistant");
 
-
-  
-  // Enable user inputs after the API has finished processing
-  enableInputs();
+;
   }
 
 function addTypingMessage() {
@@ -122,11 +176,11 @@ function addMessage(content, sender) {
   var messageContent = document.createElement('div');
   messageContent.classList.add('chat-message-content');
 
-  if (sender === 'user') {
+  if (sender === 'User') {
     message.classList.add('chat-message-right');
     messageContent.innerHTML = content.replace(/\n/g, '<br>');
   } else {
-    message.appendChild(createTypingAnimation(content));
+    messageContent.innerHTML = content.replace(/\n/g, '<br>');
   }
 
   message.appendChild(messageContent);
@@ -134,10 +188,7 @@ function addMessage(content, sender) {
 
   chatContainer.appendChild(message);
   chatContainer.scrollTop = chatContainer.scrollHeight;
-
-  
 }
-
 function createTypingAnimation(content) {
   var messageContent = document.createElement('div');
   messageContent.classList.add('chat-message-content');
@@ -205,3 +256,28 @@ favoriteSelect.addEventListener("change", async ()=>{
     console.error(error);
   }
 });
+
+function displayConversation(data){
+  cleanConversation();
+  data.forEach(message => {
+    var sender = "";
+    if(message["sender"]=="User"){
+      sender = "User"
+    }else{
+      sender = "Bot"
+    }
+    addMessage(message.content, sender)
+  });
+}
+
+function cleanConversation(){
+  const parentElement = document.querySelector('.card-body.chat-body');
+
+  // Create a NodeList of all the children except the first one
+  const childrenToRemove = parentElement.querySelectorAll(':not(:first-child)');
+
+  // Loop through the NodeList and remove each child
+  childrenToRemove.forEach(child => {
+    child.remove();
+  });
+}
