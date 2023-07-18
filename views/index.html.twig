@@ -14,17 +14,26 @@
 {% endfor %}
 </select>
     
-    <div class="card-body chat-body">
-    </div>
+    <div class="card-body chat-body"></div>
     <div id="error" class="error"></div>
-    <div class="card-footer">
-        <div id="prompt-form">
-            <div class="row align-items-center">
+
+
+
+
+    <div class="chat-area d-flex align-items-center justify-content-center">
+        <div class="container items-chat">
+            <div id="prompt-form" class="row align-items-center">
                 <div class="d-flex justify-content-between textarea-chat">
-                    <textarea id="prompt-field" class="form-control" style="flex:1;" placeholder="Écrire un message"></textarea>
-                    <button id="send" class="send-button"></button>
+                    <textarea id="prompt-field" class="form-control" style="flex:1;"
+                        placeholder="Écrire un message"></textarea>
+                    <button id="send" class="send-button btn btn-primary"></button>
                 </div>
             </div>
         </div>
     </div>
+<style>
+html{
+    overflow: hidden;
+}
+</style>
 {% endblock %}
