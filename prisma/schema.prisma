@@ -118,16 +118,16 @@ model FavoriteCharacter {
 model Conversation {
     id      Int       @id @default(autoincrement())
     Name    String?
-    User    User?     @relation(fields: [userId], references: [id])
+    User    User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId  Int?
     Message Message[]
 }
 
 model Message {
     id             Int           @id @default(autoincrement())
-    content        String?       @db.VarChar(500) // Change the number to your desired maximum length
+    content        String?       @db.VarChar(2000) // Change the number to your desired maximum length
     sender         String?
-    Conversation   Conversation? @relation(fields: [conversationId], references: [id])
+    Conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
     conversationId Int?
     Roll           Roll[]
     Context        Context[]
@@ -135,14 +135,14 @@ model Message {
 
 model Roll {
     id        Int      @id @default(autoincrement())
-    content   String?  @db.VarChar(500)
-    Message   Message? @relation(fields: [messageid], references: [id])
+    content   String?  @db.VarChar(2000)
+    Message   Message? @relation(fields: [messageid], references: [id], onDelete: Cascade)
     messageid Int?
 }
 
 model Context {
     id        Int      @id @default(autoincrement())
     content   String?  @db.VarChar(500)
-    Message   Message? @relation(fields: [messageid], references: [id])
+    Message   Message? @relation(fields: [messageid], references: [id], onDelete: Cascade)
     messageid Int?
 }

@@ -38,12 +38,12 @@ async function eventListenerFunction(event) {
 // Loop through the collection and attach the event listener to each element
 for (let i = 0; i < conversations.length; i++) {
   conversations[i].addEventListener("click", eventListenerFunction);
-  conversationId = i+1;
+  conversationId = (conversations[i].id > conversationId) ? conversations[i].id : conversationId;
 }
 
 // Create an object called 'init'
 var setupConversation = {};
-
+console.log(conversationId)
 // Assign 'conversationId' to the 'id' property inside the nested 'target' object
 setupConversation["target"] = {};
 setupConversation["target"]["id"] = conversationId;

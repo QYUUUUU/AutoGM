@@ -1,5 +1,3 @@
-
-
 export async function displayPannel(req, res) {
   if (req.session.userId != "undefined" && req.session.userId != ""  && req.session.userId != null && req.session.userId == 1){
     try {
