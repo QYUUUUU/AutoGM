@@ -321,15 +321,3 @@ body {
 .d-none.d-md-flex.input-group.w-auto.my-auto > .navbar-nav > .nav-item > .nav-link:hover{
   color: #6d7782;
 }
-
-.d-none.d-md-flex.input-group.w-auto.my-auto::after {
-  content: '';
-  position: absolute;
-  bottom: -5px; /* Adjust this value to control the distance of the shadow from the div */
-  left: 0;
-  width: 100%;
-  height: 5px; /* Adjust this value to control the height/thickness of the shadow */
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0) 100%);
-}
-
-
