@@ -22,7 +22,7 @@
     "helmet": "^7.0.0",
     "hnswlib-node": "^1.4.2",
     "jsonwebtoken": "^9.0.0",
-    "langchain": "^0.0.92",
+    "langchain": "^0.0.98",
     "nginx": "^1.0.8",
     "pdf-parse": "^1.1.1",
     "twig": "^1.16.0"
