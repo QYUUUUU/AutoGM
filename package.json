@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^4.15.0",
-    "@quixo3/prisma-session-store": "^3.1.11",
+    "@quixo3/prisma-session-store": "^3.1.12",
     "bcrypt": "^5.1.0",
     "connect-pg-simple": "^9.0.0",
     "csurf": "^1.11.0",
