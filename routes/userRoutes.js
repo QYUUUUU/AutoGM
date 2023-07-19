@@ -202,6 +202,13 @@ router.get('/Character/create/new/', async (req, res) => {
               character: { connect: { id_Character: character.id_Character } },
             },
           });
+
+          await prisma.conversation.create({
+            data: {
+              User: { connect: { id: userId } },
+              // Add other properties for the character here
+            },
+          });
         }
   
         res.redirect('/Characters');
@@ -335,7 +342,6 @@ router.get('/Conversation/new/', async (req, res) => {
   
       // Check if the connected user is the same as the user creating the character or has the role "admin"
       if (user.id === userId || req.session.role === 'admin') {
-        const isUserFirstCharacter = user.characters.length === 0;
   
         const conversation = await prisma.conversation.create({
           data: {
@@ -372,6 +378,34 @@ router.get('/Conversation/get/:conversationId', async (req, res) => {
         conversationId: conversationId,
       },
     });
+
+    res.json(messages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/Conversation/delete/:conversationId', async (req, res) => {
+  var { conversationId } = req.params;
+  conversationId = parseInt(conversationId);
+  const userId = req.session.userId;
+  try {
+    const prisma = new PrismaClient();
+
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: conversationId },
+    });
+
+    if (!conversation) {
+      throw new Error(`Conversation with ID ${conversationId} not found.`);
+    }
+
+    // Delete the conversation and its associated messages, rolls, and contexts (cascading delete)
+    await prisma.conversation.delete({
+      where: { id: conversationId },
+    });
+
 
     res.json(messages);
   } catch (error) {

@@ -8,6 +8,7 @@ export class GodsDiceTool extends Tool {
   
     async _call(arg){
       try {
+        console.log("GODS THROW TOOL CALLED WIH : "+ arg)
         // Perform your custom tool logic here with the input text
         var chain = await new GodsDiceChain().call(arg);
         // and return the output text

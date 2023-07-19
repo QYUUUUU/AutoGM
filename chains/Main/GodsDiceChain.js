@@ -29,7 +29,7 @@ export class GodsDiceChain extends BaseChain {
 
     var data = {}
     try {
-      const response = await fetch(`http://localhost:3000/Favorite/Character/get/${userId}`);
+      const response = await fetch(`http://localhost/Favorite/Character/get/${userId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -45,6 +45,10 @@ export class GodsDiceChain extends BaseChain {
       sanitizedQuestion += inputs[key];
     }
 
+    const modifier = parseInt(extractNumbersFromString(sanitizedQuestion));
+
+    sanitizedQuestion = stripNumbers(sanitizedQuestion);
+    
     const blessurelegere = data.blessurelegere
     const blessuregrave = data.blessuregrave
     const blessuremortelle = data.blessuremortelle
@@ -68,16 +72,13 @@ export class GodsDiceChain extends BaseChain {
         ---------------------
         ${characterInfo}
         ---------------------
-        Le modifieur est un nombre spécifié dans l'input, ou si il n'y en a pas c'est 0.
         Les Caractéristiques sont Puissance Précision Connaissance Volonté Résistance Réflexes Perception Empathie.
         Les autres mots sont des Compétences.
-         Quelles sont les valeurs des informations suivantes : input( ${sanitizedQuestion} ) ? Réponds au format json ex : {"modifieur" : int, "caracteristique": int, "competence": int}:
+         Quelles sont les valeurs des informations suivantes : input( ${sanitizedQuestion} ) ? Réponds au format json ex : {"caracteristique": int, "competence": int}:
         
         `;
       return await model.call(QA_PROMPT);
     };
-
-    characterInfo
 
     const filteredData = Object.keys(data)
     .filter(key => key.includes('malus'))
@@ -114,10 +115,11 @@ export class GodsDiceChain extends BaseChain {
     var [diceAmount, malusAmount] = await Promise.all([getDiceAmount(),getMalusAmount()]);
 
     diceAmount = extractValuesFromString(diceAmount);
+
     malusAmount = extractValuesFromString(malusAmount);
 
     var { lancers, relances } = calculerLancersEtRelances(diceAmount.competence);
-    var totalDice = diceAmount.modifieur + diceAmount.caracteristique + lancers + malusAmount.dice + malusAmount.throw + blessureModifier;
+    var totalDice = modifier + diceAmount.caracteristique + lancers + malusAmount.dice + malusAmount.throw + blessureModifier;
     if (totalDice <1){
       return { res:"Jet impossible, il y a trop de malus." };
     }else if (!Number.isInteger(totalDice)) {
@@ -182,4 +184,13 @@ function calculerLancersEtRelances(entier) {
   }
 
   return { lancers, relances }
+}
+
+function extractNumbersFromString(inputString) {
+  const regex = /\d+/g;
+  return inputString.match(regex).map(Number);
+}
+
+function stripNumbers(inputString) {
+  return inputString.replace(/\d+/g, "");
 }
