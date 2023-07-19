@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^4.15.0",
+    "@prisma/client": "^4.16.1",
     "@quixo3/prisma-session-store": "^3.1.11",
     "bcrypt": "^5.1.0",
     "connect-pg-simple": "^9.0.0",
