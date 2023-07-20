@@ -7,7 +7,7 @@ newCaracButton.addEventListener("click", ()=>{
 
 async function apiNewCharacter() {
     try {
-      const response = await fetch(`/Character/create/new/`);
+      const response = await fetch(`http://localhost/Character/create/new/`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
