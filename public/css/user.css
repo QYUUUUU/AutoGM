@@ -321,3 +321,8 @@ body {
 .d-none.d-md-flex.input-group.w-auto.my-auto > .navbar-nav > .nav-item > .nav-link:hover{
   color: #6d7782;
 }
+
+
+.card-body.chat-body{
+  padding-bottom: 10rem;
+}
