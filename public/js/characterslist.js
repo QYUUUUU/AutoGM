@@ -17,6 +17,12 @@ async function apiNewCharacter() {
     }
   }
 
-function redirectToCharacterPage(id) {
-    window.location.href = `/Character/show/${id}`;
+
+const characters = document.getElementsByClassName("charactersheet");
+
+
+for (let i = 0; i < characters.length; i++) {
+  characters[i].addEventListener("click", ()=>{
+    window.location.href = `/Character/show/${characters[i].id}`;
+  })
 }
