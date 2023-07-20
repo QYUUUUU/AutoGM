@@ -326,3 +326,7 @@ body {
 .card-body.chat-body{
   padding-bottom: 10rem;
 }
+
+#favoriteCharacter{
+  min-width: 150px;
+}

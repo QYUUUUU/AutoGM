@@ -72,7 +72,7 @@ router.get('/maps', (req, res) => {
 });
 
 
-router.get('/Characters/', async (req, res) => {
+router.get('/Characters', async (req, res) => {
   const id_User  = req.session.userId; // Assuming you have the user ID stored in req.session.userId
   console.log(id_User);
   if(id_User){
