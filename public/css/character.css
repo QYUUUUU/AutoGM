@@ -6,7 +6,7 @@ html{
     position: relative;
     height: 1700px;
     width: 1200px;
-    background-image: url("/images/yes.png");
+    background-image: url("/images/background.png");
     background-repeat: no-repeat;
   }
   
@@ -16,13 +16,26 @@ html{
     left: 0;
     height: 1700px;
     width: 1200px;
-    background-image: url("/images/background.png");
-    background-repeat: no-repeat;
     z-index: 1; /* Set a higher z-index to make it overlap */
     display: flex;
     flex-direction: column;
     word-wrap: break-word;
   }
+
+  #main-body{
+    height: 100%;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+  }
+
+  @media (min-width: 1200px){
+  .container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: none;
+  }
+}
   
   .nomage {
     margin-top: 225px;
@@ -203,9 +216,9 @@ html{
   
   #original-content {
     position: relative;
-    top: 50px;
     outline: none;
     background-color: none;
+    height: 100%;
   }
   
   .ui-controls {
