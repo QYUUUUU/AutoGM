@@ -330,3 +330,40 @@ body {
 #favoriteCharacter{
   min-width: 150px;
 }
+
+/* Add this custom CSS */
+@media (max-width: 991.98px) {
+  /* Hide the sidebar and navbar by default on smaller screens */
+  #sidebarMenu {
+    display: none;
+  }
+  #main-navbar .input-group {
+    display: none;
+  }
+  /* Show the sidebar and navbar when the "show" class is added */
+  #sidebarMenu.show {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: 250px;
+    background-color: #fff;
+  }
+
+  #main-navbar.show {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #fff;
+  }
+}
+
+@media (max-width: 991.98px){
+  .d-none.d-md-flex.input-group.w-auto.my-auto{
+    display: none!important;
+  }
+}
