@@ -344,7 +344,7 @@ body {
   #sidebarMenu.show {
     display: block;
     position: fixed;
-    top: 0;
+    top: 190px;
     left: 0;
     bottom: 0;
     z-index: 1000;
@@ -366,4 +366,8 @@ body {
   .d-none.d-md-flex.input-group.w-auto.my-auto{
     display: none!important;
   }
+}
+
+#main-navbar.show > div > div.d-none.d-md-flex.input-group.w-auto.my-auto {
+  display: flex!important;
 }
