@@ -1,0 +1,42 @@
+.image {
+    margin: 20px 10px;
+    overflow: hidden;
+    position: relative;
+    flex: 0 0 calc(25% - 20px); /* Adjust the width as needed */
+    height: 300px;
+    width: auto;
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+#galery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    height: fit-content;
+}
+
+.image:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transform: rotate(-1deg);
+}
+
+.image:hover {
+    transform: scale(1.03);
+}
+
+.image:hover:before {
+    transform: rotate(-10deg);
+}
+
+main{
+    height: 100%;
+}
