@@ -30,20 +30,40 @@ import { RandomNumberGeneratorTool } from "../tools/Main/RandomNumberGeneratorTo
 
 import { setUserId } from "../controllers/globals.js";
 
-const PREFIX = `Your name is bot. You always answer the user's queries, if you can't, nicely make it your final answer. You are a nice and helpfull assistant for the tabletop rpg game named GODS. If you decide to throw dices give the individual dices as result. You have access to the following tools:`;
-const formatInstructions = (toolNames) => `Use the following format in your response:
+var PREFIX = `Your name is GM. You are a Game Master of a tabletop RPG game and you narrate situations in which, I, the player, make decisions. The world you are making me play in is a Dark fantasy themed one. The scenario takes place in a medieval city of the kingdom of Avhorea. The ruler of the kingdom is "Sevire the Red", nickname she acquired by killing all the noble houses that were her ennemies, and by disennobling the weakest ones she still has ennemies within her kingdom, although they don't fight her upfront and scheme in the shadows.
 
-Question: the input question you must answer
+One of those schemes is where the story takes place. One of the representatives of fallen noble houses has made a pact with a neighboring kingdom to fight back and try to seize Sevire's empire.
+
+This other kingdom is named "The Empire of the Dark Sun" and has dark priests that are representatives of a cult that has magic abilities thanks to their God "L'unique", they are corrupted sorcerers, that kill children and meld with dark energies, summoning monstrous beasts from another world.
+
+Sevire has a magical sword, that make her almost as strong as a god, and 8 other blades are weilded by her most faithful servents, and generals of her army, the silver phalanx.
+
+To help yourself, you must use tools when necessary. Always decide the player's actions resolution via the throwing of a d20 dice.
+
+The player ALWAYS explicitly tell you to roll for him, not the other way around.
+
+Always explain your chain of thought to the user, always give him the result of a roll and what they rolled for.
+
+If you have a general question about the lore of GODS or its rules use the tool gods-lore with the Action gods-lore and the Action Input set to the question asked, the tool will then answer your question. 
+
+You need to be less immersive and be blunt about technicalities, share everything you think to the user in tge final answer
+
+Here is the history of your conversation so far :`;
+
+
+var formatInstructions = (toolNames) => `You must absolutely Use the following format in your response:
+
+Query: the user's last input you must answer
 Thought: you should always think about what to do
 Action: the action to take, should be one of [${toolNames}]
-Action Input: the input to the action (there always should an input with an action)
+Action Input: the input to the action detailed in the tool
 Observation: do I have the answer yet ?
 ... (this Thought/Action/Action Input/Observation can repeat N times)
 Thought: I now know the final answer
-Final Answer: the final answer to the original input question formulated in French`;
+Final Answer: the final answer to the original input Query that must be formulated in French explaining your chain of thought and the results of the rolled dice`;
 const SUFFIX = `Start :
 
-Question: {input}
+Query: {input}
 Thought:{agent_scratchpad}`;
 
 class CustomPromptTemplate extends BaseChatPromptTemplate {
@@ -113,10 +133,19 @@ class CustomOutputParser extends AgentActionOutputParser {
   }
 }
 
-export const startMain = async (question, userId) => {
+export const startMain = async (Query, userId, memory) => {
   
+
+  var messages = ""; 
+
+  memory.forEach(message => {
+    messages += message.sender+": "+message.content+"\n\n";
+  });
+
   // Set the userId value
   setUserId(userId);
+
+  PREFIX += messages;
 
   const model = new ChatOpenAI({ temperature: 0, verbose: true, modelName: "gpt-3.5-turbo-16k-0613" });
   const tools = [
@@ -127,10 +156,10 @@ export const startMain = async (question, userId) => {
     // }),
     // new Calculator(),
     new GodsLoreTool(),
-    new GodsRulesTool(),
-    new GodsDiceTool(),
+    // new GodsRulesTool(),
+    // new GodsDiceTool(),
     new RandomNumberGeneratorTool(),
-    new GodsConversationTool()
+    // new GodsConversationTool()
   ];
 
   const llmChain = new LLMChain({
@@ -152,11 +181,11 @@ export const startMain = async (question, userId) => {
   });
   console.log("Loaded agent.");
 
-  const input = question;
+  const input = Query;
 
   console.log(`Executing with input "${input}"...`);
 
-  const result = await executor.call({ input, timeout: 10000  });
+  const result = await executor.call({ input, timeout: 20000 });
 
   console.log(`Got output ${result.output}`);
 

@@ -4,7 +4,7 @@ import { GodsLoreChain } from "../../chains/Main/GodsLoreChain.js";
 export class GodsLoreTool extends Tool {
     name = "gods-lore";
   
-    description = "This tool answer questions about the Lore of GODS a Tabletop RPG Game.";
+    description = "This tool answer questions about the Lore of GODS a Tabletop RPG Game give it the full user's query as input.";
   
     async _call(arg){
       try {
