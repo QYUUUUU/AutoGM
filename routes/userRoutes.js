@@ -18,6 +18,10 @@ router.get('/', async (req, res) => {
       const conversations = await prisma.conversation.findMany({
         where: { userId: id_User },
       });
+
+      if (conversations.length === 0) {
+        res.redirect('/Conversation/auto/new/');
+      }
       
       // Sort conversations in reverse order based on their index in the array
       conversations.sort((a, b) => b.id - a.id);
@@ -349,7 +353,7 @@ router.get('/Conversation/new/', async (req, res) => {
             // Add other properties for the character here
           },
         });
-  
+
         res.redirect('/');
       } else {
         res.status(403).json({ error: 'Unauthorized access' });
@@ -414,4 +418,124 @@ router.get('/Conversation/delete/:conversationId', async (req, res) => {
   }
 });
 
+
+router.get('/AutoGM', async (req, res) => {
+  console.log("AUTO GM CALLED")
+  const id_User = req.session.userId; // Assuming you have the user ID stored in req.session.userId
+  console.log(id_User);
+  if(id_User){
+    try {
+      const prisma = new PrismaClient();
+  
+      const characters = await prisma.character.findMany({
+        where: { userId: id_User },
+      });
+
+      const conversations = await prisma.conversation.findMany({
+        where: { userId: id_User, Name: "Auto" },
+      });
+      
+      if (!conversations.some((conversation) => conversation.Name === "Auto")) {
+        res.redirect('/Conversation/auto/new/');
+      }
+
+      // Sort conversations in reverse order based on their index in the array
+      conversations.sort((a, b) => b.id - a.id);
+  
+      if (!characters || characters.length === 0) {
+        res.redirect('/Character/create/new/');
+      } else if (id_User !== "undefined" && id_User !== "" && id_User !== null) {
+        const favoriteCharacter = await prisma.favoriteCharacter.findFirst({
+          where: { userId: id_User },
+          include: { character: true },
+        });
+  
+        const favoriteCharacterId = favoriteCharacter?.characterId;
+  
+        const sortedCharacters = characters.sort((a, b) => {
+          if (a.id_Character === favoriteCharacterId) {
+            return -1; // Move the favorite character to the beginning of the list
+          } else if (b.id_Character === favoriteCharacterId) {
+            return 1; // Move the favorite character to the beginning of the list
+          } else {
+            return 0;
+          }
+        });
+  
+        res.render('autoGM.html.twig', { characters: sortedCharacters, conversations: conversations }); // Pass sortedCharacters as an object
+      } else {
+        res.render('../views/login.html.twig');
+      }
+    } catch (error) {
+      console.error(error);
+      res.render('../views/login.html.twig');
+    }
+  }else{
+    res.render('../views/login.html.twig');
+  }
+  
+});
+
+router.get('/Conversation/auto/new', async (req, res) => {
+  console.log("NEW AUTO CALLED")
+  const userId = req.session.userId;
+  const prisma = new PrismaClient();
+  if(userId){
+    try {
+      const user = await prisma.user.findUnique({ where: { id: userId }, include: { characters: true } });
+  
+      // Check if the connected user is the same as the user creating the character or has the role "admin"
+      if (user.id === userId || req.session.role === 'admin') {
+  
+        const currentConversation = await prisma.conversation.create({
+          data: {
+            Name:"Auto",
+            User: { connect: { id: userId } },
+            // Add other properties for the character here
+          },
+        });
+
+        await prisma.message.create({
+          data: {
+            content: "Bonjour, je suis programmé pour te faire jouer un scénario dans l'univers de GODS. Choisis un personnage avant de commencer.", // Replace with the actual content
+            sender: "Bot",   // Replace with the actual sender
+            Conversation: { connect: { id: currentConversation.id } },
+            // Add other properties for the character here
+          },
+        });
+
+        await prisma.message.create({
+          data: {
+            content: "Bienvenue dans le royaume d'Avhorea, cher voyageur. Vous incarnez un garde chargé de surveiller un marché paisible.", // Replace with the actual content
+            sender: "Bot",   // Replace with the actual sender
+            Conversation: { connect: { id: currentConversation.id } },
+            // Add other properties for the character here
+          },
+        });
+
+        await prisma.message.create({
+          data: {
+            content: "Alors que vous patrouillez avec vos camarades, le calme est soudainement brisé par une terrible secousse. Les étals se renversent, et la panique s'empare des marchands et des passants. Une créature monstrueuse, invoquée par des prêtres des ténèbres, émerge d'un portail sombre et commence à semer le chaos. Vous vous trouvez au cœur de la scène chaotique. La bête est une masse tentaculaire, dotée d'une apparence indescriptible et effrayante. Les prêtres noirs se tiennent à l'écart, observant leur création maléfique. Vos camarades gardes se préparent à l'affronter, mais vous devez décider de votre prochaine action. Note : N'hésitez pas à donner des détails sur votre personnage, comme son nom, son apparence physique ou ses traits de personnalité, si vous le souhaitez. Vous pouvez également interagir avec les personnages non-joueurs déjà présentés, comme vos camarades gardes. Après avoir résolu votre action, nous poursuivrons l'histoire en fonction de votre choix.", // Replace with the actual content
+            sender: "Bot",   // Replace with the actual sender
+            Conversation: { connect: { id: currentConversation.id } },
+            // Add other properties for the character here
+          },
+        });
+
+    
+        res.redirect('/AutoGM');
+      } else {
+        res.status(403).json({ error: 'Unauthorized access' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    } finally {
+      await prisma.$disconnect();
+    }
+  }else{
+    res.render('../views/login.html.twig');
+  }
+  
+});
 export default router;
