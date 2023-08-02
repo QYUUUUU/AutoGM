@@ -22,6 +22,7 @@ model User {
     service           String?
     enabled           Boolean             @default(false)
     role              String?             @default("user")
+    discordId         String?
     characters        Character[]
     FavoriteCharacter FavoriteCharacter[]
     Conversation      Conversation[]

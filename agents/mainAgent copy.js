@@ -52,9 +52,9 @@ class CustomPromptTemplate extends BaseChatPromptTemplate {
     this.tools = args.tools;
   }
 
-  _getPromptType(){  
-    return "custom";  
-   }
+  _getPromptType() {
+    throw new Error("Not implemented");
+  }
 
   async formatMessages(values) {
     /** Construct the final template */
@@ -120,6 +120,12 @@ export const startMain = async (question, userId) => {
 
   const model = new ChatOpenAI({ temperature: 0, verbose: true, modelName: "gpt-3.5-turbo-16k-0613" });
   const tools = [
+    // new SerpAPI(process.env.SERPAPI_API_KEY, {
+    //   location: "Bordeaux, France",
+    //   hl: "fr",
+    //   gl: "fr",
+    // }),
+    // new Calculator(),
     new GodsLoreTool(),
     new GodsRulesTool(),
     new GodsDiceTool(),
@@ -150,7 +156,7 @@ export const startMain = async (question, userId) => {
 
   console.log(`Executing with input "${input}"...`);
 
-  const result = await executor.call({ input, timeout: 30000 });
+  const result = await executor.call({ input, timeout: 10000 });
 
   console.log(`Got output ${result.output}`);
 
