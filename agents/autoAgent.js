@@ -1,5 +1,5 @@
 import { AgentActionOutputParser, AgentExecutor, LLMSingleActionAgent } from "langchain/agents";
-  
+
 import { LLMChain } from "langchain/chains";
 
 import { ChatOpenAI } from "langchain/chat_models/openai";
@@ -72,9 +72,9 @@ class CustomPromptTemplate extends BaseChatPromptTemplate {
     this.tools = args.tools;
   }
 
-  _getPromptType() {
-    throw new Error("Not implemented");
-  }
+  _getPromptType(){  
+    return "custom";  
+   }
 
   async formatMessages(values) {
     /** Construct the final template */
@@ -107,6 +107,7 @@ class CustomPromptTemplate extends BaseChatPromptTemplate {
   }
 }
 
+
 class CustomOutputParser extends AgentActionOutputParser {
   async parse(text) {
     if (text.includes("Final Answer:")) {
@@ -134,12 +135,12 @@ class CustomOutputParser extends AgentActionOutputParser {
 }
 
 export const startMain = async (Query, userId, memory) => {
-  
 
-  var messages = ""; 
+
+  var messages = "";
 
   memory.forEach(message => {
-    messages += message.sender+": "+message.content+"\n\n";
+    messages += message.sender + ": " + message.content + "\n\n";
   });
 
   // Set the userId value

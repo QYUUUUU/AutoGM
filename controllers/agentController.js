@@ -3,8 +3,6 @@ import { startMain as autoStart } from "../agents/autoAgent.js"
 
 import { PrismaClient } from '@prisma/client';
 
-
-
 export async function Agentcall(req, res) {
   if (req.session.userId != "undefined" && req.session.userId != ""  && req.session.userId != null){
     try {
