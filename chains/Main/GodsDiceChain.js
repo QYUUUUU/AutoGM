@@ -135,7 +135,7 @@ export class GodsDiceChain extends BaseChain {
     }else if (!Number.isInteger(totalDice)) {
       return { res:"Bot, Les données du personnage sont probablement mal remplies. Vérifiez les caractéristiques, compétences, malus et blessures de votre personnage." };
     } else {
-      return { res:"Bot, les dés à lancer sont "+totalDice+"d10 et "+relances+"d10 à relancer possibles. S'il te plait Bot fait les lancers pour le joueur et informe lui des possibilités de relance." };
+      return { res:"Bot, les dés à lancer sont "+totalDice+"d10 et "+relances+"d10 à relancer possibles. Bot, réalise les lancers pour le joueur et informe lui des possibilités de relance." };
     }
   }
 }
