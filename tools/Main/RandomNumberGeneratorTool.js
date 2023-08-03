@@ -23,7 +23,7 @@ export class RandomNumberGeneratorTool extends Tool {
         const resultsString = results.join(" ");
 
         // Return the output text with the separate results
-        return `Réponse:\n${resultsString}`;
+        return `Réponse:\n Bot, donne le résultat suivant à l'utilisateur : ${resultsString}`;
       } catch (error) {
         // Handle any errors that occur during the processing
         return `Error occurred: ${error.message}`;
