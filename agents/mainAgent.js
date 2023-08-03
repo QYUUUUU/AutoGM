@@ -119,7 +119,7 @@ export const startMain = async (question, userId) => {
   // Set the userId value
   setUserId(userId);
 
-  const model = new ChatOpenAI({ temperature: 0, verbose: true, modelName: "gpt-3.5-turbo-16k-0613" });
+  const model = new ChatOpenAI({ temperature: 0, verbose: true, modelName: "gpt-3.5-turbo" });
   const tools = [
     new GodsLoreTool(),
     new GodsRulesTool(),
