@@ -9,6 +9,7 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
 import { startMain as mainAgent } from "./agents/mainAgent.js";
+import { startMain as autoAgent } from "./agents/autoAgent.js";
 
 import { Client, GatewayIntentBits } from 'discord.js';
 
@@ -61,9 +62,7 @@ app.listen(80, () => {
   console.log('Server started on port 80');
 });
 
-
 //Discord BOT
-
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -78,10 +77,49 @@ client.on("messageCreate", async (msg) => {
 
       var answer = await callMainAgent(msg);
 
-      // Reply to the user in the same channel
-      msg.reply(answer);
-      // or, send the answer without mentioning the user
-      // msg.channel.send(answer);
+      // Split the answer into chunks at sentence-ending periods
+      const chunks = splitResponseIntoChunks(answer, 1999);
+
+      // Send each chunk separately
+      for (const chunk of chunks) {
+        // Reply to the user in the same channel
+        await msg.reply(chunk);
+        // or, send the chunk without mentioning the user
+        // await msg.channel.send(chunk);
+
+        // Add a small delay before sending the next chunk
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+    } catch (error) {
+      console.error("Error while processing the message:", error);
+      // Handle any potential errors here and inform the user if necessary
+      msg.channel.send("An error occurred while processing your request.");
+    }
+  }
+  
+  if (msg.channel.parent.name === 'Alone' && msg.author.id != "1136201492995518515") {
+    try {
+      const channel = await client.channels.fetch(msg.channelId);
+
+      // Start typing indicator
+      await channel.sendTyping();
+
+      var answer = await callAutoAgent(msg);
+      
+      // Split the answer into chunks at sentence-ending periods
+      const chunks = splitResponseIntoChunks(answer, 1999);
+
+      // Send each chunk separately
+      for (const chunk of chunks) {
+        // Reply to the user in the same channel
+        await msg.reply(chunk);
+        // or, send the chunk without mentioning the user
+        // await msg.channel.send(chunk);
+
+        // Add a small delay before sending the next chunk
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+
     } catch (error) {
       console.error("Error while processing the message:", error);
       // Handle any potential errors here and inform the user if necessary
@@ -149,4 +187,97 @@ async function callMainAgent(msg){
   });
 
   return botAnswer.output;
+}
+
+
+
+
+async function callAutoAgent(msg){
+
+  const discordMessage = msg.content;
+
+  const discordId = msg.author.id;
+
+  const prisma = new PrismaClient();
+
+  const user = await prisma.user.findFirst({
+      where: { discordId: discordId },
+    });
+
+  if (!user) {
+    console.log('User not found with discordId:', discordId);
+    return "Your discord account has no link to the application : https://qyuuuuu.eu/register . You must first create an account and then link it to discord.";
+  }
+
+  let mostRecentConversation = await prisma.conversation.findFirst({
+    where: { userId: user.id, Name: 'Auto' },
+    orderBy: { id: 'desc' },
+  });
+
+  if (!mostRecentConversation) {
+    console.log('No conversation found for the user with discordId:', discordId);
+    // Create a new conversation with no name if none exists
+    mostRecentConversation = await prisma.conversation.create({
+      data: {
+        User: { connect: { id: user.id } },
+        Name: 'Auto',
+      },
+    });
+  }
+
+  var conversationId = mostRecentConversation.id;
+
+
+  await prisma.message.create({
+    data: {
+      content: discordMessage, // Replace with the actual content
+      sender: "User",   // Replace with the actual sender
+      Conversation: { connect: { id: conversationId } },
+      // Add other properties for the character here
+    },
+  });
+
+  const messages = await prisma.message.findMany({
+    where: {
+      Conversation: {
+        id: conversationId,
+      },
+    },
+  });
+
+  // Now you can use startMain as an async function.
+  const botAnswer = await autoAgent(discordMessage, user.id, messages);
+
+  await prisma.message.create({
+    data: {
+      content: botAnswer.output, // Replace with the actual content
+      sender: "Bot",   // Replace with the actual sender
+      Conversation: { connect: { id: conversationId } },
+      // Add other properties for the character here
+    },
+  });
+
+  return botAnswer.output;
+}
+
+function splitResponseIntoChunks(response, maxLength) {
+  const chunks = [];
+  const sentences = response.split('. ');
+
+  let currentChunk = "";
+  for (const sentence of sentences) {
+    if ((currentChunk + sentence + '. ').length <= maxLength) {
+      currentChunk += sentence + '. ';
+    } else {
+      chunks.push(currentChunk.trim());
+      currentChunk = sentence + '. ';
+    }
+  }
+
+  // Add the last chunk
+  if (currentChunk.length > 0) {
+    chunks.push(currentChunk.trim());
+  }
+
+  return chunks;
 }
