@@ -128,7 +128,7 @@ client.on("messageCreate", async (msg) => {
   }
 });
 
-client.login("MTEzNjIwMTQ5Mjk5NTUxODUxNQ.GtNzcW.7Ig4v4_wN8xwJz97gYisl7EZHfKgdCLOFRdjnM");
+client.login(process.env.BOT_TOKEN);
 
 async function callMainAgent(msg){
 
@@ -206,9 +206,6 @@ async function callMainAgent(msg){
 
   var conversationId = mostRecentConversation.id;
 
-  
-
-
   await prisma.message.create({
     data: {
       content: discordMessage, // Replace with the actual content
@@ -232,9 +229,6 @@ async function callMainAgent(msg){
 
   return botAnswer.output;
 }
-
-
-
 
 async function callAutoAgent(msg){
 
@@ -270,7 +264,6 @@ async function callAutoAgent(msg){
   }
 
   var conversationId = mostRecentConversation.id;
-
 
   await prisma.message.create({
     data: {
