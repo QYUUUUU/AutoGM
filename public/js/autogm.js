@@ -203,27 +203,23 @@ favoriteSelect.addEventListener("change", async ()=>{
   }
 });
 
-function displayConversation(data){
+function displayConversation(data) {
   cleanConversation();
-  data.forEach(message => {
-    var sender = "";
-    if(message["sender"]=="User"){
-      sender = "User"
-    }else{
-      sender = "Bot"
-    }
-    addMessage(message.content, sender)
-  });
+  for (let i = 1; i < data.length; i++) {
+    var message = data[i];
+    var sender = message.sender === "User" ? "User" : "Bot";
+    addMessage(message.content, sender);
+  }
 }
 
-function cleanConversation(){
+function cleanConversation() {
   const parentElement = document.querySelector('.card-body.chat-body');
 
-  // Create a NodeList of all the children except the first one
-  const childrenToRemove = parentElement.querySelectorAll(':not(:first-child)');
+  // Create a list of all the children
+  const children = parentElement.children;
 
-  // Loop through the NodeList and remove each child
-  childrenToRemove.forEach(child => {
-    child.remove();
-  });
+  // Loop through the children (including the first one) and remove each child
+  for (let i = children.length - 1; i >= 0; i--) {
+    children[i].remove();
+  }
 }

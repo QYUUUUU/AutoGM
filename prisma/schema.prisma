@@ -126,7 +126,7 @@ model Conversation {
 
 model Message {
     id             Int           @id @default(autoincrement())
-    content        String?       @db.VarChar(2000) // Change the number to your desired maximum length
+    content        String?       @db.VarChar(8000) // Change the number to your desired maximum length
     sender         String?
     Conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
     conversationId Int?

@@ -1,7 +1,7 @@
 import { Tool } from "langchain/tools";
 
 export class RandomNumberGeneratorTool extends Tool {
-    name = "Dice RNG Tool";
+    name = "Dice-RNG-Tool";
   
     description = "This tool generates a random number for a chosen amount of type of dice (4d20) with the results separately for the user";
   

@@ -8,7 +8,6 @@ import expressSession from 'express-session';
 import { PrismaClient } from '@prisma/client';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
-
 import { startMain as mainAgent } from "./agents/mainAgent.js";
 
 import { Client, GatewayIntentBits } from 'discord.js';
@@ -22,10 +21,46 @@ const client = new Client({
     ]
 });
 
-
 dotenv.config({ path: `.env.local`, override: true });
 
 const app = express();
+
+//APPLICATION ROUTES
+
+app.use(
+  expressSession({
+    cookie: {
+     maxAge: 7 * 24 * 60 * 60 * 1000 // ms
+    },
+    secret: process.env.JWT_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    store: new PrismaSessionStore(
+      new PrismaClient(),
+      {
+        checkPeriod: 2 * 60 * 1000,  //ms
+        dbRecordIdIsSessionId: true,
+        dbRecordIdFunction: undefined,
+      }
+    )
+  })
+);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(expressStatic('public'));
+app.use('/public', expressStatic('public'));
+app.use('/Documentation', expressStatic('Documentation'));
+app.use('/auth', authRoutes); // Add this line for authentication routes
+app.use('/', userRoutes);
+app.use('/backend', backendRoutes);
+app.use('/admin', adminRoutes);
+
+app.listen(80, () => {
+  console.log('Server started on port 80');
+});
+
 
 //Discord BOT
 
@@ -115,39 +150,3 @@ async function callMainAgent(msg){
 
   return botAnswer.output;
 }
-
-//APPLICATION ROUTES
-
-app.use(
-  expressSession({
-    cookie: {
-     maxAge: 7 * 24 * 60 * 60 * 1000 // ms
-    },
-    secret: process.env.JWT_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    store: new PrismaSessionStore(
-      new PrismaClient(),
-      {
-        checkPeriod: 2 * 60 * 1000,  //ms
-        dbRecordIdIsSessionId: true,
-        dbRecordIdFunction: undefined,
-      }
-    )
-  })
-);
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.use(expressStatic('public'));
-app.use('/public', expressStatic('public'));
-app.use('/Documentation', expressStatic('Documentation'));
-app.use('/auth', authRoutes); // Add this line for authentication routes
-app.use('/', userRoutes);
-app.use('/backend', backendRoutes);
-app.use('/admin', adminRoutes);
-
-app.listen(80, () => {
-  console.log('Server started on port 80');
-});
