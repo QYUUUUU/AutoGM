@@ -19,7 +19,7 @@ export class GodsDiceChain extends BaseChain {
     var userId = getUserId();
 
     console.log(userId);
-
+    console.log("IGOTHERE")
     const model = new OpenAI({
       temperature: 0,
       modelName: "gpt-3.5-turbo-16k-0613",
@@ -38,17 +38,27 @@ export class GodsDiceChain extends BaseChain {
     } catch (error) {
       console.error(error)
       return { res:"Bot, dis à l'utilisateur qu'il n'a pas sélectionné de personnage."}
+    }   
+    
+    let sanitizedQuestion = '';
+    try {
+      for (const key in inputs) {
+        sanitizedQuestion += inputs[key];
+      }
+    } catch (error) {
+      console.error(error)
+      return { res:"BROKEN HERE."}
     }
 
-    let sanitizedQuestion = '';
-    for (const key in inputs) {
-      sanitizedQuestion += inputs[key];
-    }
+    console.log("BONJOUR, BONJOUR")
 
     const modifier = parseInt(extractNumbersFromString(sanitizedQuestion));
 
+
+
+    console.log("izdatgud ?")
     sanitizedQuestion = stripNumbers(sanitizedQuestion);
-    
+    console.log("wasnt")
     const blessurelegere = data.blessurelegere
     const blessuregrave = data.blessuregrave
     const blessuremortelle = data.blessuremortelle
@@ -63,7 +73,7 @@ export class GodsDiceChain extends BaseChain {
     }
 
     const characterInfo = JSON.stringify(data);
-
+    console.log("Juskici")
 
     var context = "";
 
@@ -89,7 +99,7 @@ export class GodsDiceChain extends BaseChain {
 
     const malusInfo = JSON.stringify(filteredData);
     console.log(malusInfo);
-
+    console.log("We got there")
     async function getMalusAmount() {
       var carac = removeNumbersFromString(sanitizedQuestion);
       var QA_PROMPT = `Les valeurs des malus: 
@@ -117,7 +127,7 @@ export class GodsDiceChain extends BaseChain {
     diceAmount = extractValuesFromString(diceAmount);
 
     malusAmount = extractValuesFromString(malusAmount);
-
+    console.log("La aussi")
     var { lancers, relances } = calculerLancersEtRelances(diceAmount.competence);
     var totalDice = modifier + diceAmount.caracteristique + lancers + malusAmount.dice + malusAmount.throw + blessureModifier;
     if (totalDice <1){
@@ -188,7 +198,11 @@ function calculerLancersEtRelances(entier) {
 
 function extractNumbersFromString(inputString) {
   const regex = /\d+/g;
-  return inputString.match(regex).map(Number);
+  const matches = inputString.match(regex);
+  if (matches === null) {
+    return "0";
+  }
+  return matches.map(Number);
 }
 
 function stripNumbers(inputString) {
