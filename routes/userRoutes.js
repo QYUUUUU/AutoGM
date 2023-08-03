@@ -15,19 +15,23 @@ router.get('/', async (req, res) => {
         where: { userId: id_User },
       });
 
+
       const conversations = await prisma.conversation.findMany({
-        where: { userId: id_User },
+        where: { userId: id_User, Name: null },
+        orderBy: { id: 'desc' },
       });
 
+      console.log(conversations);
+
       if (conversations.length === 0) {
-        res.redirect('/Conversation/auto/new/');
+        return res.redirect('/Conversation/new/');
       }
       
       // Sort conversations in reverse order based on their index in the array
       conversations.sort((a, b) => b.id - a.id);
   
       if (!characters || characters.length === 0) {
-        res.redirect('/Character/create/new/');
+        return res.redirect('/Character/create/new/');
       } else if (id_User !== "undefined" && id_User !== "" && id_User !== null) {
         const favoriteCharacter = await prisma.favoriteCharacter.findFirst({
           where: { userId: id_User },
@@ -46,16 +50,16 @@ router.get('/', async (req, res) => {
           }
         });
   
-        res.render('index.html.twig', { characters: sortedCharacters, conversations: conversations }); // Pass sortedCharacters as an object
+        return res.render('index.html.twig', { characters: sortedCharacters, conversations: conversations }); // Pass sortedCharacters as an object
       } else {
-        res.render('../views/login.html.twig');
+        return res.render('../views/login.html.twig');
       }
     } catch (error) {
       console.error(error);
-      res.render('../views/login.html.twig');
+      return res.render('../views/login.html.twig');
     }
   }else{
-    res.render('../views/login.html.twig');
+    return res.render('../views/login.html.twig');
   }
   
 });
@@ -90,14 +94,14 @@ router.get('/Characters', async (req, res) => {
       return res.status(404).json({ error: 'No characters found for the user' });
     }
     
-    res.render('characterslist.html.twig', { characters }); // Pass characters as an object
+    return res.render('characterslist.html.twig', { characters }); // Pass characters as an object
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }else{
-  res.render('../views/login.html.twig');
+  return res.render('../views/login.html.twig');
 }
 });
 
@@ -122,16 +126,16 @@ router.get('/Character/:id_Character', async (req, res) => {
       // Check if the connected user is linked to the character or has the role "admin"
       if (Character.User.id === id_User || Character.User.role === 'admin') {
         delete Character.User;
-        res.json(Character);
+        return res.json(Character);
       } else {
-        res.status(403).json({ error: 'Unauthorized access' });
+        return res.status(403).json({ error: 'Unauthorized access' });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
   }else{
-    res.render('../views/login.html.twig');
+    return res.render('../views/login.html.twig');
   }
   
 });
@@ -166,16 +170,16 @@ router.put('/Character/:id/:field/:value', async (req, res) => {
           where: { id_Character: parseInt(id) },
           data: { [field]: parsedValue },
         });
-        res.json(updatedCharacter);
+        return res.json(updatedCharacter);
       } else {
-        res.status(403).json({ error: 'Unauthorized access' });
+        return res.status(403).json({ error: 'Unauthorized access' });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
   }else{
-    res.render('../views/login.html.twig');
+    return res.render('../views/login.html.twig');
   }
   
 });
@@ -215,18 +219,18 @@ router.get('/Character/create/new/', async (req, res) => {
           });
         }
   
-        res.redirect('/Characters');
+        return res.redirect('/Characters');
       } else {
-        res.status(403).json({ error: 'Unauthorized access' });
+        return res.status(403).json({ error: 'Unauthorized access' });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     } finally {
       await prisma.$disconnect();
     }
   }else{
-    res.render('../views/login.html.twig');
+    return res.render('../views/login.html.twig');
   }
   
 });
@@ -252,17 +256,17 @@ router.get('/Character/show/:id_Character', async (req, res) => {
       // Check if the connected user is linked to the character or has the role "admin"
       if (character.User.id === id_User || req.session.role === 'admin') {
         delete character.User;
-        res.render('character.html.twig', { character });
+        return res.render('character.html.twig', { character });
       } else {
-        res.render('../views/login.html.twig');
+        return res.render('../views/login.html.twig');
       }
   
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
   }else{
-    res.render('../views/login.html.twig');
+    return res.render('../views/login.html.twig');
   }
   
 });
@@ -287,7 +291,7 @@ router.get('/Character/Favorite/set/:id_Character', async (req, res) => {
   
         if (existingFavoriteCharacter) {
           // Character is already the favorite, don't do anything
-          res.json({ message: 'Character is already the favorite' });
+          return res.json({ message: 'Character is already the favorite' });
         } else {
           await prisma.favoriteCharacter.deleteMany({ where: { userId: user.id } });
   
@@ -298,17 +302,17 @@ router.get('/Character/Favorite/set/:id_Character', async (req, res) => {
             }
           });
   
-          res.json(favoriteCharacter);
+          return res.json(favoriteCharacter);
         }
       } else {
-        res.status(403).json({ error: 'Unauthorized access' });
+        return res.status(403).json({ error: 'Unauthorized access' });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
   }else{
-    res.render('../views/login.html.twig');
+    return res.render('../views/login.html.twig');
   }
   
 });
@@ -329,10 +333,10 @@ router.get('/Favorite/Character/get/:userId', async (req, res) => {
       return res.status(404).json({ error: 'Favorite character not selected' });
     }
 
-    res.json(favoriteCharacter.character);
+    return res.json(favoriteCharacter.character);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -354,20 +358,19 @@ router.get('/Conversation/new/', async (req, res) => {
           },
         });
 
-        res.redirect('/');
+        return res.redirect('/');
       } else {
-        res.status(403).json({ error: 'Unauthorized access' });
+        return res.status(403).json({ error: 'Unauthorized access' });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     } finally {
       await prisma.$disconnect();
     }
   }else{
-    res.render('../views/login.html.twig');
+    return res.render('../views/login.html.twig');
   }
-  
 });
 
 router.get('/Conversation/get/:conversationId', async (req, res) => {
@@ -383,10 +386,10 @@ router.get('/Conversation/get/:conversationId', async (req, res) => {
       },
     });
 
-    res.json(messages);
+    return res.json(messages);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -411,10 +414,10 @@ router.get('/Conversation/delete/:conversationId', async (req, res) => {
     });
 
 
-    res.json(messages);
+    return res.json(messages);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -436,14 +439,14 @@ router.get('/AutoGM', async (req, res) => {
       });
       
       if (!conversations.some((conversation) => conversation.Name === "Auto")) {
-        res.redirect('/Conversation/auto/new/');
+        return res.redirect('/Conversation/auto/new/');
       }
 
       // Sort conversations in reverse order based on their index in the array
       conversations.sort((a, b) => b.id - a.id);
   
       if (!characters || characters.length === 0) {
-        res.redirect('/Character/create/new/');
+        return res.redirect('/Character/create/new/');
       } else if (id_User !== "undefined" && id_User !== "" && id_User !== null) {
         const favoriteCharacter = await prisma.favoriteCharacter.findFirst({
           where: { userId: id_User },
@@ -462,19 +465,20 @@ router.get('/AutoGM', async (req, res) => {
           }
         });
   
-        res.render('autoGM.html.twig', { characters: sortedCharacters, conversations: conversations }); // Pass sortedCharacters as an object
+        return res.render('autoGM.html.twig', { characters: sortedCharacters, conversations: conversations }); // Pass sortedCharacters as an object
       } else {
-        res.render('../views/login.html.twig');
+        return res.render('../views/login.html.twig');
       }
     } catch (error) {
       console.error(error);
-      res.render('../views/login.html.twig');
+      return res.render('../views/login.html.twig');
     }
   }else{
-    res.render('../views/login.html.twig');
+    return res.render('../views/login.html.twig');
   }
-  
 });
+
+
 
 router.get('/Conversation/auto/new', async (req, res) => {
   console.log("NEW AUTO CALLED")
@@ -497,7 +501,29 @@ router.get('/Conversation/auto/new', async (req, res) => {
 
         await prisma.message.create({
           data: {
-            content: "Bonjour, je suis programmé pour te faire jouer un scénario dans l'univers de GODS. Choisis un personnage avant de commencer.", // Replace with the actual content
+            content: `Your name is GM. You are a Game Master of a tabletop RPG game and you narrate situations in which, I, the player, make decisions. The world you are making me play in is a Dark fantasy themed one. The scenario takes place in a medieval city of the kingdom of Avhorea. The ruler of the kingdom is "Sevire the Red", nickname she acquired by killing all the noble houses that were her ennemies, and by disennobling the weakest ones she still has ennemies within her kingdom, although they don't fight her upfront and scheme in the shadows.
+
+            Adrien se réveille un matin au camp militaire de son régiment. Adrien est un soldat de l’empire du soleil noir. Il fait partit du 17ème régiment, composé de 2500 hommes.
+            
+            Le Culte du Soleil Noir est une religion fanatique qui prêche l'arrivée d'un nouveau Prophète et considère le soleil comme l'Œil de l'Unique. Ils organisent des fêtes religieuses appelées le Massacre du Soleil Noir, où des orgies ont lieu et des sacrifices violents sont effectués.
+            
+            Son régiment, aux côtés du 16ème, est chargé d’assister Vox Aedes, l’ordre dont la mission est de répandre le Culte du soleil noir dans leur mission actuelle, faire du prosélytisme en Avhorae.
+            
+            Le Culte tente d'infiltrer les terres de l'ouest en général, mais a été interdit depuis l'ascension de Sevire au trône d’Avhorae.
+            
+            Des purges ont même été organisées par Sévire pour éliminer les congrégations clandestines mais les fidèles du Culte tentent maintenant de recruter parmi les survivants des familles ducales déchues lors de l’accession au pouvoir de Sévire.
+            
+            Adrien est donc rapidement équipé et prêt à aider à l’installation du camp caché dans la montagne au nord de la ville de Cyridon.
+            
+            Durant la matinée, Adrius est interrompu dans ses corvées par son officier responsable qui lui demande de le suivre vers la tente du général.
+            
+            drien et son groupe, désormais équipés d'habits civils, commencent leur infiltration dans la ville de Cyridon. Ils doivent se mêler à la population locale pour obtenir des informations cruciales sur l'exécution publique planifiée par Sévire.
+            
+            Sevire has a magical sword, that make her almost as strong as a god, and 8 other blades are weilded by her most faithful servents, and generals of her army, the silver phalanx.
+            
+            To help yourself, you must use tools when necessary. Always decide the player's actions resolution via the throwing of a d20 dice.
+            
+            If you have a general question about the lore of GODS or its rules use the tool gods-lore with the Action gods-lore and the Action Input set to the question asked, the tool will then answer your question.`, // Replace with the actual content
             sender: "Bot",   // Replace with the actual sender
             Conversation: { connect: { id: currentConversation.id } },
             // Add other properties for the character here
@@ -506,16 +532,7 @@ router.get('/Conversation/auto/new', async (req, res) => {
 
         await prisma.message.create({
           data: {
-            content: "Bienvenue dans le royaume d'Avhorea, cher voyageur. Vous incarnez un garde chargé de surveiller un marché paisible.", // Replace with the actual content
-            sender: "Bot",   // Replace with the actual sender
-            Conversation: { connect: { id: currentConversation.id } },
-            // Add other properties for the character here
-          },
-        });
-
-        await prisma.message.create({
-          data: {
-            content: "Alors que vous patrouillez avec vos camarades, le calme est soudainement brisé par une terrible secousse. Les étals se renversent, et la panique s'empare des marchands et des passants. Une créature monstrueuse, invoquée par des prêtres des ténèbres, émerge d'un portail sombre et commence à semer le chaos. Vous vous trouvez au cœur de la scène chaotique. La bête est une masse tentaculaire, dotée d'une apparence indescriptible et effrayante. Les prêtres noirs se tiennent à l'écart, observant leur création maléfique. Vos camarades gardes se préparent à l'affronter, mais vous devez décider de votre prochaine action. Note : N'hésitez pas à donner des détails sur votre personnage, comme son nom, son apparence physique ou ses traits de personnalité, si vous le souhaitez. Vous pouvez également interagir avec les personnages non-joueurs déjà présentés, comme vos camarades gardes. Après avoir résolu votre action, nous poursuivrons l'histoire en fonction de votre choix.", // Replace with the actual content
+            content: "Bienvenue dans le royaume d'Avhorea, cher voyageur. Vous incarnez un garde de l'empire du Soleil noir chargé d'espionner le royaume d'Avhorae et son impératrice Sévire, dites moi quand vous voulez commencer à jouer.'.", // Replace with the actual content
             sender: "Bot",   // Replace with the actual sender
             Conversation: { connect: { id: currentConversation.id } },
             // Add other properties for the character here
@@ -523,18 +540,18 @@ router.get('/Conversation/auto/new', async (req, res) => {
         });
 
     
-        res.redirect('/AutoGM');
+        return res.redirect('/AutoGM');
       } else {
-        res.status(403).json({ error: 'Unauthorized access' });
+        return res.status(403).json({ error: 'Unauthorized access' });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     } finally {
       await prisma.$disconnect();
     }
   }else{
-    res.render('../views/login.html.twig');
+    return res.render('../views/login.html.twig');
   }
   
 });
