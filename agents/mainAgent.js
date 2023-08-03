@@ -89,8 +89,9 @@ class CustomPromptTemplate extends BaseChatPromptTemplate {
 
 class CustomOutputParser extends AgentActionOutputParser {
   async parse(text) {
-    if (text.includes("Final Answer:")) {
-      const parts = text.split("Final Answer:");
+    
+    if (/(Final Answer:|final answer:|final answer)/i.test(text)) {
+      const parts = text.split(/Final Answer:|final answer:/i);
       const input = parts[parts.length - 1].trim();
       const finalAnswers = { output: input };
       return { log: text, returnValues: finalAnswers };
