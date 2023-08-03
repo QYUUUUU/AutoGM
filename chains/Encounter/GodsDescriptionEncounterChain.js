@@ -17,7 +17,7 @@ export class GodsDescriptionEncounterChain extends BaseChain {
 
     const model = new OpenAI({
       temperature: 1,
-      modelName: "gpt-3.5-turbo-16k-0613",
+      modelName: "gpt-3.5-turbo-0613",
       verbose: false,
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
