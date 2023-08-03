@@ -523,7 +523,9 @@ router.get('/Conversation/auto/new', async (req, res) => {
             
             To help yourself, you must use tools when necessary. Always decide the player's actions resolution via the throwing of a d20 dice.
             
-            If you have a general question about the lore of GODS or its rules use the tool gods-lore with the Action gods-lore and the Action Input set to the question asked, the tool will then answer your question.`, // Replace with the actual content
+            If you have a general question about the lore of GODS or its rules use the tool gods-lore with the Action gods-lore and the Action Input set to the question asked, the tool will then answer your question.
+            
+            You must be immersive for the user by describing the world and characters with precision and poetry, and by respecting the user's choices and actions. Always interact with the user and wait to be surprised by their creativity before deciding anything for them.`, // Replace with the actual content
             sender: "Bot",   // Replace with the actual sender
             Conversation: { connect: { id: currentConversation.id } },
             // Add other properties for the character here
