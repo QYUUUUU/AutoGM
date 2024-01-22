@@ -6,7 +6,7 @@ import { getUserId } from "../../controllers/globals.js";
 
 export class GodsDiceChain extends BaseChain {
   _chainType() {
-    throw new Error("Method not implemented.");
+    return "custom";
   }
   serialize() {
     throw new Error("Method not implemented.");

@@ -287,25 +287,70 @@ function selectNoteCompetence(competence, note) {
   });
 
 
-
-function updateCharacterField(id, field, value) {
-  const url = `/Character/${id}/${field}/${value}`;
-
-  fetch(url, {
-    method: 'PUT'
-  })
-  .then(response => {
-    if (response.ok) {
-
-    } else {
+  function updateCharacterField(id, field, value) {
+    const url = '/Character';
+  
+    // Updated payload to be sent in the request body
+    const data = {
+      id: id,
+      field: field,
+      value: value
+    };
+  
+    fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data) // Convert data to JSON string
+    })
+    .then(response => {
+      if (response.ok) {
+        // Handle successful response
+        console.log(`Character field ${field} for ID ${id} updated successfully.`);
+      } else {
+        console.error(`Error updating ${field} for Character with ID ${id}`);
+        console.error(response.status, response.statusText);
+      }
+    })
+    .catch(error => {
       console.error(`Error updating ${field} for Character with ID ${id}`);
-      console.error(response.status, response.statusText);
+      console.error(error);
+    });
+  }
+
+
+function updateInventory(quill) {
+  var contents = quill.getContents();
+  console.log(contents)
+  const jsonString = JSON.stringify(contents);
+  console.log(jsonString)
+  updateCharacterField(id_Character, "inventory", jsonString);
+}
+
+function makeQuill(quillContent){
+  var quill = new Quill('#editor', {
+    theme: 'snow',
+    placeholder: 'Take notes here...',
+    modules: {
+    toolbar: [
+    [
+    {
+    'header': [1, 2, false]
     }
-  })
-  .catch(error => {
-    console.error(`Error updating ${field} for Character with ID ${id}`);
-    console.error(error);
+    ],
+    [
+    'bold', 'italic', 'underline'
+    ],
+    ['code-block']
+    ]
+    }
   });
+  quill.on('text-change', function() {
+      updateInventory(quill);
+  });
+  quillContent = JSON.parse(quillContent);
+  quill.setContents(quillContent);
 }
 
 
@@ -344,6 +389,7 @@ getCharacter(id_Character)
     document.getElementById('malusarme').value = data.malusarme;
     document.getElementById('malusinconnu').value = data.malusinconnu;
     document.getElementById('malusmental').value = data.malusmental;
+    makeQuill(data.inventory);
 
     if (data.connaissance !== 0 && data.connaissance !== null) {
       document.getElementById('connaissancelosange'+data.connaissance).click();

@@ -3,7 +3,7 @@ import { BaseChain } from "langchain/chains";
 
 export class GodsEncounterChain extends BaseChain {
   _chainType() {
-    throw new Error("Method not implemented.");
+    return "custom";
   }
   serialize() {
     throw new Error("Method not implemented.");

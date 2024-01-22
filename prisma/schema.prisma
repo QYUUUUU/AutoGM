@@ -104,6 +104,7 @@ model Character {
     effort              Int?                @default(15)
     maxsangfroid        Int?                @default(8)
     sangfroid           Int?                @default(8)
+    inventory           String?             @default("") @db.VarChar(5000)
     User                User?               @relation(fields: [userId], references: [id])
     userId              Int?
     FavoriteCharacter   FavoriteCharacter[]

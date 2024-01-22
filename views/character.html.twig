@@ -1,780 +1,786 @@
 {% extends '/layouts/base.html.twig' %}
 
 {% block stylesheets %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block body %}
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-12 d-flex justify-content-center">
-                  <div class="card-sheet">
-                    <div class="card-body-sheet">
-                        <div class="row nomage justify-content-center">
-                          <div class="col-3 row">
-                            <p>Nom :</p>
-                            <input class="rowToUpdate" id="nom" name="nom"/>
-                          </div>
-                          <div class="col-3 row age">
-                            <input class="rowToUpdate" id="age" name="age" />
-                            <p>: Âge</p>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center">
-                          <div class="col-5 row">
-                            <p>Genre :</p>
-                            <input class="rowToUpdate" id="genre" name="genre" />
-                          </div>
-                          <div class="col-5 row instinct">
-                            <input class="rowToUpdate" id="instinct" name="instinct" />
-                            <p>: Instinct</p>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center">
-                          <div class="col-6 row">
-                            <p>Signe Astrologique :</p>
-                            <input class="rowToUpdate" id="signeastro" name="signeastro" />
-                          </div>
-                          <div class="col-6 row origine">
-                            <input class="rowToUpdate" id="origine" name="origine" />
-                            <p>: Origine</p>
-                          </div>
-                        </div>
-                        <div class="row reputexp justify-content-center">
-                          <div class="col-5 row">
-                            <h5>Réputation</h5>
-                          </div>
-                          <div class="col-5 row experience">
-                            <h5>Expérience</h5>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center">
-                          <div class="col-6 row"></div>
-                          <div class="col-6 row exp">
-                            <p>Dépensée &nbsp;&nbsp;&nbsp;&nbsp;Totale</p>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center pointsexp">
-                          <div class="col-6 row"></div>
-                          <div class="col-6 row exp">
-                            <input class="rowToUpdate" id="depensee" name="depensee" />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input class="rowToUpdate" id="totale" name="totale" />
-                          </div>
-                        </div>
-                        <div class="row justify-content-center caracteristiques">
-                          <div class="col-2 justify-content-center">
-                            <h3 class="text-center">PHYSIQUE</h3>
-                          </div>
-                          <div class="col-2 justify-content-center">
-                            <h3 class="text-center">MANUEL</h3>
-                          </div>
-                          <div class="col-2 justify-content-center">
-                            <h3 class="text-center">SOCIAL</h3>
-                          </div>
-                          <div class="col-2 justify-content-center">
-                            <h3 class="text-center">MENTAL</h3>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center">
-                          <div class="col-2 justify-content-center">
-                            <h4 class="text-center">Puissance</h4>
-                          </div>
-                          <div class="col-2 justify-content-center">
-                            <h4 class="text-center">Précision</h4>
-                          </div>
-                          <div class="col-2 justify-content-center">
-                            <h4 class="text-center">Connaissance</h4>
-                          </div>
-                          <div class="col-2 justify-content-center">
-                            <h4 class="text-center">Volonté</h4>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center" style="height: 36.78px">
-                          <div class="col-2 text-center">
-                            <img class="losange" id="puissancelosange1" src="/images/losange.png"/>
-                            <img class="losange" id="puissancelosange2" src="/images/losange.png"/>
-                            <img class="losange"id="puissancelosange3" src="/images/losange.png"/>
-                            <img class="losange" id="puissancelosange4" src="/images/losange.png"/>
-                            <img class="losange" id="puissancelosange5" src="/images/losange.png"/>
-                          </div>
-                          <div class="col-2 text-center">
-                            <img class="losange" id="precicionlosange1" src="/images/losange.png"/>
-                            <img class="losange" id="precicionlosange2" src="/images/losange.png"/>
-                            <img class="losange" id="precicionlosange3" src="/images/losange.png"/>
-                            <img class="losange" id="precicionlosange4" src="/images/losange.png"/>
-                            <img class="losange" id="precicionlosange5" src="/images/losange.png"/>
-                          </div>
-                          <div class="col-2 text-center">
-                            <img class="losange" id="connaissancelosange1" src="/images/losange.png"/>
-                            <img class="losange" id="connaissancelosange2" src="/images/losange.png"/>
-                            <img class="losange" id="connaissancelosange3" src="/images/losange.png"/>
-                            <img class="losange" id="connaissancelosange4" src="/images/losange.png"/>
-                            <img class="losange" id="connaissancelosange5" src="/images/losange.png"/>
-                          </div>
-                          <div class="col-2 text-center">
-                            <img class="losange" id="volontelosange1" src="/images/losange.png" />
-                            <img class="losange" id="volontelosange2" src="/images/losange.png" />
-                            <img class="losange" id="volontelosange3" src="/images/losange.png" />
-                            <img class="losange" id="volontelosange4" src="/images/losange.png" />
-                            <img class="losange" id="volontelosange5" src="/images/losange.png" />
-                          </div>
-                        </div>
-                        <div class="row justify-content-center">
-                          <div class="col-2 justify-content-center">
-                            <h4 class="text-center">Résistance</h4>
-                          </div>
-                          <div class="col-2 justify-content-center">
-                            <h4 class="text-center">Réflexes</h4>
-                          </div>
-                          <div class="col-2 justify-content-center">
-                            <h4 class="text-center">Perception</h4>
-                          </div>
-                          <div class="col-2 justify-content-center">
-                            <h4 class="text-center">Empathie</h4>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center" style="height: 36.78px">
-                          <div class="col-2 text-center">
-                            <img class="losange" id="resistancelosange1" src="/images/losange.png"/>
-                            <img class="losange" id="resistancelosange2" src="/images/losange.png"/>
-                            <img class="losange" id="resistancelosange3" src="/images/losange.png"/>
-                            <img class="losange" id="resistancelosange4" src="/images/losange.png"/>
-                            <img class="losange" id="resistancelosange5" src="/images/losange.png"/>
-                          </div>
-                          <div class="col-2 text-center">
-                            <img class="losange" id="reflexeslosange1" src="/images/losange.png"/>
-                            <img class="losange" id="reflexeslosange2" src="/images/losange.png"/>
-                            <img class="losange" id="reflexeslosange3" src="/images/losange.png"/>
-                            <img class="losange" id="reflexeslosange4" src="/images/losange.png"/>
-                            <img class="losange" id="reflexeslosange5" src="/images/losange.png"/>
-                          </div>
-                          <div class="col-2 text-center">
-                            <img class="losange" id="perceptionlosange1" src="/images/losange.png"/>
-                            <img class="losange" id="perceptionlosange2" src="/images/losange.png"/>
-                            <img class="losange" id="perceptionlosange3" src="/images/losange.png"/>
-                            <img class="losange" id="perceptionlosange4" src="/images/losange.png"/>
-                            <img class="losange" id="perceptionlosange5" src="/images/losange.png"/>
-                          </div>
-                          <div class="col-2 text-center">
-                            <img class="losange" id="empathielosange1" src="/images/losange.png"/>
-                            <img class="losange" id="empathielosange2" src="/images/losange.png"/>
-                            <img class="losange" id="empathielosange3" src="/images/losange.png"/>
-                            <img class="losange" id="empathielosange4" src="/images/losange.png"/>
-                            <img class="losange" id="empathielosange5" src="/images/losange.png"/>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center">
-                          <div class="col-2 text-center">
-                            <div class="d-flex align-items-center justify-content-center">
-                              <h5 class="mr-3">Malus</h5>
-                              <input class="malus rowToUpdate" id="malusphysique" name="malusphysique"
-                              />
-                            </div>
-                          </div>
-                          <div class="col-2 text-center">
-                            <div class="d-flex align-items-center justify-content-center">
-                              <h5 class="mr-3">Malus</h5>
-                              <input class="malus rowToUpdate" id="malusmanuel" name="malusmanuel" />
-                            </div>
-                          </div>
-                          <div class="col-2 text-center">
-                            <div class="d-flex align-items-center justify-content-center">
-                              <h5 class="mr-3">Malus</h5>
-                              <input class="malus rowToUpdate" id="malussocial" name="malussocial" />
-                            </div>
-                          </div>
-                          <div class="col-2 text-center">
-                            <div class="d-flex align-items-center justify-content-center">
-                              <h5 class="mr-3">Malus</h5>
-                              <input class="malus rowToUpdate" id="malusmental" name="malusmental" />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row infosymbole justify-content-center">
-                          <div class="col-2 text-center d-flex align-items-center">
-                            <img class="losange" src="/images/losange.png" />
-                            <p>+1 D</p>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <img class="circle" src="/images/circle.png" />
-                            <p>Relance</p>
-                          </div>
-                        </div>
-                        <div class="row humainanimal justify-content-center">
-                          <div class="col-5 row justify-content-center">
-                            <h2>L'Humain</h2>
-                          </div>
-                          <div class="col-5 row animal justify-content-center">
-                            <h2>L'Animal</h2>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                            <div class="col-4">
-                              <h5 class="totheright">Arts</h5>
-                            </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="artslosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="artslosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="artslosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="artslosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="artslosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="artslosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                            <div class="col-4">
-                              <h5 class="totheright">Animalisme(I)</h5>
-                            </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="animalismelosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="animalismelosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="animalismelosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="animalismelosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="animalismelosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="animalismelosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                            <div class="col-4">
-                              <h5 class="totheright">Cité</h5>
-                            </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="citelosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="citelosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="citelosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="citelosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="citelosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="citelosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Faune</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="faunelosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="faunelosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="faunelosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="faunelosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="faunelosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="faunelosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Civilisations</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="civilisationslosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="civilisationslosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="civilisationslosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="civilisationslosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="civilisationslosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="civilisationslosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Montures</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="montureslosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="montureslosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="montureslosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="montureslosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="montureslosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="montureslosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Relationnel</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="relationnellosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="relationnellosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="relationnellosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="relationnellosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="relationnellosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="relationnellosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Pistage</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="pistagelosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="pistagelosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="pistagelosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="pistagelosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="pistagelosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="pistagelosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Soins</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="soinslosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="soinslosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="soinslosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="soinslosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="soinslosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="soinslosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Territoire</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="territoirelosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="territoirelosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="territoirelosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="territoirelosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="territoirelosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="territoirelosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts lilhigher justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                            <div class="col-2 text-center">
-                              <div class="d-flex align-items-center justify-content-center">
-                                <h5 class="mr-3">Malus</h5>
-                                <input class="malus rowToUpdate" id="malushumain" name="malushumain"/>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                            <div class="col-2 text-center">
-                              <div class="d-flex align-items-center justify-content-center">
-                                <h5 class="mr-3">Malus</h5>
-                                <input class="malus rowToUpdate" id="malusanimal" name="malushumain"/>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center">
-                          <div class="col-5 row justify-content-center">
-                            <h2>L'Outil</h2>
-                          </div>
-                          <div class="col-5 row animal justify-content-center">
-                            <h2>Les Terres Sauvages</h2>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Adresse</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="adresselosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="adresselosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="adresselosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="adresselosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="adresselosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="adresselosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Athlétisme</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="athletismelosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="athletismelosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="athletismelosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="athletismelosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="athletismelosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="athletismelosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Armurerie(I)</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="armurerielosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="armurerielosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="armurerielosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="armurerielosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="armurerielosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="armurerielosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Discrétion</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="discretionlosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="discretionlosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="discretionlosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="discretionlosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="discretionlosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="discretionlosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Artisanat(I)</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="artisanatlosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="artisanatlosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="artisanatlosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="artisanatlosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="artisanatlosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="artisanatlosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Flore</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="florelosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="florelosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="florelosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="florelosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="florelosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="florelosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Mécanisme(II)</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="mecanismelosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="mecanismelosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="mecanismelosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="mecanismelosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="mecanismelosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="mecanismelosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Vigilance</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="vigilancelosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="vigilancelosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="vigilancelosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="vigilancelosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="vigilancelosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="vigilancelosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Runes(I)</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="runeslosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="runeslosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="runeslosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="runeslosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="runeslosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="runeslosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Voyage</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="voyagelosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="voyagelosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="voyagelosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="voyagelosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="voyagelosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="voyagelosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts lilhigher justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                            <div class="col-2 text-center">
-                              <div class="d-flex align-items-center justify-content-center">
-                                <h5 class="mr-3">Malus</h5>
-                                <input class="malus rowToUpdate" id="malusoutils" name="malusoutils"/>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                            <div class="col-2 text-center">
-                              <div class="d-flex align-items-center justify-content-center">
-                                <h5 class="mr-3">Malus</h5>
-                                <input class="malus rowToUpdate" id="malusterres" name="malusterres"/>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center">
-                          <div class="col-5 row justify-content-center">
-                            <h2>L'Arme</h2>
-                          </div>
-                          <div class="col-5 row animal justify-content-center">
-                            <h2>L'Inconnu</h2>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Bouclier(I)</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="bouclierlosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="bouclierlosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="bouclierlosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="bouclierlosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="bouclierlosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="bouclierlosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Eclat(II)</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="eclatslosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="eclatslosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="eclatslosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="eclatslosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="eclatslosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="eclatslosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Corps à corps</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="caclosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="caclosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="caclosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="caclosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="caclosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="caclosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Lunes(I)</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="luneslosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="luneslosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="luneslosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="luneslosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="luneslosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="luneslosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Lance</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="lancerlosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="lancerlosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="lancerlosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="lancerlosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="lancerlosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="lancerlosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Mythes(I)</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="mytheslosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="mytheslosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="mytheslosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="mytheslosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="mytheslosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="mytheslosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Mêlée</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="meleelosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="meleelosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="meleelosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="meleelosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="meleelosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="meleelosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Panthéons(I)</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="pantheonslosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="pantheonslosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="pantheonslosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="pantheonslosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="pantheonslosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="pantheonslosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Tir</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="tirlosange1" src="/images/losange.png" />
-                              <img class="losangecarac" id="tirlosange2" src="/images/circle.png" />
-                              <img class="losangecarac" id="tirlosange3" src="/images/losange.png" />
-                              <img class="losangecarac" id="tirlosange4" src="/images/circle.png" />
-                              <img class="losangecarac" id="tirlosange5" src="/images/losange.png" />
-                              <img class="losangecarac" id="tirlosange6" src="/images/circle.png" />
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                          <div class="col-4">
-                            <h5 class="totheright">Rituels</h5>
-                          </div>
-                            <div class="col-4">
-                              <img class="losangecarac" id="rituelslosange1" src="/images/losange.png"/>
-                              <img class="losangecarac" id="rituelslosange2" src="/images/circle.png"/>
-                              <img class="losangecarac" id="rituelslosange3" src="/images/losange.png"/>
-                              <img class="losangecarac" id="rituelslosange4" src="/images/circle.png"/>
-                              <img class="losangecarac" id="rituelslosange5" src="/images/losange.png"/>
-                              <img class="losangecarac" id="rituelslosange6" src="/images/circle.png"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row arts lilhigher justify-content-center">
-                          <div class="col-6 row justify-content-center lilhigher">
-                            <div class="col-2 text-center">
-                              <div class="d-flex align-items-center justify-content-center">
-                                <h5 class="mr-3">Malus</h5>
-                                <input class="malus rowToUpdate" id="malusarme" name="malusarme"/>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-6 row justify-content-center lilhigher">
-                            <div class="col-2 text-center">
-                              <div class="d-flex align-items-center justify-content-center">
-                                <h5 class="mr-3">Malus</h5>
-                                <input class="malus rowToUpdate" id="malusinconnu" name="malusinconnu"/>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row bleres  justify-content-center">
-                          <div class="col-3 row justify-content-center">
-                            <h3 class="text-center">Blessures</h3>
-                          </div>
-                          <div class="col-3 row reserves justify-content-center">
-                            <h3>Réserves</h3>
-                          </div>
-                        </div>
-                      <div class="row justify-content-center">
-                        <div class="col-6 blessurestype row justify-content-center">
-                          <div class="col-4 row text-center">
-                            <h5>Légères</h5>
-                            <div class="btn-group-vertical alilhigher">
-                              <button id="pluslegere" type="button" class="btn increments">+</button>
-                              <button id="moinslegere" type="button" class="btn increments">-</button>
-                            </div>
-                          </div>
-                          <div class="col-3 row text-center">
-                            <h5>Graves</h5>
-                            <div class="btn-group-vertical alilhigher">
-                              <button id="plusgrave" type="button" class="btn increments">+</button>
-                              <button id="moinsgrave" type="button" class="btn increments">-</button>
-                            </div>
-                          </div>
-                          <div class="col-3 row text-center">
-                            <h5>Mortelles</h5>
-                            <div class="btn-group-vertical alilhigher">
-                              <button id="plusmortelle" type="button" class="btn increments">+</button>
-                              <button id="moinsmortelle" type="button" class="btn increments">-</button>
-                            </div>
-                          </div>
-                        </div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12 d-flex justify-content-center">
+				<div class="card-sheet">
+					<div class="card-body-sheet">
+						<div class="row nomage justify-content-center">
+							<div class="col-3 row">
+								<p>Nom :</p>
+								<input class="rowToUpdate" id="nom" name="nom"/>
+							</div>
+							<div class="col-3 row age">
+								<input class="rowToUpdate" id="age" name="age"/>
+								<p>: Âge</p>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-5 row">
+								<p>Genre :</p>
+								<input class="rowToUpdate" id="genre" name="genre"/>
+							</div>
+							<div class="col-5 row instinct">
+								<input class="rowToUpdate" id="instinct" name="instinct"/>
+								<p>: Instinct</p>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-6 row">
+								<p>Signe Astrologique :</p>
+								<input class="rowToUpdate" id="signeastro" name="signeastro"/>
+							</div>
+							<div class="col-6 row origine">
+								<input class="rowToUpdate" id="origine" name="origine"/>
+								<p>: Origine</p>
+							</div>
+						</div>
+						<div class="row reputexp justify-content-center">
+							<div class="col-5 row">
+								<h5>Réputation</h5>
+							</div>
+							<div class="col-5 row experience">
+								<h5>Expérience</h5>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-6 row"></div>
+							<div class="col-6 row exp">
+								<p>Dépensée &nbsp;&nbsp;&nbsp;&nbsp;Totale</p>
+							</div>
+						</div>
+						<div class="row justify-content-center pointsexp">
+							<div class="col-6 row"></div>
+							<div class="col-6 row exp">
+								<input class="rowToUpdate" id="depensee" name="depensee"/>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<input class="rowToUpdate" id="totale" name="totale"/>
+							</div>
+						</div>
+						<div class="row justify-content-center caracteristiques">
+							<div class="col-2 justify-content-center">
+								<h3 class="text-center">PHYSIQUE</h3>
+							</div>
+							<div class="col-2 justify-content-center">
+								<h3 class="text-center">MANUEL</h3>
+							</div>
+							<div class="col-2 justify-content-center">
+								<h3 class="text-center">SOCIAL</h3>
+							</div>
+							<div class="col-2 justify-content-center">
+								<h3 class="text-center">MENTAL</h3>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-2 justify-content-center">
+								<h4 class="text-center">Puissance</h4>
+							</div>
+							<div class="col-2 justify-content-center">
+								<h4 class="text-center">Précision</h4>
+							</div>
+							<div class="col-2 justify-content-center">
+								<h4 class="text-center">Connaissance</h4>
+							</div>
+							<div class="col-2 justify-content-center">
+								<h4 class="text-center">Volonté</h4>
+							</div>
+						</div>
+						<div class="row justify-content-center" style="height: 36.78px">
+							<div class="col-2 text-center">
+								<img class="losange" id="puissancelosange1" src="/images/losange.png"/>
+								<img class="losange" id="puissancelosange2" src="/images/losange.png"/>
+								<img class="losange" id="puissancelosange3" src="/images/losange.png"/>
+								<img class="losange" id="puissancelosange4" src="/images/losange.png"/>
+								<img class="losange" id="puissancelosange5" src="/images/losange.png"/>
+							</div>
+							<div class="col-2 text-center">
+								<img class="losange" id="precicionlosange1" src="/images/losange.png"/>
+								<img class="losange" id="precicionlosange2" src="/images/losange.png"/>
+								<img class="losange" id="precicionlosange3" src="/images/losange.png"/>
+								<img class="losange" id="precicionlosange4" src="/images/losange.png"/>
+								<img class="losange" id="precicionlosange5" src="/images/losange.png"/>
+							</div>
+							<div class="col-2 text-center">
+								<img class="losange" id="connaissancelosange1" src="/images/losange.png"/>
+								<img class="losange" id="connaissancelosange2" src="/images/losange.png"/>
+								<img class="losange" id="connaissancelosange3" src="/images/losange.png"/>
+								<img class="losange" id="connaissancelosange4" src="/images/losange.png"/>
+								<img class="losange" id="connaissancelosange5" src="/images/losange.png"/>
+							</div>
+							<div class="col-2 text-center">
+								<img class="losange" id="volontelosange1" src="/images/losange.png"/>
+								<img class="losange" id="volontelosange2" src="/images/losange.png"/>
+								<img class="losange" id="volontelosange3" src="/images/losange.png"/>
+								<img class="losange" id="volontelosange4" src="/images/losange.png"/>
+								<img class="losange" id="volontelosange5" src="/images/losange.png"/>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-2 justify-content-center">
+								<h4 class="text-center">Résistance</h4>
+							</div>
+							<div class="col-2 justify-content-center">
+								<h4 class="text-center">Réflexes</h4>
+							</div>
+							<div class="col-2 justify-content-center">
+								<h4 class="text-center">Perception</h4>
+							</div>
+							<div class="col-2 justify-content-center">
+								<h4 class="text-center">Empathie</h4>
+							</div>
+						</div>
+						<div class="row justify-content-center" style="height: 36.78px">
+							<div class="col-2 text-center">
+								<img class="losange" id="resistancelosange1" src="/images/losange.png"/>
+								<img class="losange" id="resistancelosange2" src="/images/losange.png"/>
+								<img class="losange" id="resistancelosange3" src="/images/losange.png"/>
+								<img class="losange" id="resistancelosange4" src="/images/losange.png"/>
+								<img class="losange" id="resistancelosange5" src="/images/losange.png"/>
+							</div>
+							<div class="col-2 text-center">
+								<img class="losange" id="reflexeslosange1" src="/images/losange.png"/>
+								<img class="losange" id="reflexeslosange2" src="/images/losange.png"/>
+								<img class="losange" id="reflexeslosange3" src="/images/losange.png"/>
+								<img class="losange" id="reflexeslosange4" src="/images/losange.png"/>
+								<img class="losange" id="reflexeslosange5" src="/images/losange.png"/>
+							</div>
+							<div class="col-2 text-center">
+								<img class="losange" id="perceptionlosange1" src="/images/losange.png"/>
+								<img class="losange" id="perceptionlosange2" src="/images/losange.png"/>
+								<img class="losange" id="perceptionlosange3" src="/images/losange.png"/>
+								<img class="losange" id="perceptionlosange4" src="/images/losange.png"/>
+								<img class="losange" id="perceptionlosange5" src="/images/losange.png"/>
+							</div>
+							<div class="col-2 text-center">
+								<img class="losange" id="empathielosange1" src="/images/losange.png"/>
+								<img class="losange" id="empathielosange2" src="/images/losange.png"/>
+								<img class="losange" id="empathielosange3" src="/images/losange.png"/>
+								<img class="losange" id="empathielosange4" src="/images/losange.png"/>
+								<img class="losange" id="empathielosange5" src="/images/losange.png"/>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-2 text-center">
+								<div class="d-flex align-items-center justify-content-center">
+									<h5 class="mr-3">Malus</h5>
+									<input class="malus rowToUpdate" id="malusphysique" name="malusphysique"/>
+								</div>
+							</div>
+							<div class="col-2 text-center">
+								<div class="d-flex align-items-center justify-content-center">
+									<h5 class="mr-3">Malus</h5>
+									<input class="malus rowToUpdate" id="malusmanuel" name="malusmanuel"/>
+								</div>
+							</div>
+							<div class="col-2 text-center">
+								<div class="d-flex align-items-center justify-content-center">
+									<h5 class="mr-3">Malus</h5>
+									<input class="malus rowToUpdate" id="malussocial" name="malussocial"/>
+								</div>
+							</div>
+							<div class="col-2 text-center">
+								<div class="d-flex align-items-center justify-content-center">
+									<h5 class="mr-3">Malus</h5>
+									<input class="malus rowToUpdate" id="malusmental" name="malusmental"/>
+								</div>
+							</div>
+						</div>
+						<div class="row infosymbole justify-content-center">
+							<div class="col-2 text-center d-flex align-items-center">
+								<img class="losange" src="/images/losange.png"/>
+								<p>+1 D</p>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<img class="circle" src="/images/circle.png"/>
+								<p>Relance</p>
+							</div>
+						</div>
+						<div class="row humainanimal justify-content-center">
+							<div class="col-5 row justify-content-center">
+								<h2>L'Humain</h2>
+							</div>
+							<div class="col-5 row animal justify-content-center">
+								<h2>L'Animal</h2>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Arts</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="artslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="artslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="artslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="artslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="artslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="artslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Animalisme(I)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="animalismelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="animalismelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="animalismelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="animalismelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="animalismelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="animalismelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Cité</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="citelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="citelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="citelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="citelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="citelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="citelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Faune</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="faunelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="faunelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="faunelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="faunelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="faunelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="faunelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Civilisations</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="civilisationslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="civilisationslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="civilisationslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="civilisationslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="civilisationslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="civilisationslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Montures</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="montureslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="montureslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="montureslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="montureslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="montureslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="montureslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Relationnel</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="relationnellosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="relationnellosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="relationnellosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="relationnellosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="relationnellosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="relationnellosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Pistage</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="pistagelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="pistagelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="pistagelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="pistagelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="pistagelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="pistagelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Soins</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="soinslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="soinslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="soinslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="soinslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="soinslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="soinslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Territoire</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="territoirelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="territoirelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="territoirelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="territoirelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="territoirelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="territoirelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts lilhigher justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-2 text-center">
+									<div class="d-flex align-items-center justify-content-center">
+										<h5 class="mr-3">Malus</h5>
+										<input class="malus rowToUpdate" id="malushumain" name="malushumain"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-2 text-center">
+									<div class="d-flex align-items-center justify-content-center">
+										<h5 class="mr-3">Malus</h5>
+										<input class="malus rowToUpdate" id="malusanimal" name="malushumain"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-5 row justify-content-center">
+								<h2>L'Outil</h2>
+							</div>
+							<div class="col-5 row animal justify-content-center">
+								<h2>Les Terres Sauvages</h2>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Adresse</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="adresselosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="adresselosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="adresselosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="adresselosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="adresselosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="adresselosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Athlétisme</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="athletismelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="athletismelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="athletismelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="athletismelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="athletismelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="athletismelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Armurerie(I)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="armurerielosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="armurerielosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="armurerielosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="armurerielosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="armurerielosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="armurerielosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Discrétion</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="discretionlosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="discretionlosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="discretionlosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="discretionlosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="discretionlosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="discretionlosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Artisanat(I)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="artisanatlosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="artisanatlosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="artisanatlosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="artisanatlosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="artisanatlosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="artisanatlosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Flore</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="florelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="florelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="florelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="florelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="florelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="florelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Mécanisme(II)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="mecanismelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="mecanismelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="mecanismelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="mecanismelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="mecanismelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="mecanismelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Vigilance</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="vigilancelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="vigilancelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="vigilancelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="vigilancelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="vigilancelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="vigilancelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Runes(I)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="runeslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="runeslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="runeslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="runeslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="runeslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="runeslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Voyage</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="voyagelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="voyagelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="voyagelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="voyagelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="voyagelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="voyagelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts lilhigher justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-2 text-center">
+									<div class="d-flex align-items-center justify-content-center">
+										<h5 class="mr-3">Malus</h5>
+										<input class="malus rowToUpdate" id="malusoutils" name="malusoutils"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-2 text-center">
+									<div class="d-flex align-items-center justify-content-center">
+										<h5 class="mr-3">Malus</h5>
+										<input class="malus rowToUpdate" id="malusterres" name="malusterres"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-5 row justify-content-center">
+								<h2>L'Arme</h2>
+							</div>
+							<div class="col-5 row animal justify-content-center">
+								<h2>L'Inconnu</h2>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Bouclier(I)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="bouclierlosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="bouclierlosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="bouclierlosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="bouclierlosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="bouclierlosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="bouclierlosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Eclat(II)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="eclatslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="eclatslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="eclatslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="eclatslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="eclatslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="eclatslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Corps à corps</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="caclosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="caclosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="caclosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="caclosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="caclosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="caclosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Lunes(I)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="luneslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="luneslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="luneslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="luneslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="luneslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="luneslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Lance</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="lancerlosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="lancerlosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="lancerlosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="lancerlosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="lancerlosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="lancerlosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Mythes(I)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="mytheslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="mytheslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="mytheslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="mytheslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="mytheslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="mytheslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Mêlée</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="meleelosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="meleelosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="meleelosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="meleelosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="meleelosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="meleelosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Panthéons(I)</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="pantheonslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="pantheonslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="pantheonslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="pantheonslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="pantheonslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="pantheonslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Tir</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="tirlosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="tirlosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="tirlosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="tirlosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="tirlosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="tirlosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-4">
+									<h5 class="totheright">Rituels</h5>
+								</div>
+								<div class="col-4">
+									<img class="losangecarac" id="rituelslosange1" src="/images/losange.png"/>
+									<img class="losangecarac" id="rituelslosange2" src="/images/circle.png"/>
+									<img class="losangecarac" id="rituelslosange3" src="/images/losange.png"/>
+									<img class="losangecarac" id="rituelslosange4" src="/images/circle.png"/>
+									<img class="losangecarac" id="rituelslosange5" src="/images/losange.png"/>
+									<img class="losangecarac" id="rituelslosange6" src="/images/circle.png"/>
+								</div>
+							</div>
+						</div>
+						<div class="row arts lilhigher justify-content-center">
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-2 text-center">
+									<div class="d-flex align-items-center justify-content-center">
+										<h5 class="mr-3">Malus</h5>
+										<input class="malus rowToUpdate" id="malusarme" name="malusarme"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-6 row justify-content-center lilhigher">
+								<div class="col-2 text-center">
+									<div class="d-flex align-items-center justify-content-center">
+										<h5 class="mr-3">Malus</h5>
+										<input class="malus rowToUpdate" id="malusinconnu" name="malusinconnu"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row bleres  justify-content-center">
+							<div class="col-3 row justify-content-center">
+								<h3 class="text-center">Blessures</h3>
+							</div>
+							<div class="col-3 row reserves justify-content-center">
+								<h3>Réserves</h3>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-6 blessurestype row justify-content-center">
+								<div class="col-4 row text-center">
+									<h5>Légères</h5>
+									<div class="btn-group-vertical alilhigher">
+										<button id="pluslegere" type="button" class="btn increments">+</button>
+										<button id="moinslegere" type="button" class="btn increments">-</button>
+									</div>
+								</div>
+								<div class="col-3 row text-center">
+									<h5>Graves</h5>
+									<div class="btn-group-vertical alilhigher">
+										<button id="plusgrave" type="button" class="btn increments">+</button>
+										<button id="moinsgrave" type="button" class="btn increments">-</button>
+									</div>
+								</div>
+								<div class="col-3 row text-center">
+									<h5>Mortelles</h5>
+									<div class="btn-group-vertical alilhigher">
+										<button id="plusmortelle" type="button" class="btn increments">+</button>
+										<button id="moinsmortelle" type="button" class="btn increments">-</button>
+									</div>
+								</div>
+							</div>
 
-                        <div class="col-6 row reservesoffsetright justify-content-center">
-                        <div class="col-3 row text-center">
-                        </div>
-                          <div class="col-4 row text-center">
-                              <h5>Effort</h5>
-                              <div class="btn-group-vertical alilhigher">
-                                <button id="pluseffort" type="button" class="btn incrementsreserve">+</button>
-                                <button id="moinseffort" type="button" class="btn incrementsreserve">-</button>
-                              </div>
-                            </div>
-                            <div class="col-4 row text-center">
-                              <h5>Sang-Froid</h5>
-                              <div class="btn-group-vertical alilhigher">
-                                <button id="plussangfroid" type="button" class="btn incrementsreserve">+</button>
-                                <button id="moinssangfroid" type="button" class="btn incrementsreserve">-</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row justify-content-center">
-                        <div class="col-6 blessurestypebless row justify-content-center">
-                          <div id="blessurelegere" class="col-3 text-center">
-                          </div>
-                          <div id="blessuregrave" class="col-3 text-center">
-                          </div>
-                          <div id="blessuremortelle" class="col-3 text-center">
-                          </div>
-                        </div>
-                        <div class="col-6 row justify-content-center">
-                          <div id="effort" class="col-4 text-center">
-                          </div>
-                          <div id="sangfroid" class="col-4 text-center">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-              </div>
+							<div class="col-6 row reservesoffsetright justify-content-center">
+								<div class="col-3 row text-center"></div>
+								<div class="col-4 row text-center">
+									<h5>Effort</h5>
+									<div class="btn-group-vertical alilhigher">
+										<button id="pluseffort" type="button" class="btn incrementsreserve">+</button>
+										<button id="moinseffort" type="button" class="btn incrementsreserve">-</button>
+									</div>
+								</div>
+								<div class="col-4 row text-center">
+									<h5>Sang-Froid</h5>
+									<div class="btn-group-vertical alilhigher">
+										<button id="plussangfroid" type="button" class="btn incrementsreserve">+</button>
+										<button id="moinssangfroid" type="button" class="btn incrementsreserve">-</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-6 blessurestypebless row justify-content-center">
+								<div id="blessurelegere" class="col-3 text-center"></div>
+								<div id="blessuregrave" class="col-3 text-center"></div>
+								<div id="blessuremortelle" class="col-3 text-center"></div>
+							</div>
+							<div class="col-6 row justify-content-center">
+								<div id="effort" class="col-4 text-center"></div>
+								<div id="sangfroid" class="col-4 text-center"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid inventaire">
+				<h3>Inventaire</h3>
+				<div id="editor">
+					<p>Hello World!</p>
+					<p>Some initial
+						<strong>bold</strong>
+						text</p>
+					<p><br></p>
+				</div>
+			</div>
 
-<script>
-  // Access the userId variable in your script
-  var id_Character = {{ character.id_Character }};
-</script>
 
-<script src="/js/character.js"></script>
-<link rel="stylesheet" href="/css/character.css">
-{% endblock %}
+			<script>
+				// Access the userId variable in your script
+var id_Character = {{ character.id_Character }};
+			</script>
+			<script src="/js/character.js"></script>
+			<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+			<link rel="stylesheet" href="/css/character.css">
+
+			<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+		{% endblock %}
