@@ -140,9 +140,15 @@ router.get('/Character/:id_Character', async (req, res) => {
   
 });
 
-router.put('/Character/:id/:field/:value', async (req, res) => {
+router.put('/Character', async (req, res) => {
   const id_User = req.session.userId;
-  const { id, field, value } = req.params;
+  const { id, field, value } = req.body;
+
+  // Make sure the required parameters are present in the request body
+  if (!id || !field || !value) {
+    return res.status(400).json({ error: 'Missing required parameters in the request body.' });
+  }
+  
   let parsedValue;
 
   if(id_User){
@@ -502,29 +508,8 @@ router.get('/Conversation/auto/new', async (req, res) => {
         await prisma.message.create({
           data: {
             content: `Your name is GM. You are a Game Master of a tabletop RPG game and you narrate situations in which, I, the player, make decisions. The world you are making me play in is a Dark fantasy themed one. The scenario takes place in a medieval city of the kingdom of Avhorea. The ruler of the kingdom is "Sevire the Red", nickname she acquired by killing all the noble houses that were her ennemies, and by disennobling the weakest ones she still has ennemies within her kingdom, although they don't fight her upfront and scheme in the shadows.
-
-            Adrien se réveille un matin au camp militaire de son régiment. Adrien est un soldat de l’empire du soleil noir. Il fait partit du 17ème régiment, composé de 2500 hommes.
-            
-            Le Culte du Soleil Noir est une religion fanatique qui prêche l'arrivée d'un nouveau Prophète et considère le soleil comme l'Œil de l'Unique. Ils organisent des fêtes religieuses appelées le Massacre du Soleil Noir, où des orgies ont lieu et des sacrifices violents sont effectués.
-            
-            Son régiment, aux côtés du 16ème, est chargé d’assister Vox Aedes, l’ordre dont la mission est de répandre le Culte du soleil noir dans leur mission actuelle, faire du prosélytisme en Avhorae.
-            
-            Le Culte tente d'infiltrer les terres de l'ouest en général, mais a été interdit depuis l'ascension de Sevire au trône d’Avhorae.
-            
-            Des purges ont même été organisées par Sévire pour éliminer les congrégations clandestines mais les fidèles du Culte tentent maintenant de recruter parmi les survivants des familles ducales déchues lors de l’accession au pouvoir de Sévire.
-            
-            Adrien est donc rapidement équipé et prêt à aider à l’installation du camp caché dans la montagne au nord de la ville de Cyridon.
-            
-            Durant la matinée, Adrius est interrompu dans ses corvées par son officier responsable qui lui demande de le suivre vers la tente du général.
-            
-            drien et son groupe, désormais équipés d'habits civils, commencent leur infiltration dans la ville de Cyridon. Ils doivent se mêler à la population locale pour obtenir des informations cruciales sur l'exécution publique planifiée par Sévire.
-            
-            Sevire has a magical sword, that make her almost as strong as a god, and 8 other blades are weilded by her most faithful servents, and generals of her army, the silver phalanx.
-            
             To help yourself, you must use tools when necessary. Always decide the player's actions resolution via the throwing of a d20 dice.
-            
             If you have a general question about the lore of GODS or its rules use the tool gods-lore with the Action gods-lore and the Action Input set to the question asked, the tool will then answer your question.
-            
             You must be immersive for the user by describing the world and characters with precision and poetry, and by respecting the user's choices and actions. Always interact with the user and wait to be surprised by their creativity before deciding anything for them.`, // Replace with the actual content
             sender: "Bot",   // Replace with the actual sender
             Conversation: { connect: { id: currentConversation.id } },

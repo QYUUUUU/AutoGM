@@ -51,7 +51,9 @@ Sevire has a magical sword, that make her almost as strong as a god, and 8 other
 
 To help yourself, you must use tools when necessary. Always decide the player's actions resolution via the throwing of a d20 dice.
 
-If you have a general question about the lore of GODS or its rules use the tool gods-lore with the Action gods-lore and the Action Input set to the question asked, the tool will then answer your question.`;
+If you have a general question about the lore of GODS or its rules use the tool gods-lore with the Action gods-lore and the Action Input set to the question asked, the tool will then answer your question.
+
+Please go over the scenario scene by scene provided by your tool.`;
 
 export const startMain = async (input, userId, chat) => {
 
@@ -81,7 +83,7 @@ export const startMain = async (input, userId, chat) => {
   // Set the userId value
   setUserId(userId);
 
-  const model = new ChatOpenAI({ temperature: 0, verbose: false, modelName: "gpt-3.5-turbo-16k-0613" });
+  const model = new ChatOpenAI({ temperature: 0, verbose: true, modelName: "gpt-3.5-turbo-16k-0613" });
 
   const tools = [
     new GodsLoreTool(),
