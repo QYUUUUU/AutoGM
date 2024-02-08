@@ -50,31 +50,24 @@ export class GodsDiceChain extends BaseChain {
       return { res:"BROKEN HERE."}
     }
 
-    console.log("BONJOUR, BONJOUR")
+    console.log(sanitizedQuestion);
 
     const modifier = parseInt(extractNumbersFromString(sanitizedQuestion));
 
 
 
-    console.log("izdatgud ?")
+    console.log(modifier)
     sanitizedQuestion = stripNumbers(sanitizedQuestion);
-    console.log("wasnt")
     const blessurelegere = data.blessurelegere
     const blessuregrave = data.blessuregrave
     const blessuremortelle = data.blessuremortelle
 
-    var blessureModifier = 0;
-    if(blessuremortelle && blessuremortelle > 0){
-      blessureModifier=-3;
-    }else if(blessuregrave && blessuremortelle > 0){
-      blessureModifier=-2;
-    }else if(blessurelegere && blessurelegere > 0){
-      blessureModifier=-1;
-    }
+    const blessureModifier = 
+    blessuremortelle && blessuremortelle > 0 ? -3 :
+    blessuregrave && blessuregrave > 0 ? -2 :
+    blessurelegere && blessurelegere > 0 ? -1 : 0;
 
     const characterInfo = JSON.stringify(data);
-    console.log("Juskici")
-
     var context = "";
 
     async function getDiceAmount() {
@@ -135,7 +128,7 @@ export class GodsDiceChain extends BaseChain {
     }else if (!Number.isInteger(totalDice)) {
       return { res:"Bot, Les données du personnage sont probablement mal remplies. Vérifiez les caractéristiques, compétences, malus et blessures de votre personnage." };
     } else {
-      return { res:"Bot, les dés à lancer sont "+totalDice+"d10 et "+relances+"d10 à relancer possibles. Bot, réalise les lancers pour le joueur et informe lui des possibilités de relance." };
+      return { res:"Les dés à lancer sont "+totalDice+"d10 et "+relances+"d10 à relancer possibles. Réalise les lancers pour le joueur en utilisant l'outil et informe lui des possibilités de relance." };
     }
   }
 }
@@ -197,7 +190,7 @@ function calculerLancersEtRelances(entier) {
 }
 
 function extractNumbersFromString(inputString) {
-  const regex = /\d+/g;
+  const regex = /-?\d+/g; // Modifié pour inclure le signe négatif
   const matches = inputString.match(regex);
   if (matches === null) {
     return "0";

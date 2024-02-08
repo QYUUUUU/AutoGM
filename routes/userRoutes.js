@@ -143,9 +143,10 @@ router.get('/Character/:id_Character', async (req, res) => {
 router.put('/Character', async (req, res) => {
   const id_User = req.session.userId;
   const { id, field, value } = req.body;
+  console.log({ id, field, value });
 
   // Make sure the required parameters are present in the request body
-  if (!id || !field || !value) {
+  if (!id || !field) {
     return res.status(400).json({ error: 'Missing required parameters in the request body.' });
   }
   
