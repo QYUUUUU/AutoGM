@@ -1,88 +1,84 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Assistant GODS{% endblock %}</title>
-    <link rel="stylesheet" href="/css/user.css">
-    <script src="/js/sidemenu.js"></script>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>
+			{% block title %}Assistant GODS
+			{% endblock %}
+		</title>
+		<link rel="stylesheet" href="/css/user.css">
+		<script src="/js/sidemenu.js"></script>
 
-    <script type="module" src="/js/jquery-3.5.1.slim.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-</head>
-<header>
-  <!-- Sidebar -->
-  <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
-    <div class="position-sticky">
-      <div class="list-group list-group-flush mx-3 mt-4">
-      {% block sidebar %}{% endblock %}
-    </div>    
-    </div>
-  </nav>
+		<script type="module" src="/js/jquery-3.5.1.slim.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	</head>
+	<header>
+		<!-- Sidebar -->
+		<nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+			<div class="position-sticky">
+				<div class="list-group list-group-flush mx-3 mt-4"> {% block sidebar %}{% endblock %}
+					</div>
+				</div>
+			</nav>
 
-  <!-- Navbar -->
-  <nav
-    id="main-navbar"
-    class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
-  >
-    <!-- Container wrapper -->
-    <div class="container-fluid">
-      <!-- Toggle button -->
-      <div class="d-flex"> <!-- Add this container -->
-        <button
-          class="navbar-toggler"
-          type="button"
-          aria-controls="sidebarMenu"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-      <!-- Brand -->
-      <a class="navbar-brand" href="#">
-        <img src="/images/logo.png" style="max-width: 100%; height: auto;">
-      </a>
-      <!-- Search form -->
-      <div class="d-none d-md-flex input-group w-auto my-auto">
-          <ul class="navbar-nav">
-              <li class="nav-item">
-                  <a class="nav-link" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="/login">Login</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="/register">Register</a>
-              </li>
-              <li class="nav-item">
-                   <a class= "nav-link" href="https://discord.com/api/oauth2/authorize?client_id=1136201492995518515&redirect_uri=http%3A%2F%2Flocalhost%2Fauth%2Fdiscord&response_type=code&scope=identify%20email">Lier à Discord</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="/characters">Characters</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="/maps">Maps</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="/AutoGM">AutoGM</a>
-              </li>
-          </ul>
-      </div>
-      </ul>
-    </div>
-    <!-- Container wrapper -->
-  </nav>
-  <!-- Navbar -->
+			<!-- Navbar -->
+			<nav
+				id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+				<!-- Container wrapper -->
+				<div
+					class="container-fluid">
+					<!-- Toggle button -->
+					<div
+						class="d-flex">
+						<!-- Add this container -->
+						<button class="navbar-toggler" type="button" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+							<i class="fas fa-bars"></i>
+						</button>
+					</div>
+					<!-- Brand -->
+					<a class="navbar-brand" href="/">
+						<img src="/images/logo.png" style="max-width: 100%; height: auto;">
+					</a>
+					<!-- Search form -->
+					<div class="d-none d-md-flex input-group w-auto my-auto">
+						<ul class="navbar-nav">
+							<li class="nav-item">
+								<a class="nav-link" href="/">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/login">Login</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/register">Register</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="https://discord.com/api/oauth2/authorize?client_id=1136201492995518515&redirect_uri=http%3A%2F%2Flocalhost%2Fauth%2Fdiscord&response_type=code&scope=identify%20email">Lier à Discord</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/characters">Characters</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/maps">Maps</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/AutoGM">AutoGM</a>
+							</li>
+						</ul>
+					</div>
+				</ul>
+			</div>
+			<!-- Container wrapper -->
+		</nav>
+		<!-- Navbar -->
+	</html>
 </header>
 <!--Main Navigation-->
 
 <!--Main layout-->
 <main style="margin-top: 58px">
-  <div id="main-body" class="container pt-4">{% block body %}{% endblock %}</div>
-</main>
+	<div id="main-body" class="container pt-4"> {% block body %}{% endblock %}
+		</div>
+	</main>
 </html>
