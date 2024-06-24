@@ -1,0 +1,87 @@
+{% extends '/layouts/base.html.twig' %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="/css/home.css">
+	{{ parent() }}
+{% endblock %}
+{% block body %}
+	<div class="d-flex vh-100">
+		<div class="w-75 mt-3" style="border: none; box-shadow: none;">
+			<div class="text-center" style="font-size: 3em; text-transform: uppercase; font-weight: bold;">
+				GODS le jeu de rôle
+			</div>
+			<div class="card-body page">
+				<div class="row justify-content-center">
+					<div class="col-md-4 mb-4 card-custom">
+						<a href="/dashboard" class="text-decoration-none text-dark">
+							<div class="card h-100">
+								<div class="img-container">
+									<img src="/images/book-image-1.jpg" class="card-img-top" alt="Image 1">
+								</div>
+								<div class="card-body body-presentation">
+									<h3 class="card-title">MON ASSISTANT</h3>
+									<p class="card-text">Bénéficiez d'un assistant pour jeter vos dés.</p>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="col-md-4 mb-4 card-custom">
+						<a href="/characters" class="text-decoration-none text-dark">
+							<div class="card h-100">
+								<div class="img-container">
+									<img src="/images/personnage.jpg" class="card-img-top" alt="Image 1">
+								</div>
+								<div class="card-body body-presentation">
+									<h3 class="card-title">MES PERSONNAGES</h3>
+									<p class="card-text">Créer une fiche de personnage.</p>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="row justify-content-center">
+					<div class="col-md-4 mb-4 card-custom">
+						<a href="/maps" class="text-decoration-none text-dark">
+							<div class="card h-100">
+								<div class="img-container">
+									<img src="/images/maps/saeth.png" class="card-img-top" alt="Image 1">
+								</div>
+								<div class="card-body body-presentation">
+									<h3 class="card-title">LES CARTES</h3>
+									<p class="card-text">Les cartes des Terres Sauvages.</p>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="col-md-4 mb-4 card-custom">
+						<a href="page4.html" class="text-decoration-none text-dark">
+							<div class="card h-100">
+								<div class="img-container">
+									<img src="/images/book-image-4.png" class="card-img-top" alt="Image 1">
+								</div>
+								<div class="card-body body-presentation">
+									<h3 class="card-title">Card 4</h3>
+									<p class="card-text">Description for card 4.</p>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{# <img src="/images/bookmark-1.jpg" class="bookmark"/> #}
+	<script>
+		function adjustBookmarkHeight() {
+var bookmark = document.querySelector('.bookmark');
+var documentHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight);
+bookmark.style.height = documentHeight + 'px';
+}
+
+// Adjust the height initially
+adjustBookmarkHeight();
+
+// Adjust the height on window resize
+window.addEventListener('resize', adjustBookmarkHeight);
+	</script>
+{% endblock %}
