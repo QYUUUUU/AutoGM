@@ -35,24 +35,5 @@ services:
       - mariadb
     depends_on:
       - mariadb
-
-  maildev:
-    image: maildev/maildev
     ports:
-      - "1080:80"
-      - "1025:25"
-
-  redis:
-    image: redis
-    ports:
-      - "6379:6379"
-
-  # nginx:
-  #   image: nginx:latest
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/conf.d/default.conf
-  #     - ./.htpasswd:/etc/nginx/.htpasswd
-  #   ports:
-  #     - "8081:80"
-  #   links:
-  #     - phpmyadmin
+      - 8080:80

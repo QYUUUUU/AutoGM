@@ -1,0 +1,58 @@
+{% extends '/layouts/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block sidebar %}
+    Select a Character : 
+    <select id="favoriteCharacter" class="select">
+    {% for character in characters %}
+        <option value="{{ character.id_Character }}">{{ character.nom }}</h2>
+    {% endfor %}
+    </select>
+    <div class="scrollable-container">
+        <ol class="list-group">
+            <li class="list-group-item bg-gray-900 text-white">
+                <a id="newchat" href="/Conversation/auto/new" class="d-flex py-3 px-3 gap-3 rounded-md hover:bg-[#2A2B32] cursor-pointer break-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle" width="16" height="16" viewBox="0 0 16 16">
+                        <circle cx="8" cy="8" r="7" stroke="black" fill="none" />
+                        <path stroke="black" d="M8 4V12M4 8h8" />
+                    </svg>
+                    New Chat
+                </a>
+            </li>
+        {% for conversation in conversations %}
+            <li class="list-group-item bg-gray-900 text-white">
+                <a id="{{ conversation.id }}" class="d-flex py-3 px-3 gap-3 rounded-md hover:bg-[#2A2B32] cursor-pointer break-all new-chat">
+                    Conversation {{ conversation.id }}
+                </a>
+            </li>
+        {% endfor %}
+        </ol>
+    </div>
+{% endblock %}
+
+{% block body %}
+<script type="module" src="js/autogm.js"></script>
+        Auto GM
+    <div class="card-body chat-body"></div>
+    <div id="error" class="error"></div>
+
+    <div class="chat-area d-flex align-items-center justify-content-center">
+        <div class="container items-chat">
+            <div id="prompt-form" class="row align-items-center">
+                <div class="d-flex justify-content-between textarea-chat">
+                    <textarea id="prompt-field" class="form-control" style="flex:1;"
+                        placeholder="Écrire un message"></textarea>
+                    <button id="send" class="send-button btn btn-primary"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+<style>
+html{
+    overflow: hidden;
+}
+</style>
+{% endblock %}
