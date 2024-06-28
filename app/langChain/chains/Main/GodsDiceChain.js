@@ -27,7 +27,7 @@ export class GodsDiceChain extends BaseChain {
 
     var data = {}
     try {
-      const response = await fetch(`http://localhost/Favorite/Character/get/${userId}`);
+      const response = await fetch(`http://213.165.83.226/Favorite/Character/get/${userId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

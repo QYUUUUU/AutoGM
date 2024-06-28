@@ -82,6 +82,165 @@ router.get('/maps', (req, res) => {
 });
 
 
+// Render the character form
+router.get('/newcharacter', (req, res) => {
+  res.render('../views/newcharacter.html.twig');
+});
+
+// Hydrate the character
+router.post('/create-character', async (req, res) => {
+  const id_User = req.session.userId; // Assuming you have the user ID stored in req.session.userId
+
+  if (id_User) {
+    try {
+      let {
+        nom,
+        age,
+        genre,
+        instinct,
+        signeastro,
+        origine,
+        puissance,
+        resistance,
+        precicion,
+        reflexes,
+        connaissance,
+        perception,
+        volonte,
+        empathie,
+        arts,
+        cite,
+        civilisations,
+        relationnel,
+        soins,
+        animalisme,
+        faune,
+        montures,
+        pistage,
+        territoire,
+        adresse,
+        armurerie,
+        artisanat,
+        mecanisme,
+        runes,
+        athletisme,
+        discretion,
+        flore,
+        vigilance,
+        voyage,
+        bouclier,
+        cac,
+        lancer,
+        melee,
+        tir,
+        eclats,
+        lunes,
+        mythes,
+        pantheons,
+        rituels
+      } = req.body;
+
+      puissance = parseInt(puissance);
+      resistance = parseInt(resistance);
+      precicion = parseInt(precicion);
+      reflexes = parseInt(reflexes);
+      connaissance = parseInt(connaissance);
+      perception = parseInt(perception);
+      volonte = parseInt(volonte);
+      empathie = parseInt(empathie);
+      arts = parseInt(arts);
+      cite = parseInt(cite);
+      civilisations = parseInt(civilisations);
+      relationnel = parseInt(relationnel);
+      soins = parseInt(soins);
+      animalisme = parseInt(animalisme);
+      faune = parseInt(faune);
+      montures = parseInt(montures);
+      pistage = parseInt(pistage);
+      territoire = parseInt(territoire);
+      adresse = parseInt(adresse);
+      armurerie = parseInt(armurerie);
+      artisanat = parseInt(artisanat);
+      mecanisme = parseInt(mecanisme);
+      runes = parseInt(runes);
+      athletisme = parseInt(athletisme);
+      discretion = parseInt(discretion);
+      flore = parseInt(flore);
+      vigilance = parseInt(vigilance);
+      voyage = parseInt(voyage);
+      bouclier = parseInt(bouclier);
+      cac = parseInt(cac);
+      lancer = parseInt(lancer);
+      melee = parseInt(melee);
+      tir = parseInt(tir);
+      eclats = parseInt(eclats);
+      lunes = parseInt(lunes);
+      mythes = parseInt(mythes);
+      pantheons = parseInt(pantheons);
+      rituels = parseInt(rituels);
+
+
+      // Create the character in the database
+      const newCharacter = await prisma.character.create({
+        data: {
+          nom,
+          age,
+          genre,
+          instinct,
+          signeastro,
+          origine,
+          puissance,
+          resistance,
+          precicion,
+          reflexes,
+          connaissance,
+          perception,
+          volonte,
+          empathie,
+          arts,
+          cite,
+          civilisations,
+          relationnel,
+          soins,
+          animalisme,
+          faune,
+          montures,
+          pistage,
+          territoire,
+          adresse,
+          armurerie,
+          artisanat,
+          mecanisme,
+          runes,
+          athletisme,
+          discretion,
+          flore,
+          vigilance,
+          voyage,
+          bouclier,
+          cac,
+          lancer,
+          melee,
+          tir,
+          eclats,
+          lunes,
+          mythes,
+          pantheons,
+          rituels,
+          userId: id_User,
+          inventory: '{"ops":[{"insert":"\n"}]}'
+        },
+      });
+      console.log(newCharacter);
+      // Respond with a success message or the created character object
+      res.status(201).json(newCharacter);
+    } catch (error) {
+      console.error('Error creating character:', error);
+      res.status(500).json({ error: 'Failed to create character' });
+    }
+  }
+});
+
 router.get('/Characters', async (req, res) => {
   const id_User = req.session.userId; // Assuming you have the user ID stored in req.session.userId
   if (id_User) {
