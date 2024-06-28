@@ -346,11 +346,17 @@ function buildPage() {
         ]
       }
     });
+
+    try {
+      quillContent = JSON.parse(quillContent);
+      quill.setContents(quillContent);
+      quill.history.clear();
+    } catch {
+      console.error("Inventaire non chargeable :'(");
+    }
     quill.on('text-change', function () {
       updateInventory(quill);
     });
-    quillContent = JSON.parse(quillContent);
-    quill.setContents(quillContent);
   }
 
 

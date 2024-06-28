@@ -1,11 +1,8 @@
 @import "bootstrap.min.css";
 
-html {
+html, body {
   height: 100%;
-}
-
-body {
-  height: 100%;
+  margin: 0;
 }
 
 .container-fluid {
@@ -15,6 +12,11 @@ body {
 .card {
   height: 100%-58px;
   margin-bottom: 10px;
+}
+
+body {
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 .navbar-brand {

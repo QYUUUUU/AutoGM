@@ -5,20 +5,28 @@
 {% endblock %}
 
 {% block body %}
-    <div id="charabox" class="row justify-content-center">
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div id="newCharacter" class="character-card bg-dark">
-            <img src="public/images/plus.png" class="plussign">
-            </div>
-        </div>
-        {% for character in characters %}
+    <div id="charabox" class="card-body page">
+        <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 col-sm-12">
-                <div id="{{ character.id_Character }}" class="character-card bg-dark charactersheet">
-                <h2>{{ character.nom }}</h2>
-                <p>ID: {{ character.id_Character }}</p>
-                </div>
+                <a href="/newcharacter" class="character-card bg-dark">
+                Créer
+                </a>
             </div>
-        {% endfor %}
+            {% for character in characters %}
+                <div class="col-md-4 mb-4 card-custom charactersheet" id="{{ character.id_Character }}">
+                    <div class="card h-100">
+                        <div class="img-container">
+                            <img src="/images/book-image-1.jpg" class="card-img-top" alt="Image 1">
+                        </div>
+                        <div class="card-body body-presentation">
+                            <div>
+                                <h2>{{ character.nom }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
    <script src="js/characterslist.js"></script>
 <link rel="stylesheet" href="css/characterslist.css">
