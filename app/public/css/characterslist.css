@@ -3,14 +3,19 @@
   margin: 20px 10px;
   overflow: hidden;
   position: relative;
-  flex: 0 0 calc(25% - 20px); /* Adjust the width as needed */
+  flex: 0 0 calc(25% - 20px);
+  /* Adjust the width as needed */
   height: 80px;
-  transition: transform 0.3s ease-in-out;
   display: flex;
   justify-content: center;
   align-items: center;
-  color:#E1E0DE;
+  color: #E1E0DE;
   border: none;
+}
+
+.character-card:hover {
+  color: #E1E0DE;
+  text-decoration: none;
 }
 
 #charabox {
@@ -68,34 +73,36 @@
 }
 
 main {
-    background-image: url("/images/book-image-2.jpg");
-    background-size: cover;
-    background-position: top left;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
-    display: flex !important;
-    justify-content: center;
+  background-image: url("/images/book-image-2.jpg");
+  background-size: cover;
+  background-position: top left;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  display: flex !important;
+  justify-content: center;
 }
 
 
 
 /* Cards */
 
-.card-custom > a > div {
+.card-custom>a>div {
   border: solid #42403E 3px;
   transition: box-shadow 0.2s ease;
 }
 
-.card-custom > div:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for better visual effect */
+.card-custom>div:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* Add a subtle shadow for better visual effect */
   cursor: pointer;
 }
 
 .img-container {
   width: 100%;
   height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
+  /* 16:9 aspect ratio */
   position: relative;
   overflow: hidden;
 }
@@ -107,7 +114,8 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top; /* This ensures the top of the image is shown */
+  object-position: top;
+  /* This ensures the top of the image is shown */
 }
 
 .body-presentation {
@@ -120,10 +128,10 @@ main {
   color: #fff;
 }
 
-.body-presentation > h5 {
+.body-presentation>h5 {
   color: rgb(236, 237, 238) !important;
 }
 
-.body-presentation > p {
+.body-presentation>p {
   color: rgb(196, 203, 206) !important;
 }

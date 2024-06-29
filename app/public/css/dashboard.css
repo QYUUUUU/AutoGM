@@ -1,0 +1,114 @@
+.dice-throws {
+    height: 50%;
+    padding: 10px;
+    min-height: 400px;
+}
+
+
+.dice-throws>.body-card {
+    border-radius: 0px 0px 5px 5px;
+    height: 95%;
+}
+
+.conversations {
+    height: 50%;
+    padding: 10px;
+    min-height: 400px;
+}
+
+
+.conversations>.body-card {
+    border-radius: 0px 0px 5px 5px;
+    height: 95%;
+}
+
+.inventory {
+    height: 100%;
+    padding: 10px;
+    min-height: 400px;
+}
+
+.ask-dices {
+    height: 50%;
+    min-height: 400px;
+    padding: 10px;
+}
+
+.ask-dices>.body-card {
+    border-radius: 0px 0px 5px 5px;
+    height: 95%;
+}
+
+.dice-results {
+    height: 50%;
+    padding: 10px;
+    min-height: 400px;
+}
+
+.dice-results>.body-card {
+    border-radius: 0px 0px 5px 5px;
+    height: 95%;
+}
+
+.inventory>.body-card {
+    border-radius: 0px 0px 5px 5px;
+    height: 97.5%;
+}
+
+.card-body.chat-body {
+    overflow-y: auto;
+    height: 80%;
+    padding-bottom: 2rem;
+}
+
+
+.head-card {
+    background-color: #26282a;
+    color: #d4d4d4;
+    padding-left: 15px;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.body-card {
+    background-color: rgb(218, 218, 218);
+    color: #000000;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    height: 100%;
+    margin-bottom: 10px;
+}
+
+
+.send-button {
+    background-image: url("../images/send.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: unset !important;
+    border-color: rgb(218, 218, 218) !important;
+    width: 50px;
+    /* ajuste la largeur de l'image */
+    height: 50px;
+    /* ajuste la hauteur de l'image */
+    border: none;
+    /* supprime la bordure */
+    cursor: pointer;
+    /* change le curseur en pointer */
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
+.send-button:hover {
+    background-color: unset !important;
+}
+
+.background-quill {
+    background-color: #f2f2f2;
+    height: 100%;
+    max-height: 800px;
+    overflow: hidden;
+}
+
+#editor {
+    max-height: 100%;
+}
