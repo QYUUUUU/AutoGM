@@ -13,7 +13,7 @@ export async function Agentcall(req, res) {
         data: {
           content: data.prompt, // Replace with the actual content
           sender: "User",   // Replace with the actual sender
-          Conversation: { connect: { id: conversationId } },
+          conversationId: conversationId,
           // Add other properties for the character here
         },
       });

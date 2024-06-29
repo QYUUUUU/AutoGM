@@ -15,17 +15,13 @@ router.get('/dashboard', async (req, res) => {
         where: { userId: id_User },
       });
 
-      const conversations = await prisma.conversation.findMany({
+      const conversation = await prisma.conversation.findFirst({
         where: { userId: id_User, Name: null },
-        orderBy: { id: 'desc' },
       });
 
-      if (conversations.length === 0) {
+      if (conversation == null) {
         return res.redirect('/Conversation/new/');
       }
-
-      // Sort conversations in reverse order based on their index in the array
-      conversations.sort((a, b) => b.id - a.id);
 
       if (!characters || characters.length === 0) {
         return res.redirect('/Character/create/new/');
@@ -47,7 +43,7 @@ router.get('/dashboard', async (req, res) => {
           }
         });
 
-        return res.render('index.html.twig', { characters: sortedCharacters, conversations: conversations }); // Pass sortedCharacters as an object
+        return res.render('index.html.twig', { characters: sortedCharacters, conversation: conversation }); // Pass sortedCharacters as an object
       } else {
         return res.render('../views/login.html.twig');
       }

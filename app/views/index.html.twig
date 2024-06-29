@@ -2,61 +2,94 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    	<link rel="stylesheet" href="/css/dashboard.css">
 {% endblock %}
 
-{% block sidebar %}
-    Select a Character : 
-    <select id="favoriteCharacter" class="select">
-    {% for character in characters %}
-        <option value="{{ character.id_Character }}">{{ character.nom }}</h2>
-    {% endfor %}
-    </select>
-    <div class="scrollable-container">
-        <ol class="list-group">
-            <li class="list-group-item bg-gray-900 text-white">
-                <a id="newchat" href="/Conversation/new" class="d-flex py-3 px-3 gap-3 rounded-md hover:bg-[#2A2B32] cursor-pointer break-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle" width="16" height="16" viewBox="0 0 16 16">
-                        <circle cx="8" cy="8" r="7" stroke="black" fill="none" />
-                        <path stroke="black" d="M8 4V12M4 8h8" />
-                    </svg>
-                    New Chat
-                </a>
-            </li>
-        {% for conversation in conversations %}
-            <li class="list-group-item bg-gray-900 text-white">
-                <a id="{{ conversation.id }}" class="d-flex py-3 px-3 gap-3 rounded-md hover:bg-[#2A2B32] cursor-pointer break-all new-chat">
-                    Conversation {{ conversation.id }}
-                </a>
-            </li>
-        {% endfor %}
-        </ol>
-    </div>
-{% endblock %}
 
 
 {% block body %}
-<script type="module" src="js/user.js"></script>
-        Assistant GODS
-    <div class="card-body chat-body"></div>
-    <div id="error" class="error"></div>
-
-
-
-
-    <div class="chat-area d-flex align-items-center justify-content-center">
-        <div class="container items-chat">
-            <div id="prompt-form" class="row align-items-center">
-                <div class="d-flex justify-content-between textarea-chat">
-                    <textarea id="prompt-field" class="form-control" style="flex:1;"
-                        placeholder="Écrire un message"></textarea>
-                    <button id="send" class="send-button btn btn-primary"></button>
+<div class="row h-100 w-100">
+    <div class="col-12 col-lg-3">
+        <div class="flex-column h-100">
+            <div class="conversations">
+                <div class="head-card">
+                    Options
+                </div>
+                <div class="body-card">
+                    Select a Character : 
+                    <select id="favoriteCharacter" class="select">
+                    {% for character in characters %}
+                        <option value="{{ character.id_Character }}">{{ character.nom }}</h2>
+                    {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="dice-throws">
+                <div class="head-card">
+                    Mes dés
+                </div>
+                <div class="body-card">
+                    Le corps
                 </div>
             </div>
         </div>
     </div>
-<style>
-html{
-    overflow: hidden;
-}
-</style>
+
+    <div class="col-12 col-lg-4">
+        <div class="inventory">
+            <div class="head-card">
+                Notes
+            </div>
+            <div class="body-card">
+                <div class="background-quill">
+                    <div id="editor">
+                        <p>Hello World!</p>
+                        <p>Some initial
+                            <strong>bold</strong>
+                            text</p>
+                        <p><br></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+        <div class="flex-column h-100">
+            <div class="ask-dices">
+                <div class="head-card">
+                    Assistant
+                </div>
+                <div class="body-card">
+                    <script type="module" src="js/user.js"></script>
+                    <div class="card-body chat-body"></div>
+                    <div id="error" class="error"></div>
+                    <div id="{{conversation.id}}" class="conversationid"></div>
+                    <div class="chat-area">
+                        <div class="container items-chat">
+                            <div id="prompt-form" class="row align-items-center">
+                                <div class="d-flex justify-content-between textarea-chat">
+                                    <textarea id="prompt-field" class="form-control" style="flex:1;"
+                                        placeholder="Écrire un message"></textarea>
+                                    <button id="send" class="send-button btn btn-primary"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dice-results">
+                <div class="head-card">
+                    Résultats
+                </div>
+                <div class="body-card">
+                    Le corps
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/dashboardQuill.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 {% endblock %}

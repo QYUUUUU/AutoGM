@@ -12,11 +12,17 @@
                 Créer
                 </a>
             </div>
+            {% set i = 0 %}
             {% for character in characters %}
-                <div class="col-md-4 mb-4 card-custom charactersheet" id="{{ character.id_Character }}">
+            {% set i = i + 1 %}
+                <div class="col-md-2 mb-2 card-custom charactersheet" id="{{ character.id_Character }}">
                     <div class="card h-100">
                         <div class="img-container">
-                            <img src="/images/book-image-1.jpg" class="card-img-top" alt="Image 1">
+                            {% if character.genre == "femme" %}
+                            <img src="/images/characters/femme/femme-{{i}}.jpg" class="card-img-top" alt="Image 1">
+                            {% else %}
+                            <img src="/images/characters/homme/homme-{{i}}.jpg" class="card-img-top" alt="Image 1">
+                            {% endif %}
                         </div>
                         <div class="card-body body-presentation">
                             <div>
