@@ -22,6 +22,34 @@
                         <option value="{{ character.id_Character }}">{{ character.nom }}</h2>
                     {% endfor %}
                     </select>
+                    <div class="row align-items-center justify-content-center">
+                        <div class="d4">
+                            <label for="d4">d4:</label>
+                            <button type="button" onclick="updateDiceInput('d4', 'add')">+</button>
+                            <button type="button" onclick="updateDiceInput('d4', 'remove')">-</button><br><br>
+                        </div>
+                        <div class="d6">
+                            <label for="d6">d6:</label>
+                            <button type="button" onclick="updateDiceInput('d6', 'add')">+</button>
+                            <button type="button" onclick="updateDiceInput('d6', 'remove')">-</button><br><br>
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-center">
+                        <div class="d10">
+                            <label for="d10">d10:</label>
+                            <button type="button" onclick="updateDiceInput('d10', 'add')">+</button>
+                            <button type="button" onclick="updateDiceInput('d10', 'remove')">-</button><br><br>
+                        </div>
+                        <div class="d20">
+                            <label for="d20">d20:</label>
+                            <button type="button" onclick="updateDiceInput('d20', 'add')">+</button>
+                            <button type="button" onclick="updateDiceInput('d20', 'remove')">-</button><br><br>
+                        </div>
+                    </div>
+                    <label for="dice-input">Lancer les dés :</label>
+                    <input type="text" id="dice-input" name="dice-input">
+
+                    <input id="dice-throw-trigger" type="submit" value="Lancer les dés">
                 </div>
             </div>
             <div class="dice-throws">
@@ -29,7 +57,7 @@
                     Mes dés
                 </div>
                 <div class="body-card">
-                    Le corps
+                    <div id="ThreeJS"></div>
                 </div>
             </div>
         </div>
@@ -89,7 +117,14 @@
         </div>
     </div>
 </div>
-<script src="/js/dashboardQuill.js"></script>
+
+{# Librairies notes #}
+
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="/js/dashboardQuill.js"></script>
+
+{# Librairies dés #}
+<script src="/js/bundle.js"></script>
+
 {% endblock %}

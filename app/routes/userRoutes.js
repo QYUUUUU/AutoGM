@@ -67,6 +67,11 @@ router.get('/register', (req, res) => {
   res.render('../views/register.html.twig');
 });
 
+// Render the login page
+router.get('/', (req, res) => {
+  res.render('../views/home.html.twig');
+});
+
 // Render the register page
 router.get('/home', (req, res) => {
   res.render('../views/home.html.twig');
