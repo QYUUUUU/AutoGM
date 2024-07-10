@@ -161,7 +161,7 @@ function initWorld() {
     requestAnimationFrame(animate);
 }
 
-function randomDiceThrow(diceCounts) {
+export function randomDiceThrow(diceCounts) {
 
     // Vider tous les dés de la scène
     dice.forEach(die => {
@@ -251,3 +251,5 @@ function createDice(type, size, backColor) {
 }
 
 window.updateDiceInput = updateDiceInput;
+
+window.randomDiceThrow = randomDiceThrow;

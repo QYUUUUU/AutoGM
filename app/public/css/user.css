@@ -169,7 +169,7 @@ tr>td {
   width: fit-content;
   border-radius: 4px;
   border: none;
-  background-color: #6d7782;
+  background-color: #26282a;
   color: white;
   padding: 3px;
 }
@@ -334,4 +334,8 @@ body {
 
 #main-navbar.show>div>div.d-none.d-md-flex.input-group.w-auto.my-auto {
   display: flex !important;
+}
+
+.second-increments{
+  height: 30px;
 }

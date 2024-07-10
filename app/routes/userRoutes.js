@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import twig from 'twig';
 import { prisma } from '../prisma/prismaClient.js';
+import { getThrowsByStats } from "../services/calculateThrowsService.js"
 
 const router = Router();
 
@@ -580,6 +581,45 @@ router.get('/Conversation/delete/:conversationId', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+
+
+
+router.put('/throw', async (req, res) => {
+  const id_User = req.session.userId;
+  const { modifier, competence, caracteristic } = req.body;
+
+  // Make sure the required parameters are present in the request body
+  if (!modifier || !competence || !caracteristic) {
+    return res.status(400).json({ error: 'Missing required parameters in the request body.' });
+  }
+
+  if (id_User) {
+    try {
+      const user = await prisma.favoriteCharacter.findFirst({
+        where: { userId: id_User },
+        include: { character: true },
+      });
+
+      const character = user.character;
+
+      if (!character) {
+        return res.status(404).json({ error: 'Character not found' });
+      }
+      const result = getThrowsByStats(character, modifier, competence, caracteristic);
+      console.log(result)
+      return res.json(result);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  } else {
+    return res.render('../views/login.html.twig');
+  }
+
+});
+
 
 
 export default router;
