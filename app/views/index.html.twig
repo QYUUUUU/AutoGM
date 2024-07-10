@@ -16,40 +16,104 @@
                     Options
                 </div>
                 <div class="body-card">
-                    Select a Character : 
-                    <select id="favoriteCharacter" class="select">
-                    {% for character in characters %}
-                        <option value="{{ character.id_Character }}">{{ character.nom }}</h2>
-                    {% endfor %}
-                    </select>
-                    <div class="row align-items-center justify-content-center">
-                        <div class="d4">
-                            <label for="d4">d4:</label>
-                            <button type="button" onclick="updateDiceInput('d4', 'add')">+</button>
-                            <button type="button" onclick="updateDiceInput('d4', 'remove')">-</button><br><br>
-                        </div>
-                        <div class="d6">
-                            <label for="d6">d6:</label>
-                            <button type="button" onclick="updateDiceInput('d6', 'add')">+</button>
-                            <button type="button" onclick="updateDiceInput('d6', 'remove')">-</button><br><br>
-                        </div>
+                    <div class="character-selection">
+                        Select a Character : 
+                        <select id="favoriteCharacter" class="select">
+                        {% for character in characters %}
+                            <option value="{{ character.id_Character }}">{{ character.nom }}</h2>
+                        {% endfor %}
+                        </select>
                     </div>
-                    <div class="row align-items-center justify-content-center">
-                        <div class="d10">
-                            <label for="d10">d10:</label>
-                            <button type="button" onclick="updateDiceInput('d10', 'add')">+</button>
-                            <button type="button" onclick="updateDiceInput('d10', 'remove')">-</button><br><br>
+                    <div class="dice-increments">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="d4">
+                                <label for="d4">d4:</label>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d4', 'add')">+</button>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d4', 'remove')">-</button><br>
+                            </div>
+                            <div class="d6">
+                                <label for="d6">d6:</label>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d6', 'add')">+</button>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d6', 'remove')">-</button><br>
+                            </div>
                         </div>
-                        <div class="d20">
-                            <label for="d20">d20:</label>
-                            <button type="button" onclick="updateDiceInput('d20', 'add')">+</button>
-                            <button type="button" onclick="updateDiceInput('d20', 'remove')">-</button><br><br>
+                        <div class="row align-items-center justify-content-center second-increments">
+                            <div class="d10">
+                                <label for="d10">d10:</label>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d10', 'add')">+</button>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d10', 'remove')">-</button><br><br>
+                            </div>
+                            <div class="d20">
+                                <label for="d20">d20:</label>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d20', 'add')">+</button>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d20', 'remove')">-</button><br><br>
+                            </div>
                         </div>
-                    </div>
-                    <label for="dice-input">Lancer les dés :</label>
-                    <input type="text" id="dice-input" name="dice-input">
+                        <label for="dice-input">Lancer les dés :</label>
+                        <input type="text" id="dice-input" name="dice-input">
 
-                    <input id="dice-throw-trigger" type="submit" value="Lancer les dés">
+                        <input id="dice-throw-trigger" type="submit" value="Lancer les dés">
+                    </div>
+                    <div class="dice-statistics">
+                        <div class="input-field dropdown-container">
+                            <label for="caracteristic-input">Caractéristique :</label>
+                            <input type="text" id="caracteristic-input" placeholder="Start typing...">
+                            <div id="caracteristic-dropdown" class="dropdown">
+                                <a data-value="puissance" href="#">Puissance</a>
+                                <a data-value="resistance" href="#">Résistance</a>
+                                <a data-value="precicion" href="#">Précision</a>
+                                <a data-value="reflexes" href="#">Réflexes</a>
+                                <a data-value="connaissance" href="#">Connaissance</a>
+                                <a data-value="perception" href="#">Perception</a>
+                                <a data-value="volonte" href="#">Volonte</a>
+                                <a data-value="empathie" href="#">Empathie</a>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="dropdown-container">
+                            <label for="dropdown-input">Compétence :</label>
+                            <input type="text" id="dropdown-input" placeholder="Start typing...">
+                            <div id="dropdown" class="dropdown">
+                                <a data-value="arts" href="#">Arts</a>
+                                <a data-value="cite" href="#">Cite</a>
+                                <a data-value="civilisations" href="#">Civilisations</a>
+                                <a data-value="relationnel" href="#">Relationnel</a>
+                                <a data-value="coins" href="#">Soins</a>
+                                <a data-value="animalisme" href="#">Animalisme</a>
+                                <a data-value="faune" href="#">Faune</a>
+                                <a data-value="montures" href="#">Montures</a>
+                                <a data-value="pistage" href="#">Pistage</a>
+                                <a data-value="territoire" href="#">Territoire</a>
+                                <a data-value="adresse" href="#">Adresse</a>
+                                <a data-value="armurerie" href="#">Armurerie</a>
+                                <a data-value="artisanat" href="#">Artisanat</a>
+                                <a data-value="mecanisme" href="#">Mecanisme</a>
+                                <a data-value="runes" href="#">Runes</a>
+                                <a data-value="athletisme" href="#">Athletisme</a>
+                                <a data-value="discretion" href="#">Discretion</a>
+                                <a data-value="flore" href="#">Flore</a>
+                                <a data-value="vigilance" href="#">Vigilance</a>
+                                <a data-value="voyage" href="#">Voyage</a>
+                                <a data-value="bouclier" href="#">Bouclier</a>
+                                <a data-value="cac" href="#">Corps à Corps</a>
+                                <a data-value="lancer" href="#">Lancer</a>
+                                <a data-value="melee" href="#">Melee</a>
+                                <a data-value="tir" href="#">Tir</a>
+                                <a data-value="eclats" href="#">Eclats</a>
+                                <a data-value="lunes" href="#">Lunes</a>
+                                <a data-value="mythes" href="#">Mythes</a>
+                                <a data-value="pantheons" href="#">Pantheons</a>
+                                <a data-value="rituels" href="#">Rituels</a>
+                            </div>
+                        </div>
+                       <div class="row no-gutters">
+                            <labell for="modifier">Modifier:</label>
+                            <button id="increment" class="increment-button" type="button">+</button>
+                            <input class="modifier" type="text" id="modifier" value="0">
+                            <button id="decrement" class="increment-button" type="button">-</button><br>
+                        </div>
+                        <button id="stats-send" class="stats-send" type="button">Lancer les dés</button><br>
+                    </div>
                 </div>
             </div>
             <div class="dice-throws">
@@ -123,8 +187,8 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="/js/dashboardQuill.js"></script>
+<script src="/js/dashboardForm.js"></script>
 
 {# Librairies dés #}
 <script src="/js/bundle.js"></script>
-
 {% endblock %}

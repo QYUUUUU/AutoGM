@@ -1,7 +1,7 @@
 .dice-throws {
-    height: 50%;
+    height: 40%;
     padding: 10px;
-    min-height: 400px;
+    min-height: 200px;
 }
 
 .dice-throws>.body-card {
@@ -10,14 +10,15 @@
 }
 
 .conversations {
-    height: 50%;
+    height: 60%;
     padding: 10px;
     min-height: 400px;
 }
 
 .conversations>.body-card {
     border-radius: 0px 0px 5px 5px;
-    height: 95%;
+    height: 98%;
+    overflow: hidden;
 }
 
 .inventory {
@@ -129,10 +130,93 @@ main {
 }
 
 #ThreeJS {
-    height: 100%;
+    height: 97%;
     width: 100%;
 }
 
 .select {
     margin-bottom: 15px;
+}
+
+#dice-throw-trigger{
+    border-radius: 4px;
+    border: none;
+    background-color: #26282a;
+    color: white;
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.increment-button{
+    padding: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #26282a;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    width: 30px;
+    height: 30px;
+}
+
+.dice-increments{
+    /* border: #26282a 2px solid; */
+
+}
+
+.dice-statistics{
+    margin-top: 70px;
+    /* border: #26282a 2px solid; */
+    height: 40%;
+}
+
+
+
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.dropdown {
+    display: none;
+    position: absolute !important;  /* Changed to absolute */
+    top: 100%;           /* Position the dropdown below the input field */
+    left: 0;             /* Align to the left of the container */
+    width: 100%;         /* Make the dropdown width match the input field */
+    background-color: #f9f9f9;
+    /* min-width: 160px; */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    max-height: 260px;
+    overflow-y: auto;
+}
+.dropdown a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown a:hover {
+    background-color: #f1f1f1;
+}
+
+.modifier{
+    width: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.stats-send{
+    margin-top: 10px;
+    padding: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #26282a;
+    border: none;
+    border-radius: 4px;
+    color: white;
 }
