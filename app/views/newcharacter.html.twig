@@ -61,13 +61,13 @@
         <div class="d-flex justify-content-between flex-column h-100">
             <div class="form-lines">
                 <label for="origine">Origine:</label>
-                <select name="origine">
+                <select id="origineSelect" name="origine">
                     <option value="Aon">Aon</option>
                     <option value="Avhorae">Avhorae</option>
                     <option value="Babel">Babel</option>
                     <option value="Fakhar">Fakhar</option>
-                    <option value="Horde">Horde</option>
                     <option value="Khashan">Khashan</option>
+                    <option value="Horde">Horde</option>
                     <option value="Ool">Ool</option>
                     <option value="Royaumes divisés">Royaumes divisés</option>
                     <option value="Saeth">Saeth</option>
@@ -77,6 +77,21 @@
                     <option value="Vaelor">Vaelor</option>
                     <option value="Valdheim">Valdheim</option>
                 </select>
+               
+                <div id="originDescription" class="originDescription">
+                    <div class='row'>
+                        <div class="bannerorigin col-3">
+                            <img id="bannerImage" class="bannerimage" src="/images/banners/banneraon.png" alt="Banner">
+                        </div>
+                        <div class="textorigin col-9">
+                            <h3 id="originTitle">Aon</h3>
+                            <p id="originText">
+                                Aux yeux du reste du monde, les insulaires d’Aon sont des gens taiseux, vêtus de couleurs ternes, qui vivent dans un archipel pluvieux. Ils forment un peuple sévère, quittant rarement ses îles natales, si ce n’est pour se livrer à la piraterie. Les charpentiers qui construisent les bateaux d’Aon sont renommés, mais plus encore les maîtres-forgerons, ainsi que les Hommes d’Acier, seuls à connaître le secret pour obtenir l’Acier Véritable, métal incomparable dans lequel sont forgées des épées rarissimes.<br>
+                                S’ils ne s’opposent pas à ce que les étrangers accostent dans leurs ports, les gens d’Aon ne se montrent guère hospitaliers. Qui plus est, la rigueur du climat, le caractère farouche des autochtones et le peu d’importance qu’ils attachent à la cuisine ne contribuent pas à rendre leurs auberges attrayantes. Néanmoins, ceux qui parviennent à se lier aux natifs d’Aon découvrent rapidement des gens attentifs, dotés d’une ironie tranquille et d’une parole on ne peut plus fiable. Derrière leur froideur et leurs manières frustes, les habitants d’Aon sont des gens sincères qui savent apprécier les joies simples.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="button-group">
                 <button class="prev-btn" data-prev="step-2">Précédent</button>

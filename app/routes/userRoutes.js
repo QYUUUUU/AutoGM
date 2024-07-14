@@ -621,5 +621,90 @@ router.put('/throw', async (req, res) => {
 });
 
 
+router.put('/share/throw', async (req, res) => {
+  const id_User = req.session.userId;
+  const { result, relances } = req.body;
+
+  let rollContent = "";
+
+  result.forEach(dice => {
+    rollContent += "d" + dice.value + ": " + dice.values + ", ";
+  });
+
+  if (relances) {
+    rollContent += "\n Vous avez " + relances + " relances possibles.";
+  }
+
+  // Make sure the required parameters are present in the request body
+  if (!result) {
+    return res.status(400).json({ error: 'Missing required parameters in the request body.' });
+  }
+
+  console.log("prompt:", rollContent)
+
+  if (id_User) {
+    try {
+      const user = await prisma.favoriteCharacter.findFirst({
+        where: { userId: id_User },
+        include: { character: true },
+      });
+
+      const character = user.character;
+
+      console.log(character);
+
+      const roll = await prisma.roll.create({
+        data: {
+          content: rollContent,
+          characterId_Character: character.id_Character
+        },
+      });
+
+      return res.json("No soucis roll créé");
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  } else {
+    return res.render('../views/login.html.twig');
+  }
+
+});
+
+
+router.put('/fetch/rolls', async (req, res) => {
+  const id_User = req.session.userId;
+  if (id_User) {
+    try {
+      const user = await prisma.favoriteCharacter.findFirst({
+        where: { userId: id_User },
+        include: { character: true },
+      });
+
+      const character = user.character;
+
+      const rolls = await prisma.roll.findMany({
+        where: {
+          Character: {
+            groupeId: character.groupeId,
+          },
+        },
+      });
+
+      console.log(rolls);
+
+      return res.json(rolls);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  } else {
+    return res.render('../views/login.html.twig');
+  }
+
+});
+
+
+
 
 export default router;

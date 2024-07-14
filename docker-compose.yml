@@ -8,8 +8,10 @@ services:
     ports:
       - 80:80
     command: ["yarn", "--cwd=/app", "start"]
+    restart: always  # or 'on-failure' or 'unless-stopped'
 
-  mariadb:
+
+  db:
     image: mariadb:latest  
     volumes:
       - ../.data_mysql:/var/lib/mysql
@@ -27,13 +29,13 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     environment:
-      PMA_HOST: mariadb
+      PMA_HOST: db
       PMA_PORT: 3306
-      PMA_USER: userdb
-      PMA_PASSWORD: passdb
+      PMA_USER: root
+      PMA_PASSWORD: root
     links:
-      - mariadb
+      - db
     depends_on:
-      - mariadb
+      - db
     ports:
       - 8080:80

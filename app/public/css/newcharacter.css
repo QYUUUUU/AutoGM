@@ -38,7 +38,8 @@ label {
     color: #555;
 }
 
-input, select {
+input,
+select {
     margin-bottom: 1em;
     padding: 0.5em;
     border: 1px solid #ddd;
@@ -76,7 +77,7 @@ button:hover {
     margin-bottom: 20px;
 }
 
-.text-title{
+.text-title {
     font-size: 2em;
     text-transform: uppercase;
     font-weight: bold;
@@ -84,7 +85,7 @@ button:hover {
     margin-bottom: 30px;
 }
 
-.step{
+.step {
     min-height: 428px;
     height: 70vh;
     max-height: 100%;
@@ -92,6 +93,19 @@ button:hover {
     padding-right: 20px;
 }
 
-.form-group{
+.form-group {
     margin-bottom: 35px;
+}
+
+#originDescription {
+    height: 100%;
+}
+
+#originDescription>div {
+    height: 100%;
+}
+
+.bannerimage {
+    width: 180px;
+    height: auto;
 }

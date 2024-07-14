@@ -135,3 +135,7 @@ main {
 .body-presentation>p {
   color: rgb(196, 203, 206) !important;
 }
+
+#charabox > div{
+  width: 100%;
+}
