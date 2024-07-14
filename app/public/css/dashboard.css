@@ -42,6 +42,8 @@
     height: 50%;
     padding: 10px;
     min-height: 400px;
+    max-height: 430px;
+    overflow: hidden;
 }
 
 .dice-results>.body-card {
@@ -138,7 +140,7 @@ main {
     margin-bottom: 15px;
 }
 
-#dice-throw-trigger{
+#dice-throw-trigger {
     border-radius: 4px;
     border: none;
     background-color: #26282a;
@@ -148,7 +150,7 @@ main {
     padding-right: 8px;
 }
 
-.increment-button{
+.increment-button {
     padding: 3px;
     padding-left: 8px;
     padding-right: 8px;
@@ -160,12 +162,12 @@ main {
     height: 30px;
 }
 
-.dice-increments{
+.dice-increments {
     /* border: #26282a 2px solid; */
 
 }
 
-.dice-statistics{
+.dice-statistics {
     margin-top: 70px;
     /* border: #26282a 2px solid; */
     height: 40%;
@@ -179,30 +181,37 @@ main {
     display: inline-block;
     width: 100%;
 }
+
 .dropdown {
     display: none;
-    position: absolute !important;  /* Changed to absolute */
-    top: 100%;           /* Position the dropdown below the input field */
-    left: 0;             /* Align to the left of the container */
-    width: 100%;         /* Make the dropdown width match the input field */
+    position: absolute !important;
+    /* Changed to absolute */
+    top: 100%;
+    /* Position the dropdown below the input field */
+    left: 0;
+    /* Align to the left of the container */
+    width: 100%;
+    /* Make the dropdown width match the input field */
     background-color: #f9f9f9;
     /* min-width: 160px; */
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     max-height: 260px;
     overflow-y: auto;
 }
+
 .dropdown a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
+
 .dropdown a:hover {
     background-color: #f1f1f1;
 }
 
-.modifier{
+.modifier {
     width: 30px;
     max-width: 30px;
     max-height: 30px;
@@ -210,7 +219,7 @@ main {
     margin-right: 5px;
 }
 
-.stats-send{
+.stats-send {
     margin-top: 10px;
     padding: 3px;
     padding-left: 8px;
@@ -219,4 +228,18 @@ main {
     border: none;
     border-radius: 4px;
     color: white;
+}
+
+
+.dice-results {}
+
+.dice-results>div:nth-child(2) {
+    overflow: auto;
+}
+
+.rollMessage {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
 }

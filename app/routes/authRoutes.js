@@ -6,10 +6,10 @@ const router = Router();
 
 // Register a new user
 router.post('/register', async (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
-
+  const { Pseudo, email, password } = req.body;
+  console.log(req.body);
   // Perform form validation
-  if (!firstname || !lastname || !email || !password) {
+  if (!Pseudo || !email || !password) {
     return res.status(400).render('../views/register.html.twig', { error: 'All fields are required' });
   }
 
@@ -20,8 +20,7 @@ router.post('/register', async (req, res) => {
     // Create the user in the database
     const user = await prisma.user.create({
       data: {
-        firstname,
-        lastname,
+        pseudo: Pseudo,
         email,
         password: hashedPassword,
       },

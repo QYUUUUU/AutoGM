@@ -161,7 +161,7 @@ function initWorld() {
     requestAnimationFrame(animate);
 }
 
-export function randomDiceThrow(diceCounts) {
+export function randomDiceThrow(diceCounts, relances = 0) {
 
     // Vider tous les dés de la scène
     dice.forEach(die => {
@@ -202,7 +202,8 @@ export function randomDiceThrow(diceCounts) {
         trimmedValues.push({ dice: dice[i].constructor.name, value: value });
         diceValues.push({ dice: dice[i], value: value });
     }
-
+    console.log(diceValues);
+    shareThrow(diceValues, relances);
     DiceManager.prepareValues(diceValues);
 }
 
@@ -248,6 +249,47 @@ function createDice(type, size, backColor) {
         default:
             throw new Error('Unknown dice type');
     }
+}
+
+
+function shareThrow(dices, relances = 0) {
+
+    dices.forEach(item => {
+        console.log("am trying");
+        console.log(item);
+        console.log(item["dice"]["values"]);
+    });
+    const result = dices.map(item => ({
+        value: item.dice.values,
+        values: item.value
+    }));
+
+    console.log("result = ", result)
+
+    const url = '/share/throw';
+
+    // Updated payload to be sent in the request body
+    const data = {
+        result,
+        relances
+    };
+    fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // Convert data to JSON string
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log(response.json()); // Parse JSON response
+            } else {
+                console.error(response.status, response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }
 
 window.updateDiceInput = updateDiceInput;

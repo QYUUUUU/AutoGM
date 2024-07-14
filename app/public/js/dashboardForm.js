@@ -79,11 +79,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .then(responseData => {
-
                 // Handle successful response
                 console.log(responseData)
                 const diceCounts = { "d10": responseData.totalDice }
-                randomDiceThrow(diceCounts); // Appeler votre fonction avec l'objet diceCounts
+                randomDiceThrow(diceCounts, responseData.relances); // Appeler votre fonction avec l'objet diceCounts
             })
             .catch(error => {
                 console.error(error);
