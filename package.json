@@ -12,7 +12,7 @@
   "dependencies": {
     "@prisma/client": "^4.15.0",
     "@quixo3/prisma-session-store": "^3.1.11",
-    "bcrypt": "^5.1.0",
+    "bcrypt": "^6.0.0",
     "connect-pg-simple": "^9.0.0",
     "csurf": "^1.11.0",
     "discord-oauth2": "^2.11.0",
