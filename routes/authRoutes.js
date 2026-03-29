@@ -2,13 +2,13 @@ import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
-import { PrismaClient } from '@prisma/client';
+import prisma from "../prisma.js";
 
 import DiscordOauth2 from "discord-oauth2";
 const oauth = new DiscordOauth2();
 
 const router = Router();
-const prisma = new PrismaClient();
+
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -84,7 +84,7 @@ router.post('/login', async (req, res) => {
 router.get('/discord', async (req, res) => {
   if (req.session.userId != "undefined" && req.session.userId != ""  && req.session.userId != null){
     const userId = req.session.userId;
-    const prisma = new PrismaClient();
+    
 
     try {
       const code=req.query.code;

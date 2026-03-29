@@ -11,12 +11,25 @@ To install the necessary dependencies, run the following command:
 npm install
 ```
 
-### Docker Compose
+### Starting the Project (Docker)
 
-To start the project using Docker Compose, run the following command:
+This project relies on Docker to run the application via a multi-container setup. It spins up the `web` Node.js app, MariaDB database, PhpMyAdmin for db interaction, Redis, and Maildev services.
+
+To start everything in the background, simply run:
 
 ```bash
-dc up -d
+docker compose up -d
+```
+*(If you encounter a permission denied error, run `sudo docker compose up -d`)*
+
+To check the logs if something goes wrong:
+```bash
+docker compose logs -f
+```
+
+To shut down and stop all the services:
+```bash
+docker compose down
 ```
 
 ### Environment Variables
@@ -25,7 +38,7 @@ Copy the `.env` file to `.env.local` and fill in the proper API keys and secrets
 
 ### Database Migration
 
-To push the database changes using Prisma, run the following command:
+To push the database schema changes using Prisma, run the following command (make sure the `mariadb` container is running first):
 
 ```bash
 npx prisma db push

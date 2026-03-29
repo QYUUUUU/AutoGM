@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import twig from 'twig';
-import { PrismaClient } from '@prisma/client';
+import prisma from "../prisma.js";
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
   console.log(id_User);
   if(id_User){
     try {
-      const prisma = new PrismaClient();
+      
   
       const characters = await prisma.character.findMany({
         where: { userId: id_User },
@@ -85,7 +85,7 @@ router.get('/Characters', async (req, res) => {
   console.log(id_User);
   if(id_User){
   try {
-    const prisma = new PrismaClient();
+    
     const characters = await prisma.character.findMany({
       where: { userId:id_User },
     });
@@ -110,7 +110,7 @@ router.get('/Character/:id_Character', async (req, res) => {
   const id_User = req.session.userId;
   var { id_Character } = req.params;
   id_Character = parseInt(id_Character);
-  const prisma = new PrismaClient();
+  
   if(id_User){
     try {
       const Character = await prisma.character.findUnique({
@@ -160,7 +160,7 @@ router.put('/Character', async (req, res) => {
     }
   
     try {
-      const prisma = new PrismaClient();
+      
       const character = await prisma.character.findUnique({
         where: { id_Character: parseInt(id) },
         include: {
@@ -194,7 +194,7 @@ router.put('/Character', async (req, res) => {
 
 router.get('/Character/create/new/', async (req, res) => {
   const userId = req.session.userId;
-  const prisma = new PrismaClient();
+  
   if(userId){
     try {
       const user = await prisma.user.findUnique({ where: { id: userId }, include: { characters: true } });
@@ -246,7 +246,7 @@ router.get('/Character/show/:id_Character', async (req, res) => {
   const id_User = req.session.userId;
   var { id_Character } = req.params;
   id_Character = parseInt(id_Character);
-  const prisma = new PrismaClient();
+  
   if(id_User){
     try {
       const character = await prisma.character.findUnique({
@@ -283,7 +283,7 @@ router.get('/Character/Favorite/set/:id_Character', async (req, res) => {
   id_Character = parseInt(id_Character);
   const id_User = req.session.userId;
   const { userId } = req.session; // Assuming you have the user ID stored in req.session.userId
-  const prisma = new PrismaClient();
+  
   if(id_User){
     try {
       const user = await prisma.user.findUnique({ where: { id: userId }, include: { FavoriteCharacter: true } });
@@ -329,7 +329,7 @@ router.get('/Favorite/Character/get/:userId', async (req, res) => {
   var id_User = parseInt(userId);
   console.log(id_User)
   try {
-    const prisma = new PrismaClient();
+    
 
     const favoriteCharacter = await prisma.favoriteCharacter.findFirst({
       where: { userId: id_User },
@@ -350,7 +350,7 @@ router.get('/Favorite/Character/get/:userId', async (req, res) => {
 
 router.get('/Conversation/new/', async (req, res) => {
   const userId = req.session.userId;
-  const prisma = new PrismaClient();
+  
   if(userId){
     try {
       const user = await prisma.user.findUnique({ where: { id: userId }, include: { characters: true } });
@@ -385,7 +385,7 @@ router.get('/Conversation/get/:conversationId', async (req, res) => {
   conversationId = parseInt(conversationId);
   const userId = req.session.userId;
   try {
-    const prisma = new PrismaClient();
+    
 
     const messages = await prisma.message.findMany({
       where: {
@@ -405,7 +405,7 @@ router.get('/Conversation/delete/:conversationId', async (req, res) => {
   conversationId = parseInt(conversationId);
   const userId = req.session.userId;
   try {
-    const prisma = new PrismaClient();
+    
 
     const conversation = await prisma.conversation.findUnique({
       where: { id: conversationId },
@@ -435,7 +435,7 @@ router.get('/AutoGM', async (req, res) => {
   console.log(id_User);
   if(id_User){
     try {
-      const prisma = new PrismaClient();
+      
   
       const characters = await prisma.character.findMany({
         where: { userId: id_User },
@@ -490,7 +490,7 @@ router.get('/AutoGM', async (req, res) => {
 router.get('/Conversation/auto/new', async (req, res) => {
   console.log("NEW AUTO CALLED")
   const userId = req.session.userId;
-  const prisma = new PrismaClient();
+  
   if(userId){
     try {
       const user = await prisma.user.findUnique({ where: { id: userId }, include: { characters: true } });

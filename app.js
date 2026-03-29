@@ -7,22 +7,26 @@ import adminRoutes from './routes/adminRoutes.js';
 import expressSession from 'express-session';
 import { PrismaClient } from '@prisma/client';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
+import mysql from 'mysql2/promise';
 
 import { startMain as mainAgent } from "./agents/mainAgent.js";
 import { startMain as autoAgent } from "./agents/autoAgent.js";
 
-import { Client, GatewayIntentBits } from 'discord.js';
+//import { Client, GatewayIntentBits } from 'discord.js';
 
-const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
-        // ...
-    ]
-});
+//const client = new Client({
+//    intents: [
+//        GatewayIntentBits.Guilds,
+//        GatewayIntentBits.GuildMessages,
+//        GatewayIntentBits.MessageContent,
+//        // ...
+//    ]
+//});
 
 dotenv.config({ path: `.env.local`, override: true });
+
+const pool = mysql.createPool(process.env.DATABASE_URL);
+
 
 const app = express();
 
@@ -63,72 +67,72 @@ app.listen(80, () => {
 });
 
 //Discord BOT
-client.on("ready", () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
+//client.on("ready", () => {
+//  console.log(`Logged in as ${client.user.tag}!`);
+//});
 
-client.on("messageCreate", async (msg) => {
-  if (msg.channelId === "1136204139974635641" && msg.author.id != "1136201492995518515") {
-    try {
-      const channel = await client.channels.fetch(msg.channelId);
+//client.on("messageCreate", async (msg) => {
+//  if (msg.channelId === "1136204139974635641" && msg.author.id != "1136201492995518515") {
+//    try {
+//      const channel = await client.channels.fetch(msg.channelId);
+//
+//      // Start typing indicator
+//      await channel.sendTyping();
+//
+//      var answer = await callMainAgent(msg);
+//
+//      // Split the answer into chunks at sentence-ending periods
+//      const chunks = splitResponseIntoChunks(answer, 1999);
+//
+//      // Send each chunk separately
+//      for (const chunk of chunks) {
+//        // Reply to the user in the same channel
+//        await msg.reply(chunk);
+//        // or, send the chunk without mentioning the user
+//        // await msg.channel.send(chunk);
+//
+//        // Add a small delay before sending the next chunk
+//        await new Promise((resolve) => setTimeout(resolve, 500));
+//      }
+//    } catch (error) {
+//      console.error("Error while processing the message:", error);
+//      // Handle any potential errors here and inform the user if necessary
+//      msg.channel.send("An error occurred while processing your request.");
+//    }
+//  }
+//  
+//  if (msg.channel.parent.name === 'Alone' && msg.author.id != "1136201492995518515") {
+//    try {
+//      const channel = await client.channels.fetch(msg.channelId);
+//
+//      // Start typing indicator
+//      await channel.sendTyping();
+//
+//      var answer = await callAutoAgent(msg);
+//      
+//      // Split the answer into chunks at sentence-ending periods
+//      const chunks = splitResponseIntoChunks(answer, 1999);
+//
+//      // Send each chunk separately
+//      for (const chunk of chunks) {
+//        // Reply to the user in the same channel
+//        await msg.reply(chunk);
+//        // or, send the chunk without mentioning the user
+//        // await msg.channel.send(chunk);
+//
+//        // Add a small delay before sending the next chunk
+//        await new Promise((resolve) => setTimeout(resolve, 500));
+//      }
+//
+//    } catch (error) {
+//      console.error("Error while processing the message:", error);
+//      // Handle any potential errors here and inform the user if necessary
+//      msg.channel.send("An error occurred while processing your request.");
+//    }
+//  }
+//});
 
-      // Start typing indicator
-      await channel.sendTyping();
-
-      var answer = await callMainAgent(msg);
-
-      // Split the answer into chunks at sentence-ending periods
-      const chunks = splitResponseIntoChunks(answer, 1999);
-
-      // Send each chunk separately
-      for (const chunk of chunks) {
-        // Reply to the user in the same channel
-        await msg.reply(chunk);
-        // or, send the chunk without mentioning the user
-        // await msg.channel.send(chunk);
-
-        // Add a small delay before sending the next chunk
-        await new Promise((resolve) => setTimeout(resolve, 500));
-      }
-    } catch (error) {
-      console.error("Error while processing the message:", error);
-      // Handle any potential errors here and inform the user if necessary
-      msg.channel.send("An error occurred while processing your request.");
-    }
-  }
-  
-  if (msg.channel.parent.name === 'Alone' && msg.author.id != "1136201492995518515") {
-    try {
-      const channel = await client.channels.fetch(msg.channelId);
-
-      // Start typing indicator
-      await channel.sendTyping();
-
-      var answer = await callAutoAgent(msg);
-      
-      // Split the answer into chunks at sentence-ending periods
-      const chunks = splitResponseIntoChunks(answer, 1999);
-
-      // Send each chunk separately
-      for (const chunk of chunks) {
-        // Reply to the user in the same channel
-        await msg.reply(chunk);
-        // or, send the chunk without mentioning the user
-        // await msg.channel.send(chunk);
-
-        // Add a small delay before sending the next chunk
-        await new Promise((resolve) => setTimeout(resolve, 500));
-      }
-
-    } catch (error) {
-      console.error("Error while processing the message:", error);
-      // Handle any potential errors here and inform the user if necessary
-      msg.channel.send("An error occurred while processing your request.");
-    }
-  }
-});
-
-client.login(process.env.BOT_TOKEN);
+//client.login(process.env.BOT_TOKEN);
 
 async function callMainAgent(msg){
 

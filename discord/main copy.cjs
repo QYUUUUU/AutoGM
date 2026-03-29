@@ -42,6 +42,10 @@ async function callMainAgent(msg){
 
   const discordId = msg.author.id;
 
+  const mysql = require("mysql2/promise");
+  const { PrismaClient } = require("@prisma/client");
+  const pool = mysql.createPool(process.env.DATABASE_URL);
+  
   const prisma = new PrismaClient();
 
   const user = await prisma.user.findFirst({

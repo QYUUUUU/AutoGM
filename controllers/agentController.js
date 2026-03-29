@@ -1,14 +1,14 @@
 import { startMain as mainStart } from "../agents/mainAgent.js"
 import { startMain as autoStart } from "../agents/autoAgent.js"
 
-import { PrismaClient } from '@prisma/client';
+import prisma from "../prisma.js";
 
 export async function Agentcall(req, res) {
   if (req.session.userId != "undefined" && req.session.userId != ""  && req.session.userId != null){
     try {
       const data = req.body;
       const conversationId = data.conversationId;
-      const prisma = new PrismaClient();
+      
 
       await prisma.message.create({
         data: {
@@ -45,7 +45,7 @@ export async function AutoAgentcall(req, res) {
     try {
       const data = req.body;
       const conversationId = data.conversationId;
-      const prisma = new PrismaClient();
+      
 
       await prisma.message.create({
         data: {

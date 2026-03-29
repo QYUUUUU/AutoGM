@@ -1,10 +1,9 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 RUN apk --no-cache add build-base
-
+RUN apk add --no-cache openssl
 
 RUN export PYTHONUNBUFFERED=1
-RUN apk add --update --no-cache python3 \
-    && ln -sf python3 /usr/bin/python \
-    && python3 -m ensurepip \
-    && pip3 install --no-cache --upgrade pip setuptools
+# Replace lines 7 through 10 with this:
+RUN apk add --update --no-cache python3 py3-pip \
+    && ln -sf python3 /usr/bin/python
