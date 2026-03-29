@@ -7,7 +7,7 @@ services:
       - .:/app/
     ports:
       - 80:80
-    command: ["yarn", "--cwd=/app", "start"]
+    command: ["sh", "-c", "cd /app && yarn install && npx prisma generate --schema=/app/prisma/schema.prisma && yarn run start"]
 
   mariadb:
     image: mariadb:latest  
