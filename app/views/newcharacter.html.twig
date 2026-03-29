@@ -1,0 +1,723 @@
+{% extends '/layouts/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+ <div id="character-creation-form-container">
+    <h2 class="text-title">Creation Personnage</h2>
+    <div class="step" id="step-1">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <div class="form-lines">
+                <div class="form-group">
+                    <label for="nom">Nom:</label>
+                    <input type="text" name="nom" class="form-control" placeholder="Character Name">
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" name="age" class="form-control" placeholder="Character Age">
+                </div>
+                <div class="form-group">
+                    <label for="genre">Genre:</label>
+                    <select name="genre">
+                        <option value="homme">Homme</option>
+                        <option value="femme">Femme</option>
+                        <option value="femme">Autres</option>
+                    </select>                
+                </div>
+            </div>
+            <div class="button-group">
+                <div class=""></div>
+                <button class="next-btn" data-next="step-2">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-2" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <div class="form-lines">
+                <div class="form-group">
+                    <label for="signeastro">Signe Astro:</label>
+                    <select name="signeastro">
+                        <option value="Loup">Loup: persévérants, prudents et solidaires</option>
+                        <option value="Enfant">Enfant: sensibles, imaginatifs et créatifs</option>
+                        <option value="Arbre">Arbre: courageux, impulsifs et autoritaires</option>
+                        <option value="Sceptre">Sceptre: appliqués, réfléchis, et humanistes</option>
+                        <option value="Tourbillon">Tourbillon: tenaces, éloquents et ambitieux</option>
+                        <option value="Vautour">Vautour: passionnés, attentifs et coriaces</option>
+                        <option value="Voyage">Voyage: indépendants, impatients et extrêmes</option>
+                        <option value="Glaive">Glaive: patients, prudents, lucides et persévérants</option>
+                        <option value="Chat">Chat: détachés, perspicaces et spirituels</option>
+                    </select>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-1">Précédent</button>
+                <button class="next-btn" data-next="step-3">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-3" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <div class="form-lines">
+                <label for="origine">Origine:</label>
+                <select id="origineSelect" name="origine">
+                    <option value="Aon">Aon</option>
+                    <option value="Avhorae">Avhorae</option>
+                    <option value="Babel">Babel</option>
+                    <option value="Fakhar">Fakhar</option>
+                    <option value="Khashan">Khashan</option>
+                    <option value="Horde">Horde</option>
+                    <option value="Ool">Ool</option>
+                    <option value="Royaumes divisés">Royaumes divisés</option>
+                    <option value="Saeth">Saeth</option>
+                    <option value="Empire du Soleil Noir">Empire du Soleil Noir</option>
+                    <option value="Tégée">Tégée</option>
+                    <option value="Tuuhle">Tuuhle</option>
+                    <option value="Vaelor">Vaelor</option>
+                    <option value="Valdheim">Valdheim</option>
+                </select>
+               
+                <div id="originDescription" class="originDescription">
+                    <div class='row'>
+                        <div class="bannerorigin col-3">
+                            <img id="bannerImage" class="bannerimage" src="/images/banners/banneraon.png" alt="Banner">
+                        </div>
+                        <div class="textorigin col-9">
+                            <h3 id="originTitle">Aon</h3>
+                            <p id="originText">
+                                Aux yeux du reste du monde, les insulaires d’Aon sont des gens taiseux, vêtus de couleurs ternes, qui vivent dans un archipel pluvieux. Ils forment un peuple sévère, quittant rarement ses îles natales, si ce n’est pour se livrer à la piraterie. Les charpentiers qui construisent les bateaux d’Aon sont renommés, mais plus encore les maîtres-forgerons, ainsi que les Hommes d’Acier, seuls à connaître le secret pour obtenir l’Acier Véritable, métal incomparable dans lequel sont forgées des épées rarissimes.<br>
+                                S’ils ne s’opposent pas à ce que les étrangers accostent dans leurs ports, les gens d’Aon ne se montrent guère hospitaliers. Qui plus est, la rigueur du climat, le caractère farouche des autochtones et le peu d’importance qu’ils attachent à la cuisine ne contribuent pas à rendre leurs auberges attrayantes. Néanmoins, ceux qui parviennent à se lier aux natifs d’Aon découvrent rapidement des gens attentifs, dotés d’une ironie tranquille et d’une parole on ne peut plus fiable. Derrière leur froideur et leurs manières frustes, les habitants d’Aon sont des gens sincères qui savent apprécier les joies simples.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-2">Précédent</button>
+                <button class="next-btn" data-next="step-4">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-4" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <h2 class="text-smaller-title">Caractéristiques</h2>
+            <div class="form-lines">
+                <div class="form-group">
+                    <label>Puissance:</label>
+                    <select name="puissance">
+                        <option value="1">1 - Peu puissant</option>
+                        <option value="2">2 - Modérément puissant</option>
+                        <option value="3">3 - Moyennement puissant</option>
+                        <option value="4">4 - Très puissant</option>
+                        <option value="5">5 - Extrêmement puissant</option>
+                    </select>
+                    <p>Permet de mesurer le potentiel physique et athlétique du personnage, sa force, sa vitesse, sa capacité à se battre à mains nues ou avec une arme de mêlée et les dommages de base infligés au corps à corps et avec certaines armes de jet.</p>
+                </div>
+                <div class="form-group">
+                    <label>Résistance:</label>
+                    <select name="resistance">
+                        <option value="1">1 - Faible résistance</option>
+                        <option value="2">2 - Modérée</option>
+                        <option value="3">3 - Moyenne</option>
+                        <option value="4">4 - Grande</option>
+                        <option value="5">5 - Extrême résistance</option>
+                    </select>
+                    <p>Représente la capacité du personnage à résister aux chocs, conditions extrêmes, maladies, fatigue, poisons, etc.</p>
+                </div>
+                <div class="form-group">
+                    <label>Précision:</label>
+                    <select name="precicion">
+                        <option value="1">1 - Peu précis</option>
+                        <option value="2">2 - Modérément précis</option>
+                        <option value="3">3 - Assez précis</option>
+                        <option value="4">4 - Très précis</option>
+                        <option value="5">5 - Extrêmement précis</option>
+                    </select>
+                    <p>Exprime l’habileté manuelle du personnage, sa capacité à manier des instruments, des armes de tir ou de jet.</p>
+                </div>
+                <div class="form-group">
+                    <label>Réflexes:</label>
+                    <select name="reflexes">
+                        <option value="1">1 - Lents</option>
+                        <option value="2">2 - Modérés</option>
+                        <option value="3">3 - Normaux</option>
+                        <option value="4">4 - Rapides</option>
+                        <option value="5">5 - Très rapides</option>
+                    </select>
+                    <p>Permet d’estimer la vitesse de réaction du personnage, notamment en combat.</p>
+                </div>
+                <div class="form-group">
+                    <label>Connaissance:</label>
+                    <select name="connaissance">
+                        <option value="1">1 - Peu de connaissances</option>
+                        <option value="2">2 - Modérées</option>
+                        <option value="3">3 - Moyennes</option>
+                        <option value="4">4 - Grandes</option>
+                        <option value="5">5 - Immenses connaissances</option>
+                    </select>
+                    <p>Reflète le potentiel intellectuel du personnage, sa capacité à se souvenir de quelque chose, à parler plusieurs langues, etc.</p>
+                </div>
+                <div class="form-group">
+                    <label>Perception:</label>
+                    <select name="perception">
+                        <option value="1">1 - Peu perceptif</option>
+                        <option value="2">2 - Modérément perceptif</option>
+                        <option value="3">3 - Assez perceptif</option>
+                        <option value="4">4 - Très perceptif</option>
+                        <option value="5">5 - Extrêmement perceptif</option>
+                    </select>
+                    <p>Traduit l’acuité des sens du personnage, sa capacité d’analyse et d’observation.</p>
+                </div>
+                <div class="form-group">
+                    <label>Volonté:</label>
+                    <select name="volonte">
+                        <option value="1">1 - Faible volonté</option>
+                        <option value="2">2 - Modérée</option>
+                        <option value="3">3 - Moyenne</option>
+                        <option value="4">4 - Grande</option>
+                        <option value="5">5 - Extrême volonté</option>
+                    </select>
+                    <p>Évalue la capacité du personnage à résister à la peur, à contrôler ses émotions, etc.</p>
+                </div>
+                <div class="form-group">
+                    <label>Empathie:</label>
+                    <select name="empathie">
+                        <option value="1">1 - Faible empathie</option>
+                        <option value="2">2 - Modérée</option>
+                        <option value="3">3 - Moyenne</option>
+                        <option value="4">4 - Grande</option>
+                        <option value="5">5 - Extrême empathie</option>
+                    </select>
+                    <p>Apprécie la faculté du personnage à interpréter les émotions, détecter le mensonge, etc.</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-3">Précédent</button>
+                <button class="next-btn" data-next="step-5">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-5" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <h2 class="text-smaller-title">Compétences - L'homme</h2>
+            <div class="form-lines">
+                <div class="form-group">
+                    <label>Arts:</label>
+                    <select name="arts">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Définit les capacités du personnage à peindre, sculpter, danser, chanter, tatouer, pratiquer un instrument de musique, etc. Arts permet aussi d’apprécier les œuvres et de connaître de nombreuses informations les concernant.</p>
+                    <p>Exemples de spécialités : Art dramatique, Chant, Danse, Évaluation, Instruments de musique (choisir : à vent, à corde, à percussion), Peinture, Sculpture, Tatouage.</p>
+                </div>
+                <div class="form-group">
+                    <label>Cité:</label>
+                    <select name="cite">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Cette compétence englobe de nombreuses choses : connaissances des lois et des rumeurs, du commerce, sens de l’orientation en ville, capacité à connaître les meilleures auberges, trouver des marchands particuliers, etc.</p>
+                    <p>Exemples de spécialités : Commerces locaux, Groupes criminels, Hiérarchie locale, Lieux incontournables, Lois, Organisations locales, Orientation, Rumeurs.</p>
+                </div>
+                <div class="form-group">
+                    <label>Civilisations:</label>
+                    <select name="civilisations">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Inclut les connaissances géographiques et historiques, la connaissance des coutumes, traditions et cultes, ainsi que celle des peuples sédentaires (et de leur région).</p>
+                    <p>Exemples de spécialités : Coutumes, Cultes locaux, Géographie, Grandes figures, Histoire, Peuples locaux.</p>
+                </div>
+                <div class="form-group">
+                    <label>Relationnel:</label>
+                    <select name="relationnel">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Représente la capacité du personnage à mentir, séduire, négocier, cerner une personne ou user d’autorité.</p>
+                    <p>Exemples de spécialités : Analyse du comportement, Commandement, Corruption, Diplomatie, Éloquence, Intimidation, Marchandage, Mensonge, Politique, Séduction.</p>
+                </div>
+                <div class="form-group">
+                    <label>Soins:</label>
+                    <select name="soins">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Inclut la pratique des soins d’urgence, de la médecine et de la chirurgie.</p>
+                    <p>Exemples de spécialités : Maladies, Poisons et venins, Soins d’urgence (il est impossible de se spécialiser en Blessures).</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-4">Précédent</button>
+                <button class="next-btn" data-next="step-6">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-6" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <h2 class="text-smaller-title">Compétences - L'outil</h2>
+
+            <div class="form-lines">
+                <div class="form-group">
+                    <label>Adresse:</label>
+                    <select name="adresse">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Reflète la dextérité manuelle du personnage, qu’il s'agisse de réaliser des tours de passe-passe, de faire les poches ou encore de crocheter une serrure.</p>
+                    <p>Exemples de spécialités : Crochetage, Dénouer des liens, Désamorçage, Faire les poches, Jonglage, Tours de passe-passe.</p>
+                </div>
+                <div class="form-group">
+                    <label>Armurerie:</label>
+                    <select name="armurerie">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>La forge d’armes et d’armures ainsi que la création des projectiles dépendent de l’Armurerie.</p>
+                    <p>Exemples de spécialités : Archerie, Armes de mêlée (choisir : contondantes, perforantes, tranchantes), Armures (choisir : partielles, intégrales), Boucliers, Ferronnerie.</p>
+                </div>
+                <div class="form-group">
+                    <label>Artisanat:</label>
+                    <select name="artisanat">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Inclut le travail du bois, du cuir, des textiles, etc. À la discrétion de l’Oracle, il est possible de confectionner/réparer des arcs légers et de simples flèches de bois, voire des armures de cuir non renforcées ou matelassées.</p>
+                    <p>Exemples de spécialités : Bois, Cuir, Cuisine, Évaluation, Parfumerie, Poisons (choisir : animaux ou végétaux), Poterie, Taille de pierre, Tissus, Vannerie.</p>
+                </div>
+                <div class="form-group">
+                    <label>Mécanismes:</label>
+                    <select name="mecanisme">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Permet de créer des pièges, des systèmes d’engrenages, des serrures, des arbalètes, etc.</p>
+                    <p>Exemples de spécialités : Arbalètes, Engins de siège, Pièges, Serrures et clés, Systèmes hydrauliques, Systèmes à engrenages.</p>
+                </div>
+                <div class="form-group">
+                    <label>Runes:</label>
+                    <select name="runes">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Permet de lire, écrire et parler différentes langues, de pratiquer la cartographie et la calligraphie, ainsi que quelques sciences.</p>
+                    <p>Exemples de spécialités : Architecture, Calligraphie, Cartographie, Cryptologie, Économie, Énigmes, Enluminure, Géométrie, Mathématiques.</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-5">Précédent</button>
+                <button class="next-btn" data-next="step-7">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-7" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <h2 class="text-smaller-title">Compétences - L'arme</h2>
+
+            <div class="form-lines">
+                <div class="form-group">
+                    <label>Bouclier:</label>
+                    <select name="bouclier">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Définit la capacité du personnage à utiliser un bouclier efficacement. Compétence Rare (I).</p>
+                    <p>Exemples de spécialités : Frappe au bouclier, Parade (choisir un type de dommages particulier), Parade à distance, Réparation.</p>
+                </div>
+                <div class="form-group">
+                    <label>Corps à corps:</label>
+                    <select name="cac">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>La capacité du personnage à se battre à mains nues et à esquiver dépend de cette compétence.</p>
+                    <p>Exemples de spécialités : Esquive au contact, Évasion (lors d’une saisie), Parade à mains nues, Pieds, Poings, Saisie.</p>
+                </div>
+                <div class="form-group">
+                    <label>Lancer:</label>
+                    <select name="lancer">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Représente la capacité du personnage à manier les armes de jet telles que les couteaux, pierres, frondes, filets et javelots.</p>
+                    <p>Exemples de spécialités : Couteau, Javelot, Pierre, Réparation.</p>
+                </div>
+                <div class="form-group">
+                    <label>Mêlée:</label>
+                    <select name="melee">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Définit la capacité du personnage à attaquer et parer avec une arme de mêlée comme les épées, haches, poignards, masses, etc.</p>
+                    <p>Exemples de spécialités : Couteau, Épée (choisir : une ou deux mains), Hache (choisir : une ou deux mains), Lance, Massue (choisir : une ou deux mains), Parade (préciser le type d’arme), Réparation.</p>
+                </div>
+                <div class="form-group">
+                    <label>Tir:</label>
+                    <select name="tir">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Capacité du personnage à manier des arcs, des sarbacanes ou même des balistes.</p>
+                    <p>Exemples de spécialités : Arbalète, Arc (choisir : léger ou lourd), Engin de siège (choisir : baliste, catapulte, trébuchet), Fronde, Réparation, Sarbacane.</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-6">Précédent</button>
+                <button class="next-btn" data-next="step-8">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-8" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <h2 class="text-smaller-title">Compétences - L'animal</h2>
+
+            <div class="form-lines">
+                <div class="form-group">
+                    <label>Animalisme:</label>
+                    <select name="animalisme">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Représente les connaissances « pratiques » que le personnage a des animaux et couvre le dressage, la dissection et les prélèvements (venin, peau, etc.). Elle permet également d’imiter les cris, postures, traces et odeurs d’animaux et, dans une moindre mesure, de les comprendre. Compétence Rare (I).</p>
+                    <p>Exemples de spécialités : Communication, Compréhension, Dissection, Dressage, Imitation.</p>
+                </div>
+                <div class="form-group">
+                    <label>Faune:</label>
+                    <select name="faune">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Couvre les connaissances théoriques que le personnage a des animaux, oiseaux, poissons et insectes. Elle permet également d’identifier les espèces, traces et habitats.</p>
+                    <p>Exemples de spécialités : Créatures surnaturelles, Insectes et arachnides, Mammifères terrestres, Oiseaux, Poissons et mammifères marins, Reptiles.</p>
+                </div>
+                <div class="form-group">
+                    <label>Monture:</label>
+                    <select name="montures">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Inclut l’équitation, la conduite d’attelages et les manœuvres exécutées avec une monture.</p>
+                    <p>Exemples de spécialités : Attelages, Dressage (cheval), Équitation, Joute, Manoeuvres, Saut d’obstacles, Voltige à cheval.</p>
+                </div>
+                <div class="form-group">
+                    <label>Pistage:</label>
+                    <select name="pistage">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Représente la capacité à détecter, identifier et suivre les traces ou signes de passage des humains et animaux.</p>
+                    <p>Exemples de spécialités : Animaux, Créatures, Détection, Humains.</p>
+                </div>
+                <div class="form-group">
+                    <label>Territoire:</label>
+                    <select name="territoire">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Cette compétence est un peu le pendant de Civilisations, mais pour le milieu sauvage. Elle permet d’identifier les prédateurs, tribus, runes et dangers en milieu naturel (et souvent hostile).</p>
+                    <p>Exemples de spécialités : Dangers naturels, Désert, Forêt, Mer, Montagnes, Plaines, Prédateurs, Symboles, Tribus.</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-7">Précédent</button>
+                <button class="next-btn" data-next="step-9">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-9" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <h2 class="text-smaller-title">Compétences - Les Terres Sauvages</h2>
+
+            <div class="form-lines">
+                <div class="form-group">
+                    <label>Athlétisme:</label>
+                    <select name="athletisme">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Couvre les activités comme l’escalade, la natation, la course, ainsi que les épreuves de force et d’endurance.</p>
+                    <p>Exemples de spécialités : Acrobatie, Course poursuite, Épreuve de force, Escalade, Natation, Saut.</p>
+                </div>
+                <div class="form-group">
+                    <label>Discrétion:</label>
+                    <select name="discretion">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Définit la capacité à se cacher, se déplacer et agir sans se faire remarquer. Elle permet également de camoufler ses traces et de se déguiser/maquiller.</p>
+                    <p>Exemples de spécialités : Camouflage, Déguisement, Déplacements silencieux, Disparaître dans la foule, Maquillage, Se fondre dans l’ombre.</p>
+                </div>
+                <div class="form-group">
+                    <label>Flore:</label>
+                    <select name="flore">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Représente les connaissances du personnage vis-à-vis des végétaux (plantes, fleurs, fruits, champignons, etc.). Elle permet également de cultiver et identifier les herbes médicinales et toxiques, ainsi que les drogues et poisons issus du domaine végétal.</p>
+                    <p>Exemples de spécialités : Brassage, Culture (choisir : céréales, fruits, légumes, champignons ou tubercules), Drogues, Horticulture, Plantes médicinales, Plantes toxiques, Viticulture.</p>
+                </div>
+                <div class="form-group">
+                    <label>Vigilance:</label>
+                    <select name="vigilance">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Cette compétence est le pendant de la Discrétion, elle permet de percevoir son environnement, d’anticiper et d’agir en conséquence. Elle permet également de monter la garde efficacement, d’éviter un projectile, d’agir plus rapidement en combat, de poser et détecter des pièges, d’anticiper les embuscades et même de mettre au point des tactiques.</p>
+                    <p>Exemples de spécialités : Anticipation, Détails, Esquive à distance, Pièges, Tactiques, Veille.</p>
+                </div>
+                <div class="form-group">
+                    <label>Voyage:</label>
+                    <select name="voyage">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Permet de monter des campements, préparer des itinéraires, connaître les grandes routes et les principaux dangers alentour, ainsi que les coutumes des nomades et les rumeurs circulant parmi eux. La navigation relève également de cette compétence.</p>
+                    <p>Exemples de spécialités : Campements, Coutumes nomades, Dangers, Itinéraires, Navigation, Routes commerciales, Tribus nomades, Voies de navigation.</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-8">Précédent</button>
+                <button class="next-btn" data-next="step-10">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-10" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <h2 class="text-smaller-title">Compétences - L'inconnu</h2>
+
+            <div class="form-lines">
+                <div class="form-group">
+                    <label>Éclats:</label>
+                    <select name="eclats">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Cette compétence est l’apanage des Élus et de quelques personnes exceptionnelles qui se consacrent généralement à leur étude ou leur élimination. Elle permet l’identification des Éclats, de leur sphère et, éventuellement, des Essences associées au dieu dont elles dépendent. Compétence Rare (II).</p>
+                    <p>Exemples de spécialités : Ancien propriétaire, Élus légendaires, Essences liées, Identifier (la nature d’Éclat), Lien (avec son/un Éclat), Sphère d’influence liée.</p>
+                </div>
+                <div class="form-group">
+                    <label>Lunes:</label>
+                    <select name="lunes">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Englobe la divination, l’orientation, la connaissance des marées et des phénomènes célestes et météorologiques. Compétence Rare (I).</p>
+                    <p>Exemples de spécialités : Astrologie, Astronomie, Divination, Marées, Météorologie, Orientation.</p>
+                </div>
+                <div class="form-group">
+                    <label>Mythes:</label>
+                    <select name="mythes">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Couvre la connaissance des sanctuaires, des légendes et des temps anciens. Compétence Rare (I).</p>
+                    <p>Exemples de spécialités : Deuxième Âge, Légendes, Premier Âge, Reliques, Sanctuaires.</p>
+                </div>
+                <div class="form-group">
+                    <label>Panthéons:</label>
+                    <select name="pantheons">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Englobe la connaissance des Anciens Dieux et de leurs aspects, des peuples associés et de leurs traditions, coutumes et superstitions. Compétence Rare (I).</p>
+                    <p>Exemples de spécialités : Anciens cultes, Anciens Dieux, Culte du Soleil Noir, Panthéon en particulier.</p>
+                </div>
+                <div class="form-group">
+                    <label>Rituels:</label>
+                    <select name="rituels">
+                        <option value="0">Ignorant</option>
+                        <option value="1">Debutant</option>
+                        <option value="2">Confirmé</option>
+                        <option value="3">Expert</option>
+                        <option value="4">Maître</option>
+                        <option value="5">Grand maître</option>
+                        <option value="6">Légende</option>
+                    </select>
+                    <p>Préside à la pratique des cérémonies, rituels et sacrifices. Compétence Rare (II).</p>
+                    <p>Exemples de spécialités : Cérémonies, Identification (de magie rituelle), Magie rituelle (choisir une Essence), Magie sacrificielle (choisir une Essence).</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-9">Précédent</button>
+                <button class="next-btn" data-next="step-n">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add more steps as needed -->
+    <div class="step" id="step-n" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <div class="form-lines">
+            <div class="form-group">
+                    <label>Instinct:</label>
+                    <select name="instinct">
+                        <option value="architecte">L’Architecte</option>
+                        <option value="epee">L’Épée</option>
+                        <option value="fleau">Le Fléau</option>
+                        <option value="gardien">Le Gardien</option>
+                        <option value="homme">L’Homme</option>
+                        <option value="main">La Main</option>
+                        <option value="masque">Le Masque</option>
+                        <option value="neant">Le Néant</option>
+                        <option value="os">L’Os</option>
+                        <option value="voyageur">Le Voyageur</option>
+                    </select>
+                    <p>Englobe la connaissance des Anciens Dieux et de leurs aspects, des peuples associés et de leurs traditions, coutumes et superstitions. Compétence Rare (I).</p>
+                    <p>Exemples de spécialités : Anciens cultes, Anciens Dieux, Culte du Soleil Noir, Panthéon en particulier.</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-10">Précédent</button>
+                <button id="submit" type="submit">Créer</button>
+            </div>
+        </div>
+    </div>
+</div>
+   <script src="js/newcharacter.js"></script>
+<link rel="stylesheet" href="css/newcharacter.css">
+{% endblock %}

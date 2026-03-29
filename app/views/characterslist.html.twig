@@ -1,0 +1,39 @@
+{% extends '/layouts/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div id="charabox" class="card-body page">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <a href="/newcharacter" class="character-card bg-dark">
+                Créer
+                </a>
+            </div>
+            {% set i = 0 %}
+            {% for character in characters %}
+            {% set i = i + 1 %}
+                <div class="col-md-2 mb-2 card-custom charactersheet" id="{{ character.id_Character }}">
+                    <div class="card h-100">
+                        <div class="img-container">
+                            {% if character.genre == "femme" %}
+                            <img src="/images/characters/femme/femme-{{i}}.jpg" class="card-img-top" alt="Image 1">
+                            {% else %}
+                            <img src="/images/characters/homme/homme-{{i}}.jpg" class="card-img-top" alt="Image 1">
+                            {% endif %}
+                        </div>
+                        <div class="card-body body-presentation">
+                            <div>
+                                <h2>{{ character.nom }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+   <script src="js/characterslist.js"></script>
+<link rel="stylesheet" href="css/characterslist.css">
+{% endblock %}
