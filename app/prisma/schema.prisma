@@ -42,6 +42,10 @@ model Character {
     instinct            String?
     signeastro          String?
     origine             String?
+    avantage            String?             @default("")
+    desavantage         String?             @default("")
+    capaciteInstinct1   String?             @default("")
+    capaciteInstinct2   String?             @default("")
     reputation          String?             @default("1")
     depensee            Int?                @default(0)
     totale              Int?                @default(0)
