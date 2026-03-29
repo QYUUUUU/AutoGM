@@ -1,0 +1,341 @@
+@import "bootstrap.min.css";
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.container-fluid {
+  height: 100%;
+}
+
+.card {
+  height: 100%-58px;
+  margin-bottom: 10px;
+}
+
+body {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.navbar-brand {
+  display: block;
+  width: 150px;
+  /* Set the width and height of the div to match the dimensions of your logo */
+  height: 50px;
+  background-image: url("../images/logo.svg");
+  /* Replace with the path to your logo image */
+  background-repeat: no-repeat;
+  background-size: contain;
+  /* Scale the logo image to fit within the div */
+  background-position: center center;
+  /* Center the logo image within the div */
+}
+
+.card-body {
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 1.25rem;
+  height: fit-content;
+  max-height: max-content;
+}
+
+main {
+  display: flex;
+  height: 100%;
+}
+
+.chat-message {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.chat-message-content {
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  padding: 10px;
+  max-width: 70%;
+}
+
+.chat-message-content p {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.chat-message-info {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.chat-message-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.chat-message-right {
+  flex-direction: row-reverse;
+}
+
+.chat-message-right .chat-message-content {
+  background-color: #c7e4ff;
+}
+
+.chat-message-right .chat-message-info {
+  margin-left: 0;
+  margin-right: 10px;
+}
+
+
+.loading {
+  margin-top: 15px;
+  margin-left: 2%;
+  height: 2em;
+  width: 2em;
+  display: block;
+  background-image: url("../images/typing-loading.gif");
+  /* Replace with the path to your logo image */
+  background-repeat: no-repeat;
+  background-size: contain;
+  /* Scale the logo image to fit within the div */
+  background-position: center center;
+  /* Center the logo image within the div */
+}
+
+.error-message {
+  background-color: #ffe2e2;
+  color: #ff4d4d;
+  border: 1px solid #ff4d4d;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+#tool:hover {
+  background-color: unset;
+}
+
+.pop-up {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 9999;
+  background-color: #fff;
+  padding: 20px;
+  max-height: 100vh;
+  overflow-y: auto;
+  border-radius: 2px;
+}
+
+.pop-up img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 10px;
+}
+
+.pop-up a {
+  display: block;
+  text-align: center;
+}
+
+.pop-up a:hover {
+  text-decoration: underline;
+}
+
+tr>td {
+  margin-top: 5px;
+}
+
+.groupgrey {
+  padding: 7px;
+  border-radius: 4px;
+}
+
+@media (max-width: 1000px) {
+  .navbar-nav.flex-row .nav-item:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+
+.select {
+  max-width: 200px;
+  width: fit-content;
+  border-radius: 4px;
+  border: none;
+  background-color: #26282a;
+  color: white;
+  padding: 3px;
+}
+
+#prompt-field {
+  width: 100%;
+}
+
+.textarea-chat {
+  width: 100%;
+}
+
+.card-footer {
+  background-color: #fff;
+}
+
+body {
+  background-color: #fff;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 58px 0 0;
+  /* Height of navbar */
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+  width: 240px;
+  z-index: 600;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: 100%;
+  }
+}
+
+.sidebar .active {
+  border-radius: 5px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Scrollable contents if viewport is shorter than content. */
+}
+
+.chat-area {
+  position: relative;
+  width: 100%;
+  z-index: 4;
+}
+
+.items-chat {
+  width: 60%;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+#newchat {
+  background-color: white;
+  color: black;
+  text-decoration: none;
+}
+
+#newchat:hover {
+  color: #6d7782;
+  text-decoration: none;
+}
+
+.new-chat {
+  background-color: white;
+  color: black;
+  text-decoration: none;
+}
+
+.new-chat:hover {
+  color: #6d7782;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.scrollable-container {
+  /* Add any custom styling you want here */
+  height: calc(100% - 100px);
+  overflow-y: scroll;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.position-sticky {
+  height: 100%;
+}
+
+.list-group.list-group-flush.mx-3.mt-4 {
+  height: 100%;
+}
+
+.d-none.d-md-flex.input-group.w-auto.my-auto>.navbar-nav>.nav-item>.nav-link {
+  color: black;
+}
+
+.d-none.d-md-flex.input-group.w-auto.my-auto>.navbar-nav>.nav-item>.nav-link:hover {
+  color: #6d7782;
+}
+
+#favoriteCharacter {
+  min-width: 150px;
+}
+
+#main-navbar {
+  z-index: 2;
+}
+
+/* Add this custom CSS */
+@media (max-width: 991.98px) {
+
+  /* Hide the sidebar and navbar by default on smaller screens */
+  #sidebarMenu {
+    display: none;
+  }
+
+  #main-navbar .input-group {
+    display: none;
+  }
+
+  /* Show the sidebar and navbar when the "show" class is added */
+  #sidebarMenu.show {
+    display: block;
+    position: fixed;
+    top: 190px;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: 250px;
+    background-color: #fff;
+  }
+
+  #main-navbar.show {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #fff;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .d-none.d-md-flex.input-group.w-auto.my-auto {
+    display: none !important;
+  }
+}
+
+#main-navbar.show>div>div.d-none.d-md-flex.input-group.w-auto.my-auto {
+  display: flex !important;
+}
+
+.second-increments{
+  height: 30px;
+}
