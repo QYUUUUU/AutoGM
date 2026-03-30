@@ -769,17 +769,17 @@
                             <div class="row" style="margin-bottom: 15px;">
                                 <div class="col-6">
                                     <h4 style="color: #274b27;">Avantage</h4>
-                                    <p style="font-size: 1.1em;">{{ character.avantage and character.avantage != 'none' ? character.avantage : 'Aucun' }}</p>
+                                    <p id="avantageDisplay" data-value="{{ character.avantage and character.avantage != 'none' ? character.avantage : 'Aucun' }}" style="font-size: 1.1em;">{{ character.avantage and character.avantage != 'none' ? character.avantage : 'Aucun' }}</p>
                                 </div>
                                 <div class="col-6">
                                     <h4 style="color: #7a0000;">Désavantage</h4>
-                                    <p style="font-size: 1.1em;">{{ character.desavantage and character.desavantage != 'none' ? character.desavantage : 'Aucun' }}</p>
+                                    <p id="desavantageDisplay" data-value="{{ character.desavantage and character.desavantage != 'none' ? character.desavantage : 'Aucun' }}" style="font-size: 1.1em;">{{ character.desavantage and character.desavantage != 'none' ? character.desavantage : 'Aucun' }}</p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <h4 style="color: #004b7a;">Capacité d'Instinct</h4>
-                                    <p style="font-size: 1.1em;">{{ character.capaciteInstinct1 and character.capaciteInstinct1 != 'none' ? character.capaciteInstinct1 : 'Aucune' }}</p>
+                                    <p id="instinctDisplay" data-value="{{ character.capaciteInstinct1 and character.capaciteInstinct1 != 'none' ? character.capaciteInstinct1 : 'Aucune' }}" style="font-size: 1.1em;">{{ character.capaciteInstinct1 and character.capaciteInstinct1 != 'none' ? character.capaciteInstinct1 : 'Aucune' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -797,6 +797,64 @@
                 </script>
                 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.js"></script>
                 <script src="/js/character.js"></script>
+                <script src="/js/character_data.js?v=2"></script>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        if (typeof origineDescriptions === 'undefined' || typeof instinctDescriptions === 'undefined') return;
+
+                        function findDescription(type, name) {
+                            if (!name || name === 'Aucun' || name === 'Aucune' || name === 'none') return null;
+                            
+                            if (type === 'Avantage' || type === 'Désavantage' || type === 'Spécial') {
+                                for (const key in origineDescriptions) {
+                                    const stats = origineDescriptions[key].stats;
+                                    if (!stats) continue;
+                                    const regex = new RegExp(`<b>${type}(?:\\s+|&nbsp;|&#160;|\\u2013|-)*${name}\\s*:\\s*<\\/b>(.*?)(?:<br|$)`, 's');
+                                    const match = stats.match(regex);
+                                    if (match) return match[1].trim();
+                                }
+                            }
+                            
+                            if (type === "Capacité d'Instinct") {
+                                for (const key in instinctDescriptions) {
+                                    const stats = instinctDescriptions[key].stats;
+                                    if (!stats) continue;
+                                    const regex = new RegExp(`<b>Capacité d'Instinct(?:\\s+|&nbsp;|&#160;|\\u2013|-)*${name}\\s*:\\s*<\\/b>(.*?)(?:<br|$)`, 's');
+                                    const match = stats.match(regex);
+                                    if (match) return match[1].trim();
+                                }
+                            }
+                            return null;
+                        }
+
+                        const avEl = document.getElementById('avantageDisplay');
+                        if (avEl) {
+                            const val = avEl.getAttribute('data-value');
+                            if (val !== 'Aucun' && val !== 'none' && val) {
+                                const desc = findDescription('Avantage', val) || findDescription('Spécial', val);
+                                if (desc) avEl.innerHTML = `<strong>${val} :</strong> ${desc}`;
+                            }
+                        }
+
+                        const desEl = document.getElementById('desavantageDisplay');
+                        if (desEl) {
+                            const val = desEl.getAttribute('data-value');
+                            if (val !== 'Aucun' && val !== 'none' && val) {
+                                const desc = findDescription('Désavantage', val);
+                                if (desc) desEl.innerHTML = `<strong>${val} :</strong> ${desc}`;
+                            }
+                        }
+
+                        const instEl = document.getElementById('instinctDisplay');
+                        if (instEl) {
+                            const val = instEl.getAttribute('data-value');
+                            if (val !== 'Aucune' && val !== 'none' && val) {
+                                const desc = findDescription("Capacité d'Instinct", val);
+                                if (desc) instEl.innerHTML = `<strong>${val} :</strong> ${desc}`;
+                            }
+                        }
+                    });
+                </script>
                 <link rel="stylesheet" href="/css/character.css">
 
                 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.snow.css" rel="stylesheet">

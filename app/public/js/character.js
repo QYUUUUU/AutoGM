@@ -328,32 +328,116 @@ function buildPage() {
     updateCharacterField(id_Character, "inventory", jsonString);
   }
 
-  function makeQuill(quillContent) {
-    var quill = new Quill('#editor', {
-      theme: 'snow',
-      placeholder: 'Take notes here...',
-      modules: {
-        toolbar: [
-          [
-            {
-              'header': [1, 2, false]
+  function makeQuill(quillContent, retryCount = 0) {
+    var quill;
+
+    // Wait for Quill to load if it's not ready yet (e.g., slow CDN connection)
+    if (typeof Quill === 'undefined') {
+        if (retryCount < 10) {
+            console.warn(`Quill n'est pas encore chargé. Nouvelle tentative dans 500ms... (${retryCount + 1}/10)`);
+            setTimeout(function() {
+                makeQuill(quillContent, retryCount + 1);
+            }, 500);
+            return;
+        }
+
+        // OFFLINE FALLBACK: If Quill failed to load after 10 tries, use Native Textarea
+        console.error("Quill CDN n'est pas accessible. Mode hors-ligne : utilisation d'une zone de texte basique.");
+        var editorDiv = document.getElementById('editor');
+        if (editorDiv && editorDiv.tagName !== 'TEXTAREA') {
+            var textVal = "";
+            editorDiv.outerHTML = '<textarea id="editor" style="width:100%; height:300px; padding: 10px; font-family: monospace; border: 1px solid #ccc;"></textarea>';
+        }
+        var textarea = document.getElementById('editor');
+        
+        try {
+            if (quillContent) {
+                var parsed = typeof quillContent === 'string' ? JSON.parse(quillContent) : quillContent;
+                if (typeof parsed === 'string') parsed = JSON.parse(parsed);
+
+                if (parsed && parsed.ops && Array.isArray(parsed.ops)) {
+                    textarea.value = parsed.ops.map(function(op){ return op.insert || ""; }).join('');
+                } else {
+                    textarea.value = typeof quillContent === 'string' ? quillContent : JSON.stringify(quillContent);
+                }
             }
-          ],
-          [
-            'bold', 'italic', 'underline'
-          ],
-          ['code-block']
-        ]
-      }
-    });
+        } catch(e) {
+            textarea.value = quillContent || '';
+        }
+
+        textarea.addEventListener('input', function() {
+            var val = textarea.value;
+            var fakeContent = { ops: [{ insert: val }] };
+            updateCharacterField(id_Character, "inventory", JSON.stringify(fakeContent));
+        });
+        return;
+    }
+
 
     try {
-      quillContent = JSON.parse(quillContent);
-      quill.setContents(quillContent);
-      quill.history.clear();
-    } catch {
-      console.error("Inventaire non chargeable :'(");
+      quill = new Quill('#editor', {
+        theme: 'snow',
+        placeholder: 'Take notes here...',
+        modules: {
+          keyboard: {
+            bindings: {
+              save: {
+                key: 'S',
+                shortKey: true,
+                handler: function(range, context) {
+                  updateInventory(quill);
+                  return false;
+                }
+              }
+            }
+          },
+          toolbar: [
+            [ { 'header': [1, 2, false] } ],
+            [ 'bold', 'italic', 'underline' ],
+            ['code-block']
+          ]
+        }
+      });
+    } catch (e) {
+      console.error("Erreur de chargement de Quill (ReferenceError). L'éditeur ne sera pas chargé.", e);
+      return; // Stop if Quill fail
     }
+
+    try {
+      if (quillContent) {
+        var parsedContent;
+        if (typeof quillContent === 'string') {
+          try {
+            parsedContent = JSON.parse(quillContent);
+          } catch (firstErr) {
+            console.warn("JSON parse failed, attempt sanitizing control chars...");
+            // Escape literal newlines, tabs, and carriage returns that broke JSON.parse
+            var sanitizedContent = quillContent
+                .replace(/\n/g, "\\n")
+                .replace(/\r/g, "\\r")
+                .replace(/\t/g, "\\t");
+            parsedContent = JSON.parse(sanitizedContent);
+          }
+        } else {
+          parsedContent = quillContent; // It's already a JSON object!
+        }
+        
+        // Sometimes JSON is double-stringified
+        if (typeof parsedContent === 'string') {
+            parsedContent = JSON.parse(parsedContent);
+        }
+
+        quill.setContents(parsedContent);
+        quill.history.clear();
+      }
+    } catch (e) {
+      console.error("Inventaire non chargeable, tentative en texte brut.", e);
+      if (typeof quillContent === 'string') {
+        quill.setText(quillContent);
+        quill.history.clear();
+      }
+    }
+
     quill.on('text-change', function () {
       updateInventory(quill);
     });
