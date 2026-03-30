@@ -148,6 +148,23 @@ router.post('/create-character', async (req, res) => {
 
       puissance = parseInt(puissance);
       resistance = parseInt(resistance);
+
+        let defaultLegere = 4;
+        let defaultGrave = 3;
+        let defaultMortelle = 2;
+
+        if (age) {
+          const ageLower = age.toLowerCase();
+          if (ageLower.includes('jeune')) {
+            defaultLegere = 4;
+            defaultGrave = 3;
+            defaultMortelle = 1;
+          } else if (ageLower.includes('ancien')) {
+            defaultLegere = 3;
+            defaultGrave = 2;
+            defaultMortelle = 1;
+          }
+        }
       precicion = parseInt(precicion);
       reflexes = parseInt(reflexes);
       connaissance = parseInt(connaissance);
@@ -237,6 +254,9 @@ router.post('/create-character', async (req, res) => {
           mythes,
           pantheons,
           rituels,
+          maxblessurelegere: defaultLegere,
+          maxblessuregrave: defaultGrave,
+          maxblessuremortelle: defaultMortelle,
           userId: id_User,
           inventory: '{"ops":[{"insert":"\n"}]}'
         },
@@ -260,11 +280,7 @@ router.get('/Characters', async (req, res) => {
         where: { userId: id_User },
       });
 
-      if (!characters || characters.length === 0) {
-        return res.status(404).json({ error: 'No characters found for the user' });
-      }
-
-      return res.render('characterslist.html.twig', { characters }); // Pass characters as an object
+      return res.render('characterslist.html.twig', { characters: characters || [] }); // Pass characters as an object
 
     } catch (error) {
       console.error(error);
@@ -375,6 +391,9 @@ router.get('/Character/create/new/', async (req, res) => {
         const character = await prisma.character.create({
           data: {
             User: { connect: { id: userId } },
+            maxblessurelegere: 4,
+            maxblessuregrave: 3,
+            maxblessuremortelle: 2
           },
         });
 
