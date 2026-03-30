@@ -463,3 +463,169 @@ if (signeastroSelect) {
     signeastroSelect.dispatchEvent(new Event('change'));
 }
 
+
+// --- VALIDATION TRACKER LOGIC ---
+document.addEventListener('DOMContentLoaded', function() {
+    const characteristicsNames = ['puissance', 'resistance', 'precicion', 'reflexes', 'connaissance', 'perception', 'volonte', 'empathie'];
+    const skillsNames = ['arts', 'cite', 'civilisations', 'relationnel', 'soins', 'animalisme', 'faune', 'montures', 'pistage', 'territoire', 'adresse', 'armurerie', 'artisanat', 'mecanisme', 'runes', 'athletisme', 'discretion', 'flore', 'vigilance', 'voyage', 'bouclier', 'cac', 'lancer', 'melee', 'tir', 'eclats', 'lunes', 'mythes', 'pantheons', 'rituels'];
+    
+    const container = document.getElementById('character-creation-form-container');
+    if (!container) return;
+    
+    const trackerHTML = `
+        <div id="stats-tracker" style="position: sticky; top: 0; background: #222; border: 1px solid #555; padding: 10px; margin-bottom: 20px; z-index: 1000; border-radius: 5px; color: #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.5);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h4 style="margin: 0 0 5px 0; font-size: 14px; color: #aaa;">Caractéristiques (Base 1D)</h4>
+                    <span id="char-status" style="font-weight: bold;">0 / 8 points répartis</span>
+                    <div id="char-error" style="color: #ff4444; font-size: 12px; display: none;">Max 3D par carac !</div>
+                </div>
+                <div>
+                    <h4 style="margin: 0 0 5px 0; font-size: 14px; color: #aaa;">Compétences</h4>
+                    <span id="skill-status" style="font-weight: bold;">0 / 13 points (1x3D, 2x2D, 3x1D + 3 Libres)</span>
+                    <div id="skill-error" style="color: #ff4444; font-size: 12px; display: none;">Répartition invalide !</div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('afterbegin', trackerHTML);
+
+    const charStatus = document.getElementById('char-status');
+    const charError = document.getElementById('char-error');
+    const skillStatus = document.getElementById('skill-status');
+    const skillError = document.getElementById('skill-error');
+    const submitBtn = document.getElementById('submit');
+
+    function checkValidation() {
+        let charSum = 0;
+        let charMaxExceeded = false;
+        
+        characteristicsNames.forEach(name => {
+            const el = document.querySelector(`select[name="${name}"]`);
+            if (el) {
+                const val = parseInt(el.value) || 1;
+                charSum += val;
+                if (val > 3) charMaxExceeded = true;
+            }
+        });
+        
+        // Base is 1 * 8 = 8. Points distributed = charSum - 8. Max distributed = 8.
+        const charDistributed = charSum - 8;
+        
+        if (charDistributed === 8 && !charMaxExceeded) {
+            charStatus.style.color = '#44ff44';
+            charStatus.innerText = `8 / 8 points répartis`;
+            charError.style.display = 'none';
+        } else {
+            charStatus.style.color = '#ffcc00';
+            charStatus.innerText = `${charDistributed} / 8 points répartis`;
+            if (charMaxExceeded) {
+                charError.innerText = "Max 3D par caractéristique !";
+                charError.style.display = 'block';
+            } else if (charDistributed > 8) {
+                charError.innerText = "Trop de points répartis !";
+                charError.style.display = 'block';
+            } else {
+                charError.style.display = 'none';
+            }
+        }
+        
+        let skillLevels = [];
+        let skillSum = 0;
+        let skillMaxExceeded = false;
+        
+        skillsNames.forEach(name => {
+            const el = document.querySelector(`select[name="${name}"]`);
+            if (el) {
+                const val = parseInt(el.value) || 0;
+                if (val > 0) {
+                    skillLevels.push(val);
+                    skillSum += val;
+                    if (val > 3) skillMaxExceeded = true;
+                }
+            }
+        });
+        
+        skillLevels.sort((a, b) => b - a); // descending
+        
+        // conditions: sum == 13, max <= 3, pointwise domination of [3, 2, 2, 1, 1, 1]
+        const baseSkillRequirement = [3, 2, 2, 1, 1, 1];
+        let dominationValid = true;
+        
+        for (let i = 0; i < baseSkillRequirement.length; i++) {
+            const currentSkill = skillLevels[i] || 0;
+            if (currentSkill < baseSkillRequirement[i]) {
+                dominationValid = false;
+                break;
+            }
+        }
+        
+        const isSkillValid = (skillSum === 13 && dominationValid && !skillMaxExceeded);
+        
+        if (isSkillValid) {
+            skillStatus.style.color = '#44ff44';
+            skillStatus.innerText = `${skillSum} / 13 points (Répartition correcte)`;
+            skillError.style.display = 'none';
+        } else {
+            skillStatus.style.color = '#ffcc00';
+            skillStatus.innerText = `${skillSum} / 13 points lus`;
+            if (skillMaxExceeded) {
+                skillError.innerText = "Max 3D par compétence !";
+                skillError.style.display = 'block';
+            } else if (!dominationValid && skillSum <= 13) {
+                skillError.innerText = "Il manque les bases (1x3D, 2x2D, 3x1D)";
+                skillError.style.display = 'block';
+            } else if (skillSum > 13) {
+                skillError.innerText = "Trop de points répartis !";
+                skillError.style.display = 'block';
+            } else {
+                 skillError.innerText = "Répartition incomplète/invalide.";
+                 skillError.style.display = 'block';
+            }
+        }
+        
+        // Automatically hide Options > 3 in selects
+        characteristicsNames.forEach(name => {
+            const el = document.querySelector(`select[name="${name}"]`);
+            if (el) {
+                Array.from(el.options).forEach(opt => {
+                    if (parseInt(opt.value) > 3) opt.style.display = 'none';
+                });
+            }
+        });
+        skillsNames.forEach(name => {
+            const el = document.querySelector(`select[name="${name}"]`);
+            if (el) {
+                Array.from(el.options).forEach(opt => {
+                    if (parseInt(opt.value) > 3) opt.style.display = 'none';
+                });
+            }
+        });
+
+        if (submitBtn) {
+            submitBtn.disabled = !(charDistributed === 8 && !charMaxExceeded && isSkillValid);
+            if (submitBtn.disabled) {
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+                submitBtn.title = "Veuillez répartir vos points correctement.";
+            } else {
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+                 submitBtn.title = "";
+            }
+        }
+    }
+
+    // Attach listeners
+    characteristicsNames.forEach(name => {
+        const el = document.querySelector(`select[name="${name}"]`);
+        if (el) el.addEventListener('change', checkValidation);
+    });
+    skillsNames.forEach(name => {
+        const el = document.querySelector(`select[name="${name}"]`);
+        if (el) el.addEventListener('change', checkValidation);
+    });
+    
+    // Initial check
+    setTimeout(checkValidation, 100);
+});

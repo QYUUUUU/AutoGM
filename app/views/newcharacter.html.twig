@@ -38,17 +38,27 @@
             <div class="form-lines">
                 <div class="form-group">
                     <label for="signeastro">Signe Astro:</label>
-                    <select name="signeastro">
-                        <option value="Loup">Loup: persévérants, prudents et solidaires</option>
-                        <option value="Enfant">Enfant: sensibles, imaginatifs et créatifs</option>
-                        <option value="Arbre">Arbre: courageux, impulsifs et autoritaires</option>
-                        <option value="Sceptre">Sceptre: appliqués, réfléchis, et humanistes</option>
-                        <option value="Tourbillon">Tourbillon: tenaces, éloquents et ambitieux</option>
-                        <option value="Vautour">Vautour: passionnés, attentifs et coriaces</option>
-                        <option value="Voyage">Voyage: indépendants, impatients et extrêmes</option>
-                        <option value="Glaive">Glaive: patients, prudents, lucides et persévérants</option>
-                        <option value="Chat">Chat: détachés, perspicaces et spirituels</option>
+                    <select id="signeastroSelect" name="signeastro">
+                        <option value="Loup">Le Loup</option>
+                        <option value="Enfant">L’Enfant</option>
+                        <option value="Arbre">L’Arbre</option>
+                        <option value="Sceptre">Le Sceptre</option>
+                        <option value="Tourbillon">Le Tourbillon</option>
+                        <option value="Vautour">Le Vautour</option>
+                        <option value="Voyage">Le Navire</option>
+                        <option value="Glaive">Le Glaive</option>
+                        <option value="Chat">Le Chat</option>
                     </select>
+
+                    <div id="signeastroDescriptionBlock" class="originDescription" style="margin-top: 20px;">
+                        <div class='row'>
+                            <div class="textorigin col-12">
+                                <h3 id="signeastroTitle">Le Loup</h3>
+                                <p id="signeastroStat" style="font-weight: bold; color: #a33;">Compétence bonus : Faune</p>
+                                <p id="signeastroText">Les gens nés sous le signe du Loup sont persévérants, prudents et solidaires, ce sont des idéalistes fidèles à leurs amis. Ils ressentent également un lien profond avec la nature, ce qui a tendance à orienter le choix de leur profession.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="button-group">
@@ -695,7 +705,7 @@
             <div class="form-lines">
             <div class="form-group">
                     <label>Instinct:</label>
-                    <select name="instinct">
+                    <select id="instinctSelect" name="instinct">
                         <option value="architecte">L’Architecte</option>
                         <option value="epee">L’Épée</option>
                         <option value="fleau">Le Fléau</option>
@@ -707,8 +717,15 @@
                         <option value="os">L’Os</option>
                         <option value="voyageur">Le Voyageur</option>
                     </select>
-                    <p>Englobe la connaissance des Anciens Dieux et de leurs aspects, des peuples associés et de leurs traditions, coutumes et superstitions. Compétence Rare (I).</p>
-                    <p>Exemples de spécialités : Anciens cultes, Anciens Dieux, Culte du Soleil Noir, Panthéon en particulier.</p>
+
+                <div id="instinctDescriptionBlock" class="originDescription" style="margin-top: 20px;">
+                    <div class='row'>
+                        <div class="textorigin col-12">
+                            <h3 id="instinctTitle">L’Architecte</h3>
+                            <p id="instinctText">L'Architecte planifie et construit. Que serait la civilisation sans lui ? Il bâtit des cités aux tours effleurant les cieux, dernier rempart face au chaos qui menace d'engloutir le monde.</p>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
             <div class="button-group">
