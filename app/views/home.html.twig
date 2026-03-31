@@ -74,11 +74,10 @@
 	<script>
 		function adjustBookmarkHeight() {
 var bookmark = document.querySelector('.bookmark');
-var documentHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight);
-bookmark.style.height = documentHeight + 'px';
+if (bookmark) {
+    var documentHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight);
+    bookmark.style.height = documentHeight + 'px';
 }
-
-// Adjust the height initially
 adjustBookmarkHeight();
 
 // Adjust the height on window resize

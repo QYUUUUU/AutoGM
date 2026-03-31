@@ -8,23 +8,59 @@
 
 
 {% block body %}
-<div class="row h-100 w-100">
+<div class="bg-slideshow">
+    <div class="bg-slide img1"></div>
+    <div class="bg-slide img2"></div>
+    <div class="bg-slide img3"></div>
+    <div class="bg-slide img4"></div>
+</div>
+
+<div class="container-fluid h-100 w-100 pt-3 pb-3 px-4" style="position: relative; z-index: 1;">
+    <div class="row h-100">
     <div class="col-12 col-lg-3">
         <div class="flex-column h-100">
-            <div class="conversations">
+            <div class="options-panel d-flex flex-column h-100" style="margin-top: 43px;">
                 <div class="head-card">
                     Options
                 </div>
-                <div class="body-card">
-                    <div class="character-selection">
-                        Select a Character : 
-                        <select id="favoriteCharacter" class="select">
-                        {% for character in characters %}
-                            <option value="{{ character.id_Character }}">{{ character.nom }}</h2>
-                        {% endfor %}
-                        </select>
+                <div class="body-card flex-fill" style="overflow: visible;">
+                    <div class="options-section mb-4 pb-3 border-bottom">
+                        <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Personnage & Équipement</h6>
+                        <div class="character-selection">
+                            Select a Character : 
+                            <select id="favoriteCharacter" class="select">
+                            {% for character in characters %}
+                                <option value="{{ character.id_Character }}">{{ character.nom }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="equipment-selection" style="margin-top:15px; margin-bottom: 15px;">
+                            <label>Arme Équipée:</label>
+                            <select id="armeSelect" class="select" style="width: 100%;">
+                                <option value="">-- Aucune --</option>
+                                {% for item in equipmentList %}
+                                    {% if item.type == 'Armes' or item.type == 'Armure et boucliers' or item.type == 'Armes de jet' %}
+                                        <option value="{{ item.name }}" data-stats="{{ item.stats }}" data-desc="{{ item.desc }}">{{ item.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div id="armeStats" style="font-size:0.85em; color:#888; margin-bottom:10px;"></div>
+
+                            <label>Armure Équipée:</label>
+                            <select id="armureSelect" class="select" style="width: 100%;">
+                                <option value="">-- Aucune --</option>
+                                {% for item in equipmentList %}
+                                    {% if item.type == 'Armures' or item.type == 'Armure et boucliers' %}
+                                        <option value="{{ item.name }}" data-stats="{{ item.stats }}" data-desc="{{ item.desc }}">{{ item.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div id="armureStats" style="font-size:0.85em; color:#888; margin-bottom:10px;"></div>
+                        </div>
                     </div>
-                    <div class="dice-increments">
+                    <div class="options-section mb-4 pb-3 border-bottom">
+                        <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Lancer Libre</h6>
+                        <div class="dice-increments">
                         <div class="row align-items-center justify-content-center">
                             <div class="d4">
                                 <label for="d4">d4:</label>
@@ -54,7 +90,11 @@
 
                         <input id="dice-throw-trigger" type="submit" value="Lancer les dés">
                     </div>
-                    <div class="dice-statistics">
+                    </div>
+
+                    <div class="options-section mb-3">
+                        <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Test de Compétence</h6>
+                        <div class="dice-statistics">
                         <div class="input-field dropdown-container">
                             <label for="caracteristic-input">Caractéristique :</label>
                             <input type="text" id="caracteristic-input" placeholder="Start typing...">
@@ -115,72 +155,124 @@
                         <button id="stats-send" class="stats-send" type="button">Lancer les dés</button><br>
                     </div>
                 </div>
-            </div>
-            <div class="dice-throws">
-                <div class="head-card">
-                    Mes dés
-                </div>
-                <div class="body-card">
-                    <div id="ThreeJS"></div>
                 </div>
             </div>
+            
         </div>
     </div>
 
-    <div class="col-12 col-lg-4">
-        <div class="inventory">
-            <div class="head-card">
-                Notes
-            </div>
-            <div class="body-card">
-                <div class="background-quill">
-                    <div id="editor">
-                        <p>Hello World!</p>
-                        <p>Some initial
-                            <strong>bold</strong>
-                            text</p>
-                        <p><br></p>
+    <div class="col-12 col-lg-9">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="results-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#results-tab-pane" href="#results-tab-pane" role="tab" aria-controls="results-tab-pane" aria-selected="true" style="font-weight: bold;">Résultats</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="assistant-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#assistant-tab-pane" href="#assistant-tab-pane" role="tab" aria-controls="assistant-tab-pane" aria-selected="false" style="font-weight: bold;">Interactions</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="groupe-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#groupe-tab-pane" href="#groupe-tab-pane" role="tab" aria-controls="groupe-tab-pane" aria-selected="false" style="font-weight: bold;">Groupe</a>
+            </li>
+        </ul>
+        <div class="tab-content h-100" id="myTabContent" style="padding-top: 0;">
+            <!-- tab résultats -->
+            <div class="tab-pane fade show active h-100" id="results-tab-pane" role="tabpanel" aria-labelledby="results-tab" tabindex="0">
+                <div class="row h-100 mx-0">
+                    <div class="col-md-6 h-100 pr-2 pl-0">
+                        <div class="d-flex flex-column h-100">
+                        <div class="dice-results flex-fill mb-3" style="min-height: 300px;">
+                            <div class="head-card square-tl">Résultats des dés</div>
+                            <div class="body-card" style="height: 100%; max-height: 400px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="inventory flex-fill">
+                            <div class="head-card">Inventaire</div>
+                            <div class="body-card">
+                                <textarea id="inventory-field" class="form-control" rows="8" placeholder="Votre inventaire ici...">{{ favoriteCharacter.character.inventory }}</textarea>
+                                <button class="btn btn-primary mt-2" id="save-inventory" style="background-color: #26282a; border-color: #26282a;">Sauvegarder l'inventaire</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 h-100 pl-2 pr-0">
+                        <div class="d-flex flex-column h-100">
+                        <div class="notes-container h-100 flex-fill">
+                            <div class="head-card square-tr">Notes</div>
+                            <div class="body-card h-100">
+                                <div class="background-quill h-100">
+                                    <div id="editor" style="height: 90%;">
+                                        <p>Hello World!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="col-12 col-lg-5">
-        <div class="flex-column h-100">
-            <div class="ask-dices">
-                <div class="head-card">
-                    Assistant
-                </div>
-                <div class="body-card">
-                    <script type="module" src="js/user.js"></script>
-                    <div class="card-body chat-body"></div>
-                    <div id="error" class="error"></div>
-                    <div id="{{conversation.id}}" class="conversationid"></div>
-                    <div class="chat-area">
-                        <div class="container items-chat">
-                            <div id="prompt-form" class="row align-items-center">
-                                <div class="d-flex justify-content-between textarea-chat">
-                                    <textarea id="prompt-field" class="form-control" style="flex:1;"
-                                        placeholder="Écrire un message"></textarea>
-                                    <button id="send" class="send-button btn btn-primary"></button>
+            <!-- tab assistant -->
+            <div class="tab-pane fade h-100" id="assistant-tab-pane" role="tabpanel" aria-labelledby="assistant-tab" tabindex="0">
+                <div class="row h-100 mx-0">
+                    <div class="col-md-6 h-100 pr-2 pl-0">
+                        <div class="ask-dices h-100 flex-column d-flex">
+                            <div class="head-card square-tl">Assistant (Lancé de Dés)</div>
+                            <div class="body-card flex-fill d-flex flex-column">
+                                <script type="module" src="js/user.js"></script>
+                                <div class="card-body chat-body flex-fill" style="overflow-y: auto;"></div>
+                                <div id="error" class="error"></div>
+                                <div id="{{conversation.id}}" class="conversationid"></div>
+                                <div class="chat-area mt-2">
+                                    <div class="container items-chat px-0">
+                                        <div id="prompt-form" class="row align-items-center mx-0">
+                                            <div class="d-flex justify-content-between textarea-chat w-100">
+                                                <textarea id="prompt-field" class="form-control" style="flex:1;" placeholder="Écrire un message..."></textarea>
+                                                <button id="send" class="send-button btn btn-primary ml-2"><i class="fas fa-paper-plane"></i> Envoyer</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 h-100 pl-2 pr-0">
+                        <div class="ask-rules h-100 flex-column d-flex">
+                            <div class="head-card square-tr">Questions de Règles</div>
+                            <div class="body-card flex-fill d-flex flex-column">
+                                <script type="module" src="js/rules_user.js"></script>
+                                <div class="card-body chat-body-rules flex-fill" style="overflow-y: auto;"></div>
+                                <div id="error-rules" class="error"></div>
+                                <div id="{{conversation.id}}" class="conversationid-rules"></div>
+                                <div class="chat-area mt-2">
+                                    <div class="container items-chat px-0">
+                                        <div id="prompt-form-rules" class="row align-items-center mx-0">
+                                            <div class="d-flex justify-content-between textarea-chat w-100">
+                                                <textarea id="prompt-field-rules" class="form-control" style="flex:1;" placeholder="Posez vos questions sur les règles..."></textarea>
+                                                <button id="send-rules" class="send-button btn btn-primary ml-2"><i class="fas fa-paper-plane"></i> Envoyer</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="dice-results">
-                <div class="head-card">
-                    Résultats
-                </div>
-                <div class="body-card">
-                    
+
+            <!-- tab groupe -->
+            <div class="tab-pane fade h-100" id="groupe-tab-pane" role="tabpanel" aria-labelledby="groupe-tab" tabindex="0">
+                <div class="row h-100 mx-0">
+                    <div class="col-12 h-100 px-0">
+                        <div class="head-card square-tl square-tr">Groupe</div>
+                        <div class="body-card" style="height: 100%; max-height: 400px; overflow-y: auto;">
+                            En construction...
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 </div>
+<div id="ThreeJS" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1000; width: 100vw; height: 100vh;"></div>
 
 {# Librairies notes #}
 

@@ -464,3 +464,201 @@ canvas {
 .inventaire {
   height: 500px;
 }
+
+/* --- Dark Fantasy Character Creation Elements --- */
+/* The dark fantasy dark select and inputs inherited from tabs selection style options */
+.select, #caracteristic-input, #dropdown-input, #dice-input, .modifier {
+    background-color: rgba(20, 25, 28, 0.8);
+    color: #E1E0DE !important;
+    border: 1px solid rgba(225, 224, 222, 0.4) !important;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+/* Base Nav-tabs ported to allow consistent layout if tabs are used */
+.nav-tabs {
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+}
+
+.nav-tabs .nav-link {
+    color: rgba(225, 224, 222, 0.7) !important;
+    background-color: rgba(20, 25, 28, 0.6) !important;
+    border: 1px solid rgba(199, 169, 114, 0.2) !important;
+    border-bottom: none !important;
+    margin-right: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s, color 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.nav-tabs .nav-link.active {
+    color: #c7a972 !important; /* Brassy Gold for active tab */
+    background-color: rgba(35, 43, 47, 0.95) !important;
+    border: 1px solid rgba(199, 169, 114, 0.6) !important;
+    border-bottom: none !important;
+    margin-bottom: 0 !important; 
+    text-shadow: 0px 0px 8px rgba(199, 169, 114, 0.4);
+    position: relative;
+}
+
+.nav-tabs .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: inherit;
+    z-index: 10;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    background-color: rgba(60, 80, 95, 0.9) !important;
+    color: #c7a972 !important;
+    border: 1px solid rgba(199, 169, 114, 0.4) !important;
+}
+
+/* Form inputs & dropdowns matching the aesthetic */
+.dropdown {
+    background-color: rgba(30, 35, 40, 0.95);
+    border: 1px solid rgba(225, 224, 222, 0.3);
+}
+.dropdown a {
+    color: #E1E0DE;
+}
+.dropdown a:hover {
+    background-color: rgba(60, 80, 95, 0.9);
+}
+
+.head-card {
+    background-color: rgba(20, 25, 28, 0.95);
+    background-image: url("/images/floorArt.png");
+    background-blend-mode: overlay;
+    background-size: cover;
+    color: #E1E0DE;
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 6px 6px 0px 0px;
+    border: 1px solid rgba(225, 224, 222, 0.3);
+    border-bottom: 2px solid #E1E0DE;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    font-size: 0.95rem;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.body-card {
+    background-color: rgba(35, 43, 47, 0.85);
+    color: #E1E0DE;
+    padding: 15px;
+    height: 100%;
+    margin-bottom: 10px;
+    border-radius: 0px 0px 6px 6px;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+    border-top: none;
+    backdrop-filter: blur(5px);
+}
+
+/* --- Dark Fantasy Character Creation Elements --- */
+/* The dark fantasy dark select and inputs inherited from tabs selection style options */
+.select, #caracteristic-input, #dropdown-input, #dice-input, .modifier {
+    background-color: rgba(20, 25, 28, 0.8);
+    color: #E1E0DE !important;
+    border: 1px solid rgba(225, 224, 222, 0.4) !important;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+/* Base Nav-tabs ported to allow consistent layout if tabs are used */
+.nav-tabs {
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+}
+
+.nav-tabs .nav-link {
+    color: rgba(225, 224, 222, 0.7) !important;
+    background-color: rgba(20, 25, 28, 0.6) !important;
+    border: 1px solid rgba(199, 169, 114, 0.2) !important;
+    border-bottom: none !important;
+    margin-right: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s, color 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.nav-tabs .nav-link.active {
+    color: #c7a972 !important; /* Brassy Gold for active tab */
+    background-color: rgba(35, 43, 47, 0.95) !important;
+    border: 1px solid rgba(199, 169, 114, 0.6) !important;
+    border-bottom: none !important;
+    margin-bottom: 0 !important; 
+    text-shadow: 0px 0px 8px rgba(199, 169, 114, 0.4);
+    position: relative;
+}
+
+.nav-tabs .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: inherit;
+    z-index: 10;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    background-color: rgba(60, 80, 95, 0.9) !important;
+    color: #c7a972 !important;
+    border: 1px solid rgba(199, 169, 114, 0.4) !important;
+}
+
+/* Form inputs & dropdowns matching the aesthetic */
+.dropdown {
+    background-color: rgba(30, 35, 40, 0.95);
+    border: 1px solid rgba(225, 224, 222, 0.3);
+}
+.dropdown a {
+    color: #E1E0DE;
+}
+.dropdown a:hover {
+    background-color: rgba(60, 80, 95, 0.9);
+}
+
+.head-card {
+    background-color: rgba(20, 25, 28, 0.95);
+    background-image: url("/images/floorArt.png");
+    background-blend-mode: overlay;
+    background-size: cover;
+    color: #E1E0DE;
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 6px 6px 0px 0px;
+    border: 1px solid rgba(225, 224, 222, 0.3);
+    border-bottom: 2px solid #E1E0DE;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    font-size: 0.95rem;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.body-card {
+    background-color: rgba(35, 43, 47, 0.85);
+    color: #E1E0DE;
+    padding: 15px;
+    height: 100%;
+    margin-bottom: 10px;
+    border-radius: 0px 0px 6px 6px;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+    border-top: none;
+    backdrop-filter: blur(5px);
+}

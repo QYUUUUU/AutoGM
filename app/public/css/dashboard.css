@@ -1,59 +1,98 @@
 .dice-throws {
-    height: 40%;
+    height: 25%;
     padding: 10px;
-    min-height: 200px;
+    min-height: 150px;
 }
 
 .dice-throws>.body-card {
-    border-radius: 0px 0px 5px 5px;
-    height: 95%;
+    background-color: rgba(35, 43, 47, 0.85);
+    color: #E1E0DE;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    height: 100%;
+    margin-bottom: 10px;
+    border-radius: 0px 0px 6px 6px;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+    border-top: none;
+    webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
 }
 
-.conversations {
-    height: 60%;
-    padding: 10px;
-    min-height: 400px;
+.options-panel {
+    height: 100%;
 }
 
-.conversations>.body-card {
-    border-radius: 0px 0px 5px 5px;
-    height: 98%;
-    overflow: hidden;
+.options-panel>.body-card {
+    background-color: rgba(35, 43, 47, 0.85);
+    color: #E1E0DE;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    height: 100%;
+    margin-bottom: 10px;
+    border-radius: 0px 0px 6px 6px;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+    border-top: none;
+    webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
 }
 
 .inventory {
     height: 100%;
-    padding: 10px;
     min-height: 400px;
 }
 
 .ask-dices {
-    height: 50%;
+    height: 30%;
     min-height: 400px;
-    padding: 10px;
 }
 
 .ask-dices>.body-card {
-    border-radius: 0px 0px 5px 5px;
-    height: 95%;
+    background-color: rgba(35, 43, 47, 0.85);
+    color: #E1E0DE;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    height: 100%;
+    margin-bottom: 10px;
+    border-radius: 0px 0px 6px 6px;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+    border-top: none;
+    webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
 }
 
 .dice-results {
-    height: 50%;
-    padding: 10px;
-    min-height: 400px;
-    max-height: 430px;
+    height: 30%;
+    min-height: 200px;
+    max-height: 250px;
     overflow: hidden;
 }
 
 .dice-results>.body-card {
-    border-radius: 0px 0px 5px 5px;
-    height: 95%;
+    background-color: rgba(35, 43, 47, 0.85);
+    color: #E1E0DE;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    height: 100%;
+    margin-bottom: 10px;
+    border-radius: 0px 0px 6px 6px;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+    border-top: none;
+    webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
 }
 
 .inventory>.body-card {
-    border-radius: 0px 0px 5px 5px;
-    height: 97.5%;
+    background-color: rgba(35, 43, 47, 0.85);
+    color: #E1E0DE;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    height: 100%;
+    margin-bottom: 10px;
+    border-radius: 0px 0px 6px 6px;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+    border-top: none;
+    webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
 }
 
 .card-body.chat-body {
@@ -64,20 +103,36 @@
 
 
 .head-card {
-    background-color: #26282a;
-    color: #d4d4d4;
+    background-color: rgba(20, 25, 28, 0.95);
+    background-image: url("/images/floorArt.png");
+    background-blend-mode: overlay;
+    background-size: cover;
+    color: #E1E0DE;
     padding-left: 15px;
-    border-radius: 5px 5px 0px 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 6px 6px 0px 0px;
+    border: 1px solid rgba(225, 224, 222, 0.3);
+    border-bottom: 2px solid #E1E0DE;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    font-size: 0.95rem;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
 .body-card {
-    background-color: rgb(218, 218, 218);
-    color: #000000;
+    background-color: rgba(35, 43, 47, 0.85);
+    color: #E1E0DE;
     padding-left: 15px;
     padding-right: 15px;
-    padding-top: 10px;
+    padding-top: 15px;
     height: 100%;
     margin-bottom: 10px;
+    border-radius: 0px 0px 6px 6px;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+    border-top: none;
+    webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
 }
 
 .send-button {
@@ -103,20 +158,39 @@
 }
 
 .background-quill {
-    background-color: #f2f2f2;
+    background-color: rgba(25, 30, 33, 0.7);
+    color: #E1E0DE;
     height: 100%;
     max-height: 800px;
     overflow: hidden;
+    border-radius: 4px;
+}
+.ql-toolbar {
+    background-color: rgba(220, 220, 220, 0.9) !important;
+    border-radius: 4px 4px 0 0;
+}
+.ql-toolbar {
+    background-color: rgba(220, 220, 220, 0.9) !important;
+    border-radius: 4px 4px 0 0;
 }
 
 #editor {
     max-height: 100%;
 }
 
+
 main {
     width: 100%;
     height: 100%;
+    color: #ecedee;
 }
+
+
+
+
+
+
+
 
 #dice-input {
     width: 100%;
@@ -143,7 +217,7 @@ main {
 #dice-throw-trigger {
     border-radius: 4px;
     border: none;
-    background-color: #26282a;
+    background-color: rgba(20, 25, 28, 0.9); border: 1px solid rgba(225, 224, 222, 0.4);
     color: white;
     padding: 5px;
     padding-left: 8px;
@@ -154,7 +228,7 @@ main {
     padding: 3px;
     padding-left: 8px;
     padding-right: 8px;
-    background-color: #26282a;
+    background-color: rgba(20, 25, 28, 0.9); border: 1px solid rgba(225, 224, 222, 0.4);
     border: none;
     border-radius: 4px;
     color: white;
@@ -168,9 +242,9 @@ main {
 }
 
 .dice-statistics {
-    margin-top: 70px;
+    margin-top: 5px;
     /* border: #26282a 2px solid; */
-    height: 40%;
+    height: 30%;
 }
 
 
@@ -195,7 +269,7 @@ main {
     background-color: #f9f9f9;
     /* min-width: 160px; */
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    z-index: 1000 !important;
     max-height: 260px;
     overflow-y: auto;
 }
@@ -224,7 +298,7 @@ main {
     padding: 3px;
     padding-left: 8px;
     padding-right: 8px;
-    background-color: #26282a;
+    background-color: rgba(20, 25, 28, 0.9); border: 1px solid rgba(225, 224, 222, 0.4);
     border: none;
     border-radius: 4px;
     color: white;
@@ -238,8 +312,230 @@ main {
 }
 
 .rollMessage {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
+    background-color: rgba(35, 43, 47, 0.95);
+    color: #e1e0de;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(199, 169, 114, 0.3);
+    border-left: 4px solid #c7a972;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    transition: transform 0.2s ease;
+}
+.rollMessage p {
+    margin-bottom: 0;
+}
+.rollMessage strong.roll-highlight {
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(199,169,114,0.6);
+}
+
+.chat-message-content {
+    background-color: rgba(45, 55, 60, 0.9) !important;
+    color: #E1E0DE;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+}
+.chat-message-right .chat-message-content {
+    background-color: rgba(60, 80, 95, 0.9) !important;
+    color: white;
+}
+.select, #caracteristic-input, #dropdown-input, #dice-input, .modifier {
+    background-color: rgba(20, 25, 28, 0.8);
+    color: #E1E0DE;
+    border: 1px solid rgba(225, 224, 222, 0.4);
+    border-radius: 4px;
+    padding: 5px;
+}
+.dropdown {
+    background-color: rgba(30, 35, 40, 0.95);
+    border: 1px solid rgba(225, 224, 222, 0.3);
+}
+.dropdown a {
+    color: #E1E0DE;
+}
+.dropdown a:hover {
+    background-color: rgba(60, 80, 95, 0.9);
+}
+
+
+.chat-message-content {
+    background-color: rgba(45, 55, 60, 0.9) !important;
+    color: #E1E0DE;
+    border: 1px solid rgba(225, 224, 222, 0.2);
+}
+.chat-message-right .chat-message-content {
+    background-color: rgba(60, 80, 95, 0.9) !important;
+    color: white;
+}
+.select, #caracteristic-input, #dropdown-input, #dice-input, .modifier {
+    background-color: rgba(20, 25, 28, 0.8);
+    color: #E1E0DE;
+    border: 1px solid rgba(225, 224, 222, 0.4);
+    border-radius: 4px;
+    padding: 5px;
+}
+.dropdown {
+    background-color: rgba(30, 35, 40, 0.95);
+    border: 1px solid rgba(225, 224, 222, 0.3);
+}
+.dropdown a {
+    color: #E1E0DE;
+}
+.dropdown a:hover {
+    background-color: rgba(60, 80, 95, 0.9);
+}
+
+.border-bottom {
+    border-bottom: 1px solid rgba(225, 224, 222, 0.15) !important;
+}
+
+/* Ensure headings in options section stand out nicely */
+.options-section h6 {
+    color: #c7a972 !important; /* A light gold/brass color for the headings, to give that fantasy RPG vibe */
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
+}
+
+/* Better layout sizing */
+.ask-dices {
+    flex-grow: 1;
+    min-height: 400px;
+    height: auto;
+}
+
+.dice-results {
+    height: auto;
+    flex-shrink: 0;
+    max-height: 300px;
+}
+
+.increment-button:hover, .stats-send:hover, #dice-throw-trigger:hover {
+    background-color: rgba(35, 43, 47, 0.95);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+/* Tabs styling */
+.nav-tabs {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.nav-tabs .nav-link {
+    color: rgba(225, 224, 222, 0.7) !important;
+    background-color: rgba(20, 25, 28, 0.6);
+    border: 1px solid rgba(199, 169, 114, 0.2);
+    border-bottom: none;
+    margin-right: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s, color 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.nav-tabs .nav-link.active {
+    color: #c7a972 !important;
+    background-color: rgba(35, 43, 47, 0.95);
+    border: 1px solid rgba(199, 169, 114, 0.6);
+    border-bottom: none;
+    margin-bottom: 0;
+    text-shadow: 0px 0px 8px rgba(199, 169, 114, 0.4);
+    position: relative;
+}
+.nav-tabs .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: inherit;
+    z-index: 10;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    background-color: rgba(60, 80, 95, 0.9);
+    color: #c7a972 !important;
+    border: 1px solid rgba(199, 169, 114, 0.4);
+}
+
+
+
+
+\n
+\n
+
+
+
+.notes-container {
+}
+
+.ask-rules {
+}
+
+
+.bg-slideshow { z-index: 0 !important; position: fixed !important; pointer-events: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    background-image: url("/images/background-ool.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.bg-slide {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: fadeSlide 160s infinite;
+}
+.bg-slide.img1 { background-image: url("/images/background-ool.png"); animation-delay: 0s; }
+.bg-slide.img2 { background-image: url("/images/background-aon.png"); animation-delay: 40s; }
+.bg-slide.img3 { background-image: url("/images/background-tegee.png"); animation-delay: 80s; }
+.bg-slide.img4 { background-image: url("/images/background-avorae.png"); animation-delay: 120s; }
+
+@keyframes fadeSlide {
+    0% { opacity: 0; }
+    5% { opacity: 1; }
+    25% { opacity: 1; }
+    30% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+
+
+.square-tl {
+    border-top-left-radius: 0 !important;
+}
+.square-tr {
+    border-top-right-radius: 0 !important;
+}
+
+.roll-character-name {
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #c7a972;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(199, 169, 114, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.roll-character-name i {
+    font-size: 1.1em;
 }
