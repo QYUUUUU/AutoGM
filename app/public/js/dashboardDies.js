@@ -68,6 +68,7 @@ throwDiceTrigger.addEventListener("click", () => {
 
 
 let container, scene, camera, renderer, controls, stats, world, dice = [];
+let clearDiceTimeoutId = null;
 
 initWorld();
 
@@ -80,22 +81,28 @@ function initWorld() {
 
     console.log(container.offsetWidth, container.offsetHeight);
     // CAMERA
-    var SCREEN_WIDTH = container.offsetWidth, SCREEN_HEIGHT = container.offsetHeight;
+    var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
     var VIEW_ANGLE = 20, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.01, FAR = 20000;
     camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(camera);
-    camera.position.set(60, 60, -0);
+    camera.position.set(0, 50, 0);
+    camera.lookAt(0, 0, 0);
     // RENDERER
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.domElement.style.pointerEvents = "none";
     renderer.setClearColor(0x000000, 0); // the default
     renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     container.appendChild(renderer.domElement);
 
     // CONTROLS
-    controls = new OrbitControls(camera, renderer.domElement);
+    // Controls disabled to prevent interaction
+    // // Controls disabled to prevent interaction
+    // controls = new OrbitControls(camera, renderer.domElement);
     // STATS
     stats = new Stats();
 
@@ -119,17 +126,7 @@ function initWorld() {
     scene.add(light);
 
 
-    var textureLoader = new THREE.TextureLoader();
-
-    // Remplacez 'path/to/image.jpg' par le chemin de votre image
-    textureLoader.load('images/floorArt.png', function (texture) {
-        var floorMaterial = new THREE.MeshPhongMaterial({ map: texture, side: THREE.DoubleSide });
-        var floorGeometry = new THREE.PlaneGeometry(50, 50, 10, 10);
-        var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.receiveShadow = true;
-        floor.rotation.x = Math.PI / 2;
-        scene.add(floor);
-    });
+    // Floor removed
 
     // CUSTOM //
     ////////////
@@ -145,15 +142,42 @@ function initWorld() {
     floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
     world.add(floorBody);
 
+    // Walls to keep dice inside the view
+    let wallThickness = 2;
+    let wallHeight = 20;
+
+    // Top wall (z = -10)
+    let wallTop = new CANNON.Body({ mass: 0, shape: new CANNON.Box(new CANNON.Vec3(50, wallHeight, wallThickness)), material: DiceManager.floorBodyMaterial });
+    wallTop.position.set(0, wallHeight, -12);
+    world.add(wallTop);
+
+    // Bottom wall (z = 10)
+    let wallBottom = new CANNON.Body({ mass: 0, shape: new CANNON.Box(new CANNON.Vec3(50, wallHeight, wallThickness)), material: DiceManager.floorBodyMaterial });
+    wallBottom.position.set(0, wallHeight, 12);
+    world.add(wallBottom);
+
+    // Left wall (x = -20)
+    let wallLeft = new CANNON.Body({ mass: 0, shape: new CANNON.Box(new CANNON.Vec3(wallThickness, wallHeight, 50)), material: DiceManager.floorBodyMaterial });
+    wallLeft.position.set(-20, wallHeight, 0);
+    world.add(wallLeft);
+
+    // Right wall (x = 20)
+    let wallRight = new CANNON.Body({ mass: 0, shape: new CANNON.Box(new CANNON.Vec3(wallThickness, wallHeight, 50)), material: DiceManager.floorBodyMaterial });
+    wallRight.position.set(20, wallHeight, 0);
+    world.add(wallRight);
+
+
     function onWindowResize() {
-        var SCREEN_WIDTH = container.offsetWidth;
-        var SCREEN_HEIGHT = container.offsetHeight;
+        var SCREEN_WIDTH = window.innerWidth;
+        var SCREEN_HEIGHT = window.innerHeight;
         var aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
 
         camera.aspect = aspect;
         camera.updateProjectionMatrix();
 
         renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(window.devicePixelRatio);
     }
 
     window.addEventListener('resize', onWindowResize, false);
@@ -161,7 +185,16 @@ function initWorld() {
     requestAnimationFrame(animate);
 }
 
-export function randomDiceThrow(diceCounts, relances = 0) {
+export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, competence = null, thrownByAI = false) {
+
+    // Clear any pending disappearing timer
+    if (clearDiceTimeoutId !== null) {
+        clearTimeout(clearDiceTimeoutId);
+        clearDiceTimeoutId = null;
+    }
+
+    // Prevent 'Cannot start another throw' error if spammed or if bodies were removed
+    DiceManager.throwRunning = false;
 
     // Vider tous les dés de la scène
     dice.forEach(die => {
@@ -170,6 +203,7 @@ export function randomDiceThrow(diceCounts, relances = 0) {
             world.remove(die.getObject().body);
         }
     });
+
     dice = [];
 
     console.log(diceCounts);
@@ -177,7 +211,7 @@ export function randomDiceThrow(diceCounts, relances = 0) {
     // Add dice to the scene
     for (let [type, numberThrow] of Object.entries(diceCounts)) {
         for (let i = 0; i < numberThrow; i++) {
-            let die = createDice(type, 1.5, "#ffffff");
+            let die = createDice(type, 0.8, "#2d2d2d", "#f0f0f0");
             scene.add(die.getObject());
             dice.push(die);
         }
@@ -186,15 +220,16 @@ export function randomDiceThrow(diceCounts, relances = 0) {
     var diceValues = [];
     var trimmedValues = [];
     for (var i = 0; i < dice.length; i++) {
-        let yRand = Math.random() * 20
-        dice[i].getObject().position.x = -15 - (i % 3) * 1.5;
-        dice[i].getObject().position.y = 2 + Math.floor(i / 3) * 1.5;
-        dice[i].getObject().position.z = -15 + (i % 3) * 1.5;
+        let yRand = Math.random() * 20;
+        dice[i].getObject().position.x = (Math.random() - 0.5) * 10;
+        dice[i].getObject().position.y = 15 + Math.random() * 10;
+        dice[i].getObject().position.z = (Math.random() - 0.5) * 10;
         dice[i].getObject().quaternion.x = (Math.random() * 90 - 45) * Math.PI / 180;
         dice[i].getObject().quaternion.z = (Math.random() * 90 - 45) * Math.PI / 180;
         dice[i].updateBodyFromMesh();
         let rand = Math.random() * 5;
-        dice[i].getObject().body.velocity.set(25 + rand, 40 + yRand, 15 + rand);
+        // Keep them from flying linearly sideways
+        dice[i].getObject().body.velocity.set((Math.random() - 0.5) * 10, 10 + yRand, (Math.random() - 0.5) * 10);
         dice[i].getObject().body.angularVelocity.set(20 * Math.random() - 10, 20 * Math.random() - 10, 20 * Math.random() - 10);
 
         let value = Math.floor(Math.random() * dice[i].values) + 1; // generate a random integer between 1 and 10
@@ -203,8 +238,21 @@ export function randomDiceThrow(diceCounts, relances = 0) {
         diceValues.push({ dice: dice[i], value: value });
     }
     console.log(diceValues);
-    shareThrow(diceValues, relances);
+    shareThrow(diceValues, relances, caracteristic, competence, thrownByAI);
     DiceManager.prepareValues(diceValues);
+
+    // Make dice disappear after 8 seconds
+    clearDiceTimeoutId = setTimeout(() => {
+        dice.forEach(die => {
+            scene.remove(die.getObject());
+            if (die.getObject().body) {
+                world.remove(die.getObject().body);
+            }
+        });
+        dice = [];
+        DiceManager.throwRunning = false;
+        clearDiceTimeoutId = null;
+    }, 8000);
 }
 
 
@@ -226,7 +274,7 @@ function updatePhysics() {
 }
 
 function update() {
-    controls.update();
+    // // controls.update();
     stats.update();
 }
 
@@ -235,24 +283,24 @@ function render() {
 }
 
 // Placeholder function for creating dice of different types
-function createDice(type, size, backColor) {
+function createDice(type, size, backColor, fontColor) {
     // Assume we have a Dice class for each type of die
     switch (type) {
         case 'd4':
-            return new DiceD4({ size: size, backColor: backColor });
+            return new DiceD4({ size: size, backColor: backColor, fontColor: fontColor });
         case 'd6':
-            return new DiceD6({ size: size, backColor: backColor });
+            return new DiceD6({ size: size, backColor: backColor, fontColor: fontColor });
         case 'd10':
-            return new DiceD10({ size: size, backColor: backColor });
+            return new DiceD10({ size: size, backColor: backColor, fontColor: fontColor });
         case 'd20':
-            return new DiceD20({ size: size, backColor: backColor });
+            return new DiceD20({ size: size, backColor: backColor, fontColor: fontColor });
         default:
             throw new Error('Unknown dice type');
     }
 }
 
 
-function shareThrow(dices, relances = 0) {
+function shareThrow(dices, relances = 0, caracteristic = null, competence = null, thrownByAI = false) {
 
     dices.forEach(item => {
         console.log("am trying");
@@ -271,7 +319,10 @@ function shareThrow(dices, relances = 0) {
     // Updated payload to be sent in the request body
     const data = {
         result,
-        relances
+        relances,
+        caracteristic,
+        competence,
+        thrownByAI
     };
     fetch(url, {
         method: 'PUT',

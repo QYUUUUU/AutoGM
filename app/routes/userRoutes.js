@@ -1,9 +1,12 @@
+import fs from "fs";
+import path from "path";
 import { Router } from 'express';
 import twig from 'twig';
 import { prisma } from '../prisma/prismaClient.js';
 import { getThrowsByStats } from "../services/calculateThrowsService.js"
 
 const router = Router();
+const rollClients = new Set();
 
 router.get('/dashboard', async (req, res) => {
   const id_User = req.session.userId; // Assuming you have the user ID stored in req.session.userId
@@ -29,7 +32,7 @@ router.get('/dashboard', async (req, res) => {
       } else if (id_User !== "undefined" && id_User !== "" && id_User !== null) {
         const favoriteCharacter = await prisma.favoriteCharacter.findFirst({
           where: { userId: id_User },
-          include: { character: true },
+          include: { character: { include: { Groupe: true } } },
         });
 
         const favoriteCharacterId = favoriteCharacter?.characterId;
@@ -44,7 +47,15 @@ router.get('/dashboard', async (req, res) => {
           }
         });
 
-        return res.render('index.html.twig', { characters: sortedCharacters, conversation: conversation }); // Pass sortedCharacters as an object
+        const equipmentPath = path.join(process.cwd(), 'data', 'equipment.json');
+        let equipmentList = [];
+        try {
+          equipmentList = JSON.parse(fs.readFileSync(equipmentPath, 'utf8'));
+        } catch (err) {
+          console.error('Error loading equipment.json', err);
+        }
+
+        return res.render('index.html.twig', { characters: sortedCharacters, conversation: conversation, equipmentList: equipmentList }); // Pass sortedCharacters as an object
       } else {
         return res.render('../views/login.html.twig');
       }
@@ -85,9 +96,18 @@ router.get('/maps', (req, res) => {
 
 
 // Render the character form
+// Render the character form
 router.get('/newcharacter', (req, res) => {
-  res.render('../views/newcharacter.html.twig');
+  const equipmentPath = path.join(process.cwd(), 'data', 'equipment.json');
+  let equipment = [];
+  try {
+    equipment = JSON.parse(fs.readFileSync(equipmentPath, 'utf8'));
+  } catch (err) {
+    console.error('Error loading equipment.json', err);
+  }
+  res.render('../views/newcharacter.html.twig', { equipment });
 });
+
 
 // Hydrate the character
 router.post('/create-character', async (req, res) => {
@@ -258,7 +278,16 @@ router.post('/create-character', async (req, res) => {
           maxblessuregrave: defaultGrave,
           maxblessuremortelle: defaultMortelle,
           userId: id_User,
-          inventory: '{"ops":[{"insert":"\n"}]}'
+          inventory: JSON.stringify({
+            ops: [
+              {
+                insert: "15 Sabiirihs d'Argent\n" + 
+                        (req.body.equipments ? 
+                          (Array.isArray(req.body.equipments) ? req.body.equipments.join('\n') + '\n' : req.body.equipments + '\n') 
+                          : "")
+              }
+            ]
+          })
         },
       });
       console.log(newCharacter);
@@ -450,7 +479,16 @@ router.get('/Character/show/:id_Character', async (req, res) => {
       // Check if the connected user is linked to the character or has the role "admin"
       if (character.User.id === id_User || req.session.role === 'admin') {
         delete character.User;
-        return res.render('character.html.twig', { character });
+
+        const equipmentPath = path.join(process.cwd(), 'data', 'equipment.json');
+        let equipmentList = [];
+        try {
+          equipmentList = JSON.parse(fs.readFileSync(equipmentPath, 'utf8'));
+        } catch (err) {
+          console.error('Error loading equipment.json', err);
+        }
+
+        return res.render('character.html.twig', { character, equipmentList });
       } else {
         return res.render('../views/login.html.twig');
       }
@@ -650,13 +688,22 @@ router.put('/throw', async (req, res) => {
 
 router.put('/share/throw', async (req, res) => {
   const id_User = req.session.userId;
-  const { result, relances } = req.body;
+  const { result, relances, caracteristic, competence, thrownByAI } = req.body;
 
   let rollContent = "";
 
-  result.forEach(dice => {
-    rollContent += "d" + dice.value + ": " + dice.values + ", ";
-  });
+  const grouped = {};
+  if (result && Array.isArray(result)) {
+    result.forEach(dice => {
+      if (!grouped[dice.value]) grouped[dice.value] = [];
+      grouped[dice.value].push(dice.values);
+    });
+    const rollParts = [];
+    for (const [d, vals] of Object.entries(grouped)) {
+      rollParts.push(`d${d}: ${vals.join(', ')}`);
+    }
+    rollContent = rollParts.join(' | ');
+  }
 
   if (relances) {
     rollContent += "\n Vous avez " + relances + " relances possibles.";
@@ -683,10 +730,23 @@ router.put('/share/throw', async (req, res) => {
       const roll = await prisma.roll.create({
         data: {
           content: rollContent,
-          characterId_Character: character.id_Character
+          characterId_Character: character.id_Character,
+          isStatRoll: !!(caracteristic || competence),
+          caracteristic: caracteristic || null,
+          competence: competence || null,
+          thrownByAI: thrownByAI || false
         },
+        include: {
+          Character: { select: { nom: true } }
+        }
       });
 
+      
+      for (const client of rollClients) {
+          if (client.groupeId === character.groupeId) {
+              client.res.write(`data: ${JSON.stringify([roll])}\n\n`);
+          }
+      }
       return res.json("No soucis roll créé");
     } catch (error) {
       console.error(error);
@@ -699,6 +759,48 @@ router.put('/share/throw', async (req, res) => {
 });
 
 
+
+router.get('/stream/rolls', async (req, res) => {
+  const id_User = req.session.userId;
+  console.log("SSE /stream/rolls requested by user:", id_User);
+  if (!id_User) return res.status(401).send("Unauthorized");
+  
+  try {
+      const user = await prisma.favoriteCharacter.findFirst({
+        where: { userId: id_User },
+        include: { character: true },
+      });
+      const character = user?.character;
+      const groupeId = character?.groupeId;
+
+      console.log("SSE /stream/rolls group:", groupeId);
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Connection', 'keep-alive');
+      res.flushHeaders();
+      
+      // Send an initial comment to keep the connection alive immediately
+      res.write(': connected\n\n');
+
+      // Keepalive heartbeat
+      const heartbeat = setInterval(() => {
+          res.write(': ping\n\n');
+      }, 15000);
+
+      const client = { res, groupeId };
+      rollClients.add(client);
+
+      req.on('close', () => {
+          console.log("SSE closed for user:", id_User);
+          clearInterval(heartbeat);
+          rollClients.delete(client);
+      });
+  } catch (err) {
+      console.error("SSE Error:", err);
+      res.status(500).end();
+  }
+});
+
 router.put('/fetch/rolls', async (req, res) => {
   const id_User = req.session.userId;
   if (id_User) {
@@ -710,12 +812,19 @@ router.put('/fetch/rolls', async (req, res) => {
 
       const character = user.character;
 
+      if (!character || !character.groupeId) {
+          return res.json([]);
+      }
+
       const rolls = await prisma.roll.findMany({
         where: {
           Character: {
             groupeId: character.groupeId,
           },
         },
+        include: {
+          Character: { select: { nom: true } }
+        }
       });
 
       console.log(rolls);
@@ -733,5 +842,108 @@ router.put('/fetch/rolls', async (req, res) => {
 
 
 
+
+
+// --- GROUPE ROUTES ---
+
+router.post('/Groupe', async (req, res) => {
+  const { nom, niveau, reserveDes, reputation, capacitesGroupe, instinctGroupe, capacitesInstinctGroupe } = req.body;
+  try {
+    const groupe = await prisma.groupe.create({
+      data: {
+        nom,
+        niveau: parseInt(niveau) || 1,
+        reserveDes: parseInt(reserveDes) || 0,
+        reputation: reputation || "1",
+        capacitesGroupe: capacitesGroupe || "",
+        instinctGroupe: instinctGroupe || "",
+        capacitesInstinctGroupe: capacitesInstinctGroupe || ""
+      }
+    });
+    res.json(groupe);
+  } catch (err) {
+    res.status(500).json({error: err.message});
+  }
+});
+
+router.put('/Groupe/:id', async (req, res) => {
+  try {
+    const updated = await prisma.groupe.update({
+      where: { id: parseInt(req.params.id) },
+      data: req.body
+    });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({error: err.message});
+  }
+});
+
+router.post('/Character/:charId/joinGroupe/:groupeId', async (req, res) => {
+  try {
+    const char = await prisma.character.update({
+      where: { id_Character: parseInt(req.params.charId) },
+      data: { groupeId: parseInt(req.params.groupeId) }
+    });
+    res.json(char);
+  } catch (err) {
+    res.status(500).json({error: err.message});
+  }
+});
+
+
+router.get("/groupes", async (req, res) => {
+  const id_User = req.session.userId;
+  if (!id_User) {
+    return res.render("../views/login.html.twig");
+  }
+
+  try {
+    const groupes = await prisma.groupe.findMany();
+    
+    const favoriteCharacter = await prisma.favoriteCharacter.findFirst({
+      where: { userId: id_User },
+      include: { character: true },
+    });
+
+    res.render("groupes.html.twig", {
+      groupes: groupes,
+      activeCharacter: favoriteCharacter ? favoriteCharacter.character : null
+    });
+  } catch (err) {
+
+
+    res.status(500).send("Erreur lors de la récupération des groupes: " + err.message);
+  }
+});
+
+router.post('/Character/Favorite/inventory', async (req, res) => {
+  try {
+    const { charId, inventory } = req.body;
+    const sId = parseInt(charId);
+    if (!sId) return res.status(400).send("Invalid character ID");
+    await prisma.character.update({
+      where: { id_Character: sId },
+      data: { inventory: inventory }
+    });
+    res.status(200).send("Updated");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+router.post('/Character/Favorite/inventory', async (req, res) => {
+  try {
+    const { charId, inventory } = req.body;
+    const sId = parseInt(charId);
+    if (!sId) return res.status(400).send("Invalid character ID");
+    await prisma.character.update({
+      where: { id_Character: sId },
+      data: { inventory: inventory }
+    });
+    res.status(200).send("Updated");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
 
 export default router;

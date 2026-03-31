@@ -81,8 +81,15 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(responseData => {
                 // Handle successful response
                 console.log(responseData)
-                const diceCounts = { "d10": responseData.totalDice }
-                randomDiceThrow(diceCounts, responseData.relances); // Appeler votre fonction avec l'objet diceCounts
+                let diceCounts = { "d10": responseData.totalDice };
+                if (responseData.extraDice) {
+                    for (let [dType, num] of Object.entries(responseData.extraDice)) {
+                        let lowerType = dType.toLowerCase();
+                        if (diceCounts[lowerType]) diceCounts[lowerType] += num;
+                        else diceCounts[lowerType] = num;
+                    }
+                }
+                randomDiceThrow(diceCounts, responseData.relances, data.caracteristic, data.competence); // Appeler votre fonction avec l'objet diceCounts
             })
             .catch(error => {
                 console.error(error);
