@@ -73,7 +73,8 @@ document.addEventListener('DOMContentLoaded', function () {
             lunes: document.getElementsByName('lunes')[0].value,
             mythes: document.getElementsByName('mythes')[0].value,
             pantheons: document.getElementsByName('pantheons')[0].value,
-            rituels: document.getElementsByName('rituels')[0].value
+            rituels: document.getElementsByName('rituels')[0].value,
+            equipments: Array.from(document.querySelectorAll('.equip-checkbox:checked')).map(cb => cb.value)
             // Add other fields as needed
         };
 
@@ -626,6 +627,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (el) el.addEventListener('change', checkValidation);
     });
     
+    // Equipment logic: Max 5 items
+    const equipCheckboxes = document.querySelectorAll('.equip-checkbox');
+    equipCheckboxes.forEach(cb => {
+        cb.addEventListener('change', function() {
+            const checkedCount = document.querySelectorAll('.equip-checkbox:checked').length;
+            if (checkedCount > 5) {
+                alert("Vous ne pouvez sélectionner que 5 pièces d'équipement au maximum.");
+                this.checked = false;
+            }
+        });
+    });
+
     // Initial check
     setTimeout(checkValidation, 100);
 });

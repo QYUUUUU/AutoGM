@@ -694,8 +694,30 @@
                 </div>
             </div>
             <div class="button-group">
-                <button class="prev-btn" data-prev="step-9">Précédent</button>
-                <button class="next-btn" data-next="step-n">Suivant</button>
+                <button class="prev-btn" data-prev="step-9" type="button">Précédent</button>
+                <button class="next-btn" data-next="step-11" type="button">Suivant</button>
+            </div>
+        </div>
+    </div>
+    <div class="step" id="step-11" style="display:none;">
+        <div class="d-flex justify-content-between flex-column h-100">
+            <div class="form-lines">
+                <h3>Équipement</h3>
+                <p>Choisissez 5 pièces d'équipement de rareté 6 ou moins. Vous commencez également avec 15 Sabiirihs d'Argent.</p>
+                <div class="equipment-list" style="max-height: 400px; overflow-y: auto;">
+                    {% for item in equipment %}
+                        {% if item.rarity <= 6 %}
+                        <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" name="equipments[]" value="{{ item.name }}" class="equip-checkbox">
+                            <label style="margin: 0;">{{ item.name }} (Rareté: {{ item.rarity }}, Type: {{ item.type }})</label>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-prev="step-10" type="button">Précédent</button>
+                <button class="next-btn" data-next="step-n" type="button">Suivant</button>
             </div>
         </div>
     </div>
@@ -729,7 +751,7 @@
                 </div>
             </div>
             <div class="button-group">
-                <button class="prev-btn" data-prev="step-10">Précédent</button>
+                <button class="prev-btn" data-prev="step-11" type="button">Précédent</button>
                 <button id="submit" type="submit">Créer</button>
             </div>
         </div>

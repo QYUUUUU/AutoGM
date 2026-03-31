@@ -1,10 +1,46 @@
 document.addEventListener('DOMContentLoaded', function () {
     let favoriteSelect = document.getElementById("favoriteCharacter");
+    let armeSelect = document.getElementById("armeSelect");
+    let armureSelect = document.getElementById("armureSelect");
+    let armeStats = document.getElementById("armeStats");
+    let armureStats = document.getElementById("armureStats");
+
+    function updateEquipmentStats() {
+        if (armeSelect && armeSelect.options[armeSelect.selectedIndex]) {
+            const opt = armeSelect.options[armeSelect.selectedIndex];
+            const stats = opt.getAttribute("data-stats");
+            const desc = opt.getAttribute("data-desc");
+            armeStats.innerHTML = stats && stats !== "-" ? `<b>Stats:</b> ${stats}<br><i>${desc || ''}</i>` : "";
+        }
+        if (armureSelect && armureSelect.options[armureSelect.selectedIndex]) {
+            const opt = armureSelect.options[armureSelect.selectedIndex];
+            const stats = opt.getAttribute("data-stats");
+            const desc = opt.getAttribute("data-desc");
+            armureStats.innerHTML = stats && stats !== "-" ? `<b>Stats:</b> ${stats}<br><i>${desc || ''}</i>` : "";
+        }
+    }
+
+    if (armeSelect) {
+        armeSelect.addEventListener('change', function() {
+            updateEquipmentStats();
+            updateCharacterField(characterId, "armeEquipee", this.value);
+        });
+    }
+    if (armureSelect) {
+        armureSelect.addEventListener('change', function() {
+            updateEquipmentStats();
+            updateCharacterField(characterId, "armureEquipee", this.value);
+        });
+    }
+
     let characterId = favoriteSelect.value;
     let quill;
     getCharacter(characterId)
         .then((data) => {
             quill = makeQuill(data.inventory, quill);
+            if (armeSelect) armeSelect.value = data.armeEquipee || "";
+            if (armureSelect) armureSelect.value = data.armureEquipee || "";
+            updateEquipmentStats();
         });
     favoriteSelect.addEventListener("change", async () => {
         characterId = favoriteSelect.value;
@@ -12,6 +48,9 @@ document.addEventListener('DOMContentLoaded', function () {
             getCharacter(characterId)
                 .then((data) => {
                     updateQuill(data.inventory, quill);
+                    if (armeSelect) armeSelect.value = data.armeEquipee || "";
+                    if (armureSelect) armureSelect.value = data.armureEquipee || "";
+                    updateEquipmentStats();
                 });
         } catch (error) {
             console.error(error);

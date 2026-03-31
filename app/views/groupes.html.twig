@@ -1,0 +1,327 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Gestion des Groupes{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    body, main {
+        background-color: #1a1a1a;
+        color: #e1e0de;
+    }
+    .navbar-expand-lg {
+        background-color: #26282a !important;
+    }
+    .nav-link {
+        color: #a5afba !important;
+    }
+    h2, h4, label { color: #fff; }
+    .form-control, .form-control:focus {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: #fff;
+    }
+    .groupe-card {
+        background-color: #2b2b2b;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-left: 5px solid #26282a;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        color: #ddd;
+    }
+    .alert-info { background-color: #133a4c; border-color: #1a516b; color: #a1dff5; }
+    .alert-warning { background-color: #5d440c; border-color: #7d5e16; color: #f5da99; }
+    .alert-danger { background-color: #591b22; border-color: #7a252f; color: #f5a4b0; }
+    hr { border-top: 1px solid #555; }
+    .btn-custom {
+        background-color: #26282a;
+        border-color: #26282a;
+        color: white;
+    }
+    .btn-custom:hover {
+        background-color: #1a1b1c;
+        border-color: #1a1b1c;
+        color: white;
+    }
+</style>
+<script>
+
+    const instinctsData = {
+        "Architecte": {
+            desc: "De tels Groupes viennent en aide aux communautés et luttent contre le chaos. Si les civilisations ne s’effondrent pas, c’est en partie grâce à eux.",
+            capacities: [
+                { name: "Don de l’Architecte", desc: "Une fois par jour, chaque membre du Groupe peut dépenser 1D de chacune de ses Réserves pour octroyer une réussite automatique à un autre membre du Groupe sur un jet de compétence relatif aux domaines de l’Homme ou de l’Outil." }
+            ]
+        },
+        "Épée": {
+            desc: "Un Groupe de l’Épée est motivé par le combat et louera souvent ses talents, pas forcément au plus offrant, mais surtout à celui ou celle qui pourra lui promettre les plus grands défis.",
+            capacities: [
+                { name: "Exhortation", desc: "Une fois par jour, chaque membre du Groupe peut dépenser 1D de chacune de ses Réserves pour annuler, durant une action, le malus de dés dû aux Blessures d’un autre membre." }
+            ]
+        },
+        "Fléau": {
+            desc: "Un tel Groupe n’existe que pour semer le chaos et prendre tout ce qu’il désire. Ses membres ne se livreront pas systématiquement au pillage et à la destruction, mais ces activités les motivent.",
+            capacities: [
+                { name: "Avantage du nombre", desc: "Une fois par jour, lorsqu’un membre du Groupe réussit une attaque au contact, il peut dépenser 1D de chacune de ses Réserves pour accorder une attaque supplémentaire à un autre membre." }
+            ]
+        },
+        "Gardien": {
+            desc: "Les Groupes associés au Gardien protègent les communautés et les plus faibles, mettent à bas les tyrans et font bien comprendre leur déplaisir aux exploiteurs.",
+            capacities: [
+                { name: "Conseil tactique", desc: "Une fois par jour, chaque membre du Groupe peut dépenser 1D de chacune de ses Réserves pour accorder une relance sur une action de défense à un autre membre du Groupe." }
+            ]
+        },
+        "Homme": {
+            desc: "Un tel Groupe apporte connaissance et illumination aux hommes, leur permettant de s’élever.",
+            capacities: [
+                { name: "Il n’est de situation désespérée", desc: "Une fois par jour, chaque membre du Groupe peut dépenser 1D de chacune de ses Réserves pour accorder un bonus de +2D sur le jet d’un autre membre du Groupe se trouvant en grave difficulté." }
+            ]
+        },
+        "Main": {
+            desc: "Un Groupe de la Main ne vit que pour le frisson de la transgression et l’accumulation de richesses.",
+            capacities: [
+                { name: "Diversion", desc: "Une fois par jour, chaque membre du Groupe peut dépenser 1D de chacune de ses Réserves pour accorder le trait Rapide (2) à l’arme d’un autre membre du Groupe sur une action d’attaque « surprise »." }
+            ]
+        },
+        "Masque": {
+            desc: "Les Groupes du Masque sont persuadés que le monde recèle de grands mystères.",
+            capacities: [
+                { name: "Partage des acquis", desc: "Une fois par jour, chaque membre du Groupe peut dépenser 1D de chacune de ses Réserves pour accorder une compétence (au moins Expert) à un autre membre du Groupe." }
+            ]
+        },
+        "Néant": {
+            desc: "Ils ne vivent que pour répandre le chaos et l’ignorance, en retirant au passage une satisfaction certaine.",
+            capacities: [
+                { name: "L’opposition du Néant", desc: "Une fois par jour, chaque membre du Groupe peut dépenser 1D de chacune de ses Réserves pour accorder une réussite automatique à un autre membre du Groupe qui fait un jet en opposition." }
+            ]
+        },
+        "Os": {
+            desc: "La plupart appartiennent à de sombres cultes cherchant à s’attirer les faveurs d’anciennes divinités de la Mort.",
+            capacities: [
+                { name: "Appuyer la mort", desc: "Une fois par jour, chaque membre du Groupe peut dépenser 1D de chacune de ses Réserves pour augmenter de 2 les dommages infligés par l’arme d’un autre membre du Groupe sur une attaque réussie." }
+            ]
+        },
+        "Voyageur": {
+            desc: "Les Groupes du Voyageur sont motivés par une vie nomade et par le fait que quelque chose les attend au bout du chemin.",
+            capacities: [
+                { name: "Soins conjoints", desc: "Une fois par jour, chaque membre du Groupe peut dépenser 1D de chacune de ses Réserves pour accorder une relance gratuite et diminuer d’un cran le Handicap sur une action de soin d’un autre membre du Groupe." }
+            ]
+        }
+    };
+
+    const genericCapacitiesData = {
+        "Unité": "Les actions collectives effectuées par le Groupe au complet bénéficient d’un Bonus supplémentaire de +1D (pour un total de +2D).",
+        "Expertise partagée": "Une fois par jour, les joueurs peuvent choisir une compétence de niveau Expert possédée par un des membres du Groupe présent à ce moment. Jusqu’à la prochaine phase de repos, tous en bénéficient.",
+        "Cohésion": "Une fois par jour, chaque membre du Groupe peut dépenser 1D d’Effort..."
+    };
+
+    function updateInstinct() {
+        const instinctSelect = document.getElementById('instinctGroupe');
+        const selected = instinctSelect.value;
+        const descDiv = document.getElementById('instinctDescription');
+        const capsSelect = document.getElementById('capsInstinctGroupe');
+        const capsDesc = document.getElementById('capsInstinctDescription');
+
+        capsSelect.innerHTML = '<option value="">-- Sélectionnez une capacité --</option>';
+        capsDesc.innerHTML = '';
+
+        if(selected && instinctsData[selected]) {
+            descDiv.innerHTML = '<strong>Description :</strong> ' + instinctsData[selected].desc;
+            capsSelect.disabled = false;
+            instinctsData[selected].capacities.forEach(cap => {
+                let opt = document.createElement('option');
+                opt.value = cap.name;
+                opt.textContent = cap.name;
+                capsSelect.appendChild(opt);
+            });
+        } else {
+            descDiv.innerHTML = '';
+            capsSelect.disabled = true;
+        }
+    }
+
+    function updateInstinctCaps() {
+        const instinctSelect = document.getElementById('instinctGroupe').value;
+        const capsSelect = document.getElementById('capsInstinctGroupe').value;
+        const capsDesc = document.getElementById('capsInstinctDescription');
+
+        if(instinctSelect && capsSelect && instinctsData[instinctSelect]) {
+            const cap = instinctsData[instinctSelect].capacities.find(c => c.name === capsSelect);
+            if(cap) {
+                capsDesc.innerHTML = '<strong>Effet :</strong> ' + cap.desc;
+            } else {
+                capsDesc.innerHTML = '';
+            }
+        } else {
+            capsDesc.innerHTML = '';
+        }
+    }
+
+    function updateGenericCaps() {
+        const select = document.getElementById('capsGroupeSelect');
+        const descDiv = document.getElementById('capsGroupeDescription');
+        let descs = [];
+        for (let option of select.selectedOptions) {
+            if (genericCapacitiesData[option.value]) {
+                descs.push('<strong>' + option.value + ' :</strong> ' + genericCapacitiesData[option.value]);
+            }
+        }
+        descDiv.innerHTML = descs.join('<br>');
+    }
+
+    function joinGroupe(groupeId) {
+        var charId = {{ activeCharacter.id_Character|default(0) }};
+        if(!charId) {
+            alert("Vous devez avoir un personnage actif pour rejoindre un groupe.");
+            return;
+        }
+        fetch('/Character/' + charId + '/joinGroupe/' + groupeId, {
+            method: 'POST'
+        }).then(response => {
+            if(response.ok) {
+                window.location.reload();
+            } else {
+                alert("Erreur lors de la rejoindre du groupe.");
+            }
+        });
+    }
+
+    function createGroupe(event) {
+        event.preventDefault();
+        const capsGroupeOpts = Array.from(document.getElementById('capsGroupeSelect').selectedOptions).map(o => o.value);
+        const data = {
+            nom: document.getElementById('nomGroupe').value,
+            niveau: parseInt(document.getElementById('niveauGroupe').value) || 1,
+            reserveDes: parseInt(document.getElementById('reserveDesGroupe').value) || 0,
+            reputation: document.getElementById('reputationGroupe').value,
+            capacitesGroupe: capsGroupeOpts.join(' | '),
+            instinctGroupe: document.getElementById('instinctGroupe').value,
+            capacitesInstinctGroupe: document.getElementById('capsInstinctGroupe').value
+        };
+
+        fetch('/Groupe', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(response => {
+            if(response.ok) {
+                window.location.reload();
+            } else {
+                alert("Erreur lors de la création du groupe.");
+            }
+        });
+    }
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h2>Gestion des Groupes</h2>
+            {% if activeCharacter %}
+                <p>Personnage actif : <strong>{{ activeCharacter.nom }}</strong></p>
+                {% if activeCharacter.groupeId %}
+                    <div class="alert alert-info">
+                        Vous êtes actuellement membre d'un groupe.
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        Vous n'êtes membre d'aucun groupe. Rejoignez-en un ci-dessous !
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-danger">
+                    Veuillez sélectionner un personnage favori dans le dashboard avant de rejoindre un groupe.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <h4>Groupes Existants</h4>
+            <hr>
+            {% for grp in groupes %}
+                <div class="groupe-card">
+                    <h5>{{ grp.nom }} <span class="badge badge-secondary float-right">Niv {{ grp.niveau }}</span></h5>
+                    <p><strong>Réserve de Dés :</strong> {{ grp.reserveDes }} | <strong>Réputation :</strong> {{ grp.reputation }}</p>
+                    <p><strong>Instinct du Groupe :</strong> {{ grp.instinctGroupe }}</p>
+                    <p><strong>Capacités de Groupe :</strong><br>{{ grp.capacitesGroupe }}</p>
+                    <p><strong>Capacités d'Instinct de Groupe :</strong><br>{{ grp.capacitesInstinctGroupe }}</p>
+                    <div class="mt-3">
+                        {% if activeCharacter and activeCharacter.groupeId == grp.id %}
+                            <button class="btn btn-success" disabled>Votre Groupe Actuel</button>
+                        {% else %}
+                            <button class="btn btn-custom" onclick="joinGroupe({{ grp.id }})">Rejoindre / Mettre à jour membre</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p>Aucun groupe créé pour le moment.</p>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-5">
+            <h4>Créer un Nouveau Groupe</h4>
+            <hr>
+            <form onsubmit="createGroupe(event)">
+                <div class="form-group">
+                    <label>Nom du Groupe *</label>
+                    <input type="text" class="form-control" id="nomGroupe" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Niveau</label>
+                        <input type="number" class="form-control" id="niveauGroupe" value="1">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Réserve de Dés</label>
+                        <input type="number" class="form-control" id="reserveDesGroupe" value="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Réputation (Localisation/Valeur)</label>
+                    <input type="text" class="form-control" id="reputationGroupe" placeholder="ex: Cité (Rang 2)">
+                </div>
+                <div class="form-group">
+                    <label>Instinct du Groupe (Actuel)</label>
+                    <select class="form-control" id="instinctGroupe" onchange="updateInstinct()">
+                        <option value="">-- Sélectionnez un instinct --</option>
+                        <option value="Architecte">Architecte</option>
+                        <option value="Épée">Épée</option>
+                        <option value="Fléau">Fléau</option>
+                        <option value="Gardien">Gardien</option>
+                        <option value="Homme">Homme</option>
+                        <option value="Main">Main</option>
+                        <option value="Masque">Masque</option>
+                        <option value="Néant">Néant</option>
+                        <option value="Os">Os</option>
+                        <option value="Voyageur">Voyageur</option>
+                    </select>
+                    <div id="instinctDescription" class="mt-2 text-muted small"></div>
+                </div>
+                <div class="form-group">
+                    <label>Capacités de Groupe</label>
+                    <select class="form-control" id="capsGroupeSelect" multiple onchange="updateGenericCaps()">
+                        <option value="Unité">Unité</option>
+                        <option value="Expertise partagée">Expertise partagée</option>
+                        <option value="Cohésion">Cohésion</option>
+                    </select>
+                    <small class="text-muted">Maintenez Ctrl (ou Cmd) pour sélectionner plusieurs capacités.</small>
+                    <div id="capsGroupeDescription" class="mt-2 text-muted small"></div>
+                </div>
+                <div class="form-group">
+                    <label>Capacités d'Instinct de Groupe</label>
+                    <select class="form-control" id="capsInstinctGroupe" onchange="updateInstinctCaps()" disabled>
+                        <option value="">-- Sélectionnez une capacité --</option>
+                    </select>
+                    <div id="capsInstinctDescription" class="mt-2 text-muted small"></div>
+                </div>
+
+                <button type="submit" class="btn btn-custom btn-block">Créer le Groupe</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
