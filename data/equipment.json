@@ -1,0 +1,674 @@
+[
+  {
+    "name": "Cotte de mailles",
+    "price": 40,
+    "rarity": 8,
+    "type": "Armures",
+    "stats": "Protection: 2(C)/2(P)/4(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Cotte de mailles renforcée",
+    "price": 60,
+    "rarity": 9,
+    "type": "Armures",
+    "stats": "Protection: 3(C)/3(P)/5(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Cuir (partielle)",
+    "price": 5,
+    "rarity": 4,
+    "type": "Armures",
+    "stats": "Protection: 1(C)/1(P)/1(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Cuir (intégrale)",
+    "price": 7,
+    "rarity": 4,
+    "type": "Armures",
+    "stats": "Protection: 1(C)/1(P)/1(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Cuir renforcé (partielle)",
+    "price": 7,
+    "rarity": 4,
+    "type": "Armures",
+    "stats": "Protection: 2(C)/2(P)/2(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Cuir renforcé (intégrale)",
+    "price": 9,
+    "rarity": 5,
+    "type": "Armures",
+    "stats": "Protection: 2(C)/2(P)/2(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Cuirasse",
+    "price": 9,
+    "rarity": 5,
+    "type": "Armures",
+    "stats": "Protection: 1(C)/1(P)/1(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Matelassée (partielle)",
+    "price": 7,
+    "rarity": 5,
+    "type": "Armures",
+    "stats": "Protection: 2(C)/1(P)/1(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Matelassée (intégrale)",
+    "price": 10,
+    "rarity": 6,
+    "type": "Armures",
+    "stats": "Protection: 2(C)/1(P)/1(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Plate",
+    "price": 100,
+    "rarity": 10,
+    "type": "Armures",
+    "stats": "Protection: 3(C)/4(P)/4(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Bouclier léger (bois)",
+    "price": 5,
+    "rarity": 4,
+    "type": "Boucliers",
+    "stats": "Protection: 1(C)/1(P)/1(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Bouclier lourd (métal)",
+    "price": 14,
+    "rarity": 6,
+    "type": "Boucliers",
+    "stats": "Protection: 2(C)/2(P)/2(T)",
+    "desc": "Réduit les dégâts physiques subis."
+  },
+  {
+    "name": "Arbalète",
+    "price": 75,
+    "rarity": 9,
+    "type": "Armes",
+    "stats": "Dégâts: 1D6 Perforant (P)",
+    "desc": "Arme de type perforant (p)."
+  },
+  {
+    "name": "Arc léger",
+    "price": 10,
+    "rarity": 5,
+    "type": "Armes",
+    "stats": "Dégâts: 1D6 Perforant (P)",
+    "desc": "Arme de type perforant (p)."
+  },
+  {
+    "name": "Arc lourd",
+    "price": 25,
+    "rarity": 7,
+    "type": "Armes",
+    "stats": "Dégâts: 2D6 Perforant (P)",
+    "desc": "Arme de type perforant (p)."
+  },
+  {
+    "name": "Couteau de lancer",
+    "price": 4,
+    "rarity": 4,
+    "type": "Armes",
+    "stats": "Dégâts: 1D4 Tranchant (T)",
+    "desc": "Arme de type tranchant (t)."
+  },
+  {
+    "name": "Couteau",
+    "price": 3,
+    "rarity": 3,
+    "type": "Armes",
+    "stats": "Dégâts: 1D4 Tranchant (T)",
+    "desc": "Arme de type tranchant (t)."
+  },
+  {
+    "name": "Épée/hache à deux mains",
+    "price": 18,
+    "rarity": 7,
+    "type": "Armes",
+    "stats": "Dégâts: 2D6 Tranchant (T)",
+    "desc": "Arme de type tranchant (t)."
+  },
+  {
+    "name": "Épée/hache",
+    "price": 10,
+    "rarity": 5,
+    "type": "Armes",
+    "stats": "Dégâts: 1D6 Tranchant (T)",
+    "desc": "Arme de type tranchant (t)."
+  },
+  {
+    "name": "Fronde",
+    "price": 0.5,
+    "rarity": 3,
+    "type": "Armes",
+    "stats": "Dégâts: 1D4 Mixte",
+    "desc": "Arme de type mixte."
+  },
+  {
+    "name": "Javelot",
+    "price": 8,
+    "rarity": 5,
+    "type": "Armes",
+    "stats": "Dégâts: 1D6 Perforant (P)",
+    "desc": "Arme de type perforant (p)."
+  },
+  {
+    "name": "Lance",
+    "price": 12,
+    "rarity": 6,
+    "type": "Armes",
+    "stats": "Dégâts: 1D6 Perforant (P)",
+    "desc": "Arme de type perforant (p)."
+  },
+  {
+    "name": "Massue à deux mains",
+    "price": 3,
+    "rarity": 5,
+    "type": "Armes",
+    "stats": "Dégâts: 2D6 Contondant (C)",
+    "desc": "Arme de type contondant (c)."
+  },
+  {
+    "name": "Massue",
+    "price": 2,
+    "rarity": 3,
+    "type": "Armes",
+    "stats": "Dégâts: 1D6 Contondant (C)",
+    "desc": "Arme de type contondant (c)."
+  },
+  {
+    "name": "Sarbacane",
+    "price": 2,
+    "rarity": 4,
+    "type": "Armes",
+    "stats": "Dégâts: 1D4 Mixte",
+    "desc": "Arme de type mixte."
+  },
+  {
+    "name": "Scie",
+    "price": 2,
+    "rarity": 5,
+    "type": "Outils",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Enclume",
+    "price": 10,
+    "rarity": 6,
+    "type": "Outils",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Marteau",
+    "price": 2,
+    "rarity": 4,
+    "type": "Outils",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Nécessaire de couture",
+    "price": 8,
+    "rarity": 5,
+    "type": "Outils",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Tenaille",
+    "price": 3,
+    "rarity": 5,
+    "type": "Outils",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Pinceau",
+    "price": 12,
+    "rarity": 7,
+    "type": "Outils",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Peinture (par pigment)",
+    "price": 10,
+    "rarity": 6,
+    "type": "Outils",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Burin et ciseau de sculpteur",
+    "price": 15,
+    "rarity": 6,
+    "type": "Outils",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Bandages",
+    "price": 0.5,
+    "rarity": 3,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Chaîne, 1 mètre",
+    "price": 5,
+    "rarity": 5,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Nécessaire de soins",
+    "price": 15,
+    "rarity": 6,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Bougie",
+    "price": 2,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Corde, 10 mètres",
+    "price": 2,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Grappin",
+    "price": 3,
+    "rarity": 5,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Huile pour lampe",
+    "price": 1.5,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Lampe à huile",
+    "price": 7,
+    "rarity": 5,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Outils de crochetage",
+    "price": 25,
+    "rarity": 7,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Outre (peau)",
+    "price": 3,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Panier d'osier",
+    "price": 1,
+    "rarity": 3,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Bourse (tissu)",
+    "price": 1,
+    "rarity": 3,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Bourse (cuir)",
+    "price": 2,
+    "rarity": 5,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Sac à dos (tissu)",
+    "price": 3,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Sac à dos (cuir)",
+    "price": 6,
+    "rarity": 5,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Sacoche (tissu)",
+    "price": 2,
+    "rarity": 3,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Sacoche (cuir)",
+    "price": 4,
+    "rarity": 5,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Torche",
+    "price": 0.5,
+    "rarity": 3,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Bol et cuillère en bois (voyage)",
+    "price": 1,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Pichet en terre cuite",
+    "price": 1.5,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Couverture",
+    "price": 2,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Petite tente",
+    "price": 8,
+    "rarity": 5,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Grande tente",
+    "price": 18,
+    "rarity": 6,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Carte d'une région",
+    "price": 22,
+    "rarity": 7,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Encre et plume",
+    "price": 15,
+    "rarity": 6,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Parchemin (5)",
+    "price": 10,
+    "rarity": 6,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Balance",
+    "price": 12,
+    "rarity": 6,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Sablier",
+    "price": 35,
+    "rarity": 8,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Flûte",
+    "price": 3,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Harpe",
+    "price": 45,
+    "rarity": 8,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Lyre",
+    "price": 20,
+    "rarity": 6,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Tambour",
+    "price": 6,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Carquois",
+    "price": 3,
+    "rarity": 4,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Encens, par bâton ou cône",
+    "price": 1,
+    "rarity": 6,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Parfum",
+    "price": 20,
+    "rarity": 7,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Savon",
+    "price": 5,
+    "rarity": 5,
+    "type": "Objets",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Vêtements simples",
+    "price": 5,
+    "rarity": 4,
+    "type": "Vêtements",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Vêtements luxueux",
+    "price": 20,
+    "rarity": 7,
+    "type": "Vêtements",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Cape et capuche",
+    "price": 4,
+    "rarity": 5,
+    "type": "Vêtements",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Ceinturon",
+    "price": 8,
+    "rarity": 6,
+    "type": "Vêtements",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Paire de bottes (cuir)",
+    "price": 14,
+    "rarity": 6,
+    "type": "Vêtements",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Sandales (fibres végétales)",
+    "price": 3,
+    "rarity": 4,
+    "type": "Vêtements",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Cheval de selle",
+    "price": 20,
+    "rarity": 6,
+    "type": "Animaux",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Chien de combat",
+    "price": 10,
+    "rarity": 6,
+    "type": "Animaux",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Destrier",
+    "price": 50,
+    "rarity": 8,
+    "type": "Animaux",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Barque",
+    "price": 10,
+    "rarity": 6,
+    "type": "Moyens de transport",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Barge",
+    "price": 15,
+    "rarity": 7,
+    "type": "Moyens de transport",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Petit bateau à voile",
+    "price": 25,
+    "rarity": 7,
+    "type": "Moyens de transport",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Grand bateau à voile",
+    "price": 95,
+    "rarity": 9,
+    "type": "Moyens de transport",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Chariot",
+    "price": 12,
+    "rarity": 5,
+    "type": "Moyens de transport",
+    "stats": "-",
+    "desc": "Objet général."
+  },
+  {
+    "name": "Charrette",
+    "price": 8,
+    "rarity": 4,
+    "type": "Moyens de transport",
+    "stats": "-",
+    "desc": "Objet général."
+  }
+]
