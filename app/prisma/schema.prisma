@@ -34,6 +34,8 @@ model Session {
     expiresAt DateTime
 }
 
+
+
 model Character {
     id_Character        Int                 @id @default(autoincrement())
     nom                 String?
@@ -108,6 +110,8 @@ model Character {
     maxsangfroid        Int?                @default(8)
     sangfroid           Int?                @default(8)
     inventory           String?             @default("") @db.VarChar(5000)
+    armeEquipee         String?             @default("") @db.VarChar(500)
+    armureEquipee       String?             @default("") @db.VarChar(500)
     User                User?               @relation(fields: [userId], references: [id])
     userId              Int?
     FavoriteCharacter   FavoriteCharacter[]
@@ -142,13 +146,22 @@ model Message {
 model Roll {
     id                    Int        @id @default(autoincrement())
     content               String?    @db.VarChar(2000)
+    isStatRoll            Boolean?   @default(false)
+    caracteristic         String?
+    competence            String?
+    thrownByAI            Boolean?   @default(false)
     Character             Character? @relation(fields: [characterId_Character], references: [id_Character])
     characterId_Character Int?
 }
 
 model Groupe {
-    id        Int         @id @default(autoincrement())
-    nom       String?
-    instinct  String?
-    Character Character[]
+    id                      Int         @id @default(autoincrement())
+    nom                     String?
+    niveau                  Int?        @default(1)
+    reserveDes              Int?        @default(0)
+    reputation              String?     @default("1")
+    capacitesGroupe         String?     @db.Text
+    instinctGroupe          String?     @db.VarChar(500)
+    capacitesInstinctGroupe String?     @db.Text
+    Character               Character[]
 }
