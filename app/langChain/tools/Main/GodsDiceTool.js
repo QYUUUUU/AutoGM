@@ -4,7 +4,7 @@ import { GodsDiceChain } from "../../chains/Main/GodsDiceChain.js";
 export class GodsDiceTool extends Tool {
     name = "gods-throws";
   
-    description = "This tool is used to help know from a characteristic and a skill of the user and a modifier (ex :précision, lance, default is 0) the number of dices to throw for the user";
+    description = 'Ce bot permet de calculer le nombre de dés à lancer pour le joueur à partir d\'une caractéristique, d\'une compétence et d\'un modificateur éventuel (ex: précision et tir). Retourne STRICTEMENT le JSON renvoyé par cet outil sans aucun ajout.';
   
     async _call(arg){
       try {
@@ -12,10 +12,10 @@ export class GodsDiceTool extends Tool {
         // Perform your custom tool logic here with the input text
         var chain = await new GodsDiceChain().call(arg);
         // and return the output text
-        return `Réponse: ${chain.res}`;
+        return chain.res;
       } catch (error) {
         // Handle any errors that occur during the processing
-        return `Error occurred: ${error.message}`;
+        return `Une erreur s\'est produite lors du calcul des dés : ${error.message}`;
       }
     }
   }

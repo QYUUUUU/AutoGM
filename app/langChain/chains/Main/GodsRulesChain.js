@@ -1,6 +1,6 @@
-import { OpenAI } from "langchain/llms/openai";
-import { HNSWLib } from "langchain/vectorstores/hnswlib";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { ChatOpenAI } from "@langchain/openai";
+import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { BaseChain } from "langchain/chains";
 
 export class GodsRulesChain extends BaseChain {
@@ -16,7 +16,7 @@ export class GodsRulesChain extends BaseChain {
   async _call(inputs) {
     const vectorStore = await getVectorStore();
 
-    const model = new OpenAI({
+    const model = new ChatOpenAI({
       temperature: 0,
       maxTokens: 800,
       modelName: "gpt-3.5-turbo",
@@ -41,23 +41,27 @@ export class GodsRulesChain extends BaseChain {
       context += document["pageContent"];
     });
 
-    var QA_PROMPT = `Tu es un assistant des règles du jeu GODS. Les informations de contexte sont ci-dessous. 
-      ---------------------
-      ${context}
-      ---------------------
-      Compte tenu des informations contextuelles et non des connaissances préalables, répondez à la question suivante : ${sanitizedQuestion} ?:
-      
-      `;
+    var QA_PROMPT = `Vous êtes un système RAG expert dédié aux règles et au lore du jeu de rôle GODS.
+Utilisez UNIQUEMENT les extraits de documentation ci-dessous pour générer votre réponse.
+Ne vous appuyez sur aucune connaissance externe. Si la réponse ne figure pas dans le contexte, indiquez simplement "L'information n'est pas dans mes archives."
 
-    const res = await model.call(QA_PROMPT);
+CONTEXTE:
+---------------------
+${context}
+---------------------
 
-    return { res };
+QUESTION UTILISATEUR: ${sanitizedQuestion}
+RÉPONSE:
+`;
+
+    const res = await model.invoke(QA_PROMPT);
+    return { res: res.content };
   }
 }
 
 async function getVectorStore() {
   // Load the vector store from the same directory
-  const directory = "/app/data/VectorStores/pdf/";
+  const directory = "./app/langChain/data/VectorStores/pdf/";
   const loadedVectorStore = await HNSWLib.load(
     directory,
     new OpenAIEmbeddings({
@@ -67,3 +71,8 @@ async function getVectorStore() {
   );
   return loadedVectorStore;
 }
+export const startRules = async (question, userId) => {
+  const chain = new GodsRulesChain();
+  const res = await chain.invoke({ data: question });
+  return { output: res.res };
+};

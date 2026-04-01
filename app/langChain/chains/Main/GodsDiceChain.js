@@ -1,4 +1,4 @@
-import { OpenAI } from "langchain/llms/openai";
+import { ChatOpenAI } from "@langchain/openai";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { BaseChain } from "langchain/chains";
@@ -18,9 +18,9 @@ export class GodsDiceChain extends BaseChain {
 
     var userId = getUserId();
 
-    const model = new OpenAI({
+    const model = new ChatOpenAI({
       temperature: 0,
-      modelName: "gpt-3.5-turbo",
+      modelName: "gpt-3.5-turbo-1106", modelKwargs: { response_format: { type: "json_object" } },
       verbose: false,
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
@@ -34,7 +34,7 @@ export class GodsDiceChain extends BaseChain {
       data = await response.json();
     } catch (error) {
       console.error(error)
-      return { res: "Bot, dis à l'utilisateur qu'il n'a pas sélectionné de personnage." }
+      return { res: JSON.stringify({ type: "error", message: "Désolé, mais vous n'avez pas sélectionné de personnage pour lancer ces dés." }) }
     }
 
     let sanitizedQuestion = '';
@@ -44,7 +44,7 @@ export class GodsDiceChain extends BaseChain {
       }
     } catch (error) {
       console.error(error)
-      return { res: "BROKEN HERE." }
+      return { res: JSON.stringify({ type: "error", message: "BROKEN HERE." }) }
     }
 
     const modifier = parseInt(extractNumbersFromString(sanitizedQuestion));
@@ -63,16 +63,20 @@ export class GodsDiceChain extends BaseChain {
     var context = "";
 
     async function getDiceAmount() {
-      var QA_PROMPT = `Les informations du personnage sont ci-dessous.
+      var QA_PROMPT = `Vous êtes le système d'analyse et de calcul de dés pour le jeu GODS.
+        Voici la feuille de personnage :
         ---------------------
         ${characterInfo}
         ---------------------
-        Les Caractéristiques sont Puissance Précision Connaissance Volonté Résistance Réflexes Perception Empathie.
-        Les autres mots sont des Compétences.
-         Quelles sont les valeurs des informations suivantes : input( ${sanitizedQuestion} ) ? Réponds au format json ex : {"caracteristique": int, "competence": int}:
+        Définitions :
+        - Caractéristiques = Puissance, Précision, Connaissance, Volonté, Résistance, Réflexes, Perception, Empathie.
+        - Les autres mots sont des Compétences.
         
+        Extrayez les valeurs numériques pour cette demande : input( ${sanitizedQuestion} )
+        RÉPONDEZ EXCLUSIVEMENT ET STRICTEMENT sous forme de JSON valide (exemple : {"caracteristique": nombre, "competence": nombre}) sans aucun autre texte :
         `;
-      return await model.call(QA_PROMPT);
+      const msg = await model.invoke(QA_PROMPT);
+      return msg.content;
     };
 
     const filteredData = Object.keys(data)
@@ -86,25 +90,28 @@ export class GodsDiceChain extends BaseChain {
 
     async function getMalusAmount() {
       var carac = removeNumbersFromString(sanitizedQuestion);
-      var QA_PROMPT = `Les valeurs des malus: 
+      var QA_PROMPT = `Vous êtes le système de pénalité de règles GODS.
+      État actuel des blessures (malus) :
       ---------------------
       ${malusInfo}
       ---------------------
-      Le malus physique s'applique à puissance et résistance,
-      Le malus manuel s'applique à Précision et Réflexes,
-      Le malus social s'applique à Connaissance et Perception,
-      Le malus mental s'applique à Volonté et Empathie,
-      Le malus humain s'applique à Arts Cité Civilisations Relationnel Soins,
-      Le malus Animal s'applique à Animalisme Faune Montures Pistage Territoire,
-      Le malus Outil s'applique à Adresse Armurerie Artisanat Mécanisme Runes,
-      Le malus Arme s'applique à Bouclier Corps à corps(cac) Lance Mêlée Tir,
-      Le malus Terres s'applique à Athlétisme Discrétion Flore Vigilance Voyage,
-      Le malus Inconnu s'applique à Eclat Lunes Mythes Panthéons Rituels
+      Domaines d'application:
+      - Malus physique cible: puissance, résistance
+      - Malus manuel cible: Précision, Réflexes
+      - Malus social cible: Connaissance, Perception
+      - Malus mental cible: Volonté, Empathie
+      - Malus humain cible: Arts, Cité, Civilisations, Relationnel, Soins
+      - Malus Animal cible: Animalisme, Faune, Montures, Pistage, Territoire
+      - Malus Outil cible: Adresse, Armurerie, Artisanat, Mécanisme, Runes
+      - Malus Arme cible: Bouclier, Corps à corps (cac), Lance, Mêlée, Tir
+      - Malus Terres cible: Athlétisme, Discrétion, Flore, Vigilance, Voyage
+      - Malus Inconnu cible: Eclat, Lunes, Mythes, Panthéons, Rituels
       
-      Donne les valeurs des malus qui s'appliquent à cette combinaison : ${carac} ? réponds au format json ex : {"dice": int, "throw": int}:
-      
+      Analysez les mots-clés : "${carac}" et déterminez le total du pénalité à imposer.
+      RÉPONDEZ EXCLUSIVEMENT ET STRICTEMENT sous forme de JSON valide (exemple : {"dice": nombre, "throw": nombre}) sans aucun autre texte:
       `;
-      return await model.call(QA_PROMPT);
+      const msg = await model.invoke(QA_PROMPT);
+      return msg.content;
     }
     var [diceAmount, malusAmount] = await Promise.all([getDiceAmount(), getMalusAmount()]);
 
@@ -114,11 +121,11 @@ export class GodsDiceChain extends BaseChain {
     var { lancers, relances } = calculerLancersEtRelances(diceAmount.competence);
     var totalDice = modifier + diceAmount.caracteristique + lancers + malusAmount.dice + malusAmount.throw + blessureModifier;
     if (totalDice < 1) {
-      return { res: "Jet impossible, il y a trop de malus." };
+      return { res: JSON.stringify({ type: "error", message: "Jet impossible, il y a trop de malus." }) };
     } else if (!Number.isInteger(totalDice)) {
-      return { res: "Bot, Les données du personnage sont probablement mal remplies. Vérifiez les caractéristiques, compétences, malus et blessures de votre personnage." };
+      return { res: JSON.stringify({ type: "error", message: "Les données de votre personnage sont probablement mal remplies ou la demande n'a pas été comprise." }) };
     } else {
-      return { res: "Les dés à lancer sont " + totalDice + "d10 et " + relances + "d10 à relancer possibles. Réalise les lancers pour le joueur en utilisant l'outil et informe lui des possibilités de relance." };
+      let payload = { type: "dice", diceCounts: { d10: totalDice }, caracteristic: null, competence: null, relances: relances }; return { res: JSON.stringify(payload) };
     }
   }
 }
@@ -128,16 +135,25 @@ function removeNumbersFromString(str) {
 }
 
 function extractValuesFromString(str) {
-  const cleanedStr = str.replace(/[{}]/g, '');
+  try {
+    const jsonMatch = str.match(/\{[\s\S]*?\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      if (typeof parsed === 'object' && parsed !== null) return parsed;
+    }
+  } catch (e) {}
+  
+  const cleanedStr = str.replace(/[{}"']/g, '');
   const pairs = cleanedStr.split(',');
 
   const values = {};
 
   pairs.forEach(pair => {
-    const [key, value] = pair.split(':');
-    const cleanedKey = key.trim().replace(/['"]/g, ''); // Supprimer les guillemets simples ou doubles des clés
-    const cleanedValue = parseInt(value.trim());
-    values[cleanedKey] = cleanedValue;
+    const ix = pair.indexOf(':');
+    if (ix === -1) return;
+    const key = pair.slice(0, ix).trim();
+    const val = parseInt(pair.slice(ix + 1).trim());
+    values[key] = isNaN(val) ? 0 : val;
   });
 
   return values;

@@ -55,7 +55,9 @@ router.get('/dashboard', async (req, res) => {
           console.error('Error loading equipment.json', err);
         }
 
-        return res.render('index.html.twig', { characters: sortedCharacters, conversation: conversation, equipmentList: equipmentList }); // Pass sortedCharacters as an object
+        const allGroupes = await prisma.groupe.findMany();
+
+        return res.render('index.html.twig', { characters: sortedCharacters, conversation: conversation, equipmentList: equipmentList, favoriteCharacter: favoriteCharacter, allGroupes: allGroupes }); // Pass sortedCharacters as an object
       } else {
         return res.render('../views/login.html.twig');
       }
@@ -128,7 +130,7 @@ router.post('/create-character', async (req, res) => {
         capaciteInstinct2,
         puissance,
         resistance,
-        precicion,
+        precision,
         reflexes,
         connaissance,
         perception,
@@ -185,7 +187,7 @@ router.post('/create-character', async (req, res) => {
             defaultMortelle = 1;
           }
         }
-      precicion = parseInt(precicion);
+      precision = parseInt(precision);
       reflexes = parseInt(reflexes);
       connaissance = parseInt(connaissance);
       perception = parseInt(perception);
@@ -238,7 +240,7 @@ router.post('/create-character', async (req, res) => {
           capaciteInstinct2,
           puissance,
           resistance,
-          precicion,
+          precision,
           reflexes,
           connaissance,
           perception,
@@ -278,7 +280,7 @@ router.post('/create-character', async (req, res) => {
           maxblessuregrave: defaultGrave,
           maxblessuremortelle: defaultMortelle,
           userId: id_User,
-          inventory: JSON.stringify({
+          notes: JSON.stringify({
             ops: [
               {
                 insert: "15 Sabiirihs d'Argent\n" + 
@@ -287,7 +289,13 @@ router.post('/create-character', async (req, res) => {
                           : "")
               }
             ]
-          })
+          }),
+          inventory: JSON.stringify(
+            (req.body.equipments ? 
+              (Array.isArray(req.body.equipments) ? req.body.equipments : [req.body.equipments])
+              .map(e => ({ name: e, quantity: 1, type: "Équipement de départ", desc: "", stats: "" }))
+            : [])
+          )
         },
       });
       console.log(newCharacter);
@@ -866,6 +874,28 @@ router.post('/Groupe', async (req, res) => {
   }
 });
 
+router.get('/Groupe/:id', async (req, res) => {
+  try {
+    const groupe = await prisma.groupe.findUnique({
+      where: { id: parseInt(req.params.id) }
+    });
+    res.json(groupe);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/Groupe/:id', async (req, res) => {
+  try {
+    const groupe = await prisma.groupe.findUnique({
+      where: { id: parseInt(req.params.id) }
+    });
+    res.json(groupe);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.put('/Groupe/:id', async (req, res) => {
   try {
     const updated = await prisma.groupe.update({
@@ -883,6 +913,18 @@ router.post('/Character/:charId/joinGroupe/:groupeId', async (req, res) => {
     const char = await prisma.character.update({
       where: { id_Character: parseInt(req.params.charId) },
       data: { groupeId: parseInt(req.params.groupeId) }
+    });
+    res.json(char);
+  } catch (err) {
+    res.status(500).json({error: err.message});
+  }
+});
+
+router.post('/Character/:charId/leaveGroupe', async (req, res) => {
+  try {
+    const char = await prisma.character.update({
+      where: { id_Character: parseInt(req.params.charId) },
+      data: { groupeId: null }
     });
     res.json(char);
   } catch (err) {

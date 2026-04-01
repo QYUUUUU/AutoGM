@@ -99,7 +99,7 @@ function getMalus(character, competence, caracteristique) {
         case 'resistance':
             malusCaracteristique = 'malusphysique';
             break;
-        case 'precicion':
+        case 'precision':
         case 'reflexes':
             malusCaracteristique = 'malusmanuel';
             break;

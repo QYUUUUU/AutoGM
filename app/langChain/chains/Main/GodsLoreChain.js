@@ -1,6 +1,6 @@
-import { OpenAI } from "langchain/llms/openai";
-import { HNSWLib } from "langchain/vectorstores/hnswlib";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { OpenAI } from "@langchain/openai";
+import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { BaseChain } from "langchain/chains";
 
 export class GodsLoreChain extends BaseChain {
@@ -57,7 +57,7 @@ export class GodsLoreChain extends BaseChain {
 async function getVectorStore() {
   // Load the vector store from the same directory
   console.log(__dirname);
-  const directory = "app/langchain/data/VectorStores/pdf/";
+  const directory = "./app/langChain/data/VectorStores/pdf/";
   const loadedVectorStore = await HNSWLib.load(
     directory,
     new OpenAIEmbeddings({
