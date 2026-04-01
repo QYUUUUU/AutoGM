@@ -63,7 +63,7 @@ function buildPage() {
 
   // Variables globales pour stocker les notes sélectionnées
   var puissance = 0;
-  var precicion = 0;
+  var precision = 0;
   var connaissance = 0;
   var volonte = 0;
   var resistance = 0;
@@ -77,8 +77,8 @@ function buildPage() {
       case "puissance":
         puissance = note;
         break;
-      case "precicion":
-        precicion = note;
+      case "precision":
+        precision = note;
         break;
       case "connaissance":
         connaissance = note;
@@ -325,7 +325,7 @@ function buildPage() {
     console.log(contents)
     const jsonString = JSON.stringify(contents);
     console.log(jsonString)
-    updateCharacterField(id_Character, "inventory", jsonString);
+    updateCharacterField(id_Character, "notes", jsonString);
   }
 
   function makeQuill(quillContent, retryCount = 0) {
@@ -479,7 +479,7 @@ function buildPage() {
       document.getElementById('malusarme').value = data.malusarme;
       document.getElementById('malusinconnu').value = data.malusinconnu;
       document.getElementById('malusmental').value = data.malusmental;
-      makeQuill(data.inventory);
+      makeQuill(data.notes);
 
       if (data.connaissance !== 0 && data.connaissance !== null) {
         document.getElementById('connaissancelosange' + data.connaissance).click();
@@ -509,8 +509,8 @@ function buildPage() {
         document.getElementById('empathielosange' + data.empathie).click();
       }
 
-      if (data.precicion !== 0 && data.precicion !== null) {
-        document.getElementById('precicionlosange' + data.precicion).click();
+      if (data.precision !== 0 && data.precision !== null) {
+        document.getElementById('precisionlosange' + data.precision).click();
       }
 
       if (data.arts !== 0 && data.arts !== null) {

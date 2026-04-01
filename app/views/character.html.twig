@@ -99,11 +99,11 @@
 								<img class="losange" id="puissancelosange5" src="/images/losange.png"/>
 							</div>
 							<div class="col-2 text-center">
-								<img class="losange" id="precicionlosange1" src="/images/losange.png"/>
-								<img class="losange" id="precicionlosange2" src="/images/losange.png"/>
-								<img class="losange" id="precicionlosange3" src="/images/losange.png"/>
-								<img class="losange" id="precicionlosange4" src="/images/losange.png"/>
-								<img class="losange" id="precicionlosange5" src="/images/losange.png"/>
+								<img class="losange" id="precisionlosange1" src="/images/losange.png"/>
+								<img class="losange" id="precisionlosange2" src="/images/losange.png"/>
+								<img class="losange" id="precisionlosange3" src="/images/losange.png"/>
+								<img class="losange" id="precisionlosange4" src="/images/losange.png"/>
+								<img class="losange" id="precisionlosange5" src="/images/losange.png"/>
 							</div>
 							<div class="col-2 text-center">
 								<img class="losange" id="connaissancelosange1" src="/images/losange.png"/>
@@ -784,11 +784,40 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container-fluid inventaire">
-				<h3>Inventaire</h3>
-				<div id="editor">
-                                </div>
-                        </div>
+                    
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Notes Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">Notes</h4>
+                </div>
+                <div class="card-body p-0" style="min-height: 400px; display: flex; flex-direction: column;">
+                    <div id="editor" style="flex: 1; border: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 inventory" 
+                 data-inventory="{{ character.inventory | e('html_attr') }}" 
+                 data-char-id="{{ character.id_Character }}">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Inventaire</h4>
+                    <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="card-body bg-light" id="inventory-list" style="overflow-y: auto; max-height: 500px;">
+                    <!-- Items -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
                 </div>
 
                 <script>
@@ -858,4 +887,92 @@
                 <link rel="stylesheet" href="/css/character.css">
 
                 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.snow.css" rel="stylesheet">
+
+<style>
+#addItemModal .form-control {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    padding: 0.375rem 0.75rem;
+}
+</style>
+<div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content text-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addItemModalLabel">Ajouter un objet</h5>
+        <button type="button" class="close btn btn-link" data-bs-dismiss="modal" aria-label="Close" style="color: black; text-decoration: none; font-size: 1.5rem;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs" id="itemTabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="premade-item-tab" data-bs-toggle="tab" href="#premade-item" role="tab">Dans le manuel</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="custom-item-tab" data-bs-toggle="tab" href="#custom-item" role="tab">Objet personnalisé</a>
+          </li>
+        </ul>
+        <div class="tab-content mt-3" id="itemTabsContent">
+          <!-- Premade Item -->
+          <div class="tab-pane fade show active" id="premade-item" role="tabpanel">
+             <div class="form-group">
+                <label for="item-select">Sélectionner un objet</label>
+                <select id="item-select" class="form-control">
+                    <option value="">Sélectionnez...</option>
+                    {% for item in equipmentList %}
+                        <option value="{{ loop.index0 }}" 
+                                data-name="{{ item.name }}" 
+                                data-type="{{ item.type }}" 
+                                data-stats="{{ item.stats }}" 
+                                data-desc="{{ item.desc }}">
+                            {{ item.name }} ({{ item.type }}) - {{ item.price }} Or - Rareté {{ item.rarity }}
+                        </option>
+                    {% endfor %}
+                </select>
+             </div>
+          </div>
+          <!-- Custom Item -->
+          <div class="tab-pane fade" id="custom-item" role="tabpanel">
+             <div class="form-group">
+                 <label>Nom</label>
+                 <input type="text" id="custom-item-name" class="form-control">
+             </div>
+             <div class="form-group">
+                 <label>Type</label>
+                 <input type="text" id="custom-item-type" class="form-control" placeholder="Arme, Armure, Consommable...">
+             </div>
+             <div class="form-group">
+                 <label>Stats</label>
+                 <input type="text" id="custom-item-stats" class="form-control">
+             </div>
+             <div class="form-group">
+                 <label>Description</label>
+                 <textarea id="custom-item-desc" class="form-control" rows="2"></textarea>
+             </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" id="btn-save-item">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var modal = document.getElementById('addItemModal');
+    if (modal) {
+        document.body.appendChild(modal);
+    }
+});
+</script>
+<script src="/js/dashboardInventory.js"></script>
+
+<script src="/js/bootstrap.min.js"></script>
 {% endblock %}

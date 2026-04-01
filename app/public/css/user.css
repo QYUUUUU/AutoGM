@@ -339,3 +339,53 @@ body {
 .second-increments{
   height: 30px;
 }
+.chat-body, .chat-body-rules {
+  height: 0 !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+}
+
+.body-card {
+  min-height: 0 !important;
+}
+
+
+/* Thème Groupe : Noir, Gris, Doré */
+.text-gold {
+    color: #d4af37 !important;
+}
+.bg-black-custom {
+    background-color: #111111 !important;
+}
+.bg-dark-gold {
+    background-color: #222222 !important;
+    border: 1px solid #d4af37 !important;
+}
+.border-gold {
+    border-color: #d4af37 !important;
+}
+.border-gray {
+    border-color: #444444 !important;
+}
+.btn-gold {
+    color: #111;
+    background-color: #d4af37;
+    border-color: #c5a030;
+}
+.btn-gold:hover {
+    color: #111;
+    background-color: #b8860b;
+    border-color: #a4760a;
+}
+.btn-outline-gold {
+    color: #d4af37;
+    background-color: transparent;
+    border-color: #d4af37;
+}
+.btn-outline-gold:hover {
+    color: #111;
+    background-color: #d4af37;
+    border-color: #d4af37;
+}

@@ -65,6 +65,8 @@
     min-height: 200px;
     max-height: 250px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .dice-results>.body-card {
@@ -73,12 +75,19 @@
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 15px;
-    height: 100%;
+    height: auto;
+    flex: 1;
+    min-height: 0;
     margin-bottom: 10px;
     border-radius: 0px 0px 6px 6px;
     border: 1px solid rgba(225, 224, 222, 0.2);
     border-top: none;
     webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
+}
+
+.inventory {
+    display: flex;
+    flex-direction: column;
 }
 
 .inventory>.body-card {
@@ -87,7 +96,9 @@
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 15px;
-    height: 100%;
+    height: auto;
+    flex: 1;
+    min-height: 0;
     margin-bottom: 10px;
     border-radius: 0px 0px 6px 6px;
     border: 1px solid rgba(225, 224, 222, 0.2);
@@ -406,9 +417,6 @@ main {
 }
 
 .dice-results {
-    height: auto;
-    flex-shrink: 0;
-    max-height: 300px;
 }
 
 .increment-button:hover, .stats-send:hover, #dice-throw-trigger:hover {

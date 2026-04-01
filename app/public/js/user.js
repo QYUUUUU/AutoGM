@@ -4,7 +4,7 @@ import './bootstrap.min.js';
 
 //Conversation selection
 const conversation = document.getElementsByClassName("conversationid");
-var conversationId = conversation.id;
+var conversationId = conversation.length > 0 ? parseInt(conversation[0].id) : null;
 
 const init = "Bonjour, je suis programmé pour t'aider à jouer à GODS. Tu peux me demander de lancer les dés de ton choix 'Lance cinq dés 20 s'il te plait', ou directement depuis la fiche de personnage sélectionnée dans la sidebar ('jette précision et tir avec modifieur à -2'). Je connais aussi les livres par coeur alors n'hésite pas à me poser des questions ('Parle moi d'Aon') ! 😎";
 addMessage(init, "assistant");
@@ -63,34 +63,55 @@ async function lancementAPI() {
   addMessage(prompt, "User");
 
   // Define a variable outside the setTimeout() function to assign a value later
-  let typingMessage;
+  let typingMessage = null;
 
   // Show the typing message in 500 milliseconds to indicate the AI is processing
-  setTimeout(function () {
+  const typingTimer = setTimeout(function () {
     typingMessage = addTypingMessage();
   }, 500);
 
-  // Make a POST request to the discussion API endpoint with the user prompt as the body
-  const response = await fetch("/backend/agent", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ prompt, conversationId }),
-  });
+  try {
+    // Make a POST request to the discussion API endpoint with the user prompt as the body
+    const response = await fetch("/backend/agent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt, conversationId }),
+    });
 
-  // Remove the typing message after the response is received
-  removeTypingMessage(typingMessage);
+    clearTimeout(typingTimer);
+    if (typingMessage) {
+      removeTypingMessage(typingMessage);
+    }
 
-  // Enable user inputs after the API has finished processing
-  enableInputs()
+    if (!response.ok) {
+        throw new Error("Server Error");
+    }
 
-  // Parse the response as JSON
-  const data = await response.json();
+    // Parse the response as JSON
+    const data = await response.json();
+    
+    if (data.isDice && data.diceData && data.diceData.diceCounts) {
+      if (typeof window.randomDiceThrow === 'function') {
+        window.randomDiceThrow(data.diceData.diceCounts, data.diceData.relances || 0, data.diceData.caracteristic || null, data.diceData.competence || null, true);
+      } else {
+        console.error("randomDiceThrow not found");
+      }
+    } else {
+      addMessage(data["output"], "assistant");
+    }
 
-  addMessage(data["output"], "assistant");
-
-  ;
+  } catch (error) {
+    clearTimeout(typingTimer);
+    if (typingMessage) {
+      removeTypingMessage(typingMessage);
+    }
+    addMessage("Désolé, une erreur s'est produite lors de la communication avec l'assistant.", "assistant");
+  } finally {
+    // Enable user inputs after the API has finished processing
+    enableInputs();
+  }
 }
 
 function addTypingMessage() {
@@ -130,8 +151,10 @@ function addMessage(content, sender) {
 
   if (sender === 'User') {
     message.classList.add('chat-message-right');
+    messageContent.innerHTML = content.escape().replace(/\n/g, '<br>');
+  } else {
+    messageContent.innerHTML = typeof marked !== 'undefined' ? marked.parse(content) : content.escape().replace(/\n/g, '<br>');
   }
-  messageContent.innerHTML = content.replace(/\n/g, '<br>');
 
   message.appendChild(messageContent);
   message.appendChild(createMessageInfo());

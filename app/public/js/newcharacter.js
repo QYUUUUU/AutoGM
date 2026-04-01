@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
             capaciteInstinct1: document.querySelector('input[name="instinct_capacite"]:checked') ? document.querySelector('input[name="instinct_capacite"]:checked').value : 'none',
             puissance: document.getElementsByName('puissance')[0].value,
             resistance: document.getElementsByName('resistance')[0].value,
-            precicion: document.getElementsByName('precicion')[0].value,
+            precision: document.getElementsByName('precision')[0].value,
             reflexes: document.getElementsByName('reflexes')[0].value,
             connaissance: document.getElementsByName('connaissance')[0].value,
             perception: document.getElementsByName('perception')[0].value,
@@ -467,7 +467,7 @@ if (signeastroSelect) {
 
 // --- VALIDATION TRACKER LOGIC ---
 document.addEventListener('DOMContentLoaded', function() {
-    const characteristicsNames = ['puissance', 'resistance', 'precicion', 'reflexes', 'connaissance', 'perception', 'volonte', 'empathie'];
+    const characteristicsNames = ['puissance', 'resistance', 'precision', 'reflexes', 'connaissance', 'perception', 'volonte', 'empathie'];
     const skillsNames = ['arts', 'cite', 'civilisations', 'relationnel', 'soins', 'animalisme', 'faune', 'montures', 'pistage', 'territoire', 'adresse', 'armurerie', 'artisanat', 'mecanisme', 'runes', 'athletisme', 'discretion', 'flore', 'vigilance', 'voyage', 'bouclier', 'cac', 'lancer', 'melee', 'tir', 'eclats', 'lunes', 'mythes', 'pantheons', 'rituels'];
     
     const container = document.getElementById('character-creation-form-container');

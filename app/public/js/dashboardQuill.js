@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let quill;
     getCharacter(characterId)
         .then((data) => {
-            quill = makeQuill(data.inventory, quill);
+            quill = makeQuill(data.notes, quill);
             if (armeSelect) armeSelect.value = data.armeEquipee || "";
             if (armureSelect) armureSelect.value = data.armureEquipee || "";
             updateEquipmentStats();
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             getCharacter(characterId)
                 .then((data) => {
-                    updateQuill(data.inventory, quill);
+                    updateQuill(data.notes, quill);
                     if (armeSelect) armeSelect.value = data.armeEquipee || "";
                     if (armureSelect) armureSelect.value = data.armureEquipee || "";
                     updateEquipmentStats();
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateInventory(quill) {
         var contents = quill.getContents();
         const jsonString = JSON.stringify(contents);
-        updateCharacterField(characterId, "inventory", jsonString);
+        updateCharacterField(characterId, "notes", jsonString);
     }
 
     function makeQuill(quillContent) {
@@ -89,14 +89,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateQuill(quillContent, quill) {
-        console.log(quillContent);
+        console.log("Loading notes: ", quillContent);
         try {
-            quillContent = JSON.parse(quillContent);
-            quill.setContents(quillContent);
+            if (!quillContent || typeof quillContent !== 'string' || quillContent.trim() === '') {
+                quill.setContents([{ insert: '\n' }]);
+            } else {
+                const parsedContent = JSON.parse(quillContent);
+                quill.setContents(parsedContent);
+            }
             quill.history.clear();
         } catch (error) {
-            console.error("Inventaire non chargeable :'(");
-            console.error(error);
+            console.error("Notes non chargeables au format formatté, fallback :");
+            quill.setText(quillContent || "");
+            quill.history.clear();
         }
     }
 

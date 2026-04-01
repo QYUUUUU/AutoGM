@@ -4,7 +4,7 @@ import './bootstrap.min.js';
 
 //Conversation selection
 const conversation = document.getElementsByClassName("conversationid-rules");
-var conversationId = conversation.id;
+var conversationId = conversation.length > 0 ? parseInt(conversation[0].id) : null;
 
 const init = "Bonjour, posez-moi vos questions sur les règles du jeu GODS !";
 
@@ -62,34 +62,46 @@ async function lancementAPI() {
   addMessage(prompt, "User");
 
   // Define a variable outside the setTimeout() function to assign a value later
-  let typingMessage;
+  let typingMessage = null;
 
   // Show the typing message in 500 milliseconds to indicate the AI is processing
-  setTimeout(function () {
+  const typingTimer = setTimeout(function () {
     typingMessage = addTypingMessage();
   }, 500);
 
-  // Make a POST request to the discussion API endpoint with the user prompt as the body
-  const response = await fetch("/backend/agent", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ prompt, conversationId }),
-  });
+  try {
+    // Make a POST request to the discussion API endpoint with the user prompt as the body
+    const response = await fetch("/backend/rules", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt, conversationId }),
+    });
 
-  // Remove the typing message after the response is received
-  removeTypingMessage(typingMessage);
+    clearTimeout(typingTimer);
+    if (typingMessage) {
+      removeTypingMessage(typingMessage);
+    }
+    
+    if (!response.ok) {
+        throw new Error("Server Error");
+    }
 
-  // Enable user inputs after the API has finished processing
-  enableInputs()
+    // Parse the response as JSON
+    const data = await response.json();
+    addMessage(data["output"], "assistant");
 
-  // Parse the response as JSON
-  const data = await response.json();
-
-  addMessage(data["output"], "assistant");
-
-  ;
+  } catch (error) {
+    clearTimeout(typingTimer);
+    if (typingMessage) {
+      removeTypingMessage(typingMessage);
+    }
+    addMessage("Désolé, une erreur s'est produite lors de la communication avec l'assistant.", "assistant");
+  } finally {
+    // Enable user inputs after the API has finished processing
+    enableInputs();
+  }
 }
 
 function addTypingMessage() {
@@ -127,10 +139,12 @@ function addMessage(content, sender) {
   var messageContent = document.createElement('div');
   messageContent.classList.add('chat-message-content');
 
-  if (sender === 'User') {
-    message.classList.add('chat-message-right');
+  if (sender === "User") {
+    message.classList.add("chat-message-right");
+    messageContent.innerHTML = content.escape().replace(/\n/g, "<br>");
+  } else {
+    messageContent.innerHTML = typeof marked !== "undefined" ? marked.parse(content) : content.escape().replace(/\n/g, "<br>");
   }
-  messageContent.innerHTML = content.replace(/\n/g, '<br>');
 
   message.appendChild(messageContent);
   message.appendChild(createMessageInfo());

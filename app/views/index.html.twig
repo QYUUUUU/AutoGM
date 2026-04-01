@@ -101,7 +101,7 @@
                             <div id="caracteristic-dropdown" class="dropdown">
                                 <a data-value="puissance" href="#">Puissance</a>
                                 <a data-value="resistance" href="#">Résistance</a>
-                                <a data-value="precicion" href="#">Précision</a>
+                                <a data-value="precision" href="#">Précision</a>
                                 <a data-value="reflexes" href="#">Réflexes</a>
                                 <a data-value="connaissance" href="#">Connaissance</a>
                                 <a data-value="perception" href="#">Perception</a>
@@ -166,7 +166,7 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="results-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#results-tab-pane" href="#results-tab-pane" role="tab" aria-controls="results-tab-pane" aria-selected="true" style="font-weight: bold;">Résultats</a>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item d-none" role="presentation">
                 <a class="nav-link" id="assistant-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#assistant-tab-pane" href="#assistant-tab-pane" role="tab" aria-controls="assistant-tab-pane" aria-selected="false" style="font-weight: bold;">Interactions</a>
             </li>
             <li class="nav-item" role="presentation">
@@ -179,31 +179,37 @@
                 <div class="row h-100 mx-0">
                     <div class="col-md-6 h-100 pr-2 pl-0">
                         <div class="d-flex flex-column h-100">
-                        <div class="dice-results flex-fill mb-3" style="min-height: 300px;">
+                        <div class="dice-results mb-3 d-flex flex-column" style="flex: 1; min-height: 45vh; overflow: hidden;">
                             <div class="head-card square-tl">Résultats des dés</div>
-                            <div class="body-card" style="height: 100%; max-height: 400px; overflow-y: auto;"></div>
+                            <div class="body-card" style="flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 20px;"></div>
                         </div>
-                        <div class="inventory flex-fill">
-                            <div class="head-card">Inventaire</div>
-                            <div class="body-card">
-                                <textarea id="inventory-field" class="form-control" rows="8" placeholder="Votre inventaire ici...">{{ favoriteCharacter.character.inventory }}</textarea>
-                                <button class="btn btn-primary mt-2" id="save-inventory" style="background-color: #26282a; border-color: #26282a;">Sauvegarder l'inventaire</button>
+<div class="inventory d-flex flex-column" style="flex: 1; min-height: 45vh; overflow: hidden;" data-inventory="{{ favoriteCharacter.character.inventory | e('html_attr') }}" data-char-id="{{ favoriteCharacter.character.id_Character }}">
+                            <div class="head-card d-flex justify-content-between align-items-center">
+                                <span>Inventaire</span>
+                                <button class="btn btn-sm btn-outline-light" style="padding: 0 5px;" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="body-card p-2" id="inventory-list" style="flex: 1; min-height: 0; overflow-y: auto;">
+                                <!-- Item list will be injected here by JS -->
                             </div>
                         </div>
+
                         </div>
                     </div>
                     <div class="col-md-6 h-100 pl-2 pr-0">
                         <div class="d-flex flex-column h-100">
-                        <div class="notes-container h-100 flex-fill">
+                        <div class="notes-container flex-fill d-flex flex-column h-100" style="min-height: 250px;">
                             <div class="head-card square-tr">Notes</div>
-                            <div class="body-card h-100">
+                            <div class="body-card p-0" style="flex: 1; min-height: 0; overflow-y: auto;">
                                 <div class="background-quill h-100">
-                                    <div id="editor" style="height: 90%;">
+                                    <div id="editor" style="height: 100%;">
                                         <p>Hello World!</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                         </div>
                     </div>
                 </div>
@@ -222,10 +228,10 @@
                                 <div id="{{conversation.id}}" class="conversationid"></div>
                                 <div class="chat-area mt-2">
                                     <div class="container items-chat px-0">
-                                        <div id="prompt-form" class="row align-items-center mx-0">
-                                            <div class="d-flex justify-content-between textarea-chat w-100">
-                                                <textarea id="prompt-field" class="form-control" style="flex:1;" placeholder="Écrire un message..."></textarea>
-                                                <button id="send" class="send-button btn btn-primary ml-2"><i class="fas fa-paper-plane"></i> Envoyer</button>
+                                        <div id="prompt-form" class="row align-items-center mx-0 p-1 border shadow-sm" style="border-radius: 25px; background-color: #fff; margin-bottom: 5px;">
+                                            <div class="d-flex w-100 p-0 align-items-center">
+                                                <textarea id="prompt-field" class="form-control border-0 shadow-none m-0 p-2 overflow-hidden" rows="1" style="resize: none; background: transparent; outline: none; border-radius: 25px 0 0 25px;" placeholder="Écrire un message..."></textarea>
+                                                <button id="send" class="btn btn-dark rounded-circle border-0 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px; margin-left: 8px;"><i class="fas fa-paper-plane" style="margin-left: -1px;"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -243,10 +249,10 @@
                                 <div id="{{conversation.id}}" class="conversationid-rules"></div>
                                 <div class="chat-area mt-2">
                                     <div class="container items-chat px-0">
-                                        <div id="prompt-form-rules" class="row align-items-center mx-0">
-                                            <div class="d-flex justify-content-between textarea-chat w-100">
-                                                <textarea id="prompt-field-rules" class="form-control" style="flex:1;" placeholder="Posez vos questions sur les règles..."></textarea>
-                                                <button id="send-rules" class="send-button btn btn-primary ml-2"><i class="fas fa-paper-plane"></i> Envoyer</button>
+                                        <div id="prompt-form-rules" class="row align-items-center mx-0 p-1 border shadow-sm" style="border-radius: 25px; background-color: #fff; margin-bottom: 5px;">
+                                            <div class="d-flex w-100 p-0 align-items-center">
+                                                <textarea id="prompt-field-rules" class="form-control border-0 shadow-none m-0 p-2 overflow-hidden" rows="1" style="resize: none; background: transparent; outline: none; border-radius: 25px 0 0 25px;" placeholder="Posez vos questions sur les règles..."></textarea>
+                                                <button id="send-rules" class="btn btn-dark rounded-circle border-0 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px; margin-left: 8px;"><i class="fas fa-paper-plane" style="margin-left: -1px;"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -262,8 +268,125 @@
                 <div class="row h-100 mx-0">
                     <div class="col-12 h-100 px-0">
                         <div class="head-card square-tl square-tr">Groupe</div>
-                        <div class="body-card" style="height: 100%; max-height: 400px; overflow-y: auto;">
-                            En construction...
+                        <div class="body-card p-3" style="height: 100%; overflow-y: auto;">
+                            {% if favoriteCharacter.character.Groupe is defined and favoriteCharacter.character.Groupe %}
+                                <!-- The user is IN a group -->
+                                <h4>{{ favoriteCharacter.character.Groupe.nom }}</h4>
+                                <hr>
+                                <div class="row mb-3">
+                                    <div class="col-md-4 text-center">
+                                        <div class="badge bg-dark-gold text-gold w-100 fs-6 p-2">Niveau {{ favoriteCharacter.character.Groupe.niveau }}</div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="badge bg-dark-gold text-gold w-100 fs-6 p-2">Réputation: {{ favoriteCharacter.character.Groupe.reputation }}</div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="badge bg-dark-gold text-gold w-100 fs-6 p-2" id="groupe-dice-display" data-grp-id="{{ favoriteCharacter.character.Groupe.id }}" data-grp-niveau="{{ favoriteCharacter.character.Groupe.niveau }}">
+                                            Dés: {{ favoriteCharacter.character.Groupe.reserveDes }} / 
+                                            {% if favoriteCharacter.character.Groupe.niveau == 1 %}12{% elseif favoriteCharacter.character.Groupe.niveau == 2 %}14{% else %}16{% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 d-flex gap-2 justify-content-center">
+                                    <button class="btn btn-sm btn-gold" onclick="ajouterDesGroupe({{ favoriteCharacter.character.Groupe.id }}, {{ favoriteCharacter.character.Groupe.niveau }})">Ajouter 1 Dé</button>
+                                    <button class="btn btn-sm btn-outline-gold" onclick="depenserDesGroupe({{ favoriteCharacter.character.Groupe.id }})">Dépenser 1 Dé</button>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h5 class="m-0">Instinct: <span id="current-instinct-name">{{ favoriteCharacter.character.Groupe.instinctGroupe }}</span></h5>
+                                    </div>
+                                    <div class="p-3 bg-black-custom border border-gold rounded text-light" id="current-instinct-details">
+                                        <p><em>{{ favoriteCharacter.character.Groupe.capacitesInstinctGroupe }}</em></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3 mt-4 text-light p-3 border border-gold rounded bg-black-custom">
+                                    <h5 class="text-gold border-bottom border-gray pb-2"><i class="fas fa-book"></i> Règles : Perdre et Regagner des Dés de Réserve de Groupe</h5>
+                                    
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <h6 class="text-warning mt-2">Dépenses & Pertes</h6>
+                                        <ul class="small mb-0" style="list-style-type: none; padding-left: 0;">
+                                            <li><span class="text-secondary fw-bold">-1D</span> : Tension mineure (brouille, désaccord), ou Découragement (fatigue, faim, soif)</li>
+                                            <li><span class="text-danger">-2D à -3D</span> : Coup dur (vol, perte d'équipement, mauvaise nouvelle)</li>
+                                            <li><span class="text-secondary fw-bold">-3D</span> : Tension majeure (conflit, accusation grave)</li>
+                                            <li><span class="text-danger">-3D à -5D</span> : Interdit de l'Instinct enfreint</li>
+                                            <li><span class="text-secondary fw-bold">-5D</span> : Choc (mort d'un membre, trahison)</li>
+                                        </ul>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <h6 class="text-gold mt-2">Gains de Dés</h6>
+                                        <ul class="small mb-0" style="list-style-type: none; padding-left: 0;">
+                                            <li><span class="text-gold">+1D</span> : Bon moment partagé (repas, échange)</li>
+                                            <li><span class="text-gold">+1D à +2D</span> : Cohésion (action collective, esprit d'équipe)</li>
+                                            <li><span class="text-gold">+2D à +3D</span> : Communauté (réussite collective, harmonie)</li>
+                                            <li><span class="text-gold">+3D à +5D</span> : Principe de l'Instinct accompli</li>
+                                            <li><span class="text-gold">+5D à Max</span> : Accomplissement (Objectif majeur)</li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <p class="small text-muted mt-3 mb-0"><em>Note: Les principes et interdits suivis d'un astérisque (*) peuvent faire gagner ou perdre jusqu'à 4D dans chacune des Réserves s'ils sont significatifs pour le Groupe.</em></p>
+                                </div>
+                                <div class="mb-3">
+                                    <h5>Capacités de Groupe:</h5>
+                                    <ul>
+                                        <li><strong>Unité:</strong> +1D aux actions collectives</li>
+                                        <li><strong>Expertise partagée:</strong> +1 réussite si un membre du groupe possède la compétence (Expert)</li>
+                                        <li>{{ favoriteCharacter.character.Groupe.capacitesGroupe }}</li>
+                                    </ul>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-gold btn-sm" onclick="quitterGroupe({{ favoriteCharacter.character.id_Character }})">Quitter le groupe</button>
+                                </div>
+                            {% else %}
+                                <!-- The user is NOT in a group -->
+                                <p>Rejoignez un groupe existant ou créez-en un nouveau.</p>
+
+                                <h5>Rejoindre un groupe</h5>
+                                <div class="d-flex mb-4">
+                                    <select class="form-select me-2" id="group-select" style="min-width: 200px;">
+                                        {% if allGroupes is defined and allGroupes|length > 0 %}
+                                            {% for grp in allGroupes %}
+                                                <option value="{{ grp.id }}">{{ grp.nom }} (Niveau {{ grp.niveau }})</option>
+                                            {% endfor %}
+                                        {% else %}
+                                            <option value="">Aucun groupe disponible</option>
+                                        {% endif %}
+                                    </select>
+                                    <button class="btn btn-gold" onclick="rejoindreGroupe({{ favoriteCharacter.character.id_Character }})">Rejoindre</button>
+                                </div>
+
+                                <hr>
+
+                                <h5>Créer un groupe</h5>
+                                <form id="create-group-form">
+                                    <div class="mb-2">
+                                        <label>Nom du Groupe</label>
+                                        <input type="text" class="form-control bg-dark-gold text-light border-gold" id="new-group-name" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Instinct du Groupe</label>
+                                        <select class="form-select bg-dark-gold text-light border-gold" id="new-group-instinct" required>
+                                            <option value="architecte">L’Architecte</option>
+                                            <option value="epee">L’Épée</option>
+                                            <option value="fleau">Le Fléau</option>
+                                            <option value="gardien">Le Gardien</option>
+                                            <option value="homme">L’Homme</option>
+                                            <option value="main">La Main</option>
+                                            <option value="masque">Le Masque</option>
+                                            <option value="neant">Le Néant</option>
+                                            <option value="os">L’Os</option>
+                                            <option value="voyageur">Le Voyageur</option>
+                                        </select>
+                                    </div>
+                                    <div id="groupInstinctDescriptionBlock" class="p-2 mb-2 bg-secondary text-light rounded" style="display: none;">
+                                        <h6 id="groupInstinctTitle" class="mb-1 fw-bold"></h6>
+                                        <p id="groupInstinctText" class="mb-1 small" style="font-style: italic;"></p>
+                                        <div id="groupInstinctStats" class="small text-warning" style="border-top: 1px solid #666; padding-top: 5px; margin-top: 5px;"></div>
+                                    </div>
+                                    <button type="button" class="btn btn-gold mt-2" onclick="creerGroupe({{ favoriteCharacter.character.id_Character }})">Créer</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -272,6 +395,73 @@
     </div>
     </div>
 </div>
+<!-- Add Item Modal -->
+<div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content text-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addItemModalLabel">Ajouter un objet</h5>
+        <button type="button" class="close btn btn-link" data-bs-dismiss="modal" aria-label="Close" style="color: black; text-decoration: none; font-size: 1.5rem;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs" id="itemTabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="premade-item-tab" data-bs-toggle="tab" href="#premade-item" role="tab">Dans le manuel</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="custom-item-tab" data-bs-toggle="tab" href="#custom-item" role="tab">Objet personnalisé</a>
+          </li>
+        </ul>
+        <div class="tab-content mt-3" id="itemTabsContent">
+          <!-- Premade Item -->
+          <div class="tab-pane fade show active" id="premade-item" role="tabpanel">
+             <div class="form-group">
+                <label for="item-select">Sélectionner un objet</label>
+                <select id="item-select" class="form-control">
+                    <option value="">Sélectionnez...</option>
+                    {% for item in equipmentList %}
+                        <option value="{{ loop.index0 }}" 
+                                data-name="{{ item.name }}" 
+                                data-type="{{ item.type }}" 
+                                data-stats="{{ item.stats }}" 
+                                data-desc="{{ item.desc }}">
+                            {{ item.name }} ({{ item.type }}) - {{ item.price }} Or - Rareté {{ item.rarity }}
+                        </option>
+                    {% endfor %}
+                </select>
+             </div>
+          </div>
+          <!-- Custom Item -->
+          <div class="tab-pane fade" id="custom-item" role="tabpanel">
+             <div class="form-group">
+                 <label>Nom</label>
+                 <input type="text" id="custom-item-name" class="form-control">
+             </div>
+             <div class="form-group">
+                 <label>Type</label>
+                 <input type="text" id="custom-item-type" class="form-control" placeholder="Arme, Armure, Consommable...">
+             </div>
+             <div class="form-group">
+                 <label>Stats</label>
+                 <input type="text" id="custom-item-stats" class="form-control">
+             </div>
+             <div class="form-group">
+                 <label>Description</label>
+                 <textarea id="custom-item-desc" class="form-control" rows="2"></textarea>
+             </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" id="btn-save-item">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="ThreeJS" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1000; width: 100vw; height: 100vh;"></div>
 
 {# Librairies notes #}
@@ -285,4 +475,6 @@
 
 {# Librairies dés #}
 <script src="/js/bundle.js"></script>
+<script src="/js/dashboardInventory.js"></script>
+<script src="/js/dashboardGroupe.js"></script>
 {% endblock %}
