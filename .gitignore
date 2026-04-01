@@ -1,3 +1,9 @@
 node_modules
 .env.local
 .htpasswd
+# Local Datasets and Secrets
+.env
+*.pdf
+gods_book.txt
+group_instincts.txt
+group_instincts_full.txt
