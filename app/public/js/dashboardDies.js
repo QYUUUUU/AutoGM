@@ -2,7 +2,24 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon';
 import { OrbitControls } from 'OrbitControls';
 import Stats from 'stats';
-import { DiceManager, DiceD4, DiceD6, DiceD10, DiceD20 } from 'threejs-dice';
+import { DiceManager, DiceD4, DiceD6, DiceD8, DiceD10, DiceD12, DiceD20 } from 'threejs-dice';
+
+// --- D4 Math Topology Fix ---
+DiceD4.prototype.shiftUpperValue = function(t){
+    if (this.values === 4) {
+        let n = this.getUpsideValue();
+        let u=0; if(n===1)u=0; if(n===2)u=3; if(n===3)u=2; if(n===4)u=1;
+        let c = ['1','2','3','4'];
+        let ts = t.toString();
+        let s = c.indexOf(ts);
+        c[s] = c[u];
+        c[u] = ts;
+        this.faceTexts = [[], ["0","0","0"], [c[3], c[1], c[2]], [c[0], c[2], c[1]], [c[3], c[0], c[1]], [c[0], c[3], c[2]]];
+        this.object.material = this.getMaterials();
+        return;
+    }
+};
+// ----------------------------
 
 
 function updateDiceInput(diceType, action) {
@@ -209,11 +226,20 @@ export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, 
     console.log(diceCounts);
 
     // Add dice to the scene
+    let fakeDiceValues = [];
     for (let [type, numberThrow] of Object.entries(diceCounts)) {
+        let faces = parseInt(type.substring(1));
+        let isFake = ![4, 6, 8, 10, 12, 20].includes(faces);
+
         for (let i = 0; i < numberThrow; i++) {
-            let die = createDice(type, 0.8, "#2d2d2d", "#f0f0f0");
-            scene.add(die.getObject());
-            dice.push(die);
+            if (isFake) {
+                let value = Math.floor(Math.random() * faces) + 1;
+                fakeDiceValues.push({ dice: { values: faces }, value: value });
+            } else {
+                let die = createDice(type, 0.8, "#2d2d2d", "#f0f0f0");
+                scene.add(die.getObject());
+                dice.push(die);
+            }
         }
     }
 
@@ -238,8 +264,14 @@ export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, 
         diceValues.push({ dice: dice[i], value: value });
     }
     console.log(diceValues);
-    shareThrow(diceValues, relances, caracteristic, competence, thrownByAI);
-    DiceManager.prepareValues(diceValues);
+    const allShareValues = diceValues.concat(fakeDiceValues);
+    shareThrow(allShareValues, relances, caracteristic, competence, thrownByAI);
+    
+    if (diceValues.length > 0) {
+        DiceManager.prepareValues(diceValues);
+    } else {
+        DiceManager.throwRunning = false;
+    }
 
     // Make dice disappear after 8 seconds
     clearDiceTimeoutId = setTimeout(() => {
@@ -284,18 +316,24 @@ function render() {
 
 // Placeholder function for creating dice of different types
 function createDice(type, size, backColor, fontColor) {
-    // Assume we have a Dice class for each type of die
     switch (type) {
         case 'd4':
-            return new DiceD4({ size: size, backColor: backColor, fontColor: fontColor });
+            let dieD4 = new DiceD4({ size: size, backColor: backColor, fontColor: fontColor });
+            dieD4.faceTexts = [[], ["0","0","0"], ["4","2","3"], ["1","3","2"], ["4","1","2"], ["1","4","3"]];
+            dieD4.object.material = dieD4.getMaterials();
+            return dieD4;
         case 'd6':
             return new DiceD6({ size: size, backColor: backColor, fontColor: fontColor });
+        case 'd8':
+            return new DiceD8({ size: size, backColor: backColor, fontColor: fontColor });
         case 'd10':
             return new DiceD10({ size: size, backColor: backColor, fontColor: fontColor });
+        case 'd12':
+            return new DiceD12({ size: size, backColor: backColor, fontColor: fontColor });
         case 'd20':
             return new DiceD20({ size: size, backColor: backColor, fontColor: fontColor });
         default:
-            throw new Error('Unknown dice type');
+            throw new Error('Unknown dice type ' + type);
     }
 }
 
@@ -346,3 +384,4 @@ function shareThrow(dices, relances = 0, caracteristic = null, competence = null
 window.updateDiceInput = updateDiceInput;
 
 window.randomDiceThrow = randomDiceThrow;
+
