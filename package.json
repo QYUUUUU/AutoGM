@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@langchain/community": "^1.1.27",
+    "@langchain/core": "^1.1.38",
+    "@langchain/openai": "^1.4.1",
     "@prisma/client": "^4.15.0",
     "@quixo3/prisma-session-store": "^3.1.11",
     "bcrypt": "^5.1.0",
@@ -25,10 +28,10 @@
     "helmet": "^7.0.0",
     "hnswlib-node": "^1.4.2",
     "jsonwebtoken": "^9.0.0",
-    "langchain": "^0.0.121",
+    "langchain": "^0.1.28",
     "mysql2": "^3.20.0",
     "nginx": "^1.0.8",
-    "pdf-parse": "^1.1.1",
+    "pdf-parse": "^1.1.4",
     "three": "^0.124.0",
     "threejs-dice": "^1.1.0",
     "twig": "^1.16.0"

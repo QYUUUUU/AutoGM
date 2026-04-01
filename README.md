@@ -41,3 +41,18 @@ docker compose exec web npx prisma db push --schema=/app/app/prisma/schema.prism
 ```
 
 That's it! You're now ready to start using the project. Happy coding!
+
+### Frontend Build (Webpack)
+
+If you modify files inside the `app/public/js/` directory (for example, `dashboardDies.js` for 3D dice logic, or other entry points), you need to recompile the `bundle.js` file for the changes to take effect in the browser.
+
+To rebuild the frontend assets, use the following `npm` or `npx` command at the root of the project:
+
+```bash
+npx webpack --config webpack.config.js
+```
+Alternatively, you can rebuild things directly within the Docker container:
+```bash
+docker compose exec web npx webpack --config webpack.config.js
+```
+Make sure to hard-refresh your browser (Ctrl+F5) to load the newly compiled assets.
