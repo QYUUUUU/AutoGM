@@ -93,9 +93,14 @@
 
 /* Overlay to blend image smoothly into the dark card body */
 .overlay-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
   background: linear-gradient(to bottom, rgba(35, 43, 47, 0) 0%, rgb(35, 43, 47) 100%);
   pointer-events: none;
-  height: 60px; /* Positioned at the very base */
+  z-index: 1;
 }
 
 .body-presentation {
