@@ -1,110 +1,79 @@
-.character-card {
-  background-color: #232323;
-  margin: 20px 10px;
-  overflow: hidden;
-  position: relative;
-  flex: 0 0 calc(25% - 20px);
-  /* Adjust the width as needed */
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #E1E0DE;
-  border: none;
-}
-
-.character-card:hover {
-  color: #E1E0DE;
-  text-decoration: none;
-}
-
-#charabox {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.character-card:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  z-index: -1;
-  transform: rotate(-1deg);
-}
-
-.character-card h2 {
-  color: #fff;
-  font-size: 20px;
-  margin: 20px;
-}
-
-.character-card h3 {
-  color: #fff;
-  font-size: 17px;
-  margin: 20px;
-}
-
-
-.character-card p {
-  color: #fff;
-  font-size: 16px;
-  margin: 0 20px;
-}
-
-.character-card:hover {
-  transform: scale(1.03);
-}
-
-.character-card:hover:before {
-  transform: rotate(-10deg);
-}
-
-.newbutton {
-  text-align: center;
-}
-
-.plussign {
-  height: 70%;
-  width: auto;
-}
-
-main {
-  background-image: url("/images/book-image-2.jpg");
-  background-size: cover;
-  background-position: top left;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 100%;
+/* --- Characters Page Specifics --- */
+.characters-page-container {
+  min-height: 100vh;
+  padding: 40px 0;
   display: flex !important;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
-
-
-/* Cards */
-
-.card-custom>a>div {
-  border: solid #42403E 3px;
-  transition: box-shadow 0.2s ease;
+.header-section {
+  width: 100%;
 }
 
-.card-custom>div:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  /* Add a subtle shadow for better visual effect */
+.page-title {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  font-family: serif; /* Keep inline with standard RPG themes if applicable */
+}
+
+/* Cards Layout */
+#charabox {
+  max-width: 1400px;
+}
+
+.character-card.btn-create {
+  display: block;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.create-card-inner {
+  border: 2px dashed #555 !important;
+  background-color: rgba(35, 43, 47, 0.8) !important;
+  transition: all 0.3s ease;
   cursor: pointer;
+  min-height: 300px;
+}
+
+.create-card-inner:hover {
+  background-color: rgba(55, 63, 67, 0.9) !important;
+  border-color: #888 !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  transform: translateY(-5px);
+}
+
+.plus-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background-color: #444 !important;
+  transition: background-color 0.3s;
+}
+
+.create-card-inner:hover .plus-icon-wrapper {
+  background-color: #a33 !important; /* Theme red accent */
+}
+
+/* Character Item Cards */
+.character-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #333 !important;
+  min-height: 300px;
+}
+
+.character-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7) !important;
+  border-color: #666 !important;
 }
 
 .img-container {
   width: 100%;
-  height: 0;
-  padding-bottom: 56.25%;
-  /* 16:9 aspect ratio */
+  height: 250px; /* Fixed height for uniformity */
   position: relative;
   overflow: hidden;
+  background-color: #111;
 }
 
 .img-container img {
@@ -115,27 +84,43 @@ main {
   height: 100%;
   object-fit: cover;
   object-position: top;
-  /* This ensures the top of the image is shown */
+  transition: transform 0.5s ease;
+}
+
+.character-item:hover .img-container img {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Overlay to blend image smoothly into the dark card body */
+.overlay-gradient {
+  background: linear-gradient(to bottom, rgba(35, 43, 47, 0) 0%, rgb(35, 43, 47) 100%);
+  pointer-events: none;
 }
 
 .body-presentation {
-  color: rgb(236, 237, 238) !important;
   background-color: rgb(35, 43, 47);
-  overflow: hidden !important;
+  z-index: 2;
+  border-top: none;
 }
 
-.body-presentation:hover {
-  color: #fff;
+.body-presentation h2 {
+  font-family: "Cinzel", serif; /* Or whatever standard RPG font you use */
+  font-size: 1.5rem;
+  letter-spacing: 1px;
 }
 
-.body-presentation>h5 {
-  color: rgb(236, 237, 238) !important;
+.body-presentation p.small {
+  font-size: 0.85rem;
+  color: #aaa !important;
 }
 
-.body-presentation>p {
-  color: rgb(196, 203, 206) !important;
-}
-
-#charabox > div{
+/* Main background fixing */
+main {
+  background-image: url("/images/book-image-2.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   width: 100%;
+  min-height: 100vh;
 }

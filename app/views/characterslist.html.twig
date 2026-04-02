@@ -2,38 +2,60 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="/css/characterslist.css">
 {% endblock %}
 
 {% block body %}
-    <div id="charabox" class="card-body page">
-        <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <a href="/newcharacter" class="character-card bg-dark">
-                Créer
+<div class="characters-page-container">
+    <div class="header-section text-center mb-5">
+        <h1 class="page-title display-4 text-light mt-4">Vos Personnages</h1>
+        <p class="lead text-muted">Sélectionnez un héros pour poursuivre l'aventure ou créez-en un nouveau.</p>
+    </div>
+
+    <div id="charabox" class="container page">
+        <div class="row justify-content-center g-4">
+            
+            <!-- Carte Créer un personnage -->
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4 d-flex">
+                <a href="/newcharacter" class="character-card btn-create text-decoration-none w-100 shadow-sm">
+                    <div class="card h-100 create-card-inner border-0 bg-dark text-center py-5 d-flex flex-column justify-content-center align-items-center">
+                        <div class="plus-icon-wrapper rounded-circle bg-secondary d-flex justify-content-center align-items-center mb-3">
+                            <i class="fs-1 text-light">+</i>
+                        </div>
+                        <h3 class="text-light m-0 mt-2">Créer un Héros</h3>
+                    </div>
                 </a>
             </div>
+
             {% set i = 0 %}
             {% for character in characters %}
-            {% set i = i + 1 %}
-                <div class="col-md-2 mb-2 card-custom charactersheet" id="{{ character.id_Character }}">
-                    <div class="card h-100">
-                        <div class="img-container">
+                {% set i = i + 1 %}
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4 d-flex card-custom charactersheet" id="{{ character.id_Character }}">
+                    <div class="card h-100 w-100 shadow-sm border-0 character-item rounded-3 overflow-hidden bg-dark">
+                        <div class="img-container position-relative">
                             {% if character.genre == "femme" %}
-                            <img src="/images/characters/femme/femme-{{i}}.jpg" class="card-img-top" alt="Image 1">
+                                <img src="/images/characters/femme/femme-{{i}}.jpg" class="card-img-top w-100" alt="{{ character.nom }}">
                             {% else %}
-                            <img src="/images/characters/homme/homme-{{i}}.jpg" class="card-img-top" alt="Image 1">
+                                <img src="/images/characters/homme/homme-{{i}}.jpg" class="card-img-top w-100" alt="{{ character.nom }}">
                             {% endif %}
+                            <div class="overlay-gradient position-absolute bottom-0 start-0 w-100 h-50"></div>
                         </div>
-                        <div class="card-body body-presentation">
-                            <div>
-                                <h2>{{ character.nom }}</h2>
-                            </div>
+                        <div class="card-body body-presentation text-center d-flex flex-column justify-content-center py-4">
+                            <h2 class="card-title text-uppercase fw-bold m-0 text-light">{{ character.nom }}</h2>
+                            {% if character.origine or character.instinct %}
+                                <p class="text-muted small mt-2 mb-0">
+                                    {{ character.origine|default('Inconnu') }} 
+                                    {% if character.instinct %} • {{ character.instinct }}{% endif %}
+                                </p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             {% endfor %}
+
         </div>
     </div>
-   <script src="js/characterslist.js"></script>
-<link rel="stylesheet" href="css/characterslist.css">
+</div>
+
+<script src="/js/characterslist.js"></script>
 {% endblock %}
