@@ -300,28 +300,28 @@
                                     </div>
                                 </div>
                                 
-                                <div class="mb-3 mt-4 text-light p-3 border border-gold rounded bg-black-custom">
-                                    <h5 class="text-gold border-bottom border-gray pb-2"><i class="fas fa-book"></i> Règles : Perdre et Regagner des Dés de Réserve de Groupe</h5>
+                                <div class="mb-3 mt-4 text-light p-3 border border-secondary rounded bg-dark">
+                                    <h5 class="text-light border-bottom border-secondary pb-2"><i class="fas fa-book"></i> Règles : Perdre et Regagner des Dés de Réserve de Groupe</h5>
                                     
                                     <div class="row">
                                       <div class="col-md-6">
-                                        <h6 class="text-warning mt-2">Dépenses & Pertes</h6>
+                                        <!-- title --><h6 class="text-danger mt-2">Dépenses & Pertes</h6>
                                         <ul class="small mb-0" style="list-style-type: none; padding-left: 0;">
-                                            <li><span class="text-secondary fw-bold">-1D</span> : Tension mineure (brouille, désaccord), ou Découragement (fatigue, faim, soif)</li>
+                                            <li><span class="text-danger fw-bold">-1D</span> : Tension mineure (brouille, désaccord), ou Découragement (fatigue, faim, soif)</li>
                                             <li><span class="text-danger">-2D à -3D</span> : Coup dur (vol, perte d'équipement, mauvaise nouvelle)</li>
-                                            <li><span class="text-secondary fw-bold">-3D</span> : Tension majeure (conflit, accusation grave)</li>
+                                            <li><span class="text-danger fw-bold">-3D</span> : Tension majeure (conflit, accusation grave)</li>
                                             <li><span class="text-danger">-3D à -5D</span> : Interdit de l'Instinct enfreint</li>
-                                            <li><span class="text-secondary fw-bold">-5D</span> : Choc (mort d'un membre, trahison)</li>
+                                            <li><span class="text-danger fw-bold">-5D</span> : Choc (mort d'un membre, trahison)</li>
                                         </ul>
                                       </div>
                                       <div class="col-md-6">
-                                        <h6 class="text-gold mt-2">Gains de Dés</h6>
+                                        <!-- title --><h6 class="text-success mt-2">Gains de Dés</h6>
                                         <ul class="small mb-0" style="list-style-type: none; padding-left: 0;">
-                                            <li><span class="text-gold">+1D</span> : Bon moment partagé (repas, échange)</li>
-                                            <li><span class="text-gold">+1D à +2D</span> : Cohésion (action collective, esprit d'équipe)</li>
-                                            <li><span class="text-gold">+2D à +3D</span> : Communauté (réussite collective, harmonie)</li>
-                                            <li><span class="text-gold">+3D à +5D</span> : Principe de l'Instinct accompli</li>
-                                            <li><span class="text-gold">+5D à Max</span> : Accomplissement (Objectif majeur)</li>
+                                            <li><span class="text-success fw-bold">+1D</span> : Bon moment partagé (repas, échange)</li>
+                                            <li><span class="text-success fw-bold">+1D à +2D</span> : Cohésion (action collective, esprit d'équipe)</li>
+                                            <li><span class="text-success fw-bold">+2D à +3D</span> : Communauté (réussite collective, harmonie)</li>
+                                            <li><span class="text-success fw-bold">+3D à +5D</span> : Principe de l'Instinct accompli</li>
+                                            <li><span class="text-success fw-bold">+5D à Max</span> : Accomplissement (Objectif majeur)</li>
                                         </ul>
                                       </div>
                                     </div>
@@ -336,7 +336,7 @@
                                     </ul>
                                 </div>
                                 <div class="text-end">
-                                    <button class="btn btn-outline-gold btn-sm" onclick="quitterGroupe({{ favoriteCharacter.character.id_Character }})">Quitter le groupe</button>
+                                    <!-- Quitter button --><button style="color: #a32a2a; text-decoration: underline; background: none; border: none; padding: 0; font-size: 0.9em;" onclick="quitterGroupe({{ favoriteCharacter.character.id_Character }})">Quitter le groupe</button>
                                 </div>
                             {% else %}
                                 <!-- The user is NOT in a group -->
