@@ -275,27 +275,27 @@
                                 <hr>
                                 <div class="row mb-3">
                                     <div class="col-md-4 text-center">
-                                        <div class="badge bg-dark-gold text-gold w-100 fs-6 p-2">Niveau {{ favoriteCharacter.character.Groupe.niveau }}</div>
+                                        <div class="badge bg-dark border border-secondary text-light w-100 fs-6 p-2">Niveau {{ favoriteCharacter.character.Groupe.niveau }}</div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <div class="badge bg-dark-gold text-gold w-100 fs-6 p-2">Réputation: {{ favoriteCharacter.character.Groupe.reputation }}</div>
+                                        <div class="badge bg-dark border border-secondary text-light w-100 fs-6 p-2">Réputation: {{ favoriteCharacter.character.Groupe.reputation }}</div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <div class="badge bg-dark-gold text-gold w-100 fs-6 p-2" id="groupe-dice-display" data-grp-id="{{ favoriteCharacter.character.Groupe.id }}" data-grp-niveau="{{ favoriteCharacter.character.Groupe.niveau }}">
+                                        <div class="badge bg-dark border border-secondary text-light w-100 fs-6 p-2" id="groupe-dice-display" data-grp-id="{{ favoriteCharacter.character.Groupe.id }}" data-grp-niveau="{{ favoriteCharacter.character.Groupe.niveau }}">
                                             Dés: {{ favoriteCharacter.character.Groupe.reserveDes }} / 
                                             {% if favoriteCharacter.character.Groupe.niveau == 1 %}12{% elseif favoriteCharacter.character.Groupe.niveau == 2 %}14{% else %}16{% endif %}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mb-3 d-flex gap-2 justify-content-center">
-                                    <button class="btn btn-sm btn-gold" onclick="ajouterDesGroupe({{ favoriteCharacter.character.Groupe.id }}, {{ favoriteCharacter.character.Groupe.niveau }})">Ajouter 1 Dé</button>
-                                    <button class="btn btn-sm btn-outline-gold" onclick="depenserDesGroupe({{ favoriteCharacter.character.Groupe.id }})">Dépenser 1 Dé</button>
+                                    <button class="btn btn-sm btn-success" onclick="ajouterDesGroupe({{ favoriteCharacter.character.Groupe.id }}, {{ favoriteCharacter.character.Groupe.niveau }})">Ajouter 1 Dé</button>
+                                    <button class="btn btn-sm btn-danger" onclick="depenserDesGroupe({{ favoriteCharacter.character.Groupe.id }})">Dépenser 1 Dé</button>
                                 </div>
                                 <div class="mb-3">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <h5 class="m-0">Instinct: <span id="current-instinct-name">{{ favoriteCharacter.character.Groupe.instinctGroupe }}</span></h5>
                                     </div>
-                                    <div class="p-3 bg-black-custom border border-gold rounded text-light" id="current-instinct-details">
+                                    <div class="p-3 bg-dark border border-secondary rounded text-light" id="current-instinct-details">
                                         <p><em>{{ favoriteCharacter.character.Groupe.capacitesInstinctGroupe }}</em></p>
                                     </div>
                                 </div>
@@ -308,9 +308,9 @@
                                         <!-- title --><h6 class="text-danger mt-2">Dépenses & Pertes</h6>
                                         <ul class="small mb-0" style="list-style-type: none; padding-left: 0;">
                                             <li><span class="text-danger fw-bold">-1D</span> : Tension mineure (brouille, désaccord), ou Découragement (fatigue, faim, soif)</li>
-                                            <li><span class="text-danger">-2D à -3D</span> : Coup dur (vol, perte d'équipement, mauvaise nouvelle)</li>
+                                            <li><span class="text-danger fw-bold">-2D à -3D</span> : Coup dur (vol, perte d'équipement, mauvaise nouvelle)</li>
                                             <li><span class="text-danger fw-bold">-3D</span> : Tension majeure (conflit, accusation grave)</li>
-                                            <li><span class="text-danger">-3D à -5D</span> : Interdit de l'Instinct enfreint</li>
+                                            <li><span class="text-danger fw-bold">-3D à -5D</span> : Interdit de l'Instinct enfreint</li>
                                             <li><span class="text-danger fw-bold">-5D</span> : Choc (mort d'un membre, trahison)</li>
                                         </ul>
                                       </div>
@@ -336,7 +336,7 @@
                                     </ul>
                                 </div>
                                 <div class="text-end">
-                                    <!-- Quitter button --><button style="color: #a32a2a; text-decoration: underline; background: none; border: none; padding: 0; font-size: 0.9em;" onclick="quitterGroupe({{ favoriteCharacter.character.id_Character }})">Quitter le groupe</button>
+                                    <!-- Quitter button --><button style="color: #8b0000; text-decoration: underline; background: none; border: none; padding: 0; font-size: 0.9em;" onclick="quitterGroupe({{ favoriteCharacter.character.id_Character }})">Quitter le groupe</button>
                                 </div>
                             {% else %}
                                 <!-- The user is NOT in a group -->
@@ -353,7 +353,7 @@
                                             <option value="">Aucun groupe disponible</option>
                                         {% endif %}
                                     </select>
-                                    <button class="btn btn-gold" onclick="rejoindreGroupe({{ favoriteCharacter.character.id_Character }})">Rejoindre</button>
+                                    <button class="btn btn-success" onclick="rejoindreGroupe({{ favoriteCharacter.character.id_Character }})">Rejoindre</button>
                                 </div>
 
                                 <hr>
@@ -362,11 +362,11 @@
                                 <form id="create-group-form">
                                     <div class="mb-2">
                                         <label>Nom du Groupe</label>
-                                        <input type="text" class="form-control bg-dark-gold text-light border-gold" id="new-group-name" required>
+                                        <input type="text" class="form-control bg-dark text-light border-secondary" id="new-group-name" required>
                                     </div>
                                     <div class="mb-2">
                                         <label>Instinct du Groupe</label>
-                                        <select class="form-select bg-dark-gold text-light border-gold" id="new-group-instinct" required>
+                                        <select class="form-select bg-dark text-light border-secondary" id="new-group-instinct" required>
                                             <option value="architecte">L’Architecte</option>
                                             <option value="epee">L’Épée</option>
                                             <option value="fleau">Le Fléau</option>
@@ -384,7 +384,7 @@
                                         <p id="groupInstinctText" class="mb-1 small" style="font-style: italic;"></p>
                                         <div id="groupInstinctStats" class="small text-warning" style="border-top: 1px solid #666; padding-top: 5px; margin-top: 5px;"></div>
                                     </div>
-                                    <button type="button" class="btn btn-gold mt-2" onclick="creerGroupe({{ favoriteCharacter.character.id_Character }})">Créer</button>
+                                    <button type="button" class="btn btn-success mt-2" onclick="creerGroupe({{ favoriteCharacter.character.id_Character }})">Créer</button>
                                 </form>
                             {% endif %}
                         </div>
