@@ -18,7 +18,7 @@
     "@quixo3/prisma-session-store": "^3.1.11",
     "bcrypt": "^5.1.0",
     "connect-pg-simple": "^9.0.0",
-    "csurf": "^1.2.2",
+    "csurf": "^1.11.0",
     "discord-oauth2": "^2.11.0",
     "discord.js": "^14.12.1",
     "dotenv": "^16.0.3",
