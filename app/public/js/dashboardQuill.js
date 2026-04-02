@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateQuill(quillContent, quill) {
-        console.log("Loading notes: ", quillContent);
+
         try {
             if (!quillContent || typeof quillContent !== 'string' || quillContent.trim() === '') {
                 quill.setContents([{ insert: '\n' }]);

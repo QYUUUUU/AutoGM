@@ -45,5 +45,5 @@ app.use('/backend', backendRoutes);
 app.use('/admin', adminRoutes);
 
 app.listen(80, () => {
-  console.log('Server started on port 80');
+
 });

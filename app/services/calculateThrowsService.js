@@ -46,7 +46,6 @@ export function getThrowsByStats(character, modifier, competence, caracteristic)
 
     // Check if the armor is too heavy, maybe it gives negative modifier on "reflexes" or "discretion" (though here we just pass them naturally or leave that up to DM, typically armor malus applies to physical stats). Let's implement standard if needed. But mainly we just provide the damage dice.
     
-    console.log(totalDice, relances, extraDice);
     return { totalDice, relances, extraDice };
 }
 
@@ -112,7 +111,7 @@ function getMalus(character, competence, caracteristique) {
             malusCaracteristique = 'malussocial';
             break;
         default:
-            console.log("Malus not found for caracteristic: " + caracteristique)
+            // Malus not found for caracteristic
             break;
     }
 
@@ -163,7 +162,7 @@ function getMalus(character, competence, caracteristique) {
             malusCompetence = 'malusinconnu';
             break;
         default:
-            console.log("Malus not found for competence: " + competence)
+            // Malus not found for competence
             return "ERROR";
     }
 

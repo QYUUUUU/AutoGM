@@ -315,7 +315,7 @@ router.post('/create-character', async (req, res) => {
           )
         },
       });
-      console.log(newCharacter);
+
       // Respond with a success message or the created character object
       res.status(201).json(newCharacter);
     } catch (error) {
@@ -710,7 +710,7 @@ router.put('/throw', async (req, res) => {
         return res.status(404).json({ error: 'Character not found' });
       }
       const result = getThrowsByStats(character, modifier, competence, caracteristic);
-      console.log(result)
+
       return res.json(result);
     } catch (error) {
       console.error(error);
@@ -758,7 +758,7 @@ router.put('/share/throw', async (req, res) => {
     return res.status(400).json({ error: 'Missing required parameters in the request body.' });
   }
 
-  console.log("prompt:", rollContent)
+
 
   if (id_User) {
     try {
@@ -769,7 +769,7 @@ router.put('/share/throw', async (req, res) => {
 
       const character = user.character;
 
-      console.log(character);
+
 
       const roll = await prisma.roll.create({
         data: {
@@ -806,7 +806,7 @@ router.put('/share/throw', async (req, res) => {
 
 router.get('/stream/rolls', async (req, res) => {
   const id_User = req.session.userId;
-  console.log("SSE /stream/rolls requested by user:", id_User);
+
   if (!id_User) return res.status(401).send("Unauthorized");
   
   try {
@@ -817,7 +817,7 @@ router.get('/stream/rolls', async (req, res) => {
       const character = user?.character;
       const groupeId = character?.groupeId;
 
-      console.log("SSE /stream/rolls group:", groupeId);
+
       res.setHeader('Content-Type', 'text/event-stream');
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Connection', 'keep-alive');
@@ -835,7 +835,7 @@ router.get('/stream/rolls', async (req, res) => {
       rollClients.add(client);
 
       req.on('close', () => {
-          console.log("SSE closed for user:", id_User);
+
           clearInterval(heartbeat);
           rollClients.delete(client);
       });
@@ -873,7 +873,7 @@ router.put('/fetch/rolls', async (req, res) => {
         }
       });
 
-      console.log(rolls);
+
 
       return res.json(rolls);
     } catch (error) {

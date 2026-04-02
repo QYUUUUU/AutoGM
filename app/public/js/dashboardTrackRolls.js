@@ -20,7 +20,7 @@ async function fetchRolls() {
         })
         .then(responseData => {
             // Handle successful response
-            console.log(responseData)
+
             showRollOnDashboard(responseData); // Appeler votre fonction avec l'objet diceCounts
         })
         .catch(error => {

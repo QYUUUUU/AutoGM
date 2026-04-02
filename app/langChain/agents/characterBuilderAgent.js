@@ -137,7 +137,7 @@ export const startMain = async (question) => {
 
   const result = await executor.call({ input });
 
-  console.log(`Got output ${result.output}`);
+
 
   return result;
 };

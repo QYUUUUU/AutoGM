@@ -7,7 +7,7 @@ const router = Router();
 // Register a new user
 router.post('/register', async (req, res) => {
   const { pseudo, email, password } = req.body;
-  console.log(req.body);
+
   // Perform form validation
   if (!pseudo || !email || !password) {
     return res.status(400).render('../views/register.html.twig', { error: 'All fields are required' });

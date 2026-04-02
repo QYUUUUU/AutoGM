@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const competenceInput = document.getElementById("dropdown-input");
     const caracteristicInput = document.getElementById("caracteristic-input");
     statsSendButton.addEventListener("click", () => {
-        console.log("triggered")
+
         const url = '/throw';
 
         // Updated payload to be sent in the request body
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(responseData => {
                 // Handle successful response
-                console.log(responseData)
+
                 let diceCounts = { "d10": responseData.totalDice };
                 if (responseData.extraDice) {
                     for (let [dType, num] of Object.entries(responseData.extraDice)) {

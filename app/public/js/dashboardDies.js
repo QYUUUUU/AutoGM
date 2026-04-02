@@ -96,7 +96,7 @@ function initWorld() {
     //Container
     container = document.getElementById('ThreeJS');
 
-    console.log(container.offsetWidth, container.offsetHeight);
+
     // CAMERA
     var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
     var VIEW_ANGLE = 20, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.01, FAR = 20000;
@@ -223,7 +223,7 @@ export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, 
 
     dice = [];
 
-    console.log(diceCounts);
+
 
     // Add dice to the scene
     let fakeDiceValues = [];
@@ -263,7 +263,7 @@ export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, 
         trimmedValues.push({ dice: dice[i].constructor.name, value: value });
         diceValues.push({ dice: dice[i], value: value });
     }
-    console.log(diceValues);
+
     const allShareValues = diceValues.concat(fakeDiceValues);
     shareThrow(allShareValues, relances, caracteristic, competence, thrownByAI);
     
@@ -341,16 +341,16 @@ function createDice(type, size, backColor, fontColor) {
 function shareThrow(dices, relances = 0, caracteristic = null, competence = null, thrownByAI = false) {
 
     dices.forEach(item => {
-        console.log("am trying");
-        console.log(item);
-        console.log(item["dice"]["values"]);
+
+
+
     });
     const result = dices.map(item => ({
         value: item.dice.values,
         values: item.value
     }));
 
-    console.log("result = ", result)
+
 
     const url = '/share/throw';
 
@@ -371,7 +371,7 @@ function shareThrow(dices, relances = 0, caracteristic = null, competence = null
     })
         .then(response => {
             if (response.ok) {
-                console.log(response.json()); // Parse JSON response
+
             } else {
                 console.error(response.status, response.statusText);
             }

@@ -56,7 +56,7 @@ export class GodsLoreChain extends BaseChain {
 
 async function getVectorStore() {
   // Load the vector store from the same directory
-  console.log(__dirname);
+
   const directory = "./app/langChain/data/VectorStores/pdf/";
   const loadedVectorStore = await HNSWLib.load(
     directory,

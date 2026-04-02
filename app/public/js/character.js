@@ -307,7 +307,7 @@ function buildPage() {
       .then(response => {
         if (response.ok) {
           // Handle successful response
-          console.log(`Character field ${field} for ID ${id} updated successfully.`);
+
         } else {
           console.error(`Error updating ${field} for Character with ID ${id}`);
           console.error(response.status, response.statusText);
@@ -322,9 +322,9 @@ function buildPage() {
 
   function updateInventory(quill) {
     var contents = quill.getContents();
-    console.log(contents)
+
     const jsonString = JSON.stringify(contents);
-    console.log(jsonString)
+
     updateCharacterField(id_Character, "notes", jsonString);
   }
 
@@ -451,7 +451,7 @@ function buildPage() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data)
+
       return data;
     } catch (error) {
       console.error(error);
@@ -869,7 +869,7 @@ function buildPage() {
 
         if (legere) {
           if (legere !== 0 && legere !== null) {
-            console.log("lost in the speed");
+
             document.getElementById('legerecircle' + legere).click();
           }
         } else {
@@ -881,7 +881,7 @@ function buildPage() {
 
         if (grave) {
           if (grave !== 0 && grave !== null) {
-            console.log("lost in the speed");
+
             document.getElementById('gravecircle' + grave).click();
           }
         } else {
@@ -892,7 +892,7 @@ function buildPage() {
 
         if (mortelle) {
           if (mortelle !== 0 && mortelle !== null) {
-            console.log("lost in the speed");
+
             document.getElementById('mortellecircle' + mortelle).click();
           }
         } else {
