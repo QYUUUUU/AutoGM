@@ -20,11 +20,31 @@
                 </div>
                 <div class="form-group">
                     <label for="genre">Genre:</label>
-                    <select name="genre">
+                    <select id="genreSelect" name="genre">
                         <option value="homme">Homme</option>
                         <option value="femme">Femme</option>
-                        <option value="femme">Autres</option>
                     </select>                
+                </div>
+                <div class="form-group">
+                    <label>Avatar:</label>
+                    <div id="avatar-selection" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:15px; border:1px solid #444; padding:10px; justify-content: center;">
+                        <!-- JS populate -->
+                    </div>
+                    <label>Ou envoyer une image (prioritaire) :</label>
+                    <div class="custom-file-upload">
+                        <label for="custom_avatar" class="file-upload-btn">
+                            Choisir un fichier
+                        </label>
+                        <span id="file-chosen">Aucun fichier choisi</span>
+                        <input type="file" id="custom_avatar" accept="image/*" style="display: none;">
+                    </div>
+                    <input type="hidden" name="avatar_preset" id="avatar_preset" value="/images/characters/homme/homme-1.jpg">
+                    <input type="hidden" name="imageData" id="imageData" value="">
+                    
+                    <div style="margin-top: 15px;">
+                        <p>Aperçu de l'avatar sélectionné :</p>
+                        <img id="avatar_preview" src="/images/characters/homme/homme-1.jpg" style="max-width:150px; max-height:150px; border-radius:5px; border:1px solid #666; object-fit:cover;">
+                    </div>
                 </div>
             </div>
             <div class="button-group">
@@ -53,9 +73,9 @@
                     <div id="signeastroDescriptionBlock" class="originDescription" style="margin-top: 20px;">
                         <div class='row'>
                             <div class="textorigin col-12">
-                                <h3 id="signeastroTitle">Le Loup</h3>
-                                <p id="signeastroStat" style="font-weight: bold; color: #a33;">Compétence bonus : Faune</p>
-                                <p id="signeastroText">Les gens nés sous le signe du Loup sont persévérants, prudents et solidaires, ce sont des idéalistes fidèles à leurs amis. Ils ressentent également un lien profond avec la nature, ce qui a tendance à orienter le choix de leur profession.</p>
+                                <h3 id="signeastroTitle"></h3>
+                                <p id="signeastroStat" style="font-weight: bold; color: #a33;"></p>
+                                <p id="signeastroText"></p>
                             </div>
                         </div>
                     </div>
@@ -94,11 +114,8 @@
                             <img id="bannerImage" class="bannerimage" src="/images/banners/banneraon.png" alt="Banner">
                         </div>
                         <div class="textorigin col-9">
-                            <h3 id="originTitle">Aon</h3>
-                            <p id="originText">
-                                Aux yeux du reste du monde, les insulaires d’Aon sont des gens taiseux, vêtus de couleurs ternes, qui vivent dans un archipel pluvieux. Ils forment un peuple sévère, quittant rarement ses îles natales, si ce n’est pour se livrer à la piraterie. Les charpentiers qui construisent les bateaux d’Aon sont renommés, mais plus encore les maîtres-forgerons, ainsi que les Hommes d’Acier, seuls à connaître le secret pour obtenir l’Acier Véritable, métal incomparable dans lequel sont forgées des épées rarissimes.<br>
-                                S’ils ne s’opposent pas à ce que les étrangers accostent dans leurs ports, les gens d’Aon ne se montrent guère hospitaliers. Qui plus est, la rigueur du climat, le caractère farouche des autochtones et le peu d’importance qu’ils attachent à la cuisine ne contribuent pas à rendre leurs auberges attrayantes. Néanmoins, ceux qui parviennent à se lier aux natifs d’Aon découvrent rapidement des gens attentifs, dotés d’une ironie tranquille et d’une parole on ne peut plus fiable. Derrière leur froideur et leurs manières frustes, les habitants d’Aon sont des gens sincères qui savent apprécier les joies simples.
-                            </p>
+                            <h3 id="originTitle"></h3>
+                            <p id="originText"></p>
                         </div>
                     </div>
                 </div>
@@ -704,13 +721,13 @@
             <div class="form-lines">
                 <h3>Équipement</h3>
                 <p>Choisissez 5 pièces d'équipement de rareté 6 ou moins. Vous commencez également avec 15 Sabiirihs d'Argent.</p>
-                <div class="equipment-list" style="max-height: 400px; overflow-y: auto;">
+                <div class="equipment-list">
                     {% for item in equipment %}
                         {% if item.rarity <= 6 %}
-                        <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" name="equipments[]" value="{{ item.name }}" class="equip-checkbox">
-                            <label style="margin: 0;">{{ item.name }} (Rareté: {{ item.rarity }}, Type: {{ item.type }})</label>
-                        </div>
+                        <label class="form-group equipment-item-label" style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                            <input type="checkbox" name="equipments[]" value="{{ item.name }}" class="equip-checkbox custom-checkbox">
+                            <span style="margin: 0;">{{ item.name }} <span style="color: #888;">(Rareté: {{ item.rarity }}, Type: {{ item.type }})</span></span>
+                        </label>
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -743,8 +760,8 @@
                 <div id="instinctDescriptionBlock" class="originDescription" style="margin-top: 20px;">
                     <div class='row'>
                         <div class="textorigin col-12">
-                            <h3 id="instinctTitle">L’Architecte</h3>
-                            <p id="instinctText">L'Architecte planifie et construit. Que serait la civilisation sans lui ? Il bâtit des cités aux tours effleurant les cieux, dernier rempart face au chaos qui menace d'engloutir le monde.</p>
+                            <h3 id="instinctTitle"></h3>
+                            <p id="instinctText"></p>
                         </div>
                     </div>
                 </div>
@@ -757,6 +774,7 @@
         </div>
     </div>
 </div>
-   <script src="js/newcharacter.js"></script>
-<link rel="stylesheet" href="css/newcharacter.css">
+   <script src="/js/character_data.js"></script>
+   <script src="/js/newcharacter.js"></script>
+<link rel="stylesheet" href="/css/newcharacter.css">
 {% endblock %}

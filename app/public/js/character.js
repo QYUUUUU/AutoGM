@@ -464,6 +464,60 @@ function buildPage() {
       document.getElementById('nom').value = data.nom;
       document.getElementById('age').value = data.age;
       document.getElementById('genre').value = data.genre;
+      
+      const avatarDisplay = document.getElementById('avatar_display');
+      if (avatarDisplay) {
+        if (data.avatar) {
+            avatarDisplay.src = data.avatar;
+            avatarDisplay.style.display = 'inline-block';
+        } else if (data.genre) {
+            avatarDisplay.src = `/images/characters/${data.genre}/${data.genre}-1.jpg`;
+            avatarDisplay.style.display = 'inline-block';
+        }
+      }
+      
+      const btnChangeAvatar = document.getElementById('btn_change_avatar');
+      const avatarUpload = document.getElementById('avatar_upload');
+      
+      if (btnChangeAvatar && avatarUpload) {
+          btnChangeAvatar.addEventListener('click', () => {
+              avatarUpload.click();
+          });
+      }
+      
+      if (avatarUpload) {
+          avatarUpload.addEventListener('change', function(e) {
+              const file = e.target.files[0];
+              if (file) {
+                  const reader = new FileReader();
+                  reader.onload = function(evt) {
+                      const imageData = evt.target.result;
+                      avatarDisplay.src = imageData;
+                      
+                      const url = `/Character`;
+                      const bodyData = {
+                          id: id_Character,
+                          field: 'avatar',
+                          value: imageData
+                      };
+                      
+                      fetch(url, {
+                          method: 'PUT',
+                          headers: {
+                              'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify(bodyData)
+                      }).then(res => res.json()).then(resData => {
+                          if (resData.avatar) {
+                              avatarDisplay.src = resData.avatar; // Update with the new backend path
+                          }
+                      }).catch(err => console.error("Avatar upload failed", err));
+                  };
+                  reader.readAsDataURL(file);
+              }
+          });
+      }
+      
       document.getElementById('instinct').value = data.instinct;
       document.getElementById('signeastro').value = data.signeastro;
       document.getElementById('origine').value = data.origine;

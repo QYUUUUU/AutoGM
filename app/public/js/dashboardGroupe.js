@@ -100,7 +100,7 @@ async function depenserDesGroupe(grpId) {
         let current = parseInt(parts[1]);
         let max = maxMatch ? maxMatch[1] : 12;
         if(current <= 0) return alert("La réserve est vide !");
-        if(!confirm("Le groupe est-il d'accord pour dépenser ce dé ?")) return;
+        
         
         current--;
         try {
@@ -222,12 +222,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const detailsBox = document.getElementById('current-instinct-details');
             detailsBox.innerHTML = `
                 <p class="mb-2"><em>${desc.text}</em></p>
-                <div class="small mt-2" style="border-top: 1px solid #444; padding-top: 10px;">
-                    <p class="mb-1"><span class="text-secondary fw-bold">Exemples de Groupe :</span> ${desc.exemples}</p>
+                <div class=" mt-2" style="border-top: 1px solid #444; padding-top: 10px;">
+                    <p class="mb-1"><span class="text-light fw-bold">Exemples de Groupe :</span> ${desc.exemples}</p>
                     <p class="mb-1"><span class="text-gold fw-bold">Principes :</span> ${desc.principes}</p>
-                    <p class="mb-1"><span class="text-secondary fw-bold">Interdits :</span> ${desc.interdits}</p>
+                    <p class="mb-1"><span class="text-light fw-bold">Interdits :</span> ${desc.interdits}</p>
                 </div>
-                <div class="small text-gold mt-2 pt-2" style="border-top: 1px solid #d4af37;">
+                <div class=" text-gold mt-2 pt-2" style="border-top: 1px solid #d4af37;">
                     <i class="fas fa-bolt"></i> ${desc.stats}
                 </div>
             `;
@@ -244,10 +244,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById('groupInstinctTitle').innerText = desc.title;
                 document.getElementById('groupInstinctText').innerHTML = `
                     <p class="mb-2">${desc.text}</p>
-                    <div class="small mt-2" style="border-top: 1px solid #444; padding-top: 10px;">
-                        <p class="mb-1"><span class="text-secondary fw-bold">Exemples de Groupe :</span> ${desc.exemples}</p>
+                    <div class=" mt-2" style="border-top: 1px solid #444; padding-top: 10px;">
+                        <p class="mb-1"><span class="text-light fw-bold">Exemples de Groupe :</span> ${desc.exemples}</p>
                         <p class="mb-1"><span class="text-gold fw-bold">Principes :</span> ${desc.principes}</p>
-                        <p class="mb-1"><span class="text-secondary fw-bold">Interdits :</span> ${desc.interdits}</p>
+                        <p class="mb-1"><span class="text-light fw-bold">Interdits :</span> ${desc.interdits}</p>
                     </div>`;
                 document.getElementById('groupInstinctStats').innerText = desc.stats;
                 block.style.display = 'block';

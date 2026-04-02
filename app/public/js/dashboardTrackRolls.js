@@ -62,7 +62,16 @@ function showRollOnDashboard(rolls) {
                 aiBadge = ` <span style="color: #c7a972; font-size: 0.7em; font-weight: bold; margin-left: 8px; border: 1px solid #c7a972; padding: 1px 4px; border-radius: 3px; vertical-align: middle;">AI</span>`;
             }
 
-            nameHeader.innerHTML = `<i class="fas fa-user-circle"></i> ${characterName}${statLabel}${aiBadge}`;
+            let avatarImg = '<i class="fas fa-user-circle"></i>';
+            if (roll.Character) {
+                if (roll.Character.avatar && roll.Character.avatar !== "") {
+                    avatarImg = `<img src="${roll.Character.avatar}" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(199, 169, 114, 0.4); margin-right: 5px; vertical-align: middle;">`;
+                } else if (roll.Character.genre) {
+                    avatarImg = `<img src="/images/characters/${roll.Character.genre}/${roll.Character.genre}-1.jpg" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(199, 169, 114, 0.4); margin-right: 5px; vertical-align: middle;">`;
+                }
+            }
+
+            nameHeader.innerHTML = `${avatarImg} ${characterName}${statLabel}${aiBadge}`;
             
             const textRoll = document.createElement("p");
             

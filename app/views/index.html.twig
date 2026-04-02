@@ -25,7 +25,7 @@
                 </div>
                 <div class="body-card flex-fill" style="overflow: visible;">
                     <div class="options-section mb-4 pb-3 border-bottom">
-                        <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Personnage & Équipement</h6>
+                        <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Personnage & Équipement</h6>
                         <div class="character-selection">
                             Select a Character : 
                             <select id="favoriteCharacter" class="select">
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="options-section mb-4 pb-3 border-bottom">
-                        <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Lancer Libre</h6>
+                        <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Lancer Libre</h6>
                         <div class="dice-increments">
                         <div class="row align-items-center justify-content-center">
                             <div class="d4">
@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="options-section mb-3">
-                        <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Test de Compétence</h6>
+                        <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Test de Compétence</h6>
                         <div class="dice-statistics">
                         <div class="input-field dropdown-container">
                             <label for="caracteristic-input">Caractéristique :</label>
@@ -275,30 +275,30 @@
                             <h4 class="fw-bold mb-3"><i class="fas fa-paw"></i> Capacité d'Instinct</h4>
                             <div class="mb-4 p-3 bg-dark border border-secondary rounded text-light">
                                 <h5 class="mb-1">Instinct : <span class="text-success" id="nom-instinct">{{ favoriteCharacter.character.instinct|default("Aucun instinct sélectionné") }}</span></h5>
-                                <p id="desc-instinct" class="text-muted small mb-3 fst-italic" style="border-bottom: 1px solid #444; padding-bottom: 10px;"></p>
+                                <p id="desc-instinct" class="text-light  mb-3 fst-italic" style="border-bottom: 1px solid #444; padding-bottom: 10px;"></p>
                                 
                                 {% if favoriteCharacter.character.capaciteInstinct1 %}
-                                <p class="mb-2"><strong><span id="nom-cap-1">{{ favoriteCharacter.character.capaciteInstinct1 }}</span>:</strong><br><span id="desc-cap-1" class="text-muted small"></span></p>
+                                <p class="mb-2"><strong><span id="nom-cap-1">{{ favoriteCharacter.character.capaciteInstinct1 }}</span>:</strong><br><span id="desc-cap-1" class="text-light "></span></p>
                                 {% else %}
-                                <p class="mb-2 text-muted small">Aucune capacité d'instinct sélectionnée.</p>
+                                <p class="mb-2 text-light ">Aucune capacité d'instinct sélectionnée.</p>
                                 {% endif %}
                                 
                                 
                             </div>
                             
                             <h4 class="fw-bold mt-5 mb-1"><i class="fas fa-globe"></i> Origine : <span class="text-warning" id="nom-origine">{{ favoriteCharacter.character.origine|default("Aucune") }}</span></h4>
-                            <p id="desc-origine" class="text-muted small mb-3 fst-italic text-light" style="padding-left: 10px;"></p>
+                            <p id="desc-origine" class="text-light  mb-3 fst-italic text-light" style="padding-left: 10px;"></p>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
                                         <h5 class="text-success border-bottom border-secondary pb-2"><i class="fas fa-plus-circle"></i> Avantage d'origine</h5>
-                                        <p class="mb-0"><strong><span id="nom-avantage">{{ favoriteCharacter.character.avantage ? favoriteCharacter.character.avantage : 'Aucun avantage' }}</span></strong><br><span id="desc-avantage" class="text-muted small"></span></p>
+                                        <p class="mb-0"><strong><span id="nom-avantage">{{ favoriteCharacter.character.avantage ? favoriteCharacter.character.avantage : 'Aucun avantage' }}</span></strong><br><span id="desc-avantage" class="text-light "></span></p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
                                         <h5 class="text-danger border-bottom border-secondary pb-2"><i class="fas fa-minus-circle"></i> Désavantage d'origine</h5>
-                                        <p class="mb-0"><strong><span id="nom-desavantage">{{ favoriteCharacter.character.desavantage ? favoriteCharacter.character.desavantage : 'Aucun désavantage' }}</span></strong><br><span id="desc-desavantage" class="text-muted small"></span></p>
+                                        <p class="mb-0"><strong><span id="nom-desavantage">{{ favoriteCharacter.character.desavantage ? favoriteCharacter.character.desavantage : 'Aucun désavantage' }}</span></strong><br><span id="desc-desavantage" class="text-light "></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -332,8 +332,12 @@
                                     </div>
                                 </div>
                                 <div class="mb-4 d-flex justify-content-evenly mt-3">
-                                    <button class="btn btn-success px-4 py-2 fw-bold" onclick="ajouterDesGroupe({{ favoriteCharacter.character.Groupe.id }}, {{ favoriteCharacter.character.Groupe.niveau }})">Ajouter 1 Dé</button>
-                                    <button class="btn btn-danger px-4 py-2 fw-bold" onclick="depenserDesGroupe({{ favoriteCharacter.character.Groupe.id }})">Dépenser 1 Dé</button>
+                                    <button class="btn btn-outline-success px-4 py-2 fw-bold d-flex align-items-center gap-2" style="border-radius: 25px; transition: all 0.3s ease; background: rgba(25, 135, 84, 0.1);" onmouseover="this.style.backgroundColor='rgba(25, 135, 84, 0.2)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.backgroundColor='rgba(25, 135, 84, 0.1)'; this.style.transform='translateY(0)';" onclick="ajouterDesGroupe({{ favoriteCharacter.character.Groupe.id }}, {{ favoriteCharacter.character.Groupe.niveau }})">
+                                        <i class="fas fa-plus-circle"></i> Ajouter 1 Dé
+                                    </button>
+                                    <button class="btn btn-outline-danger px-4 py-2 fw-bold d-flex align-items-center gap-2" style="border-radius: 25px; transition: all 0.3s ease; background: rgba(220, 53, 69, 0.1);" onmouseover="this.style.backgroundColor='rgba(220, 53, 69, 0.2)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.backgroundColor='rgba(220, 53, 69, 0.1)'; this.style.transform='translateY(0)';" onclick="depenserDesGroupe({{ favoriteCharacter.character.Groupe.id }})">
+                                        <i class="fas fa-minus-circle"></i> Dépenser 1 Dé
+                                    </button>
                                 </div>
                                 <div class="mb-3">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -350,7 +354,7 @@
                                     <div class="row">
                                       <div class="col-md-6">
                                         <!-- title --><h6 class="text-danger mt-2">Dépenses & Pertes</h6>
-                                        <ul class="small mb-0" style="list-style-type: none; padding-left: 0;">
+                                        <ul class=" mb-0" style="list-style-type: none; padding-left: 0;">
                                             <li><span class="text-danger fw-bold">-1D</span> : Tension mineure (brouille, désaccord), ou Découragement (fatigue, faim, soif)</li>
                                             <li><span class="text-danger fw-bold">-2D à -3D</span> : Coup dur (vol, perte d'équipement, mauvaise nouvelle)</li>
                                             <li><span class="text-danger fw-bold">-3D</span> : Tension majeure (conflit, accusation grave)</li>
@@ -360,7 +364,7 @@
                                       </div>
                                       <div class="col-md-6">
                                         <!-- title --><h6 class="text-success mt-2">Gains de Dés</h6>
-                                        <ul class="small mb-0" style="list-style-type: none; padding-left: 0;">
+                                        <ul class=" mb-0" style="list-style-type: none; padding-left: 0;">
                                             <li><span class="text-success fw-bold">+1D</span> : Bon moment partagé (repas, échange)</li>
                                             <li><span class="text-success fw-bold">+1D à +2D</span> : Cohésion (action collective, esprit d'équipe)</li>
                                             <li><span class="text-success fw-bold">+2D à +3D</span> : Communauté (réussite collective, harmonie)</li>
@@ -369,7 +373,7 @@
                                         </ul>
                                       </div>
                                     </div>
-                                    <p class="small text-muted mt-3 mb-0"><em>Note: Les principes et interdits suivis d'un astérisque (*) peuvent faire gagner ou perdre jusqu'à 4D dans chacune des Réserves s'ils sont significatifs pour le Groupe.</em></p>
+                                    <p class=" text-light mt-3 mb-0"><em>Note: Les principes et interdits suivis d'un astérisque (*) peuvent faire gagner ou perdre jusqu'à 4D dans chacune des Réserves s'ils sont significatifs pour le Groupe.</em></p>
                                 </div>
                                 <div class="mb-3">
                                     <h5>Capacités de Groupe:</h5>
@@ -423,10 +427,10 @@
                                             <option value="voyageur">Le Voyageur</option>
                                         </select>
                                     </div>
-                                    <div id="groupInstinctDescriptionBlock" class="p-2 mb-2 bg-secondary text-light rounded" style="display: none;">
+                                    <div id="groupInstinctDescriptionBlock" class="p-2 mb-2 bg-dark text-light border border-secondary rounded" style="display: none;">
                                         <h6 id="groupInstinctTitle" class="mb-1 fw-bold"></h6>
-                                        <p id="groupInstinctText" class="mb-1 small" style="font-style: italic;"></p>
-                                        <div id="groupInstinctStats" class="small text-warning" style="border-top: 1px solid #666; padding-top: 5px; margin-top: 5px;"></div>
+                                        <p id="groupInstinctText" class="mb-1 " style="font-style: italic;"></p>
+                                        <div id="groupInstinctStats" class=" text-warning" style="border-top: 1px solid #666; padding-top: 5px; margin-top: 5px;"></div>
                                     </div>
                                     <button type="button" class="btn btn-success mt-2" onclick="creerGroupe({{ favoriteCharacter.character.id_Character }})">Créer</button>
                                 </form>
@@ -565,7 +569,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const parts = instinctDescriptions[key].stats.split('<br><br>');
                         const cleanParts = parts.filter(p => !p.includes("<b>Avantage") && !p.includes("<b>Désavantage") && !p.includes("<b>Capacité d\'Instinct"));
                         if (cleanParts.length > 0) {
-                            res += "<div style='margin-top:10px; padding-top:10px; border-top:1px solid #555; color:#aaa; font-style:normal;'>" + cleanParts.join('<br><br>') + "</div>";
+                            res += "<div style='margin-top:10px; padding-top:10px; border-top:1px solid #555; color:#fff; font-style:normal;'>" + cleanParts.join('<br><br>') + "</div>";
                         }
                     }
                     return res;
@@ -583,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const parts = origineDescriptions[key].stats.split('<br><br>');
                         const cleanParts = parts.filter(p => !p.includes("<b>Avantage") && !p.includes("<b>Désavantage") && !p.includes("<b>Capacité d\'Instinct"));
                         if (cleanParts.length > 0) {
-                            res += "<div style='margin-top:10px; padding-top:10px; border-top:1px solid #555; color:#aaa; font-style:normal;'>" + cleanParts.join('<br><br>') + "</div>";
+                            res += "<div style='margin-top:10px; padding-top:10px; border-top:1px solid #555; color:#fff; font-style:normal;'>" + cleanParts.join('<br><br>') + "</div>";
                         }
                     }
                     return res;

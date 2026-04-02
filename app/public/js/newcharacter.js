@@ -2,21 +2,37 @@ document.addEventListener('DOMContentLoaded', function () {
     const nextButtons = document.querySelectorAll('.next-btn');
     const prevButtons = document.querySelectorAll('.prev-btn');
 
+    function updateTrackerVisibility(stepId) {
+        const tracker = document.getElementById('stats-tracker');
+        if (tracker) {
+            const stepNum = parseInt(stepId.replace('step-', ''));
+            if (stepNum >= 4 && stepNum <= 10) {
+                tracker.style.display = 'block';
+            } else {
+                tracker.style.display = 'none';
+            }
+        }
+    }
+
     nextButtons.forEach(button => {
         button.addEventListener('click', function () {
+            const nextStepId = this.getAttribute('data-next');
             const currentStep = this.closest('.step');
-            const nextStep = document.getElementById(this.getAttribute('data-next'));
+            const nextStep = document.getElementById(nextStepId);
             currentStep.style.display = 'none';
             nextStep.style.display = 'block';
+            updateTrackerVisibility(nextStepId);
         });
     });
 
     prevButtons.forEach(button => {
         button.addEventListener('click', function () {
+            const prevStepId = this.getAttribute('data-prev');
             const currentStep = this.closest('.step');
-            const prevStep = document.getElementById(this.getAttribute('data-prev'));
+            const prevStep = document.getElementById(prevStepId);
             currentStep.style.display = 'none';
             prevStep.style.display = 'block';
+            updateTrackerVisibility(prevStepId);
         });
     });
 
@@ -24,12 +40,80 @@ document.addEventListener('DOMContentLoaded', function () {
 
     submitButton.addEventListener("click", createCharacter);
 
+    // --- AVATAR LOGIC ---
+    const genreSelect = document.getElementById('genreSelect');
+    const avatarSelection = document.getElementById('avatar-selection');
+    const avatarPreset = document.getElementById('avatar_preset');
+    const avatarPreview = document.getElementById('avatar_preview');
+    const customAvatarInput = document.getElementById('custom_avatar');
+    const imageDataInput = document.getElementById('imageData');
+
+    function populateAvatars() {
+        if (!avatarSelection) return;
+        const genre = genreSelect.value;
+        const count = genre === 'femme' ? 15 : 16;
+        avatarSelection.innerHTML = '';
+        
+        for (let i = 1; i <= count; i++) {
+            const imgPath = `/images/characters/${genre}/${genre}-${i}.jpg`;
+            const img = document.createElement('img');
+            img.src = imgPath;
+            img.style.width = '60px';
+            img.style.height = '60px';
+            img.style.objectFit = 'cover';
+            img.style.cursor = 'pointer';
+            img.style.borderRadius = '5px';
+            img.style.border = (avatarPreset.value === imgPath && !imageDataInput.value) ? '2px solid #ffcc00' : '2px solid transparent';
+            
+            img.addEventListener('click', () => {
+                avatarPreset.value = imgPath;
+                imageDataInput.value = ''; // clear custom
+                customAvatarInput.value = ''; // visual clear
+                avatarPreview.src = imgPath;
+                populateAvatars(); // re-render borders
+            });
+            avatarSelection.appendChild(img);
+        }
+        
+        if (!imageDataInput.value && !avatarPreset.value.includes(genre)) {
+            avatarPreset.value = `/images/characters/${genre}/${genre}-1.jpg`;
+            avatarPreview.src = avatarPreset.value;
+            populateAvatars();
+        }
+    }
+
+    if(genreSelect) {
+        genreSelect.addEventListener('change', populateAvatars);
+        populateAvatars();
+    }
+
+    if(customAvatarInput) {
+        customAvatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const fileChosen = document.getElementById('file-chosen');
+            if (file) {
+                if (fileChosen) fileChosen.textContent = file.name;
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    imageDataInput.value = evt.target.result;
+                    avatarPreview.src = evt.target.result;
+                    populateAvatars(); // to clear the yellow border
+                };
+                reader.readAsDataURL(file);
+            } else {
+                if (fileChosen) fileChosen.textContent = "Aucun fichier choisi";
+            }
+        });
+    }
+
     function createCharacter() {
         // Gather form data
         const formData = {
             nom: document.getElementsByName('nom')[0].value,
             age: document.getElementsByName('age')[0].value,
-            genre: document.getElementsByName('genre')[0].value,
+            genre: genreSelect ? genreSelect.value : document.getElementsByName('genre')[0].value,
+            avatar: avatarPreset ? avatarPreset.value : undefined,
+            imageData: imageDataInput ? imageDataInput.value : undefined,
             instinct: document.getElementsByName('instinct')[0].value,
             signeastro: document.getElementsByName('signeastro')[0].value,
             origine: document.getElementsByName('origine')[0].value,
@@ -163,8 +247,8 @@ function formatStatsWithSelection(rawStats) {
                 const name = match[1].trim().replace(/^[-–—]\s*/, '');
                 const desc = match[2];
                 // Try to find if we already added the radio group description
-                if (!newParts.some(p => p.includes('Choisissez votre Capacité d\'Instinct'))) {
-                    newParts.push('<div style="margin-top: 10px;"><strong>Choisissez votre Capacité d\'Instinct :</strong></div>');
+                if (!newParts.some(p => p.includes("Choisissez votre Capacité d'Instinct"))) {
+                    newParts.push('<div style="margin-top: 15px; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid #4a4a4a; color: #d0c8b0; font-size: 1.1em; font-family: \'Cinzel\', serif;">Choisissez votre Capacité d\'Instinct :</div>');
                 }
                 // default checked on the first one
                 const isChecked = newParts.some(p => p.includes('name="instinct_capacite"')) ? '' : 'checked';
@@ -357,18 +441,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('character-creation-form-container');
     if (!container) return;
     
+    // Create the tracker and hide it initially
     const trackerHTML = `
-        <div id="stats-tracker" style="position: sticky; top: 0; background: #222; border: 1px solid #555; padding: 10px; margin-bottom: 20px; z-index: 1000; border-radius: 5px; color: #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.5);">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div id="stats-tracker" style="position: sticky; top: 0; background: rgba(18, 21, 23, 0.95); border: 1px solid #c2a059; padding: 15px; margin-bottom: 20px; z-index: 1000; border-radius: 8px; color: #eee; box-shadow: 0 4px 8px rgba(0,0,0,0.6); display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
-                    <h4 style="margin: 0 0 5px 0; font-size: 14px; color: #aaa;">Caractéristiques (Base 1D)</h4>
-                    <span id="char-status" style="font-weight: bold;">0 / 8 points répartis</span>
-                    <div id="char-error" style="color: #ff4444; font-size: 12px; display: none;">Max 3D par carac !</div>
+                    <h4 style="margin: 0 0 5px 0; font-size: 15px; color: #c2a059; text-transform: uppercase;">Caractéristiques (Base 1D)</h4>
+                    <span id="char-status" style="font-weight: bold; font-size: 16px;">0 / 8 points répartis</span>
+                    <div id="char-error" style="color: #ff4444; font-size: 13px; display: none; margin-top: 5px;">Max 3D par carac !</div>
                 </div>
-                <div>
-                    <h4 style="margin: 0 0 5px 0; font-size: 14px; color: #aaa;">Compétences</h4>
-                    <span id="skill-status" style="font-weight: bold;">0 / 13 points (1x3D, 2x2D, 3x1D + 3 Libres)</span>
-                    <div id="skill-error" style="color: #ff4444; font-size: 12px; display: none;">Répartition invalide !</div>
+                <div style="text-align: right;">
+                    <h4 style="margin: 0 0 5px 0; font-size: 15px; color: #c2a059; text-transform: uppercase;">Compétences</h4>
+                    <div id="skill-status" style="font-weight: bold; font-size: 16px;">0 / 13 points lus</div>
+                    <div id="skill-missing" style="font-size: 13px; color: #aaa; margin-top: 2px;">Il manque les bases (1x3D, 2x2D, 3x1D)</div>
+                    <div id="skill-error" style="color: #ff4444; font-size: 13px; display: none; margin-top: 5px;">Répartition invalide !</div>
                 </div>
             </div>
         </div>
@@ -516,25 +602,32 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const isSkillValid = (skillSum === 13 && dominationValid && !skillMaxExceeded);
         
+        const skillMissingDiv = document.getElementById('skill-missing');
+        
         if (isSkillValid) {
             skillStatus.style.color = '#44ff44';
             skillStatus.innerText = `${skillSum} / 13 points (Répartition correcte)`;
             skillError.style.display = 'none';
+            if(skillMissingDiv) skillMissingDiv.style.display = 'none';
         } else {
             skillStatus.style.color = '#ffcc00';
             skillStatus.innerText = `${skillSum} / 13 points lus`;
+            
+            if (!dominationValid) {
+                if(skillMissingDiv) skillMissingDiv.style.display = 'block';
+            } else {
+                if(skillMissingDiv) skillMissingDiv.style.display = 'none';
+            }
+            
             if (skillMaxExceeded) {
                 skillError.innerText = "Max 3D par compétence !";
-                skillError.style.display = 'block';
-            } else if (!dominationValid && skillSum <= 13) {
-                skillError.innerText = "Il manque les bases (1x3D, 2x2D, 3x1D)";
                 skillError.style.display = 'block';
             } else if (skillSum > 13) {
                 skillError.innerText = "Trop de points répartis !";
                 skillError.style.display = 'block';
             } else {
-                 skillError.innerText = "Répartition incomplète/invalide.";
-                 skillError.style.display = 'block';
+                 // skillError is specifically for breaking hard limits, missing bases is handled by skillMissingDiv
+                 skillError.style.display = 'none';
             }
         }
         
