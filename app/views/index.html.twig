@@ -276,10 +276,10 @@
                             <div class="mb-4 p-3 bg-dark border border-secondary rounded text-light">
                                 <h5 class="mb-3">Instinct : <span class="text-success">{{ favoriteCharacter.character.instinct|default("Aucun instinct sélectionné") }}</span></h5>
                                 {% if favoriteCharacter.character.capaciteInstinct1 %}
-                                <p class="mb-2"><strong>Capacité 1:</strong> {{ favoriteCharacter.character.capaciteInstinct1 }}</p>
+                                <p class="mb-2"><strong><span id="nom-cap-1">{{ favoriteCharacter.character.capaciteInstinct1 }}</span>:</strong><br><span id="desc-cap-1" class="text-muted small"></span></p>
                                 {% endif %}
                                 {% if favoriteCharacter.character.capaciteInstinct2 %}
-                                <p class="mb-0"><strong>Capacité 2:</strong> {{ favoriteCharacter.character.capaciteInstinct2 }}</p>
+                                <p class="mb-0"><strong><span id="nom-cap-2">{{ favoriteCharacter.character.capaciteInstinct2 }}</span>:</strong><br><span id="desc-cap-2" class="text-muted small"></span></p>
                                 {% endif %}
                             </div>
                             
@@ -517,4 +517,39 @@
 <script src="/js/bundle.js"></script>
 <script src="/js/dashboardInventory.js"></script>
 <script src="/js/dashboardGroupe.js"></script>
+<script src="/js/character_data.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    function findInstinctCapDescription(capaciteName) {
+        if(!capaciteName) return "";
+        let normalizedTarget = capaciteName.toLowerCase().trim().replace(/['’]/g, "'");
+        for (const key in instinctDescriptions) {
+            const stats = instinctDescriptions[key].stats;
+            if (stats) {
+                const parts = stats.split('<br><br>');
+                for (const part of parts) {
+                    const match = part.match(/<b>Capacité d'Instinct[\s\-–—]+([^<:]+)\s*:\s*<\/b>\s*(.*)/i);
+                    if (match) {
+                        const name = match[1].trim().toLowerCase().replace(/['’]/g, "'");
+                        if (name === normalizedTarget) {
+                            return match[2].trim();
+                        }
+                    }
+                }
+            }
+        }
+        return "";
+    }
+    const n1 = document.getElementById("nom-cap-1");
+    const d1 = document.getElementById("desc-cap-1");
+    if (n1 && d1 && n1.innerText) {
+        d1.innerHTML = findInstinctCapDescription(n1.innerText);
+    }
+    const n2 = document.getElementById("nom-cap-2");
+    const d2 = document.getElementById("desc-cap-2");
+    if (n2 && d2 && n2.innerText) {
+        d2.innerHTML = findInstinctCapDescription(n2.innerText);
+    }
+});
+</script>
 {% endblock %}
