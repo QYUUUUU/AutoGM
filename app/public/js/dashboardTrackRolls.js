@@ -71,6 +71,9 @@ function showRollOnDashboard(rolls) {
             // If there's a bar separator | let's format it a bit nicer
             formattedContent = formattedContent.replace(/\|/g, '<span style="color: rgba(199, 169, 114, 0.4); margin: 0 5px;">|</span>');
             
+            // Format newlines
+            formattedContent = formattedContent.replace(/\n/g, '<br>');
+            
             textRoll.innerHTML = formattedContent;
             
             rollMessage.appendChild(nameHeader);

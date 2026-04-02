@@ -713,7 +713,14 @@ router.put('/share/throw', async (req, res) => {
     rollContent = rollParts.join(' | ');
   }
 
-  if (relances) {
+  if (caracteristic || competence) {
+    const r = parseInt(relances) || 0;
+    if (r > 0) {
+      rollContent += `\n Vous avez ${r} relance${r > 1 ? 's' : ''} possible${r > 1 ? 's' : ''}.`;
+    } else {
+      rollContent += "\n Vous n'avez aucune relance possible.";
+    }
+  } else if (relances) {
     rollContent += "\n Vous avez " + relances + " relances possibles.";
   }
 
