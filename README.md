@@ -5,7 +5,7 @@ Ask questions about GODS the tabletop RPG game. Also supports dice throwing and 
 
 ### Prerequisites
 
-You need to have Docker and Docker compose installed on your machine. Yarn is used inside the container for internal package management.
+You need to have Docker and Docker compose installed on your machine. npm is used inside the container for internal package management.
 
 ### Starting the Project (Docker)
 
