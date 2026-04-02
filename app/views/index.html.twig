@@ -272,29 +272,33 @@
                     <div class="col-12 h-100 px-0">
                         <div class="head-card square-tl square-tr">Modificateurs & Origine</div>
                         <div class="body-card p-4" style="height: 100%; overflow-y: auto;">
-                            <h4 class="fw-bold mb-3"><i class="fas fa-paw"></i> Capacités d'Instinct</h4>
+                            <h4 class="fw-bold mb-3"><i class="fas fa-paw"></i> Capacité d'Instinct</h4>
                             <div class="mb-4 p-3 bg-dark border border-secondary rounded text-light">
-                                <h5 class="mb-3">Instinct : <span class="text-success">{{ favoriteCharacter.character.instinct|default("Aucun instinct sélectionné") }}</span></h5>
+                                <h5 class="mb-1">Instinct : <span class="text-success" id="nom-instinct">{{ favoriteCharacter.character.instinct|default("Aucun instinct sélectionné") }}</span></h5>
+                                <p id="desc-instinct" class="text-muted small mb-3 fst-italic" style="border-bottom: 1px solid #444; padding-bottom: 10px;"></p>
+                                
                                 {% if favoriteCharacter.character.capaciteInstinct1 %}
                                 <p class="mb-2"><strong><span id="nom-cap-1">{{ favoriteCharacter.character.capaciteInstinct1 }}</span>:</strong><br><span id="desc-cap-1" class="text-muted small"></span></p>
+                                {% else %}
+                                <p class="mb-2 text-muted small">Aucune capacité d'instinct sélectionnée.</p>
                                 {% endif %}
-                                {% if favoriteCharacter.character.capaciteInstinct2 %}
-                                <p class="mb-0"><strong><span id="nom-cap-2">{{ favoriteCharacter.character.capaciteInstinct2 }}</span>:</strong><br><span id="desc-cap-2" class="text-muted small"></span></p>
-                                {% endif %}
+                                
+                                
                             </div>
                             
-                            <h4 class="fw-bold mt-5 mb-3"><i class="fas fa-globe"></i> Origine : <span class="text-warning">{{ favoriteCharacter.character.origine|default("Aucune") }}</span></h4>
+                            <h4 class="fw-bold mt-5 mb-1"><i class="fas fa-globe"></i> Origine : <span class="text-warning" id="nom-origine">{{ favoriteCharacter.character.origine|default("Aucune") }}</span></h4>
+                            <p id="desc-origine" class="text-muted small mb-3 fst-italic text-light" style="padding-left: 10px;"></p>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
                                         <h5 class="text-success border-bottom border-secondary pb-2"><i class="fas fa-plus-circle"></i> Avantage d'origine</h5>
-                                        <p class="mb-0">{{ favoriteCharacter.character.avantage ? favoriteCharacter.character.avantage : 'Aucun avantage' }}</p>
+                                        <p class="mb-0"><strong><span id="nom-avantage">{{ favoriteCharacter.character.avantage ? favoriteCharacter.character.avantage : 'Aucun avantage' }}</span></strong><br><span id="desc-avantage" class="text-muted small"></span></p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
                                         <h5 class="text-danger border-bottom border-secondary pb-2"><i class="fas fa-minus-circle"></i> Désavantage d'origine</h5>
-                                        <p class="mb-0">{{ favoriteCharacter.character.desavantage ? favoriteCharacter.character.desavantage : 'Aucun désavantage' }}</p>
+                                        <p class="mb-0"><strong><span id="nom-desavantage">{{ favoriteCharacter.character.desavantage ? favoriteCharacter.character.desavantage : 'Aucun désavantage' }}</span></strong><br><span id="desc-desavantage" class="text-muted small"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -520,36 +524,91 @@
 <script src="/js/character_data.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    function findInstinctCapDescription(capaciteName) {
-        if(!capaciteName) return "";
-        let normalizedTarget = capaciteName.toLowerCase().trim().replace(/['’]/g, "'");
-        for (const key in instinctDescriptions) {
-            const stats = instinctDescriptions[key].stats;
-            if (stats) {
-                const parts = stats.split('<br><br>');
-                for (const part of parts) {
-                    const match = part.match(/<b>Capacité d'Instinct[\s\-–—]+([^<:]+)\s*:\s*<\/b>\s*(.*)/i);
-                    if (match) {
-                        const name = match[1].trim().toLowerCase().replace(/['’]/g, "'");
-                        if (name === normalizedTarget) {
-                            return match[2].trim();
+    if (typeof origineDescriptions === 'undefined' || typeof instinctDescriptions === 'undefined') return;
+
+    function normalizeString(str) {
+        if (!str) return "";
+        return str.toLowerCase().replace(/['’]/g, "").trim();
+    }
+
+    function findDescription(type, name) {
+        if (!name || name === 'Aucun' || name === 'Aucune' || name === 'none') return null;
+        let safeName = name.replace(/['’]/g, "."); 
+
+        if (type === 'Avantage' || type === 'Désavantage' || type === 'Spécial') {
+            for (const key in origineDescriptions) {
+                const stats = origineDescriptions[key].stats;
+                if (!stats) continue;
+                const regex = new RegExp('<b>' + type + '(?:\\s+|&nbsp;|&#160;|\\u2013|-)*' + safeName + '\\s*:\\s*<\\/b>(.*?)(?:<br|$)', 'is');
+                const match = stats.match(regex);
+                if (match) return match[1].trim();
+            }
+        }
+        
+        if (type === "Capacité d'Instinct") {
+            for (const key in instinctDescriptions) {
+                const stats = instinctDescriptions[key].stats;
+                if (!stats) continue;
+                const regex = new RegExp('<b>Capacité d\'Instinct(?:\\s+|&nbsp;|&#160;|\\u2013|-)*' + safeName + '\\s*:\\s*<\\/b>(.*?)(?:<br|$)', 'is');
+                const match = stats.match(regex);
+                if (match) return match[1].trim();
+            }
+        }
+        
+        if (type === "TextInstinct") {
+            const search = normalizeString(name);
+            for (const key in instinctDescriptions) {
+                const title = normalizeString(instinctDescriptions[key].title);
+                if (title === search || title.includes(search) || search.includes(title)) {
+                    let res = instinctDescriptions[key].text;
+                    if (instinctDescriptions[key].stats) {
+                        const parts = instinctDescriptions[key].stats.split('<br><br>');
+                        const cleanParts = parts.filter(p => !p.includes("<b>Avantage") && !p.includes("<b>Désavantage") && !p.includes("<b>Capacité d\'Instinct"));
+                        if (cleanParts.length > 0) {
+                            res += "<div style='margin-top:10px; padding-top:10px; border-top:1px solid #555; color:#aaa; font-style:normal;'>" + cleanParts.join('<br><br>') + "</div>";
                         }
                     }
+                    return res;
                 }
             }
         }
-        return "";
+
+        if (type === "TextOrigine") {
+            const search = normalizeString(name);
+            for (const key in origineDescriptions) {
+                const title = normalizeString(origineDescriptions[key].title);
+                if (title === search || title.includes(search) || search.includes(title) || (search === 'akshan' && title.includes('khashan'))) {
+                    let res = origineDescriptions[key].text;
+                    if (origineDescriptions[key].stats) {
+                        const parts = origineDescriptions[key].stats.split('<br><br>');
+                        const cleanParts = parts.filter(p => !p.includes("<b>Avantage") && !p.includes("<b>Désavantage") && !p.includes("<b>Capacité d\'Instinct"));
+                        if (cleanParts.length > 0) {
+                            res += "<div style='margin-top:10px; padding-top:10px; border-top:1px solid #555; color:#aaa; font-style:normal;'>" + cleanParts.join('<br><br>') + "</div>";
+                        }
+                    }
+                    return res;
+                }
+            }
+        }
+
+        return null;
     }
-    const n1 = document.getElementById("nom-cap-1");
-    const d1 = document.getElementById("desc-cap-1");
-    if (n1 && d1 && n1.innerText) {
-        d1.innerHTML = findInstinctCapDescription(n1.innerText);
-    }
-    const n2 = document.getElementById("nom-cap-2");
-    const d2 = document.getElementById("desc-cap-2");
-    if (n2 && d2 && n2.innerText) {
-        d2.innerHTML = findInstinctCapDescription(n2.innerText);
-    }
+
+    const setDesc = (nomId, descId, typeType, altType) => {
+        const nomEl = document.getElementById(nomId);
+        const descEl = document.getElementById(descId);
+        if (nomEl && descEl && nomEl.innerText && nomEl.innerText !== 'Aucune' && nomEl.innerText !== 'Aucun avantage' && nomEl.innerText !== 'Aucun désavantage' && nomEl.innerText !== 'Aucun' && nomEl.innerText !== 'none' && nomEl.innerText !== 'Aucun instinct sélectionné') {
+            let desc = findDescription(typeType, nomEl.innerText);
+            if (!desc && altType) desc = findDescription(altType, nomEl.innerText);
+            if (desc) descEl.innerHTML = desc;
+        }
+    };
+
+    setDesc("nom-cap-1", "desc-cap-1", "Capacité d'Instinct");
+    setDesc("nom-avantage", "desc-avantage", "Avantage", "Spécial");
+    setDesc("nom-desavantage", "desc-desavantage", "Désavantage");
+    setDesc("nom-instinct", "desc-instinct", "TextInstinct");
+    setDesc("nom-origine", "desc-origine", "TextOrigine");
 });
 </script>
 {% endblock %}
