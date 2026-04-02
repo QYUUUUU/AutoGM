@@ -9,7 +9,7 @@
 <div class="characters-page-container">
     <div class="header-section text-center mb-5">
         <h1 class="page-title display-4 text-light mt-4">Vos Personnages</h1>
-        <p class="lead text-muted">Sélectionnez un héros pour poursuivre l'aventure ou créez-en un nouveau.</p>
+        <p class="lead text-light" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">Sélectionnez un Élu pour poursuivre l'aventure ou créez-en un nouveau.</p>
     </div>
 
     <div id="charabox" class="container page">
@@ -22,7 +22,7 @@
                         <div class="plus-icon-wrapper rounded-circle bg-secondary d-flex justify-content-center align-items-center mb-3">
                             <i class="fs-1 text-light">+</i>
                         </div>
-                        <h3 class="text-light m-0 mt-2">Créer un Héros</h3>
+                        <h3 class="text-light m-0 mt-2">Créer un Élu</h3>
                     </div>
                 </a>
             </div>
@@ -38,7 +38,7 @@
                             {% else %}
                                 <img src="/images/characters/homme/homme-{{i}}.jpg" class="card-img-top w-100" alt="{{ character.nom }}">
                             {% endif %}
-                            <div class="overlay-gradient position-absolute bottom-0 start-0 w-100 h-50"></div>
+                            <div class="overlay-gradient position-absolute bottom-0 start-0 w-100"></div>
                         </div>
                         <div class="card-body body-presentation text-center d-flex flex-column justify-content-center py-4">
                             <h2 class="card-title text-uppercase fw-bold m-0 text-light">{{ character.nom }}</h2>

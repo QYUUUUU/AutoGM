@@ -51,7 +51,7 @@
 }
 
 .create-card-inner:hover .plus-icon-wrapper {
-  background-color: #a33 !important; /* Theme red accent */
+  background-color: #c5a059 !important; /* Dark fantasy gold */
 }
 
 /* Character Item Cards */
@@ -95,6 +95,7 @@
 .overlay-gradient {
   background: linear-gradient(to bottom, rgba(35, 43, 47, 0) 0%, rgb(35, 43, 47) 100%);
   pointer-events: none;
+  height: 60px; /* Positioned at the very base */
 }
 
 .body-presentation {
