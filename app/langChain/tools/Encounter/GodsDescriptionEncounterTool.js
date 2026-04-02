@@ -1,4 +1,4 @@
-import { Tool } from "langchain/tools";
+import { Tool } from "@langchain/core/tools";
 import { GodsDescriptionEncounterChain } from "../../chains/Encounter/GodsDescriptionEncounterChain.js";
 
 export class GodsDescriptionEncounterTool extends Tool {

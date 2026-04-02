@@ -1,4 +1,4 @@
-import { Tool } from "langchain/tools";
+import { Tool } from "@langchain/core/tools";
 
 export class GodsConversationTool extends Tool {
     name = "gods-conversation";

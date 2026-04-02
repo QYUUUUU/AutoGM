@@ -1,7 +1,7 @@
 import { OpenAI } from "@langchain/openai";
 import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { BaseChain } from "langchain/chains";
+import { BaseChain } from "@langchain/classic/chains";
 
 export class GodsLoreChain extends BaseChain {
   _chainType() {

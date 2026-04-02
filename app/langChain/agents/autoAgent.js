@@ -1,6 +1,6 @@
-import { initializeAgentExecutorWithOptions } from "langchain/agents";
+import { initializeAgentExecutorWithOptions } from "@langchain/classic/agents";
 import { ChatOpenAI } from "@langchain/openai";
-import { BufferMemory, ChatMessageHistory } from "langchain/memory";
+import { BufferMemory, ChatMessageHistory } from "@langchain/classic/memory";
 import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 import { GodsLoreTool } from "../tools/Main/GodsLoreTool.js";
 import { GodsRulesTool } from "../tools/Main/GodsRulesTool.js";

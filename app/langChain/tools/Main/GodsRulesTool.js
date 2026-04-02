@@ -1,4 +1,4 @@
-import { Tool } from "langchain/tools";
+import { Tool } from "@langchain/core/tools";
 import { GodsRulesChain } from "../../chains/Main/GodsRulesChain.js";
 
 export class GodsRulesTool extends Tool {

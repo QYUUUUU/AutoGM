@@ -1,7 +1,7 @@
 import { ChatOpenAI } from "@langchain/openai";
-import { HNSWLib } from "langchain/vectorstores/hnswlib";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { BaseChain } from "langchain/chains";
+import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { BaseChain } from "@langchain/classic/chains";
 import { getUserId } from "./app/../../../../controllers/globals.js"
 
 export class GodsDiceChain extends BaseChain {

@@ -1,20 +1,19 @@
-import { AgentActionOutputParser, AgentExecutor, LLMSingleActionAgent } from "langchain/agents";
+import { AgentActionOutputParser, AgentExecutor, LLMSingleActionAgent } from "@langchain/classic/agents";
 
-import { LLMChain } from "langchain/chains";
+import { LLMChain } from "@langchain/classic/chains";
+import { ChatOpenAI } from "@langchain/openai";
+import { BaseChatPromptTemplate, BasePromptTemplate, renderTemplate } from "@langchain/core/prompts";
 
-import { ChatOpenAI } from "langchain/chat_models/openai";
+import { HumanMessage } from "@langchain/core/messages";
 
-import { BaseChatPromptTemplate, BasePromptTemplate, renderTemplate } from "langchain/prompts";
+import { Tool } from "@langchain/core/tools";
+import { SerpAPI } from "@langchain/community/tools/serpapi";
 
-import { HumanChatMessage } from "langchain/schema";
+import { initializeAgentExecutorWithOptions } from "@langchain/classic/agents";
 
-import { SerpAPI, Tool } from "langchain/tools";
+import { DynamicTool } from "@langchain/core/tools";
 
-import { initializeAgentExecutorWithOptions } from "langchain/agents";
-
-import { DynamicTool } from "langchain/tools";
-
-import { Calculator } from "langchain/tools/calculator";
+import { Calculator } from "@langchain/community/tools/calculator";
 
 import { GodsLoreTool } from "../tools/Main/GodsLoreTool.js";
 
@@ -69,7 +68,7 @@ class CustomPromptTemplate extends BaseChatPromptTemplate {
     const newInput = { agent_scratchpad: agentScratchpad, ...values };
     /** Format the template. */
     const formatted = renderTemplate(template, "f-string", newInput);
-    return [new HumanChatMessage(formatted)];
+    return [new HumanMessage(formatted)];
   }
 
   partial(_values) {

@@ -1,4 +1,4 @@
-import { Tool } from "langchain/tools";
+import { Tool } from "@langchain/core/tools";
 import { startMain } from "../../agents/encounterAgent.js";
 
 export class GodsEncounterTool extends Tool {

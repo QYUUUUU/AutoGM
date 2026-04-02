@@ -165,8 +165,24 @@ router.post('/create-character', async (req, res) => {
         lunes,
         mythes,
         pantheons,
-        rituels
+        rituels,
+        avatar,
+        imageData
       } = req.body;
+
+      // Handle custom image upload
+      if (imageData && imageData.startsWith('data:image')) {
+        const matches = imageData.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+        if (matches && matches.length === 3) {
+          const extension = matches[1].split('/')[1] || 'png';
+          const buffer = Buffer.from(matches[2], 'base64');
+          const fileName = `custom/avatar_${Date.now()}_${Math.floor(Math.random() * 1000)}.${extension}`;
+          // Correct path knowing we run from app.js in /app
+          const uploadPath = path.join(process.cwd(), 'app/public/images/characters', fileName);
+          fs.writeFileSync(uploadPath, buffer);
+          avatar = `/images/characters/${fileName}`;
+        }
+      }
 
       puissance = parseInt(puissance);
       resistance = parseInt(resistance);
@@ -231,6 +247,7 @@ router.post('/create-character', async (req, res) => {
           nom,
           age,
           genre,
+          avatar,
           instinct,
           signeastro,
           origine,
@@ -375,7 +392,19 @@ router.put('/Character', async (req, res) => {
   let parsedValue;
 
   if (id_User) {
-    if (!isNaN(value)) {
+    if (field === 'avatar' && value && value.startsWith('data:image')) {
+      const matches = value.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      if (matches && matches.length === 3) {
+        const extension = matches[1].split('/')[1] || 'png';
+        const buffer = Buffer.from(matches[2], 'base64');
+        const fileName = `custom/avatar_${Date.now()}_${Math.floor(Math.random() * 1000)}.${extension}`;
+        const uploadPath = path.join(process.cwd(), 'app/public/images/characters', fileName);
+        fs.writeFileSync(uploadPath, buffer);
+        parsedValue = `/images/characters/${fileName}`;
+      } else {
+        parsedValue = value;
+      }
+    } else if (!isNaN(value) && field !== 'avatar') {
       parsedValue = parseInt(value);
     } else {
       parsedValue = value;
@@ -752,13 +781,13 @@ router.put('/share/throw', async (req, res) => {
           thrownByAI: thrownByAI || false
         },
         include: {
-          Character: { select: { nom: true } }
+          Character: { select: { nom: true, avatar: true, genre: true } }
         }
       });
 
       
       for (const client of rollClients) {
-          if (client.groupeId === character.groupeId) {
+          if ((character.groupeId && client.groupeId === character.groupeId) || client.userId === id_User) {
               client.res.write(`data: ${JSON.stringify([roll])}\n\n`);
           }
       }
@@ -802,7 +831,7 @@ router.get('/stream/rolls', async (req, res) => {
           res.write(': ping\n\n');
       }, 15000);
 
-      const client = { res, groupeId };
+      const client = { res, groupeId, userId: id_User };
       rollClients.add(client);
 
       req.on('close', () => {
@@ -827,18 +856,20 @@ router.put('/fetch/rolls', async (req, res) => {
 
       const character = user.character;
 
-      if (!character || !character.groupeId) {
+      if (!character) {
           return res.json([]);
       }
 
       const rolls = await prisma.roll.findMany({
-        where: {
+        where: character.groupeId ? {
           Character: {
             groupeId: character.groupeId,
           },
+        } : {
+          characterId_Character: character.id_Character,
         },
         include: {
-          Character: { select: { nom: true } }
+          Character: { select: { nom: true, avatar: true, genre: true } }
         }
       });
 

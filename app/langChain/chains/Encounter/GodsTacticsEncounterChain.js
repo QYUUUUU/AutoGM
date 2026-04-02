@@ -1,5 +1,5 @@
-import { OpenAI } from "langchain/llms/openai";
-import { BaseChain } from "langchain/chains";
+import { OpenAI } from "@langchain/openai";
+import { BaseChain } from "@langchain/classic/chains";
 
 export class GodsTacticsEncounterChain extends BaseChain {
   _chainType() {

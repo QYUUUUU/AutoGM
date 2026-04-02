@@ -1,8 +1,8 @@
-import { AgentActionOutputParser, AgentExecutor, LLMSingleActionAgent } from "langchain/agents";
-import { LLMChain } from "langchain/chains";
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { BaseChatPromptTemplate, renderTemplate } from "langchain/prompts";
-import { HumanChatMessage } from "langchain/schema";
+import { AgentActionOutputParser, AgentExecutor, LLMSingleActionAgent } from "@langchain/classic/agents";
+import { LLMChain } from "@langchain/classic/chains";
+import { ChatOpenAI } from "@langchain/openai";
+import { BaseChatPromptTemplate, renderTemplate } from "@langchain/core/prompts";
+import { HumanMessage } from "@langchain/core/messages";
 
 import { GodsDescriptionEncounterTool } from "../../tools/Encounter/GodsDescriptionEncounterTool.js";
 import { GodsEnemiesEncounterTool } from "../../tools/Encounter/GodsEnemiesEncounterTool.js";
@@ -56,7 +56,7 @@ class CustomPromptTemplate extends BaseChatPromptTemplate {
     const newInput = { agent_scratchpad: agentScratchpad, ...values };
     /** Format the template. */
     const formatted = renderTemplate(template, "f-string", newInput);
-    return [new HumanChatMessage(formatted)];
+    return [new HumanMessage(formatted)];
   }
 
   partial(_values) {

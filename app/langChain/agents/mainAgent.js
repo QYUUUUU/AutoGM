@@ -1,4 +1,4 @@
-import { initializeAgentExecutorWithOptions } from "langchain/agents";
+import { initializeAgentExecutorWithOptions } from "@langchain/classic/agents";
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { GodsLoreTool } from "../tools/Main/GodsLoreTool.js";
