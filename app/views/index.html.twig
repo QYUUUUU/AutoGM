@@ -172,6 +172,9 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="groupe-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#groupe-tab-pane" href="#groupe-tab-pane" role="tab" aria-controls="groupe-tab-pane" aria-selected="false" style="font-weight: bold;">Groupe</a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="capacites-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#capacites-tab-pane" href="#capacites-tab-pane" role="tab" aria-controls="capacites-tab-pane" aria-selected="false" style="font-weight: bold;">Personnage</a>
+            </li>
         </ul>
         <div class="tab-content h-100" id="myTabContent" style="padding-top: 0;">
             <!-- tab résultats -->
@@ -255,6 +258,43 @@
                                                 <button id="send-rules" class="btn btn-dark rounded-circle border-0 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px; margin-left: 8px;"><i class="fas fa-paper-plane" style="margin-left: -1px;"></i></button>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- tab capacites -->
+            <div class="tab-pane fade h-100" id="capacites-tab-pane" role="tabpanel" aria-labelledby="capacites-tab" tabindex="0">
+                <div class="row h-100 mx-0">
+                    <div class="col-12 h-100 px-0">
+                        <div class="head-card square-tl square-tr">Modificateurs & Origine</div>
+                        <div class="body-card p-4" style="height: 100%; overflow-y: auto;">
+                            <h4 class="fw-bold mb-3"><i class="fas fa-paw"></i> Capacités d'Instinct</h4>
+                            <div class="mb-4 p-3 bg-dark border border-secondary rounded text-light">
+                                <h5 class="mb-3">Instinct : <span class="text-success">{{ favoriteCharacter.character.instinct|default("Aucun instinct sélectionné") }}</span></h5>
+                                {% if favoriteCharacter.character.capaciteInstinct1 %}
+                                <p class="mb-2"><strong>Capacité 1:</strong> {{ favoriteCharacter.character.capaciteInstinct1 }}</p>
+                                {% endif %}
+                                {% if favoriteCharacter.character.capaciteInstinct2 %}
+                                <p class="mb-0"><strong>Capacité 2:</strong> {{ favoriteCharacter.character.capaciteInstinct2 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <h4 class="fw-bold mt-5 mb-3"><i class="fas fa-globe"></i> Origine : <span class="text-warning">{{ favoriteCharacter.character.origine|default("Aucune") }}</span></h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
+                                        <h5 class="text-success border-bottom border-secondary pb-2"><i class="fas fa-plus-circle"></i> Avantage d'origine</h5>
+                                        <p class="mb-0">{{ favoriteCharacter.character.avantage ? favoriteCharacter.character.avantage : 'Aucun avantage' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
+                                        <h5 class="text-danger border-bottom border-secondary pb-2"><i class="fas fa-minus-circle"></i> Désavantage d'origine</h5>
+                                        <p class="mb-0">{{ favoriteCharacter.character.desavantage ? favoriteCharacter.character.desavantage : 'Aucun désavantage' }}</p>
                                     </div>
                                 </div>
                             </div>

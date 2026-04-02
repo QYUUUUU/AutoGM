@@ -195,6 +195,7 @@ favoriteSelect.addEventListener("change", async ()=>{
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    window.location.reload();
   } catch (error) {
     console.error(error);
   }
