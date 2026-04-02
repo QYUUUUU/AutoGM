@@ -335,8 +335,8 @@
                                         <li>{{ favoriteCharacter.character.Groupe.capacitesGroupe }}</li>
                                     </ul>
                                 </div>
-                                <div class="text-end mt-5 mb-4">
-                                    <!-- Quitter button --><button style="color: #8b0000; font-weight: bold; text-decoration: underline; background: none; border: none; padding: 10px; font-size: 1.2rem; cursor: pointer;" onmouseover="this.style.color='#ff4444'" onmouseout="this.style.color='#8b0000'" onclick="quitterGroupe({{ favoriteCharacter.character.id_Character }})">Quitter le groupe</button>
+                                <div class="text-end mt-4 mb-2">
+                                    <!-- Quitter button --><button style="color: #d9534f; text-decoration: underline; background: none; border: none; padding: 0; font-size: 0.9em; cursor: pointer;" onmouseover="this.style.color='#ff6b6b'" onmouseout="this.style.color='#d9534f'" onclick="quitterGroupe({{ favoriteCharacter.character.id_Character }})">Quitter le groupe</button>
                                 </div>
                             {% else %}
                                 <!-- The user is NOT in a group -->
