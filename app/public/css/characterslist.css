@@ -121,12 +121,16 @@
 }
 
 /* Main background fixing */
-main {
+body {
+  background-color: #111;
   background-image: url("/images/book-image-2.jpg");
   background-size: cover;
-  background-position: center;
+  background-position: top center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+
+main {
   width: 100%;
   min-height: 100vh;
 }
