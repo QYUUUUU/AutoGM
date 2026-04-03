@@ -288,44 +288,30 @@
                             </div>
                             
                             <hr class="border-secondary">
-                            <h5>Ajouter Ennemi / PNJ</h5>
-                            <select id="bestiarySelect" class="form-select form-select-sm mj-select mb-2" onchange="loadBestiary(this)">
-                                <option value="">-- Depuis le Bestiaire --</option>
-                                {% for adv in adversaries %}
-                                <option value="{{ adv.name|escape('html') }}" data-react="{{ adv.reaction }}" data-arm="{{ adv.armure }}" data-l="{{ adv.blessuresLegeres }}" data-g="{{ adv.blessuresGraves }}" data-m="{{ adv.blessuresMortelles }}">{{ adv.name }} (Menace: {{ adv.menace }})</option>
-                                {% endfor %}
-                            </select>
+                            <h5>Création à la Volée (Bestiaire)</h5>
+                            <div class="row g-2 mb-3">
+                                <div class="col-sm-8">
+                                    <select id="bestiaryQuickSelect" class="form-select form-select-sm mj-select">
+                                        <option value="">-- Choisir dans le Bestiaire --</option>
+                                        {% for adv in adversaries %}
+                                        <option value="{{ adv.name|escape('html') }}" data-react="{{ adv.reaction }}" data-arm="{{ adv.armure }}" data-l="{{ adv.blessuresLegeres }}" data-g="{{ adv.blessuresGraves }}" data-m="{{ adv.blessuresMortelles }}">{{ adv.name }} (Menace: {{ adv.menace }})</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-sm btn-warning w-100" onclick="generateBestiaryPNJ()">+ Générer</button>
+                                </div>
+                            </div>
+
+                            <hr class="border-secondary mt-4">
+                            <h5>Ajout Manuel d'Ennemi</h5>
                             <div class="row g-2 mb-3">
                                 <div class="col-sm-3"><input type="text" id="neName" class="form-control form-control-sm mb-1" placeholder="Nom"></div>
-                                <div class="col-sm-2"><input type="number" id="neReact" class="form-control form-control-sm mb-1" placeholder="Réaction" value="2"></div>
+                                <div class="col-sm-2"><input type="number" id="neReact" class="form-control form-control-sm mb-1" placeholder="Réactivité" value="2"></div>
                                 <div class="col-sm-3"><input type="text" id="neArmor" class="form-control form-control-sm mb-1" placeholder="0,0,0 (C,P,T)"></div>
-                                <div class="col-sm-4"><input type="text" id="neWounds" class="form-control form-control-sm mb-1" placeholder="Max: L,G,M (ex: 3,2,1)" value="3,2,1"></div>
+                                <div class="col-sm-4"><input type="text" id="neWounds" class="form-control form-control-sm mb-1" placeholder="Max: L,G,M (3,2,1)" value="3,2,1"></div>
                             </div>
-                            <button class="btn btn-sm btn-danger w-100" onclick="addEnemy()">+ Ajouter Ennemi</button>
-                            
-                            <hr class="border-secondary mt-4">
-                            <h5>Générateur Express de PNJ</h5>
-                            <div class="row g-2 mb-3">
-                                <div class="col-sm-4">
-                                    <select id="expressProfil" class="form-select form-select-sm mj-select">
-                                        <option value="3">Néophyte (3 dés)</option>
-                                        <option value="5">Apprenti (5 dés)</option>
-                                        <option value="7">Vétéran (7 dés)</option>
-                                        <option value="9">Élite (9 dés)</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-4">
-                                    <select id="expressCulture" class="form-select form-select-sm mj-select">
-                                        <option value="Babel">Babel (+Int)</option>
-                                        <option value="Empire">L'Empire (+For/Arm)</option>
-                                        <option value="Khashan">Khashan (+Ref)</option>
-                                        <option value="Saeth">Saeth (+Agil)</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-4">
-                                    <button class="btn btn-sm btn-warning w-100" onclick="generateExpressPNJ()">+ Générer</button>
-                                </div>
-                            </div>
+                            <button class="btn btn-sm btn-danger w-100" onclick="addEnemy()">+ Ajouter Manuellement</button>
                         </div>
                         
                         <!-- Panel de droite : Résolution Combat -->
@@ -494,47 +480,6 @@ function getArmorVal(armorStr, type) {
     if(type === "P") return parseInt(parts[1])||0;
     if(type === "T") return parseInt(parts[2])||0;
     return parseInt(parts[0])||0;
-}
-
-function generateExpressPNJ() {
-    const profSelect = document.getElementById("expressProfil");
-    const cultSelect = document.getElementById("expressCulture");
-    const rating = parseInt(profSelect.value); // 3, 5, 7, 9
-    const culture = cultSelect.value;
-    
-    let baseName = "PNJ ("+culture+" - "+rating+"d)";
-    let react = rating - 1;
-    
-    let maxL = Math.max(1, Math.floor(rating / 1.5));
-    let maxG = Math.max(1, Math.floor(rating / 3));
-    let maxM = 1;
-    
-    let arm = 0;
-    if(rating >= 5) arm = 2;
-    if(rating >= 7) arm = 4;
-    if(rating >= 9) arm = 6;
-    
-    if(culture === "Empire") { arm += 1; maxL += 1; }
-    if(culture === "Khashan") { react += 2; }
-    
-    let armor = arm + "," + arm + "," + arm;
-
-    combatants.push({
-        id: "npc_exp_"+Date.now(),
-        isPC: false,
-        name: baseName,
-        reaction: react,
-        init: 0,
-        armor: armor,
-        lMax: maxL,
-        gMax: maxG,
-        mMax: maxM,
-        l: 0,
-        g: 0,
-        m: 0
-    });
-    updateCombatUI();
-    logAction(`=> Ajout Rapide: ${baseName} (Blessures max: L:${maxL} G:${maxG} M:${maxM})`);
 }
 
 function addEnemy() {
@@ -765,15 +710,27 @@ function resolveAttack() {
     }
 }
 
-function loadBestiary(sel) {
-    if (!sel.value) return;
-    const opt = sel.options[sel.selectedIndex];
-    document.getElementById('neName').value = sel.value;
+
+    document.getElementById('neArmor').value = arm;
     
-    let l = opt.getAttribute('data-l') || 3;
-    let g = opt.getAttribute('data-g') || 2;
-    let m = opt.getAttribute('data-m') || 1;
-    document.getElementById('neWounds').value = l + ',' + g + ',' + m;
+    let reactText = opt.getAttribute('data-react') || "";
+    let reactMatch = reactText.match(/(\d+)/);
+    if (reactMatch) {
+       document.getElementById('neReact').value = reactMatch[1];
+    }
+}
+
+
+function generateBestiaryPNJ() {
+    const sel = document.getElementById("bestiaryQuickSelect");
+    if (!sel.value) return alert("Sélectionnez un adversaire dans le Bestiaire.");
+    const opt = sel.options[sel.selectedIndex];
+    
+    let baseName = sel.value;
+    
+    let l = parseInt(opt.getAttribute('data-l')) || 3;
+    let g = parseInt(opt.getAttribute('data-g')) || 2;
+    let m = parseInt(opt.getAttribute('data-m')) || 1;
     
     let armText = (opt.getAttribute('data-arm') || "").toLowerCase();
     let arm = "0,0,0";
@@ -782,13 +739,30 @@ function loadBestiary(sel) {
         let n = parseInt(match[1]);
         arm = n + ',' + n + ',' + n;
     }
-    document.getElementById('neArmor').value = arm;
     
     let reactText = opt.getAttribute('data-react') || "";
     let reactMatch = reactText.match(/(\d+)/);
-    if (reactMatch) {
-       document.getElementById('neReact').value = reactMatch[1];
-    }
+    let react = reactMatch ? parseInt(reactMatch[1]) : 2;
+
+    let count = combatants.filter(c => c.name.startsWith(baseName)).length;
+    let finalName = count > 0 ? baseName + " " + (count + 1) : baseName;
+
+    combatants.push({
+        id: "npc_best_"+Date.now(),
+        isPC: false,
+        name: finalName,
+        reaction: react,
+        init: 0,
+        armor: arm,
+        lMax: l,
+        gMax: g,
+        mMax: m,
+        l: 0,
+        g: 0,
+        m: 0
+    });
+    updateCombatUI();
+    logAction('=> Génération depuis Bestiaire: <b>' + finalName + '</b> (L:' + l + ' G:' + g + ' M:' + m + ')');
 }
 
 </script>
