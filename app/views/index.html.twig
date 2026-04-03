@@ -25,74 +25,6 @@
                 </div>
                 <div class="body-card flex-fill" style="overflow: visible;">
                     <div class="options-section mb-4 pb-3 border-bottom">
-                        <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Personnage & Équipement</h6>
-                        <div class="character-selection">
-                            Select a Character : 
-                            <select id="favoriteCharacter" class="select">
-                            {% for character in characters %}
-                                <option value="{{ character.id_Character }}">{{ character.nom }}</option>
-                            {% endfor %}
-                            </select>
-                        </div>
-                        <div class="equipment-selection" style="margin-top:15px; margin-bottom: 15px;">
-                            <label>Arme Équipée:</label>
-                            <select id="armeSelect" class="select" style="width: 100%;">
-                                <option value="">-- Aucune --</option>
-                                {% for item in equipmentList %}
-                                    {% if item.type == 'Armes' or item.type == 'Armure et boucliers' or item.type == 'Armes de jet' %}
-                                        <option value="{{ item.name }}" data-stats="{{ item.stats }}" data-desc="{{ item.desc }}">{{ item.name }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                            <div id="armeStats" style="font-size:0.85em; color:#888; margin-bottom:10px;"></div>
-
-                            <label>Armure Équipée:</label>
-                            <select id="armureSelect" class="select" style="width: 100%;">
-                                <option value="">-- Aucune --</option>
-                                {% for item in equipmentList %}
-                                    {% if item.type == 'Armures' or item.type == 'Armure et boucliers' %}
-                                        <option value="{{ item.name }}" data-stats="{{ item.stats }}" data-desc="{{ item.desc }}">{{ item.name }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                            <div id="armureStats" style="font-size:0.85em; color:#888; margin-bottom:10px;"></div>
-                        </div>
-                    </div>
-                    <div class="options-section mb-4 pb-3 border-bottom">
-                        <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Lancer Libre</h6>
-                        <div class="dice-increments">
-                        <div class="row align-items-center justify-content-center">
-                            <div class="d4">
-                                <label for="d4">d4:</label>
-                                <button class="increment-button" type="button" onclick="updateDiceInput('d4', 'add')">+</button>
-                                <button class="increment-button" type="button" onclick="updateDiceInput('d4', 'remove')">-</button><br>
-                            </div>
-                            <div class="d6">
-                                <label for="d6">d6:</label>
-                                <button class="increment-button" type="button" onclick="updateDiceInput('d6', 'add')">+</button>
-                                <button class="increment-button" type="button" onclick="updateDiceInput('d6', 'remove')">-</button><br>
-                            </div>
-                        </div>
-                        <div class="row align-items-center justify-content-center second-increments">
-                            <div class="d10">
-                                <label for="d10">d10:</label>
-                                <button class="increment-button" type="button" onclick="updateDiceInput('d10', 'add')">+</button>
-                                <button class="increment-button" type="button" onclick="updateDiceInput('d10', 'remove')">-</button><br><br>
-                            </div>
-                            <div class="d20">
-                                <label for="d20">d20:</label>
-                                <button class="increment-button" type="button" onclick="updateDiceInput('d20', 'add')">+</button>
-                                <button class="increment-button" type="button" onclick="updateDiceInput('d20', 'remove')">-</button><br><br>
-                            </div>
-                        </div>
-                        <label for="dice-input">Lancer les dés :</label>
-                        <input type="text" id="dice-input" name="dice-input">
-
-                        <input id="dice-throw-trigger" type="submit" value="Lancer les dés">
-                    </div>
-                    </div>
-
-                    <div class="options-section mb-3">
                         <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Test de Compétence</h6>
                         <div class="dice-statistics">
                         <div class="input-field dropdown-container">
@@ -155,6 +87,75 @@
                         <button id="stats-send" class="stats-send" type="button">Lancer les dés</button><br>
                     </div>
                 </div>
+
+                    <div class="options-section mb-4 pb-3 border-bottom">
+                        <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Lancer Libre</h6>
+                        <div class="dice-increments">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="d4">
+                                <label for="d4">d4:</label>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d4', 'add')">+</button>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d4', 'remove')">-</button><br>
+                            </div>
+                            <div class="d6">
+                                <label for="d6">d6:</label>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d6', 'add')">+</button>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d6', 'remove')">-</button><br>
+                            </div>
+                        </div>
+                        <div class="row align-items-center justify-content-center second-increments">
+                            <div class="d10">
+                                <label for="d10">d10:</label>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d10', 'add')">+</button>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d10', 'remove')">-</button><br><br>
+                            </div>
+                            <div class="d20">
+                                <label for="d20">d20:</label>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d20', 'add')">+</button>
+                                <button class="increment-button" type="button" onclick="updateDiceInput('d20', 'remove')">-</button><br><br>
+                            </div>
+                        </div>
+                        <label for="dice-input">Lancer les dés :</label>
+                        <input type="text" id="dice-input" name="dice-input">
+
+                        <input id="dice-throw-trigger" type="submit" value="Lancer les dés">
+                    </div>
+                    </div>
+
+                    <div class="options-section mb-3">
+                        <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Personnage & Équipement</h6>
+                        <div class="character-selection">
+                            Select a Character : 
+                            <select id="favoriteCharacter" class="select">
+                            {% for character in characters %}
+                                <option value="{{ character.id_Character }}">{{ character.nom }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="equipment-selection" style="margin-top:15px; margin-bottom: 15px;">
+                            <label>Arme Équipée:</label>
+                            <select id="armeSelect" class="select" style="width: 100%;">
+                                <option value="">-- Aucune --</option>
+                                {% for item in equipmentList %}
+                                    {% if item.type == 'Armes' or item.type == 'Armure et boucliers' or item.type == 'Armes de jet' %}
+                                        <option value="{{ item.name }}" data-stats="{{ item.stats }}" data-desc="{{ item.desc }}">{{ item.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div id="armeStats" style="font-size:0.85em; color:#888; margin-bottom:10px;"></div>
+
+                            <label>Armure Équipée:</label>
+                            <select id="armureSelect" class="select" style="width: 100%;">
+                                <option value="">-- Aucune --</option>
+                                {% for item in equipmentList %}
+                                    {% if item.type == 'Armures' or item.type == 'Armure et boucliers' %}
+                                        <option value="{{ item.name }}" data-stats="{{ item.stats }}" data-desc="{{ item.desc }}">{{ item.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div id="armureStats" style="font-size:0.85em; color:#888; margin-bottom:10px;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
