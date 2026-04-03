@@ -35,6 +35,7 @@ export async function displayPannel(req, res) {
       }
       let characters = [];
       let equipment = [];
+      let adversaries = [];
       try {
           if (activeGroupeId) {
              characters = await prisma.character.findMany({ where: { groupeId: activeGroupeId } });
@@ -43,9 +44,10 @@ export async function displayPannel(req, res) {
           if (fs.existsSync(eqPath)) {
              equipment = JSON.parse(fs.readFileSync(eqPath, "utf8"));
           }
+          adversaries = await prisma.adversary.findMany();
       } catch(e) { console.error("Error loading extra data", e); }
       
-      res.render('../views/admin.html.twig', { worldState, groupes, activeGroupeId, characters, equipment });
+      res.render('../views/admin.html.twig', { worldState, groupes, activeGroupeId, characters, equipment, adversaries });
     } catch (error) {
       console.error(error);
       res.status(500).send("Error processing request");

@@ -289,6 +289,12 @@
                             
                             <hr class="border-secondary">
                             <h5>Ajouter Ennemi / PNJ</h5>
+                            <select id="bestiarySelect" class="form-select form-select-sm mj-select mb-2" onchange="loadBestiary(this)">
+                                <option value="">-- Depuis le Bestiaire --</option>
+                                {% for adv in adversaries %}
+                                <option value="{{ adv.name|escape('html') }}" data-react="{{ adv.reaction }}" data-arm="{{ adv.armure }}" data-l="{{ adv.blessuresLegeres }}" data-g="{{ adv.blessuresGraves }}" data-m="{{ adv.blessuresMortelles }}">{{ adv.name }} (Menace: {{ adv.menace }})</option>
+                                {% endfor %}
+                            </select>
                             <div class="row g-2 mb-3">
                                 <div class="col-sm-3"><input type="text" id="neName" class="form-control form-control-sm mb-1" placeholder="Nom"></div>
                                 <div class="col-sm-2"><input type="number" id="neReact" class="form-control form-control-sm mb-1" placeholder="Réaction" value="2"></div>
@@ -758,5 +764,32 @@ function resolveAttack() {
         logAction(`<span class="text-danger">=> <b>${cib.name}</b> subit <b>${finalDmg} Dégâts nets</b>. (Mettez à jour les coche(s) de Blessure manuellement)</span>`);
     }
 }
+
+function loadBestiary(sel) {
+    if (!sel.value) return;
+    const opt = sel.options[sel.selectedIndex];
+    document.getElementById('neName').value = sel.value;
+    
+    let l = opt.getAttribute('data-l') || 3;
+    let g = opt.getAttribute('data-g') || 2;
+    let m = opt.getAttribute('data-m') || 1;
+    document.getElementById('neWounds').value = l + ',' + g + ',' + m;
+    
+    let armText = (opt.getAttribute('data-arm') || "").toLowerCase();
+    let arm = "0,0,0";
+    let match = armText.match(/(\d+)/);
+    if (match) {
+        let n = parseInt(match[1]);
+        arm = n + ',' + n + ',' + n;
+    }
+    document.getElementById('neArmor').value = arm;
+    
+    let reactText = opt.getAttribute('data-react') || "";
+    let reactMatch = reactText.match(/(\d+)/);
+    if (reactMatch) {
+       document.getElementById('neReact').value = reactMatch[1];
+    }
+}
+
 </script>
 {% endblock %}
