@@ -2,184 +2,208 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider        = "prisma-client-js"
-    binaryTargets   = ["native", "linux-musl", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
-    
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id                Int                 @id @default(autoincrement())
-    created_at        DateTime            @default(now())
-    pseudo            String?
-    email             String              @unique
-    password          String
-    service           String?
-    enabled           Boolean             @default(false)
-    role              String?             @default("user")
-    discordId         String?
-    characters        Character[]
-    FavoriteCharacter FavoriteCharacter[]
-    Conversation      Conversation[]
+  id                Int                 @id @default(autoincrement())
+  created_at        DateTime            @default(now())
+  pseudo            String?
+  email             String              @unique
+  password          String
+  service           String?
+  enabled           Boolean             @default(false)
+  role              String?             @default("user")
+  discordId         String?
+  characters        Character[]
+  FavoriteCharacter FavoriteCharacter[]
+  Adversary         Adversary[]
+  Conversation      Conversation[]
 }
 
 model Session {
-    id        String   @id
-    sid       String   @unique
-    data      String
-    expiresAt DateTime
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
 }
 
-
-
 model Character {
-    id_Character        Int                 @id @default(autoincrement())
-    nom                 String?
-    age                 String?
-    genre               String?
-    avatar              String?             @default("")
-    instinct            String?
-    signeastro          String?
-    origine             String?
-    avantage            String?             @default("")
-    desavantage         String?             @default("")
-    capaciteInstinct1   String?             @default("")
-    capaciteInstinct2   String?             @default("")
-    reputation          String?             @default("1")
-    depensee            Int?                @default(0)
-    totale              Int?                @default(0)
-    puissance           Int?                @default(1)
-    resistance          Int?                @default(1)
-    precision           Int?                @default(1)
-    reflexes            Int?                @default(1)
-    connaissance        Int?                @default(1)
-    perception          Int?                @default(1)
-    volonte             Int?                @default(1)
-    empathie            Int?                @default(1)
-    arts                Int?                @default(0)
-    cite                Int?                @default(0)
-    civilisations       Int?                @default(0)
-    relationnel         Int?                @default(0)
-    soins               Int?                @default(0)
-    animalisme          Int?                @default(0)
-    faune               Int?                @default(0)
-    montures            Int?                @default(0)
-    pistage             Int?                @default(0)
-    territoire          Int?                @default(0)
-    adresse             Int?                @default(0)
-    armurerie           Int?                @default(0)
-    artisanat           Int?                @default(0)
-    mecanisme           Int?                @default(0)
-    runes               Int?                @default(0)
-    athletisme          Int?                @default(0)
-    discretion          Int?                @default(0)
-    flore               Int?                @default(0)
-    vigilance           Int?                @default(0)
-    voyage              Int?                @default(0)
-    bouclier            Int?                @default(0)
-    cac                 Int?                @default(0)
-    lancer              Int?                @default(0)
-    melee               Int?                @default(0)
-    tir                 Int?                @default(0)
-    eclats              Int?                @default(0)
-    lunes               Int?                @default(0)
-    mythes              Int?                @default(0)
-    pantheons           Int?                @default(0)
-    rituels             Int?                @default(0)
-    malusphysique       Int?                @default(0)
-    malusmanuel         Int?                @default(0)
-    malussocial         Int?                @default(0)
-    malushumain         Int?                @default(0)
-    malusanimal         Int?                @default(0)
-    malusoutils         Int?                @default(0)
-    malusterres         Int?                @default(0)
-    malusarme           Int?                @default(0)
-    malusinconnu        Int?                @default(0)
-    malusmental         Int?                @default(0)
-    maxblessurelegere   Int?                @default(5)
-    blessurelegere      Int?                @default(0)
-    maxblessuregrave    Int?                @default(3)
-    blessuregrave       Int?                @default(0)
-    maxblessuremortelle Int?                @default(2)
-    blessuremortelle    Int?                @default(0)
-    maxeffort           Int?                @default(15)
-    effort              Int?                @default(15)
-    maxsangfroid        Int?                @default(8)
-    sangfroid           Int?                @default(8)
-    inventory           String?             @default("") @db.VarChar(5000)
-    notes               String?             @default("") @db.VarChar(5000)
-    armeEquipee         String?             @default("") @db.VarChar(500)
-    armureEquipee       String?             @default("") @db.VarChar(500)
-    User                User?               @relation(fields: [userId], references: [id])
-    userId              Int?
-    FavoriteCharacter   FavoriteCharacter[]
-    Roll                Roll[]
-    Groupe              Groupe?             @relation(fields: [groupeId], references: [id])
-    groupeId            Int?
+  id_Character        Int                 @id @default(autoincrement())
+  nom                 String?
+  age                 String?
+  genre               String?
+  avatar              String?             @default("")
+  instinct            String?
+  signeastro          String?
+  origine             String?
+  avantage            String?             @default("")
+  desavantage         String?             @default("")
+  capaciteInstinct1   String?             @default("")
+  capaciteInstinct2   String?             @default("")
+  reputation          String?             @default("1")
+  depensee            Int?                @default(0)
+  totale              Int?                @default(0)
+  puissance           Int?                @default(1)
+  resistance          Int?                @default(1)
+  precision           Int?                @default(1)
+  reflexes            Int?                @default(1)
+  connaissance        Int?                @default(1)
+  perception          Int?                @default(1)
+  volonte             Int?                @default(1)
+  empathie            Int?                @default(1)
+  arts                Int?                @default(0)
+  cite                Int?                @default(0)
+  civilisations       Int?                @default(0)
+  relationnel         Int?                @default(0)
+  soins               Int?                @default(0)
+  animalisme          Int?                @default(0)
+  faune               Int?                @default(0)
+  montures            Int?                @default(0)
+  pistage             Int?                @default(0)
+  territoire          Int?                @default(0)
+  adresse             Int?                @default(0)
+  armurerie           Int?                @default(0)
+  artisanat           Int?                @default(0)
+  mecanisme           Int?                @default(0)
+  runes               Int?                @default(0)
+  athletisme          Int?                @default(0)
+  discretion          Int?                @default(0)
+  flore               Int?                @default(0)
+  vigilance           Int?                @default(0)
+  voyage              Int?                @default(0)
+  bouclier            Int?                @default(0)
+  cac                 Int?                @default(0)
+  lancer              Int?                @default(0)
+  melee               Int?                @default(0)
+  tir                 Int?                @default(0)
+  eclats              Int?                @default(0)
+  lunes               Int?                @default(0)
+  mythes              Int?                @default(0)
+  pantheons           Int?                @default(0)
+  rituels             Int?                @default(0)
+  malusphysique       Int?                @default(0)
+  malusmanuel         Int?                @default(0)
+  malussocial         Int?                @default(0)
+  malushumain         Int?                @default(0)
+  malusanimal         Int?                @default(0)
+  malusoutils         Int?                @default(0)
+  malusterres         Int?                @default(0)
+  malusarme           Int?                @default(0)
+  malusinconnu        Int?                @default(0)
+  malusmental         Int?                @default(0)
+  maxblessurelegere   Int?                @default(5)
+  blessurelegere      Int?                @default(0)
+  maxblessuregrave    Int?                @default(3)
+  blessuregrave       Int?                @default(0)
+  maxblessuremortelle Int?                @default(2)
+  blessuremortelle    Int?                @default(0)
+  maxeffort           Int?                @default(15)
+  effort              Int?                @default(15)
+  maxsangfroid        Int?                @default(8)
+  sangfroid           Int?                @default(8)
+  inventory           String?             @default("") @db.VarChar(5000)
+  notes               String?             @default("") @db.VarChar(5000)
+  armeEquipee         String?             @default("") @db.VarChar(500)
+  armureEquipee       String?             @default("") @db.VarChar(500)
+  User                User?               @relation(fields: [userId], references: [id])
+  userId              Int?
+  FavoriteCharacter   FavoriteCharacter[]
+  Roll                Roll[]
+  Groupe              Groupe?             @relation(fields: [groupeId], references: [id])
+  groupeId            Int?
 }
 
 model FavoriteCharacter {
-    user        User      @relation(fields: [userId], references: [id])
-    userId      Int       @unique
-    character   Character @relation(fields: [characterId], references: [id_Character])
-    characterId Int
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int       @unique
+  character   Character @relation(fields: [characterId], references: [id_Character])
+  characterId Int
 }
 
 model Conversation {
-    id      Int       @id @default(autoincrement())
-    Name    String?
-    User    User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId  Int?
-    Message Message[]
+  id      Int       @id @default(autoincrement())
+  Name    String?
+  User    User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int?
+  Message Message[]
 }
 
 model Message {
-    id             Int           @id @default(autoincrement())
-    content        String?       @db.VarChar(8000) // Change the number to your desired maximum length
-    sender         String?
-    Conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-    conversationId Int?
+  id             Int           @id @default(autoincrement())
+  content        String?       @db.VarChar(8000) // Change the number to your desired maximum length
+  sender         String?
+  Conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId Int?
 }
 
 model Roll {
-    id                    Int        @id @default(autoincrement())
-    content               String?    @db.VarChar(2000)
-    isStatRoll            Boolean?   @default(false)
-    caracteristic         String?
-    competence            String?
-    thrownByAI            Boolean?   @default(false)
-    Character             Character? @relation(fields: [characterId_Character], references: [id_Character])
-    characterId_Character Int?
+  id                    Int        @id @default(autoincrement())
+  content               String?    @db.VarChar(2000)
+  isStatRoll            Boolean?   @default(false)
+  caracteristic         String?
+  competence            String?
+  thrownByAI            Boolean?   @default(false)
+  Character             Character? @relation(fields: [characterId_Character], references: [id_Character])
+  characterId_Character Int?
 }
 
 model Groupe {
-    id                      Int         @id @default(autoincrement())
-    nom                     String?
-    niveau                  Int?        @default(1)
-    reserveDes              Int?        @default(0)
-    reputation              String?     @default("1")
-    capacitesGroupe         String?     @db.Text
-    instinctGroupe          String?     @db.VarChar(500)
-    capacitesInstinctGroupe String?     @db.Text
-    Character               Character[]
-    WorldState          WorldState?
+  id                      Int         @id @default(autoincrement())
+  nom                     String?
+  niveau                  Int?        @default(1)
+  reserveDes              Int?        @default(0)
+  reputation              String?     @default("1")
+  capacitesGroupe         String?     @db.Text
+  instinctGroupe          String?     @db.VarChar(500)
+  capacitesInstinctGroupe String?     @db.Text
+  Character               Character[]
+  WorldState              WorldState?
 }
 
 model WorldState {
-    id          Int     @id @default(autoincrement())
-    timeOfDay   String  @default("Matin")
-    weekType    String  @default("Eau")
-    dayNumber   Int     @default(1)
-    sinlaPhase   String  @default("Nouvelle")
-    akhatState   String  @default("Eteinte")
-    loisCoutumes String? @db.Text
-    rations      Int?    @default(0)
-    etatMontures String? @db.Text
-    encombrement String? @db.Text
-    Groupe       Groupe? @relation(fields: [groupeId], references: [id], onDelete: Cascade)
-    groupeId     Int?    @unique
+  id           Int     @id @default(autoincrement())
+  timeOfDay    String  @default("Matin")
+  weekType     String  @default("Eau")
+  dayNumber    Int     @default(1)
+  sinlaPhase   String  @default("Nouvelle")
+  akhatState   String  @default("Eteinte")
+  loisCoutumes String? @db.Text
+  rations      Int?    @default(0)
+  etatMontures String? @db.Text
+  encombrement String? @db.Text
+  Groupe       Groupe? @relation(fields: [groupeId], references: [id], onDelete: Cascade)
+  groupeId     Int?    @unique
+}
+
+model Adversary {
+  id                 Int     @id @default(autoincrement())
+  name               String
+  description        String? @db.Text
+  type               String? @default("Humain")
+  menace             String? @default("Mineure")
+  experience         String? @default("Débutant")
+  role               String? @default("Mineur")
+  attaque            String? @default("3D")
+  contact            String? @default("5/7")
+  action             String? @default("3D")
+  specialite         String? @default("4D")
+  specialite_details String? @db.Text
+  relances           String? @default("0D")
+  reserve            String? @default("0D")
+  reaction           String? @default("3D")
+  arme               String? @db.VarChar(255)
+  armure             String? @db.VarChar(255)
+  blessuresLegeres   Int     @default(2)
+  blessuresGraves    Int     @default(3)
+  blessuresMortelles Int     @default(4)
+  capacites          String? @db.Text
+  userId             Int?
+  User               User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

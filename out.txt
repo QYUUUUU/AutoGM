@@ -1,0 +1,134 @@
+25:                 <div class="body-card flex-fill" style="overflow: visible;"> | deps: 1
+26:                     <div class="options-section mb-4 pb-3 border-bottom"> | deps: 2
+27:                         <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Personnage & Équipement</h6> | deps: 2
+28:                         <div class="character-selection"> | deps: 3
+29:                             Select a Character :  | deps: 3
+30:                             <select id="favoriteCharacter" class="select"> | deps: 3
+31:                             {% for character in characters %} | deps: 3
+32:                                 <option value="{{ character.id_Character }}">{{ character.nom }}</option> | deps: 3
+33:                             {% endfor %} | deps: 3
+34:                             </select> | deps: 3
+35:                         </div> | deps: 2
+36:                         <div class="equipment-selection" style="margin-top:15px; margin-bottom: 15px;"> | deps: 3
+37:                             <label>Arme Équipée:</label> | deps: 3
+38:                             <select id="armeSelect" class="select" style="width: 100%;"> | deps: 3
+39:                                 <option value="">-- Aucune --</option> | deps: 3
+40:                                 {% for item in equipmentList %} | deps: 3
+41:                                     {% if item.type == 'Armes' or item.type == 'Armure et boucliers' or item.type == 'Armes de jet' %} | deps: 3
+42:                                         <option value="{{ item.name }}" data-stats="{{ item.stats }}" data-desc="{{ item.desc }}">{{ item.name }}</option> | deps: 3
+43:                                     {% endif %} | deps: 3
+44:                                 {% endfor %} | deps: 3
+45:                             </select> | deps: 3
+46:                             <div id="armeStats" style="font-size:0.85em; color:#888; margin-bottom:10px;"></div> | deps: 3
+47:  | deps: 3
+48:                             <label>Armure Équipée:</label> | deps: 3
+49:                             <select id="armureSelect" class="select" style="width: 100%;"> | deps: 3
+50:                                 <option value="">-- Aucune --</option> | deps: 3
+51:                                 {% for item in equipmentList %} | deps: 3
+52:                                     {% if item.type == 'Armures' or item.type == 'Armure et boucliers' %} | deps: 3
+53:                                         <option value="{{ item.name }}" data-stats="{{ item.stats }}" data-desc="{{ item.desc }}">{{ item.name }}</option> | deps: 3
+54:                                     {% endif %} | deps: 3
+55:                                 {% endfor %} | deps: 3
+56:                             </select> | deps: 3
+57:                             <div id="armureStats" style="font-size:0.85em; color:#888; margin-bottom:10px;"></div> | deps: 3
+58:                         </div> | deps: 2
+59:                     </div> | deps: 1
+60:                     <div class="options-section mb-4 pb-3 border-bottom"> | deps: 2
+61:                         <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Lancer Libre</h6> | deps: 2
+62:                         <div class="dice-increments"> | deps: 3
+63:                         <div class="row align-items-center justify-content-center"> | deps: 4
+64:                             <div class="d4"> | deps: 5
+65:                                 <label for="d4">d4:</label> | deps: 5
+66:                                 <button class="increment-button" type="button" onclick="updateDiceInput('d4', 'add')">+</button> | deps: 5
+67:                                 <button class="increment-button" type="button" onclick="updateDiceInput('d4', 'remove')">-</button><br> | deps: 5
+68:                             </div> | deps: 4
+69:                             <div class="d6"> | deps: 5
+70:                                 <label for="d6">d6:</label> | deps: 5
+71:                                 <button class="increment-button" type="button" onclick="updateDiceInput('d6', 'add')">+</button> | deps: 5
+72:                                 <button class="increment-button" type="button" onclick="updateDiceInput('d6', 'remove')">-</button><br> | deps: 5
+73:                             </div> | deps: 4
+74:                         </div> | deps: 3
+75:                         <div class="row align-items-center justify-content-center second-increments"> | deps: 4
+76:                             <div class="d10"> | deps: 5
+77:                                 <label for="d10">d10:</label> | deps: 5
+78:                                 <button class="increment-button" type="button" onclick="updateDiceInput('d10', 'add')">+</button> | deps: 5
+79:                                 <button class="increment-button" type="button" onclick="updateDiceInput('d10', 'remove')">-</button><br><br> | deps: 5
+80:                             </div> | deps: 4
+81:                             <div class="d20"> | deps: 5
+82:                                 <label for="d20">d20:</label> | deps: 5
+83:                                 <button class="increment-button" type="button" onclick="updateDiceInput('d20', 'add')">+</button> | deps: 5
+84:                                 <button class="increment-button" type="button" onclick="updateDiceInput('d20', 'remove')">-</button><br><br> | deps: 5
+85:                             </div> | deps: 4
+86:                         </div> | deps: 3
+87:                         <label for="dice-input">Lancer les dés :</label> | deps: 3
+88:                         <input type="text" id="dice-input" name="dice-input"> | deps: 3
+89:  | deps: 3
+90:                         <input id="dice-throw-trigger" type="submit" value="Lancer les dés"> | deps: 3
+91:                     </div> | deps: 2
+92:                     </div> | deps: 1
+93:  | deps: 1
+94:                     <div class="options-section mb-3"> | deps: 2
+95:                         <h6 class="fw-bold text-light text-uppercase mb-3" style="font-size: 0.85rem; letter-spacing: 0.05em;">Test de Compétence</h6> | deps: 2
+96:                         <div class="dice-statistics"> | deps: 3
+97:                         <div class="input-field dropdown-container"> | deps: 4
+98:                             <label for="caracteristic-input">Caractéristique :</label> | deps: 4
+99:                             <input type="text" id="caracteristic-input" placeholder="Start typing..."> | deps: 4
+100:                             <div id="caracteristic-dropdown" class="dropdown"> | deps: 5
+101:                                 <a data-value="puissance" href="#">Puissance</a> | deps: 5
+102:                                 <a data-value="resistance" href="#">Résistance</a> | deps: 5
+103:                                 <a data-value="precision" href="#">Précision</a> | deps: 5
+104:                                 <a data-value="reflexes" href="#">Réflexes</a> | deps: 5
+105:                                 <a data-value="connaissance" href="#">Connaissance</a> | deps: 5
+106:                                 <a data-value="perception" href="#">Perception</a> | deps: 5
+107:                                 <a data-value="volonte" href="#">Volonte</a> | deps: 5
+108:                                 <a data-value="empathie" href="#">Empathie</a> | deps: 5
+109:                             </div> | deps: 4
+110:                         </div> | deps: 3
+111:                         <br> | deps: 3
+112:                         <div class="dropdown-container"> | deps: 4
+113:                             <label for="dropdown-input">Compétence :</label> | deps: 4
+114:                             <input type="text" id="dropdown-input" placeholder="Start typing..."> | deps: 4
+115:                             <div id="dropdown" class="dropdown"> | deps: 5
+116:                                 <a data-value="arts" href="#">Arts</a> | deps: 5
+117:                                 <a data-value="cite" href="#">Cite</a> | deps: 5
+118:                                 <a data-value="civilisations" href="#">Civilisations</a> | deps: 5
+119:                                 <a data-value="relationnel" href="#">Relationnel</a> | deps: 5
+120:                                 <a data-value="soins" href="#">Soins</a> | deps: 5
+121:                                 <a data-value="animalisme" href="#">Animalisme</a> | deps: 5
+122:                                 <a data-value="faune" href="#">Faune</a> | deps: 5
+123:                                 <a data-value="montures" href="#">Montures</a> | deps: 5
+124:                                 <a data-value="pistage" href="#">Pistage</a> | deps: 5
+125:                                 <a data-value="territoire" href="#">Territoire</a> | deps: 5
+126:                                 <a data-value="adresse" href="#">Adresse</a> | deps: 5
+127:                                 <a data-value="armurerie" href="#">Armurerie</a> | deps: 5
+128:                                 <a data-value="artisanat" href="#">Artisanat</a> | deps: 5
+129:                                 <a data-value="mecanisme" href="#">Mecanisme</a> | deps: 5
+130:                                 <a data-value="runes" href="#">Runes</a> | deps: 5
+131:                                 <a data-value="athletisme" href="#">Athletisme</a> | deps: 5
+132:                                 <a data-value="discretion" href="#">Discretion</a> | deps: 5
+133:                                 <a data-value="flore" href="#">Flore</a> | deps: 5
+134:                                 <a data-value="vigilance" href="#">Vigilance</a> | deps: 5
+135:                                 <a data-value="voyage" href="#">Voyage</a> | deps: 5
+136:                                 <a data-value="bouclier" href="#">Bouclier</a> | deps: 5
+137:                                 <a data-value="cac" href="#">Corps à Corps</a> | deps: 5
+138:                                 <a data-value="lancer" href="#">Lancer</a> | deps: 5
+139:                                 <a data-value="melee" href="#">Melee</a> | deps: 5
+140:                                 <a data-value="tir" href="#">Tir</a> | deps: 5
+141:                                 <a data-value="eclats" href="#">Eclats</a> | deps: 5
+142:                                 <a data-value="lunes" href="#">Lunes</a> | deps: 5
+143:                                 <a data-value="mythes" href="#">Mythes</a> | deps: 5
+144:                                 <a data-value="pantheons" href="#">Pantheons</a> | deps: 5
+145:                                 <a data-value="rituels" href="#">Rituels</a> | deps: 5
+146:                             </div> | deps: 4
+147:                         </div> | deps: 3
+148:                        <div class="row no-gutters"> | deps: 4
+149:                             <labell for="modifier">Modifier:</label> | deps: 4
+150:                             <button id="increment" class="increment-button" type="button">+</button> | deps: 4
+151:                             <input class="modifier" type="text" id="modifier" value="0"> | deps: 4
+152:                             <button id="decrement" class="increment-button" type="button">-</button><br> | deps: 4
+153:                         </div> | deps: 3
+154:                         <button id="stats-send" class="stats-send" type="button">Lancer les dés</button><br> | deps: 3
+155:                     </div> | deps: 2
+156:                 </div> | deps: 1
+157:                 </div> | deps: 0
+158:             </div> | deps: -1

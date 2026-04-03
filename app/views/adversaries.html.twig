@@ -1,0 +1,157 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Bestiaire / PNJ{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4"><i class="fas fa-dragon"></i> Bestiaire et PNJ</h1>
+    
+    <div class="row">
+        <!-- Form to add new Adversary -->
+        <div class="col-md-5">
+            <div class="card bg-dark text-light border-secondary">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">Ajouter une Entité</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/admin/adversaries" method="POST">
+                        <div class="mb-2">
+                            <label>Nom</label>
+                            <input type="text" name="name" class="form-control" required placeholder="Ex: Adun'tu">
+                        </div>
+                        <div class="mb-2">
+                            <label>Type</label>
+                            <input type="text" name="type" class="form-control" placeholder="Humain, bête extraordinaire, monstre...">
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <label>Menace</label>
+                                <input type="text" name="menace" class="form-control" placeholder="Majeure...">
+                            </div>
+                            <div class="col-6 mb-2">
+                                <label>Expérience</label>
+                                <input type="text" name="experience" class="form-control" placeholder="Expert...">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <label>Attaque (Jet)</label>
+                                <input type="text" name="attaque" class="form-control" placeholder="6D">
+                            </div>
+                            <div class="col-6 mb-2">
+                                <label>Contact (Diff)</label>
+                                <input type="text" name="contact" class="form-control" placeholder="5/7/9">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <label>Action (Jet)</label>
+                                <input type="text" name="action" class="form-control" placeholder="5D">
+                            </div>
+                            <div class="col-6 mb-2">
+                                <label>Spécialité (Jet)</label>
+                                <input type="text" name="specialite" class="form-control" placeholder="7D">
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label>Détails Spécialités</label>
+                            <input type="text" name="specialite_details" class="form-control" placeholder="Athlétisme, Discrétion...">
+                        </div>
+                        <div class="row">
+                            <div class="col-4 mb-2">
+                                <label>Relances</label>
+                                <input type="text" name="relances" class="form-control" placeholder="2D">
+                            </div>
+                            <div class="col-4 mb-2">
+                                <label>Réserve</label>
+                                <input type="text" name="reserve" class="form-control" placeholder="3D">
+                            </div>
+                            <div class="col-4 mb-2">
+                                <label>Réaction</label>
+                                <input type="text" name="reaction" class="form-control" placeholder="4D+2">
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label>Armes / Dommages</label>
+                            <input type="text" name="arme" class="form-control" placeholder="griffes, dommages 4 (T), Rapide (2)">
+                        </div>
+                        <div class="mb-2">
+                            <label>Armure</label>
+                            <input type="text" name="armure" class="form-control" placeholder="oripeaux funestes, intégrale 3">
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label>Bless. Légères</label>
+                                <input type="number" name="blessuresLegeres" class="form-control" value="2">
+                            </div>
+                            <div class="col-4">
+                                <label>Bless. Graves</label>
+                                <input type="number" name="blessuresGraves" class="form-control" value="5">
+                            </div>
+                            <div class="col-4">
+                                <label>Bless. Mortelles</label>
+                                <input type="number" name="blessuresMortelles" class="form-control" value="8">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>Capacités / Notes</label>
+                            <textarea name="capacites" class="form-control" rows="3" placeholder="Arpenteur nocturne..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Créer l'Entité</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- List of existing Adversaries -->
+        <div class="col-md-7">
+            <h4 class="mb-3">Bestiaire Enregistré</h4>
+            {% for adv in adversaries %}
+                <div class="card bg-dark border-secondary text-light mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ adv.name }} <small class="text-muted">({{ adv.type }})</small></h5>
+                        <form action="/admin/adversaries/delete/{{ adv.id }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-white-50 small mb-2">
+                            <div class="col-4">Menace: {{ adv.menace }}</div>
+                            <div class="col-4">Expérience: {{ adv.experience }}</div>
+                            <div class="col-4">Rôle: {{ adv.role }}</div>
+                        </div>
+                        <table class="table table-sm table-dark table-bordered text-center">
+                            <tr>
+                                <th>Attaque</th><th>Contact</th><th>Action</th><th>Spécialité</th>
+                            </tr>
+                            <tr>
+                                <td>{{ adv.attaque }}</td><td>{{ adv.contact }}</td><td>{{ adv.action }}</td><td>{{ adv.specialite }}*</td>
+                            </tr>
+                        </table>
+                        <p class="small text-muted mb-2">* {{ adv.specialite_details }}</p>
+                        <table class="table table-sm table-dark table-bordered text-center">
+                            <tr>
+                                <th>Relances</th><th>Réserve</th><th>Réaction</th>
+                            </tr>
+                            <tr>
+                                <td>{{ adv.relances }}</td><td>{{ adv.reserve }}</td><td>{{ adv.reaction }}</td>
+                            </tr>
+                        </table>
+                        <p class="mb-1"><strong>Arme:</strong> {{ adv.arme }}</p>
+                        <p class="mb-1"><strong>Armure:</strong> {{ adv.armure }}</p>
+                        <p class="mb-2"><strong>Blessures:</strong> Légères ({{ adv.blessuresLegeres }}) | Graves ({{ adv.blessuresGraves }}) | Mortelles ({{ adv.blessuresMortelles }})</p>
+                        {% if adv.capacites %}
+                            <div class="alert alert-secondary text-dark p-2 small mb-0">
+                                <strong>Capacités:</strong><br>
+                                {{ adv.capacites | nl2br }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info">Aucun PNJ / Monstre enregistré pour l'instant.</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
