@@ -36,6 +36,11 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.set('views', "./app/views");
 
+app.use((req, res, next) => {
+  res.locals.isAdmin = (req.session && req.session.userId == 1);
+  next();
+});
+
 app.use(expressStatic('./app/public'));
 app.use('/public', expressStatic('./app/public'));
 app.use('/Documentation', expressStatic('Documentation'));

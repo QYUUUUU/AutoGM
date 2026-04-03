@@ -32,7 +32,7 @@
                 {% set i = i + 1 %}
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4 d-flex card-custom charactersheet" id="{{ character.id_Character }}">
                     <div class="card h-100 w-100 shadow-sm border-0 character-item rounded-3 overflow-hidden bg-dark">
-                        <div class="img-container position-relative" style="height: 350px; overflow: hidden;">
+                        <div class="img-container position-relative" style="height: 280px; overflow: hidden;">
                             {% if character.avatar and character.avatar != "" %}
                                 <img src="{{ character.avatar }}" class="card-img-top w-100 h-100" style="object-fit: cover; object-position: center top;" alt="{{ character.nom }}">
                             {% else %}

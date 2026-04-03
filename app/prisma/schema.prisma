@@ -166,4 +166,20 @@ model Groupe {
     instinctGroupe          String?     @db.VarChar(500)
     capacitesInstinctGroupe String?     @db.Text
     Character               Character[]
+    WorldState          WorldState?
+}
+
+model WorldState {
+    id          Int     @id @default(autoincrement())
+    timeOfDay   String  @default("Matin")
+    weekType    String  @default("Eau")
+    dayNumber   Int     @default(1)
+    sinlaPhase   String  @default("Nouvelle")
+    akhatState   String  @default("Eteinte")
+    loisCoutumes String? @db.Text
+    rations      Int?    @default(0)
+    etatMontures String? @db.Text
+    encombrement String? @db.Text
+    Groupe       Groupe? @relation(fields: [groupeId], references: [id], onDelete: Cascade)
+    groupeId     Int?    @unique
 }
