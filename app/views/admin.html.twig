@@ -1,13 +1,14 @@
 {% extends '/layouts/base.html.twig' %}
 
-{% block title %}Dashboard MJ - GODS{% endblock %}
+{% block title %}Dashboard MJ - GODS
+{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="/css/dashboard.css">
     <style>
         .admin-dashboard {
-            background-color: rgba(26, 26, 29, 0.85); /* Semi-transparent to show the background */
+            background-color: rgba(26, 26, 29, 0.65); /* Semi-transparent to show the background */
             min-height: 100vh;
             color: #dcdccc;
             padding: 2rem 0;
@@ -16,7 +17,7 @@
             z-index: 1; /* Keep above the slideshow */
         }
         .mj-card {
-            background: rgba(35, 35, 40, 0.95);
+            background: rgba(35, 35, 40, 0.82);
             border: 1px solid #4a4a50;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.5);
@@ -111,7 +112,7 @@
 </div>
 
 <div class="admin-dashboard">
-    <div class="container">
+    <div class="container-fluid px-4 px-xl-5">
         <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
             <h1 class="text-white text-uppercase"><i class="fas fa-crown text-warning"></i> Dashboard du Maître de Jeu</h1>
             
@@ -244,74 +245,120 @@
                     </div>
                     <div class="mj-card-body row text-white">
                         <!-- Panel de gauche : Liste de combat -->
-                        <div class="col-md-7 border-end border-secondary">
-                            <div class="d-flex justify-content-between mb-3">
-                                <h4>Combattants</h4>
-                                <div>
-                                    <button class="btn btn-sm btn-outline-info" onclick="rollInitiative()">Lancer Initiative (1D10 + Réaction)</button>
-                                    <button class="btn btn-sm btn-outline-warning" onclick="clearCombatants()">Vider Ennemis</button>
+                        <div class="col-md-7 border-end border-secondary pe-4">
+                            <style>
+                                input[type=number]::-webkit-inner-spin-button, 
+                                input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+                                input[type=number] { -moz-appearance: textfield; }
+                                .stat-box { background: rgba(0,0,0,0.2); border-radius: 6px; padding: 4px 8px; border: 1px solid rgba(255,255,255,0.1); }
+                                .stat-label { font-size: 0.65rem; text-transform: uppercase; color: #888; font-weight: bold; letter-spacing: 0.5px; display: block; margin-bottom: 2px; }
+                                .stat-val { font-size: 0.95rem; font-weight: bold; color: #eee; } .stat-clickable:hover strong { background-color:#d4af37 !important; color:#000 !important; cursor:pointer; }
+                            </style>
+                                                        <div class="d-flex flex-column mb-4 pb-3 border-bottom border-secondary">
+                                <!-- SYSTEME DE TABS (ENCOUNTERS) -->
+                                <ul class="nav nav-tabs mb-3 shadow-sm border-secondary border-opacity-50" id="encountersTabs" style="border-bottom: 2px solid #5a4b3c;">
+                                    <!-- Tabs renderisés dynamiquement ici -->
+                                    <li class="nav-item">
+                                        <button class="nav-link text-success fw-bold border-0 bg-transparent" onclick="createNewEncounterTab()" style="cursor: pointer;"><i class="fas fa-plus"></i> Nouvelle Scène</button>
+                                    </li>
+                                </ul>
+
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="mb-0 text-info"><i class="fas fa-list-ol"></i> Ordre d'Action</h4>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="clearCombatants()"><i class="fas fa-trash-alt"></i> Vider Ennemis</button>
+                                </div>
+                                <div class="d-flex flex-wrap align-items-center justify-content-between bg-dark p-3 rounded border border-secondary shadow-sm">
+                                    <div class="d-flex flex-wrap align-items-center mb-2 mb-md-0">
+                                        <span class="text-white-50 ms-2 me-3 small fw-bold text-nowrap mb-2 mb-sm-0">RÉACTION PNJ :</span>
+                                        <div class="d-flex align-items-center mb-2 mb-sm-0" style="width: auto; gap: 1.5rem;">
+                                            <select id="pnjDiff" class="form-select form-select-sm border-secondary text-white rounded" style="background:#2c3034;">
+                                                <option value="5">Offensif (Diff 5)</option>
+                                                <option value="7" selected>Actif (Diff 7)</option>
+                                                <option value="9">Passif (Diff 9)</option>
+                                            </select>
+                                            <button class="btn btn-sm btn-outline-info px-4 rounded" onclick="rollPNJInitiative()">
+                                                <i class="fas fa-dice"></i> Lancer
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-warning fw-bold text-dark px-3 py-2 shadow w-100" onclick="sortInitiative()">
+                                            <i class="fas fa-sort-amount-down"></i> Appliquer l'Ordre
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <h5>Personnages Joueurs (PJ)</h5>
-                            <div class="table-responsive mb-3">
-                                <table class="table table-dark table-striped text-white align-middle" id="combatTablePJ">
-                                    <thead>
-                                        <tr>
-                                            <th>Init</th>
-                                            <th>Nom</th>
-                                            <th>Armure<br><small>(C,P,T)</small></th>
-                                            <th style="width:150px;">Blessures<br><small>(L/G/M)</small></th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <div id="combatListAll" class="d-flex flex-column gap-3 mb-4"></div>
 
-                            <h5>Personnages Non-Joueurs (PNJ)</h5>
-                            <div class="table-responsive mb-4">
-                                <table class="table table-dark table-striped text-white align-middle" id="combatTablePNJ">
-                                    <thead>
-                                        <tr>
-                                            <th>Init</th>
-                                            <th>Nom</th>
-                                            <th>Armure<br><small>(C,P,T)</small></th>
-                                            <th style="width:150px;">Blessures<br><small>(L/G/M)</small></th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                            
-                            <hr class="border-secondary">
-                            <h5>Création à la Volée (Bestiaire)</h5>
+                            <hr class="border-secondary mt-5">
+                            <h5 class="text-white-50"><i class="fas fa-book-dead text-warning"></i> Boutiques & Bestiaire</h5>
                             <div class="row g-2 mb-3">
                                 <div class="col-sm-8">
-                                    <select id="bestiaryQuickSelect" class="form-select form-select-sm mj-select">
+                                    <select id="bestiaryQuickSelect" class="form-select form-select-sm mj-select pe-4">
                                         <option value="">-- Choisir dans le Bestiaire --</option>
                                         {% for adv in adversaries %}
-                                        <option value="{{ adv.name|escape('html') }}" data-react="{{ adv.reaction }}" data-arm="{{ adv.armure }}" data-l="{{ adv.blessuresLegeres }}" data-g="{{ adv.blessuresGraves }}" data-m="{{ adv.blessuresMortelles }}">{{ adv.name }} (Menace: {{ adv.menace }})</option>
+                                        <option value="{{ adv.name|escape('html') }}"
+    data-react="{{ adv.reaction }}" 
+    data-arm="{{ adv.armure }}" 
+    data-l="{{ adv.blessuresLegeres }}" 
+    data-g="{{ adv.blessuresGraves }}" 
+    data-m="{{ adv.blessuresMortelles }}"
+    data-atk="{{ adv.attaque|escape('html') }}"
+    data-act="{{ adv.action|escape('html') }}"
+    data-contact="{{ adv.contact|escape('html') }}"
+    data-spec="{{ adv.specialite|escape('html') }}"
+    data-specdet="{{ adv.specialite_details|escape('html') }}"
+    data-rel="{{ adv.relances|escape('html') }}"
+    data-res="{{ adv.reserve|escape('html') }}"
+    data-arme="{{ adv.arme|escape('html') }}"
+    data-cap="{{ adv.capacites|escape('html') }}"
+    data-desc="{{ adv.description|escape('html') }}"
+>{{ adv.name }} (Menace: {{ adv.menace }})</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
-                                    <button class="btn btn-sm btn-warning w-100" onclick="generateBestiaryPNJ()">+ Générer</button>
+                                    <button class="btn btn-sm btn-warning w-100 fw-bold" onclick="generateBestiaryPNJ()"><i class="fas fa-plus"></i> Générer PNJ</button>
                                 </div>
                             </div>
-
-                            <hr class="border-secondary mt-4">
-                            <h5>Ajout Manuel d'Ennemi</h5>
+                            
+                            <h5 class="text-white-50 mt-4"><i class="fas fa-user-edit text-info"></i> PNJ Rapide</h5>
                             <div class="row g-2 mb-3">
-                                <div class="col-sm-3"><input type="text" id="neName" class="form-control form-control-sm mb-1" placeholder="Nom"></div>
-                                <div class="col-sm-2"><input type="number" id="neReact" class="form-control form-control-sm mb-1" placeholder="Réactivité" value="2"></div>
-                                <div class="col-sm-3"><input type="text" id="neArmor" class="form-control form-control-sm mb-1" placeholder="0,0,0 (C,P,T)"></div>
-                                <div class="col-sm-4"><input type="text" id="neWounds" class="form-control form-control-sm mb-1" placeholder="Max: L,G,M (3,2,1)" value="3,2,1"></div>
+                                <div class="col-sm-12"><input type="text" id="neName" class="form-control form-control-sm border-secondary text-white" style="background:#222;" placeholder="Nom du PNJ (ex: Chasseur, Garde...)"></div>
+                                <div class="col-sm-4">
+                                    <select id="neMenace" class="form-select form-select-sm mj-select" title="Menace">
+                                        <option value="Mineure">Mineure (3D)</option>
+                                        <option value="Sérieuse" selected>Sérieuse (4D)</option>
+                                        <option value="Majeure">Majeure (5D)</option>
+                                        <option value="Mortelle">Mortelle (6D)</option>
+                                        <option value="Funeste">Funeste (7D)</option>
+                                        <option value="Effroyable">Effroyable (8D)</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select id="neExp" class="form-select form-select-sm mj-select" title="Expérience">
+                                        <option value="Débutant">Débutant (3D/4D)</option>
+                                        <option value="Confirmé" selected>Confirmé (3D/5D)</option>
+                                        <option value="Expert">Expert (4D/6D)</option>
+                                        <option value="Maître">Maître (4D/6D)</option>
+                                        <option value="Grand maître">Gd Maître (5D/7D)</option>
+                                        <option value="Légende">Légende (6D/8D)</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select id="neRole" class="form-select form-select-sm mj-select" title="Rôle">
+                                        <option value="Mineur">Mineur</option>
+                                        <option value="Secondaire" selected>Secondaire</option>
+                                        <option value="Important">Important</option>
+                                        <option value="Majeur">Majeur</option>
+                                        <option value="Principal">Principal</option>
+                                        <option value="Primordial">Primordial</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12"><input type="text" id="neSpecName" class="form-control form-control-sm border-secondary text-white" style="background:#222;" placeholder="Nom de la spécialité (ex: Archerie, Discrétion...)"></div>
                             </div>
-                            <button class="btn btn-sm btn-danger w-100" onclick="addEnemy()">+ Ajouter Manuellement</button>
+                            <button class="btn btn-sm btn-outline-secondary text-white w-100 mb-4" onclick="addEnemy()"><i class="fas fa-plus"></i> Générer par Profil</button>
                         </div>
                         
                         <!-- Panel de droite : Résolution Combat -->
@@ -359,6 +406,15 @@
                             <button class="btn btn-danger w-100 mb-3" onclick="resolveAttack()"><i class="fas fa-gavel"></i> Lancer l'Attaque</button>
                             
                             <div id="combatLog" class="p-2 border border-secondary rounded" style="background:#111; height:300px; overflow-y:auto; font-family:monospace; font-size:0.9em; white-space:pre-wrap;"></div>
+                            
+                            <hr class="border-secondary mt-5 mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4>Historique des Lancés (Joueurs)</h4>
+                            </div>
+                            <div class="dice-results d-flex flex-column border border-secondary rounded mb-4" style="height: 85vh; min-height: 800px; background-color: #1a1d24; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
+                                <div class="body-card p-3" style="flex: 1; overflow-y: auto; font-size: 0.9em; font-family: sans-serif; color: #eee;"></div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -469,6 +525,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
+    let savedState = [];
+    try {
+        let raw = localStorage.getItem('combatantsState');
+        if (raw) savedState = JSON.parse(raw);
+    } catch(e) {}
+    
+    if (savedState && savedState.length > 0) {
+        // Mettre à jour les PJ si trouvés dans le state
+        combatants.forEach(pc => {
+            let s = savedState.find(x => x.id === pc.id);
+            if (s) {
+                pc.init = s.init;
+                pc.armor = s.armor;
+                pc.l = s.l;
+                pc.g = s.g;
+                pc.m = s.m;
+                pc.lMax = s.lMax;
+                pc.gMax = s.gMax;
+                pc.mMax = s.mMax;
+            }
+        });
+        
+        // Ajouter les PNJ du state
+        let savedNPCs = savedState.filter(s => !s.isPC);
+        combatants.push(...savedNPCs);
+        
+        // Trier par initiative
+        combatants.sort((a,b) => b.init - a.init);
+    }
+    
     updateCombatUI();
 });
 
@@ -483,30 +569,78 @@ function getArmorVal(armorStr, type) {
 }
 
 function addEnemy() {
-    const name = document.getElementById("neName").value || "Goule";
-    const react = parseInt(document.getElementById("neReact").value) || 2;
-    const armor = document.getElementById("neArmor").value || "0,0,0";
+    const name = document.getElementById("neName").value || "PNJ";
+    const valMenace = document.getElementById("neMenace").value;
+    const valExp = document.getElementById("neExp").value;
+    const valRole = document.getElementById("neRole").value;
+    const valSpecName = document.getElementById("neSpecName") ? document.getElementById("neSpecName").value : "";
+
+    const tableMenace = {
+        "Mineure": { atk: "3D", l: 1, g: 1, m: 1 },
+        "Sérieuse": { atk: "4D", l: 2, g: 1, m: 1 },
+        "Majeure": { atk: "5D", l: 2, g: 2, m: 1 },
+        "Mortelle": { atk: "6D", l: 3, g: 2, m: 2 },
+        "Funeste": { atk: "7D", l: 4, g: 3, m: 2 },
+        "Effroyable": { atk: "8D", l: 5, g: 4, m: 2 }
+    };
     
-    let woundsRaw = document.getElementById("neWounds").value || "3,2,1";
-    let wSplit = woundsRaw.split(',');
+    const tableExp = {
+        "Débutant": { act: "3D", spec: "4D", rel: "0D", contact: "7" },
+        "Confirmé": { act: "3D", spec: "5D", rel: "0D", contact: "5" },
+        "Expert": { act: "4D", spec: "6D", rel: "1D", contact: "7" },
+        "Maître": { act: "4D", spec: "6D", rel: "2D", contact: "5" },
+        "Grand maître": { act: "5D", spec: "7D", rel: "3D", contact: "5" },
+        "Légende": { act: "6D", spec: "8D", rel: "4D", contact: "3" }
+    };
     
-    let maxL = parseInt(wSplit[0]) || 3;
-    let maxG = parseInt(wSplit[1]) || 2;
-    let maxM = parseInt(wSplit[2]) || 1;
-    
+    const tableRole = {
+        "Mineur": { reactRaw: "3D", reserve: "0D", arm: 1 },
+        "Secondaire": { reactRaw: "3D+1", reserve: "1D", arm: 2 },
+        "Important": { reactRaw: "3D+2", reserve: "2D", arm: 2 },
+        "Majeur": { reactRaw: "4D+2", reserve: "4D", arm: 3 },
+        "Principal": { reactRaw: "4D+3", reserve: "6D", arm: 4 },
+        "Primordial": { reactRaw: "5D+3", reserve: "8D", arm: 5 }
+    };
+
+    const m = tableMenace[valMenace];
+    const e = tableExp[valExp];
+    const r = tableRole[valRole];
+
+    let reactMatch = r.reactRaw.match(/(\d+)/);
+    let reactVal = reactMatch ? parseInt(reactMatch[1]) : 3;
+
+    let npcData = {
+        atk: m.atk,
+        act: e.act,
+        contact: e.contact,
+        spec: e.spec,
+        specdet: valSpecName,
+        rel: e.rel,
+        res: r.reserve,
+        arme: "",
+        cap: `Profil Rapide (${valMenace}, ${valExp}, ${valRole})`,
+        desc: "",
+        reactRaw: r.reactRaw,
+        armRaw: String(r.arm),
+        lRaw: String(m.l),
+        gRaw: String(m.g),
+        mRaw: String(m.m)
+    };
+
     combatants.push({
         id: "npc_"+Date.now(),
         isPC: false,
         name: name,
-        reaction: react,
+        reaction: reactVal, // this sets the reaction logic to base number of dice for backwards compat
         init: 0,
-        armor: armor,
-        lMax: maxL,
-        gMax: maxG,
-        mMax: maxM,
+        armor: r.arm + "," + r.arm + "," + r.arm,
+        lMax: m.l,
+        gMax: m.g,
+        mMax: m.m,
         l: 0,
         g: 0,
-        m: 0
+        m: 0,
+        npcData: npcData
     });
     updateCombatUI();
 }
@@ -517,13 +651,46 @@ function clearCombatants() {
     updateCombatUI();
 }
 
-function rollInitiative() {
+function rollPNJInitiative() {
+    let diff = parseInt(document.getElementById("pnjDiff").value);
+    let count = 0;
     combatants.forEach(c => {
-        let roll = Math.floor(Math.random() * 10) + 1;
-        c.init = roll + c.reaction;
+        if (!c.isPC) {
+            let successes = 0;
+            // Gestion du format 4D+2
+            let rawReact = (c.npcData && c.npcData.reactRaw) ? c.npcData.reactRaw : String(c.reaction);
+            let reactStr = rawReact.toString().toUpperCase().replace(/\s/g, '');
+            let diceCount = parseInt(reactStr) || 2;
+            let auto = reactStr.includes('+') ? (parseInt(reactStr.split('+')[1]) || 0) : 0;
+            
+            successes += auto;
+            let rolls = [];
+            for(let i=0; i<diceCount; i++){
+                let r = Math.floor(Math.random() * 10) + 1;
+                rolls.push(r);
+                if (r >= diff) successes++;
+            }
+            c.init = successes;
+            count++;
+            
+            let autoMs = auto > 0 ? ` (+${auto} bonus)` : "";
+            logAction(`=> 🎲 Jet PNJ [${c.name}]: ${diceCount}D10 vs ${diff}${autoMs} -> [${rolls.join(', ')}] = ${successes} réussite(s)`);
+        }
     });
-    combatants.sort((a,b) => b.init - a.init);
-    logAction("=> Initiatives lancées (1D10 + R.) 🎲");
+    if(count > 0) logAction("=> 🎲 <b>Jets de Réaction PNJ terminés.</b> Cliquez sur 'Appliquer l'Ordre' pour trier timeline.");
+    updateCombatUI();
+}
+
+function sortInitiative() {
+    combatants.sort((a,b) => {
+        if(a.init === b.init) {
+            if(a.isPC && !b.isPC) return -1;
+            if(!a.isPC && b.isPC) return 1;
+            return 0; 
+        }
+        return b.init - a.init;
+    });
+    logAction("=> ⏱️ <b>Ordre d'Action appliqué !</b> (Egalités : PJs gagnent).");
     updateCombatUI();
 }
 
@@ -533,40 +700,118 @@ function removeCombatant(id) {
 }
 
 function renderRow(c) {
-    let badge = c.isPC ? '<span class="badge bg-primary">PJ</span>' : '<span class="badge bg-danger">PNJ</span>';
+    let isPC = c.isPC;
+    let bgClass = isPC ? '#1a1d24' : '#1e1a1a'; 
+    let borderClass = isPC ? '#0d6efd' : '#dc3545';
+    
+    // Thresholds
+    let tL = c.lMax || 2;
+    let tG = tL + 3;
+    let tM = tL + 7;
+
+    let statsSection = '';
+    if (!isPC && c.npcData) {
+        
+        let atkNb = parseInt(c.npcData.atk) || 0;
+        let puisValue = Math.max(1, atkNb - 2); 
+        let actNb = parseInt(c.npcData.act) || 0;
+        let caracValue = Math.max(1, actNb - 1);
+        
+        let relCount = parseInt(c.npcData.rel) || 0;
+        const esc = (s) => String(s || '').replace(/'/g, "\\'");
+
+        statsSection = `
+        <div class="mt-3 p-3 bg-dark bg-opacity-75 rounded border border-dark border-opacity-50" style="font-size: 0.95rem; line-height: 1.6;">
+            <div class="d-flex flex-wrap" style="gap: 1.5rem; margin-bottom: 0.75rem;">
+                <div style="cursor:pointer;" onclick="quickStatRoll('${esc(c.name)}', 'Attaque', '${esc(c.npcData.atk)}', '${c.id}', ${relCount})" title="Lancer Attaque" class="stat-clickable"><span class="text-info fw-bold me-1">Attaque</span> <strong class="text-white bg-dark px-2 py-1 rounded border border-secondary">${c.npcData.atk}</strong></div>
+                <div style="cursor:pointer;" onclick="quickStatRoll('${esc(c.name)}', 'Puissance', '${puisValue}D', '${c.id}', 0)" title="Lancer Puissance (Dégâts)" class="stat-clickable"><span class="text-secondary fw-bold me-1">Puis</span> <strong class="text-white bg-dark px-2 py-1 rounded border border-secondary">${puisValue}D</strong></div>
+                <div style="cursor:pointer;" onclick="quickStatRoll('${esc(c.name)}', 'Action', '${esc(c.npcData.act)}', '${c.id}', 0)" title="Lancer Action" class="stat-clickable"><span class="text-info fw-bold me-1">Action</span> <strong class="text-white bg-dark px-2 py-1 rounded border border-secondary">${c.npcData.act}</strong></div>
+                <div style="cursor:pointer;" onclick="quickStatRoll('${esc(c.name)}', 'Caractéristique', '${caracValue}D', '${c.id}', 0)" title="Lancer Caractéristique (ex: Force, Dextérité...)" class="stat-clickable"><span class="text-secondary fw-bold me-1">Carac</span> <strong class="text-white bg-dark px-2 py-1 rounded border border-secondary">${caracValue}D</strong></div>
+                <div style="cursor:pointer;" onclick="quickStatRoll('${esc(c.name)}', 'Contact', '${esc(c.npcData.contact)}', '${c.id}', 0)" title="Lancer Contact (Défense ou Esquive)" class="stat-clickable"><span class="text-info fw-bold me-1">Contact</span> <strong class="text-white bg-dark px-2 py-1 rounded border border-secondary">${c.npcData.contact}</strong></div>
+                <div><span class="text-info fw-bold me-1">Réserve</span> <strong class="text-white">${c.npcData.res}</strong> <span class="text-light">(${c.npcData.rel} rel)</span></div>
+                ${c.npcData.arme ? `<div><span class="text-warning fw-bold me-1">Arme</span> <strong class="text-white">${c.npcData.arme}</strong></div>` : ''}
+            </div>
+            ${c.npcData.spec ? `<div class="mb-2"><div style="cursor:pointer; display:inline-block;" onclick="quickStatRoll('${esc(c.name)}', 'Spécialité : ${esc(c.npcData.specdet||"Générale")}', '${esc(c.npcData.spec)}', '${c.id}', ${relCount})" title="Lancer Spécialité" class="stat-clickable"><span class="text-primary fw-bold me-2">Spécialité</span> <span class="text-white bg-dark px-2 py-1 rounded border border-secondary">${c.npcData.spec}</span> ${c.npcData.specdet ? `<span class="text-warning fst-italic ms-1">(${c.npcData.specdet})</span>` : ''}</div></div>` : ''}
+            ${c.npcData.cap ? `<div><span class="text-warning fw-bold me-2">Capacités</span> <span class="text-white">${c.npcData.cap.replace(/\n/g, ' &bull; ')}</span></div>` : ''}
+        </div>
+        `;
+    }
+
     return `
-        <tr>
-            <td><input type="number" class="form-control form-control-sm mj-input text-center p-0" style="width:40px;" value="${c.init}" onchange="changeInit('${c.id}', this.value)"></td>
-            <td>${badge} ${c.name}</td>
-            <td><input type="text" class="form-control form-control-sm mj-input text-center p-0" style="width:60px;" value="${c.armor}" onchange="changeArmor('${c.id}', this.value)"></td>
-            <td>
-                <div class="d-flex align-items-center justify-content-start gap-2" style="font-size:0.85em;">
-                    <div class="d-flex flex-column align-items-center">
-                        <small class="text-warning">Lég (${c.lMax})</small>
-                        <input type="number" min="0" max="${c.lMax}" class="form-control form-control-sm mj-input text-center p-0" style="width:35px; height:24px; color:#ffc107;" value="${c.l}" onchange="changeWound('${c.id}', 'l', this.value)">
+    <div class="card mb-4 shadow-sm" style="background-color: ${bgClass}; border: 1px solid #4a4a50; border-left: 6px solid ${borderClass};">
+        <div class="card-body p-3">
+            <!-- HEADER ROW -->
+            <div class="d-flex flex-nowrap align-items-center justify-content-between mb-3 pb-3 border-bottom border-dark" style="gap: 1.5rem;">
+                
+                <div class="d-flex align-items-center" style="gap: 1.5rem; flex: 1; min-width: 0;">
+                    <div class="text-center flex-shrink-0">
+                        <label class="text-muted text-uppercase d-block mb-1" style="font-size: 0.65rem; font-weight: bold;">Init</label>
+                        <input type="number" class="form-control form-control-sm text-center text-white" style="background: #111; border: 1px solid #444; width: 60px; font-weight: bold; font-size: 1.2rem; appearance: none; -moz-appearance: textfield;" value="${c.init}" onchange="changeInit('${c.id}', this.value)">
                     </div>
-                    <div class="d-flex flex-column align-items-center">
-                        <small class="text-danger">Grav (${c.gMax})</small>
-                        <input type="number" min="0" max="${c.gMax}" class="form-control form-control-sm mj-input text-center p-0" style="width:35px; height:24px; color:#dc3545;" value="${c.g}" onchange="changeWound('${c.id}', 'g', this.value)">
-                    </div>
-                    <div class="d-flex flex-column align-items-center">
-                        <small class="text-white" style="background:#dc3545; padding:0 2px; border-radius:2px;">Mort (${c.mMax})</small>
-                        <input type="number" min="0" max="${c.mMax}" class="form-control form-control-sm mj-input text-center p-0" style="width:35px; height:24px; color:#ff8888;" value="${c.m}" onchange="changeWound('${c.id}', 'm', this.value)">
+                    
+                    <div style="flex: 1; min-width: 0;" class="pe-3">
+                        <div class="d-flex align-items-center mb-1" style="gap: 0.75rem;">
+                            <span class="badge" style="background-color: ${isPC ? '#0d6efd' : '#dc3545'}; color: white; padding: 4px 8px; font-size: 0.7rem;">${isPC ? 'PJ' : 'PNJ'}</span>
+                            ${!isPC ? `<span class="text-muted" style="font-size: 0.8rem;">Réaction <strong class="text-white">${c.reaction}</strong></span>` : ''}
+                        </div>
+                        <h3 class="m-0 text-white fw-bold text-truncate" style="letter-spacing: 1px; text-transform: uppercase;" title="${c.name}">${c.name}</h3>
                     </div>
                 </div>
-            </td>
-            <td>
-              <button class="btn btn-sm btn-outline-danger py-0 px-1" onclick="removeCombatant('${c.id}')"><i class="fas fa-times"></i></button>
-            </td>
-        </tr>
-    `;
-}
 
+                <div class="d-flex align-items-center" style="gap: 2rem;">
+                    <div>
+                        <label class="text-muted text-uppercase d-block mb-1 text-center" style="font-size: 0.75rem; font-weight: bold; color: #a8a8b8;">Armure <span style="font-size:0.6rem">(C,P,T)</span></label>
+                        <input type="text" class="form-control form-control-sm text-center text-white" style="background: #111; border: 1px solid #444; width: 70px; font-size: 1rem;" value="${c.armor}" placeholder="0,0,0" onchange="changeArmor('${c.id}', this.value)">
+                    </div>
+                    <button class="btn btn-outline-danger border-0" onclick="removeCombatant('${c.id}')"><i class="fas fa-times fs-4"></i></button>
+                </div>
+            </div>
+
+            <!-- WOUNDS ROW -->
+            <div class="d-flex flex-wrap align-items-center bg-dark bg-opacity-25 p-3 rounded border border-secondary border-opacity-50 mt-3" style="gap: 1.5rem;">
+                <span class="text-muted text-uppercase fw-bold" style="font-size:0.85rem; letter-spacing: 1px;">Blessures <i class="fas fa-heartbeat text-danger ms-1"></i></span>
+                
+                <div class="d-flex align-items-center flex-wrap" style="gap: 2.5rem;">
+                    <!-- LÉGÈRES -->
+                    <div class="d-flex align-items-center flex-nowrap" style="gap: 0.6rem;">
+                        <span class="text-white fw-bold text-nowrap" style="font-size:0.85rem; display:inline-block; width: 95px; text-align: right; padding-right: 10px;">Légères (${tL})</span>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-dark border-secondary text-muted" onclick="changeWound('${c.id}', 'l', ${c.l - 1})">-</button>
+                            <span class="btn btn-sm btn-dark border-secondary text-warning fw-bold" style="min-width: 80px; white-space: nowrap; font-size: 1rem; font-family: monospace; display: inline-flex; align-items: center; justify-content: center;">${c.l} / ${c.lMax}</span>
+                            <button class="btn btn-sm btn-dark border-secondary text-muted" onclick="changeWound('${c.id}', 'l', ${c.l + 1})">+</button>
+                        </div>
+                    </div>
+
+                    <!-- GRAVES -->
+                    <div class="d-flex align-items-center flex-nowrap" style="gap: 0.6rem;">
+                        <span class="text-white fw-bold text-nowrap" style="font-size:0.85rem; display:inline-block; width: 95px; text-align: right; padding-right: 10px;">Graves (${tG})</span>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-dark border-secondary text-muted" onclick="changeWound('${c.id}', 'g', ${c.g - 1})">-</button>
+                            <span class="btn btn-sm btn-dark border-secondary text-danger fw-bold" style="min-width: 80px; white-space: nowrap; font-size: 1rem; font-family: monospace; display: inline-flex; align-items: center; justify-content: center;">${c.g} / ${c.gMax}</span>
+                            <button class="btn btn-sm btn-dark border-secondary text-muted" onclick="changeWound('${c.id}', 'g', ${c.g + 1})">+</button>
+                        </div>
+                    </div>
+
+                    <!-- MORTELLES -->
+                    <div class="d-flex align-items-center flex-nowrap" style="gap: 0.6rem;">
+                        <span class="text-white fw-bold text-nowrap" style="font-size:0.85rem; display:inline-block; width: 95px; text-align: right; padding-right: 10px;">Mortelles (${tM})</span>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-dark border-secondary text-muted" onclick="changeWound('${c.id}', 'm', ${c.m - 1})">-</button>
+                            <span class="btn btn-sm btn-dark border-secondary text-white fw-bold" style="min-width: 80px; white-space: nowrap; font-size: 1rem; font-family: monospace; display: inline-flex; align-items: center; justify-content: center;">${c.m} / ${c.mMax}</span>
+                            <button class="btn btn-sm btn-dark border-secondary text-muted" onclick="changeWound('${c.id}', 'm', ${c.m + 1})">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            ${statsSection}
+        </div>
+    </div>
+    `
+}
 function updateCombatUI() {
-    const tbodyPJ = document.querySelector("#combatTablePJ tbody");
-    const tbodyPNJ = document.querySelector("#combatTablePNJ tbody");
-    if(tbodyPJ) tbodyPJ.innerHTML = "";
-    if(tbodyPNJ) tbodyPNJ.innerHTML = "";
+    const listAll = document.querySelector("#combatListAll");
+    if(listAll) listAll.innerHTML = "";
     
     let attSelect = document.getElementById("atkAttaquant");
     let cibleSelect = document.getElementById("atkCible");
@@ -582,11 +827,7 @@ function updateCombatUI() {
     let optPNJ_cib = document.createElement("optgroup"); optPNJ_cib.label = "Non-Joueurs (PNJ)";
     
     combatants.forEach(c => {
-        if (c.isPC) {
-            if(tbodyPJ) tbodyPJ.innerHTML += renderRow(c);
-        } else {
-            if(tbodyPNJ) tbodyPNJ.innerHTML += renderRow(c);
-        }
+        if(listAll) listAll.innerHTML += renderRow(c);
         
         let opt = document.createElement("option");
         opt.value = c.id; 
@@ -606,10 +847,13 @@ function updateCombatUI() {
     
     if(prevAtt && combatants.find(c=>c.id==prevAtt) && attSelect) attSelect.value = prevAtt;
     if(prevCib && combatants.find(c=>c.id==prevCib) && cibleSelect) cibleSelect.value = prevCib;
+    
+    // Sauvegarder l'état
+    localStorage.setItem('combatantsState', JSON.stringify(combatants));
 }
 
-function changeInit(id, val) { let c = combatants.find(x=>x.id==id); if(c) { c.init = parseInt(val)||0; combatants.sort((a,b)=>b.init-a.init); updateCombatUI(); } }
-function changeArmor(id, val) { let c = combatants.find(x=>x.id==id); if(c) { c.armor = val; } }
+function changeInit(id, val) { let c = combatants.find(x=>x.id==id); if(c) { c.init = parseInt(val)||0; /* No auto-sort to prevent jumping */ localStorage.setItem('combatantsState', JSON.stringify(combatants)); } }
+function changeArmor(id, val) { let c = combatants.find(x=>x.id==id); if(c) { c.armor = val; localStorage.setItem('combatantsState', JSON.stringify(combatants)); } }
 function changeWound(id, type, val) {
     let c = combatants.find(x=>x.id==id);
     if(c) {
@@ -643,17 +887,45 @@ function resolveAttack() {
     let attId = document.getElementById("atkAttaquant").value;
     let cibId = document.getElementById("atkCible").value;
     
-    let atkJet = parseInt(document.getElementById("atkJet").value) || 0;
-    let defJet = parseInt(document.getElementById("defJet").value) || 0;
+    let atkJetInput = document.getElementById("atkJet").value;
+    let defJetInput = document.getElementById("defJet").value;
     
     let att = combatants.find(c=>c.id==attId);
     let cib = combatants.find(c=>c.id==cibId);
     
     if(!att || !cib) return alert("Sélectionnez les cibles.");
     
+    let atkJet = parseInt(atkJetInput);
+    if(isNaN(atkJet)) {
+        if (!att.isPC && att.npcData) {
+            let pool = parseInt(att.npcData.atk) || parseInt(att.npcData.contact) || parseInt(att.npcData.act) || 3;
+            let diff = 7;
+            let rolls = [];
+            atkJet = 0;
+            for(let i=0; i<pool; i++){ let r = Math.floor(Math.random()*10)+1; rolls.push(r); if(r>=diff) atkJet++; }
+            logAction(`=> 🎲 Attaque Auto PNJ (${att.name}) : ${pool}D10 vs ${diff} -> [${rolls.join(', ')}] = ${atkJet} réussite(s)`);
+        } else {
+            atkJet = 0;
+        }
+    }
+
+    let defJet = parseInt(defJetInput);
+    if(isNaN(defJet)) {
+        if (!cib.isPC && cib.npcData) {
+            let pool = parseInt(cib.npcData.contact) || parseInt(cib.npcData.act) || 3;
+            let diff = 7;
+            let rolls = [];
+            defJet = 0;
+            for(let i=0; i<pool; i++){ let r = Math.floor(Math.random()*10)+1; rolls.push(r); if(r>=diff) defJet++; }
+            logAction(`=> 🛡️ Défense Auto PNJ (${cib.name}) : ${pool}D10 vs ${diff} -> [${rolls.join(', ')}] = ${defJet} réussite(s)`);
+        } else {
+            defJet = 0;
+        }
+    }
+    
     logAction(`<hr class="border-secondary my-1">`);
     logAction(`🥊 <b>${att.name}</b> attaque <b>${cib.name}</b>`);
-    logAction(`=> Jet: ${atkJet} R. (Attaque) VS ${defJet} R. (Défense)`);
+    logAction(`=> Résolution : ${atkJet} R. (Attaque) VS ${defJet} R. (Défense)`);
     
     if(defJet >= atkJet) {
         let margin = defJet - atkJet;
@@ -709,25 +981,12 @@ function resolveAttack() {
         logAction(`<span class="text-danger">=> <b>${cib.name}</b> subit <b>${finalDmg} Dégâts nets</b>. (Mettez à jour les coche(s) de Blessure manuellement)</span>`);
     }
 }
-
-
-    document.getElementById('neArmor').value = arm;
-    
-    let reactText = opt.getAttribute('data-react') || "";
-    let reactMatch = reactText.match(/(\d+)/);
-    if (reactMatch) {
-       document.getElementById('neReact').value = reactMatch[1];
-    }
-}
-
-
 function generateBestiaryPNJ() {
     const sel = document.getElementById("bestiaryQuickSelect");
     if (!sel.value) return alert("Sélectionnez un adversaire dans le Bestiaire.");
     const opt = sel.options[sel.selectedIndex];
     
     let baseName = sel.value;
-    
     let l = parseInt(opt.getAttribute('data-l')) || 3;
     let g = parseInt(opt.getAttribute('data-g')) || 2;
     let m = parseInt(opt.getAttribute('data-m')) || 1;
@@ -744,6 +1003,24 @@ function generateBestiaryPNJ() {
     let reactMatch = reactText.match(/(\d+)/);
     let react = reactMatch ? parseInt(reactMatch[1]) : 2;
 
+    let npcData = {
+        atk: opt.getAttribute('data-atk') || "",
+        act: opt.getAttribute('data-act') || "",
+        contact: opt.getAttribute('data-contact') || "",
+        spec: opt.getAttribute('data-spec') || "",
+        specdet: opt.getAttribute('data-specdet') || "",
+        rel: opt.getAttribute('data-rel') || "",
+        res: opt.getAttribute('data-res') || "",
+        arme: opt.getAttribute('data-arme') || "",
+        cap: opt.getAttribute('data-cap') || "",
+        desc: opt.getAttribute('data-desc') || "",
+        reactRaw: opt.getAttribute('data-react') || "",
+        armRaw: opt.getAttribute('data-arm') || "",
+        lRaw: opt.getAttribute('data-l') || "",
+        gRaw: opt.getAttribute('data-g') || "",
+        mRaw: opt.getAttribute('data-m') || ""
+    };
+
     let count = combatants.filter(c => c.name.startsWith(baseName)).length;
     let finalName = count > 0 ? baseName + " " + (count + 1) : baseName;
 
@@ -759,11 +1036,172 @@ function generateBestiaryPNJ() {
         mMax: m,
         l: 0,
         g: 0,
-        m: 0
+        m: 0,
+        npcData: npcData
     });
     updateCombatUI();
+    localStorage.setItem('combatantsState', JSON.stringify(combatants));
     logAction('=> Génération depuis Bestiaire: <b>' + finalName + '</b> (L:' + l + ' G:' + g + ' M:' + m + ')');
 }
 
 </script>
+
+<script src="/js/dashboardTrackRolls.js"></script>
+
+<script>
+// --- TABS SYSTEM ---
+let encounters = {};
+let activeTabId = "default";
+let tabsInitDone = false;
+
+function initTabs() {
+    let saved = localStorage.getItem('gmTabsState');
+    if(saved) {
+        try {
+            encounters = JSON.parse(saved);
+        } catch(e) {
+            encounters = { "default": { name: "Scène Principale", combatants: combatants } };
+        }
+    } else {
+        encounters = { "default": { name: "Scène Principale", combatants: combatants } };
+    }
+    
+    // Assure au moins un tab
+    if(Object.keys(encounters).length === 0) encounters = { "default": { name: "Scène Principale", combatants: [] } };
+    if(!encounters[activeTabId]) activeTabId = Object.keys(encounters)[0];
+    
+    combatants = encounters[activeTabId].combatants || [];
+    tabsInitDone = true;
+    renderTabs();
+    updateCombatUI();
+}
+
+function renderTabs() {
+    const ul = document.getElementById('encountersTabs');
+    if(!ul) return;
+    ul.innerHTML = '';
+    
+    for(let tId in encounters) {
+        const li = document.createElement('li');
+        li.className = 'nav-item position-relative';
+        
+        const isAct = (tId === activeTabId);
+        
+        li.innerHTML = `<button class="nav-link ${isAct ? 'active fw-bold text-warning border-secondary bg-dark' : 'text-white-50 border-0 bg-transparent'}" 
+            onclick="switchTab('${tId}')" style="cursor: pointer; border-bottom: ${isAct ? 'none' : '2px solid transparent'};">${encounters[tId].name}
+            ${isAct && Object.keys(encounters).length > 1 ? '<i class="fas fa-times text-danger ms-2" onclick="deleteTab(event, \''+tId+'\')" title="Fermer Scène"></i>' : ''}
+            </button>`;
+        ul.appendChild(li);
+    }
+    
+    ul.innerHTML += `<li class="nav-item">
+        <button class="nav-link text-success fw-bold border-0 bg-transparent" onclick="createNewEncounterTab()" style="cursor: pointer;"><i class="fas fa-plus"></i> Nouvelle Scène</button>
+    </li>`;
+}
+
+function switchTab(tId) {
+    if(!encounters[tId]) return;
+    saveCurrentTabState();
+    
+    activeTabId = tId;
+    combatants = encounters[activeTabId].combatants || [];
+    renderTabs();
+    updateCombatUI();
+}
+
+function saveCurrentTabState() {
+    if (!tabsInitDone) return;
+    if(encounters[activeTabId]) {
+        encounters[activeTabId].combatants = combatants;
+    }
+    localStorage.setItem('gmTabsState', JSON.stringify(encounters));
+}
+
+function createNewEncounterTab() {
+    let name = prompt("Nom de la nouvelle scène (ex: Embuscade Forêt, Donjon final...) :");
+    if(!name) return;
+    
+    let newId = "tab_" + Date.now();
+    saveCurrentTabState();
+    
+    encounters[newId] = { name: name, combatants: [] };
+    activeTabId = newId;
+    combatants = encounters[newId].combatants;
+    
+    renderTabs();
+    updateCombatUI();
+    saveCurrentTabState();
+}
+
+function deleteTab(e, tId) {
+    e.stopPropagation();
+    if(confirm("Supprimer cette scène et tous ses ennemis ?")) {
+        delete encounters[tId];
+        activeTabId = Object.keys(encounters)[0];
+        combatants = encounters[activeTabId].combatants || [];
+        renderTabs();
+        updateCombatUI();
+        saveCurrentTabState();
+    }
+}
+
+// Hooking to the end of the updateCombatUI
+let originalUpdateCombatUI = updateCombatUI;
+updateCombatUI = function() {
+    originalUpdateCombatUI();
+    saveCurrentTabState();
+};
+
+// -- QUICK ROLLS --
+function quickStatRoll(name, statName, value, cid, maxRelances) {
+    let limitRelances = parseInt(maxRelances) || 0;
+    let valStr = String(value).toUpperCase().replace(/\s/g, '');
+    let nbDice = parseInt(valStr) || 0;
+    let auto = valStr.includes('+') ? (parseInt(valStr.split('+')[1]) || 0) : 0;
+    
+    if(nbDice <= 0 && auto <= 0) return;
+    
+    let autoMs = auto > 0 ? ` (+${auto} bonus)` : "";
+    let relMsg = limitRelances > 0 ? ` (Relances auto activées: max ${limitRelances})` : "";
+    
+    logAction(`=> 🎲 ${name} effectue un Test <b>${statName}</b> (Jet : ${nbDice} dés${autoMs})${relMsg}. <span class="text-white-50"><i>Lancement en cours...</i></span>`);
+    
+    // Simulate auto roll
+    setTimeout(() => {
+        let rolledValues = [];
+        let succes = auto;
+        let failedCount = 0;
+        
+        for(let i=0; i<nbDice; i++) {
+            let r = Math.ceil(Math.random() * 10);
+            rolledValues.push(r);
+            if(r >= 7) succes++;
+            else failedCount++;
+        }
+        
+        let textResult = rolledValues.join(" ");
+        let finalDisplay = `Résultat: [${textResult}]`;
+        
+        if (limitRelances > 0 && failedCount > 0) {
+            let rerollCount = Math.min(limitRelances, failedCount);
+            let rerolledVals = [];
+            for(let i=0; i<rerollCount; i++) {
+                let r = Math.ceil(Math.random() * 10);
+                rerolledVals.push(r);
+                if(r >= 7) succes++;
+            }
+            finalDisplay += ` | Relances utilisées (${rerollCount}) -> [${rerolledVals.join(" ")}]`;
+        }
+        
+        logAction(`<span class="text-warning">=> <b>${name}</b> [${statName}] </span> ${finalDisplay}${autoMs} => <b class="fs-6">${succes} Succès</b> !`);
+    }, 400);
+}
+
+// Init when page loads
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(initTabs, 500); // let original data load
+});
+
+</script>
+
 {% endblock %}
