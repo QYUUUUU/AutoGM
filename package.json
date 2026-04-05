@@ -8,6 +8,9 @@
     "start": "node ./app.js",
     "build": "webpack"
   },
+  "prisma": {
+    "seed": "node prisma/seed.cjs"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
