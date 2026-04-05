@@ -7,3 +7,5 @@ node_modules
 gods_book.txt
 group_instincts.txt
 group_instincts_full.txt
+
+*.db
