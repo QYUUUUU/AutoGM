@@ -810,12 +810,14 @@ router.get('/stream/rolls', async (req, res) => {
   if (!id_User) return res.status(401).send("Unauthorized");
   
   try {
+      const queryGroupeId = req.query.groupe_id ? parseInt(req.query.groupe_id) : null;
+      
       const user = await prisma.favoriteCharacter.findFirst({
         where: { userId: id_User },
         include: { character: true },
       });
       const character = user?.character;
-      const groupeId = character?.groupeId;
+      const groupeId = queryGroupeId || character?.groupeId;
 
 
       res.setHeader('Content-Type', 'text/event-stream');
@@ -849,25 +851,34 @@ router.put('/fetch/rolls', async (req, res) => {
   const id_User = req.session.userId;
   if (id_User) {
     try {
-      const user = await prisma.favoriteCharacter.findFirst({
-        where: { userId: id_User },
-        include: { character: true },
-      });
+      const queryGroupeId = req.query.groupe_id ? parseInt(req.query.groupe_id) : null;
+      let whereClause = {};
 
-      const character = user.character;
+      if (queryGroupeId) {
+          whereClause = { Character: { groupeId: queryGroupeId } };
+      } else {
+          const user = await prisma.favoriteCharacter.findFirst({
+            where: { userId: id_User },
+            include: { character: true },
+          });
 
-      if (!character) {
-          return res.json([]);
+          const character = user?.character;
+          if (!character) {
+              return res.json([]);
+          }
+
+          whereClause = character.groupeId ? {
+            Character: {
+              groupeId: character.groupeId,
+            },
+          } : {
+            characterId_Character: character.id_Character,
+          };
       }
 
       const rolls = await prisma.roll.findMany({
-        where: character.groupeId ? {
-          Character: {
-            groupeId: character.groupeId,
-          },
-        } : {
-          characterId_Character: character.id_Character,
-        },
+        where: whereClause,
+        orderBy: { id: 'asc' },
         include: {
           Character: { select: { nom: true, avatar: true, genre: true } }
         }

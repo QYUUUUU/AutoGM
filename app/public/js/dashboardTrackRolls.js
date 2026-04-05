@@ -1,9 +1,12 @@
-
 let showedRolls = [];
 
 // Fonction pour appeler la route
 async function fetchRolls() {
-    const url = '/fetch/rolls';
+    let url = '/fetch/rolls';
+    const groupeInput = document.getElementById('activeGroupeId');
+    if (groupeInput && groupeInput.value) {
+        url += `?groupe_id=${groupeInput.value}`;
+    }
 
     fetch(url, {
         method: 'PUT',
@@ -19,16 +22,12 @@ async function fetchRolls() {
             }
         })
         .then(responseData => {
-            // Handle successful response
-
-            showRollOnDashboard(responseData); // Appeler votre fonction avec l'objet diceCounts
+            showRollOnDashboard(responseData);
         })
         .catch(error => {
             console.error(error);
         });
 }
-
-
 
 function showRollOnDashboard(rolls) {
     if (!rolls || !Array.isArray(rolls)) {
@@ -36,6 +35,8 @@ function showRollOnDashboard(rolls) {
         return;
     }
     const rollsTracking = document.querySelector(".dice-results .body-card");
+    if (!rollsTracking) return; // wait...
+    
     let added = false;
     rolls.forEach(roll => {
         if (!showedRolls.includes(roll.id)) {
@@ -79,7 +80,6 @@ function showRollOnDashboard(rolls) {
             let formattedContent = roll.content.replace(/\b(\d+)\b/g, '<strong class="roll-highlight">$1</strong>');
             // If there's a bar separator | let's format it a bit nicer
             formattedContent = formattedContent.replace(/\|/g, '<span style="color: rgba(199, 169, 114, 0.4); margin: 0 5px;">|</span>');
-            
             // Format newlines
             formattedContent = formattedContent.replace(/\n/g, '<br>');
             
@@ -99,15 +99,25 @@ function showRollOnDashboard(rolls) {
     }
 }
 
-// Load initial rolls once
-fetchRolls();
+// Ensure the DOM is fully loaded before fetching
+document.addEventListener('DOMContentLoaded', () => {
+    const rollsTracking = document.querySelector(".dice-results .body-card");
+    if(rollsTracking) {
+        fetchRolls();
 
-// Listen to real-time events
-const evtSource = new EventSource('/stream/rolls');
-evtSource.onmessage = function(event) {
-    const newRolls = JSON.parse(event.data);
-    showRollOnDashboard(newRolls);
-};
-evtSource.onerror = function() {
-    console.error("EventSource failed.");
-};
+        let sseUrl = '/stream/rolls';
+        const groupeInput = document.getElementById('activeGroupeId');
+        if (groupeInput && groupeInput.value) {
+            sseUrl += `?groupe_id=${groupeInput.value}`;
+        }
+        
+        const evtSource = new EventSource(sseUrl);
+        evtSource.onmessage = function(event) {
+            const newRolls = JSON.parse(event.data);
+            showRollOnDashboard(newRolls);
+        };
+        evtSource.onerror = function() {
+            console.error("EventSource failed.");
+        };
+    }
+});
