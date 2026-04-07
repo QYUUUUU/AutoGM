@@ -1,4 +1,20 @@
+/**
+ * @fileoverview dashboardForm.js
+ * @description Manages the interactive components of the dice rolling form on the dashboard (custom dropdowns, stat modifiers, and throw dispatching).
+ */
 document.addEventListener('DOMContentLoaded', function () {
+    /**
+     * @function setupDropdown
+     * @description Initializes a custom searchable dropdown component attached to a text input.
+     * Features:
+     * - Toggles dropdown visibility on input click.
+     * - Hides dropdown when clicking outside of it to prevent UI clutter.
+     * - Live-filters available `<a>` options inside the dropdown based on text typed in the input (keyup event).
+     * - Allows selecting an option and populating the input with a hidden `data-value` attribute.
+     * 
+     * @param {string} inputId - DOM ID of the text input acting as a search bar/selector.
+     * @param {string} dropdownId - DOM ID of the container holding the dropdown options.
+     */
     function setupDropdown(inputId, dropdownId) {
         const input = document.getElementById(inputId);
         const dropdown = document.getElementById(dropdownId);
@@ -35,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Initialize custom dropdown components
     setupDropdown('dropdown-input', 'dropdown');
     setupDropdown('caracteristic-input', 'caracteristic-dropdown');
 
@@ -42,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const incrementButton = document.getElementById("increment");
     const decrementButton = document.getElementById("decrement");
 
+    // Standard +1 / -1 counter mechanics for the dice modifier
     incrementButton.addEventListener("click", () => {
         modifierInput.value = parseInt(modifierInput.value) + 1;
     });
@@ -54,6 +72,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const statsSendButton = document.getElementById("stats-send");
     const competenceInput = document.getElementById("dropdown-input");
     const caracteristicInput = document.getElementById("caracteristic-input");
+    
+    /**
+     * @event 'click' on statsSendButton
+     * @description Fires an asynchronous request to the server to compute the mechanics for the RPG dice roll attempt.
+     * Features:
+     * - Packages current input values (`modifier`, `competence`, `caracteristic`).
+     * - Sends JSON to `PUT /throw`.
+     * - Parses backend response (`responseData.totalDice`, `relances`, and `extraDice`).
+     * - Combines the dice count dictionary mapped by string types (e.g. "d10", "d6").
+     * - Proxies raw data execution to the global 3D `randomDiceThrow(diceCounts, relances, caracteristic, competence)` method (mapped loosely from `dashboardDies.js`).
+     */
     statsSendButton.addEventListener("click", () => {
 
         const url = '/throw';

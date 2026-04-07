@@ -1,6 +1,28 @@
+/**
+ * @fileoverview calculateThrowsService.js
+ * @description Provides business logic for resolving mechanics and dice rolls within the RPG system (like maluses, extra dice for weapons, wound penalties).
+ */
 import fs from 'fs';
 import path from 'path';
 
+/**
+ * @function getThrowsByStats
+ * @description Master method calculating the entire dice pool and rule modifications for a character's attempt at an action.
+ * Features:
+ * - Reads a character's current health limits to apply wound penalties (`blessureModifier`: ranging from -1 for light wounds to -3 for mortal wounds).
+ * - Identifies the requested skill (`competence`) and attribute (`caracteristic`) values.
+ * - Enforces rarity penalites (`rareteMalus`) (-1 or -2 modifier drop) if a character attempts to use specialized skills they have no points in.
+ * - Extracts contextual structural maluses dynamically using the localized `getMalus` function.
+ * - Calculates basic roll and reroll configurations via `calculerLancersEtRelances`.
+ * - For combat actions (e.g., "cac", "tir"), it checks if an `armeEquipee` string exists on the character, searches for it in `equipment.json`, and parses out bonus damage dice string formats (e.g. `2D6`) mapping them cleanly into an `extraDice` dict.
+ * - Returns a configured package ready to be fully resolved.
+ * 
+ * @param {Object} character - The Prisma Character Entity object containing full stats and states.
+ * @param {Number|String} modifier - Floating situational modifier submitted from the Frontend.
+ * @param {String} competence - The strict name mapping of the skill used in the action.
+ * @param {String} caracteristic - The strict name mapping of the core attribute being leveraged.
+ * @returns {Object} `{ totalDice, relances, extraDice }` representing final instructions for random number generation.
+ */
 export function getThrowsByStats(character, modifier, competence, caracteristic) {
     const blessurelegere = character.blessurelegere;
     const blessuregrave = character.blessuregrave;
@@ -14,10 +36,21 @@ export function getThrowsByStats(character, modifier, competence, caracteristic)
     const valueCompetence = character[competence] || 0;
     const valueCaracteristic = character[caracteristic] || 0;
 
+    let rareteMalus = 0;
+    if (valueCompetence === 0) {
+        const rare1 = ['bouclier', 'animalisme', 'lunes', 'armurerie', 'artisanat', 'mythes', 'pantheons', 'runes'];
+        const rare2 = ['mecanisme', 'eclats', 'rituels'];
+        if (rare1.includes(competence)) {
+            rareteMalus = -1;
+        } else if (rare2.includes(competence)) {
+            rareteMalus = -2;
+        }
+    }
+
     const malus = getMalus(character, competence, caracteristic);
 
     var { lancers, relances } = calculerLancersEtRelances(valueCompetence);
-    const totalDice = Number(modifier) + Number(valueCaracteristic) + Number(lancers) + Number(blessureModifier) + Number(malus);
+    const totalDice = Number(modifier) + Number(valueCaracteristic) + Number(lancers) + Number(blessureModifier) + Number(malus) + Number(rareteMalus);
 
     let extraDice = {};
     const weaponComps = ["cac", "melee", "lancer", "tir"];
@@ -50,6 +83,17 @@ export function getThrowsByStats(character, modifier, competence, caracteristic)
 }
 
 
+/**
+ * @function calculerLancersEtRelances
+ * @description Extracts total discrete mechanics allowed (number of dice logic `lancers` & maximum rerolls logic `relances`) tied functionally to skill ranks.
+ * Features:
+ * - Reads a mapped `entier` value representing a character's rank in a competence.
+ * - Progressively returns ascending power ranges (e.g. rank 1 gives 1 die/0 rerolls, rank 6 gives 3 dice/3 rerolls).
+ * - Implemented fundamentally via switch case logic against predefined boundaries.
+ * 
+ * @param {Number} entier - An integer reflecting current raw rank of `valueCompetence` calculated in `getThrowsByStats()`.
+ * @returns {Object} Container mapped to `{ lancers, relances }`.
+ */
 function calculerLancersEtRelances(entier) {
     let lancers = 0;
     let relances = 0;
@@ -86,6 +130,22 @@ function calculerLancersEtRelances(entier) {
     return { lancers, relances }
 }
 
+/**
+ * @function getMalus
+ * @description Extracts and accumulates circumstantial system-enforced penalites depending purely upon which attribute and skill combination is tested.
+ * Features:
+ * - Scopes `caracteristique` grouping into domains (`malusphysique` vs `malusmental`).
+ * - Extracts `competence` domain mapping penalites (`malusoutils`, `malusanimal`, `malusterres`).
+ * - Grabs the assigned malus levels dynamically from the Prisma character record using those strings as keys (e.g. `character['malusphysique']`).
+ * - Adds both values up and forwards the combined numerical malus integer.
+ * 
+ * @param {Object} character - Target RPG Entity containing relational maluses.
+ * @param {String} competence - System skill name attempting the roll.
+ * @param {String} caracteristique - Associated core attribute checking the roll.
+ * @returns {Number|String} Compiled malus value.
+ * 
+ * Wait for obsolete code confirmation: `// Malus not found for caracteristic` happens silently passing `malusCaracteristique` as an empty string, making `malus = character[""]` which becomes `undefined`. Then, `.character[malusCompetence]` is added to it resulting in `NaN`, cascading into `totalDice = NaN` throughout the server logic, causing massive math bugs down the line to a user.
+ */
 function getMalus(character, competence, caracteristique) {
     // Initialisation de la variable qui va contenir le malus
     let malus = 0;
@@ -142,7 +202,7 @@ function getMalus(character, competence, caracteristique) {
             break;
         case 'bouclier':
         case 'cac':
-        case 'lance':
+        case 'lancer':
         case 'melee':
         case 'tir':
             malusCompetence = 'malusarme';
@@ -154,7 +214,7 @@ function getMalus(character, competence, caracteristique) {
         case 'voyage':
             malusCompetence = 'malusterres';
             break;
-        case 'eclat':
+        case 'eclats':
         case 'lunes':
         case 'mythes':
         case 'pantheons':

@@ -108,6 +108,27 @@ const bestiary = [
     capacites: "Bond du prédateur (+1D attaque) ; Puissance du prédateur (impossible de parer sans bouclier)"
   },
   {
+    name: "Lacerte",
+    type: "Bête",
+    menace: "Mineure",
+    experience: "Débutant",
+    role: "Mineur",
+    attaque: "3D",
+    contact: "7",
+    action: "3D",
+    specialite: "4D",
+    specialite_details: "Escalade",
+    relances: "0D",
+    reserve: "0D",
+    reaction: "3D",
+    arme: "morsure, griffes, dommages 1",
+    armure: "peau épaisse, protection 1",
+    blessuresLegeres: 1,
+    blessuresGraves: 1,
+    blessuresMortelles: 1,
+    capacites: "Escalade"
+  },
+  {
     name: "Rat Géant",
     type: "Bête",
     menace: "Mineure",

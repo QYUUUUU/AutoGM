@@ -1,6 +1,14 @@
 import './bootstrap.min.js';
 
-
+/**
+ * @fileoverview user.js
+ * @description Frontend script for managing the user's primary AI Assistant Chat interface on the Character Dashboard.
+ * Features:
+ * - Controls chat inputs (`#prompt-field`), sending prompt data to the internal API `POST /backend/agent`.
+ * - Handles UI state disabling forms and animating loading messages (`addTypingMessage`).
+ * - Extracts `data.diceData` from the Assistant's JSON response and routes it automatically into the Three.js 3D Physics engine (`window.randomDiceThrow`) instead of text rendering.
+ * - Manages Favorite Character swapping logic (`POST /Character/Favorite/set/:id`).
+ */
 
 //Conversation selection
 const conversation = document.getElementsByClassName("conversationid");

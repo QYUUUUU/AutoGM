@@ -1,6 +1,13 @@
 import './bootstrap.min.js';
 
-
+/**
+ * @fileoverview rules_user.js
+ * @description Frontend script for the GODS TTRPG rules-lawyer AI chat assistant widget.
+ * Features:
+ * - Similar to `user.js` but specifically binds to `POST /backend/rules`.
+ * - Does NOT handle 3D Dice intercepts, only text responses parsed through `marked.js`.
+ * - Manages chat interface bounding limits (`promptField.value.length > 1200`) and message DOM appending (`addMessage`).
+ */
 
 //Conversation selection
 const conversation = document.getElementsByClassName("conversationid-rules");

@@ -3,6 +3,21 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
+/**
+ * @fileoverview backendController.js
+ * @description Controller responsible for vector embeddings extraction via LangChain. 
+ * Allows generation/regeneration of local HNSW vector stores containing rules and lore from PDF documents.
+ */
+
+/**
+ * @function getEmbedding
+ * @description HTTP Endpoint logic to regenerate both Lore (docJDR.pdf) and Rules (rulesJDR.pdf) embeddings sequentially.
+ * Features:
+ * - Checks that a user is logged in via `req.session.userId`.
+ * - Intercepts exceptions to prevent unhandled rejection crashes.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ */
 export async function getEmbedding(req, res) {
   if (req.session.userId != "undefined" && req.session.userId != "" && req.session.userId != null) {
     try {
@@ -22,6 +37,17 @@ export async function getEmbedding(req, res) {
   }
 }
 
+/**
+ * @function embedPDF
+ * @description Extracts and processes the text from Lore/Setting PDF (`docJDR.pdf`).
+ * Features:
+ * - Cleans whitespace and newlines from raw PDF extractions.
+ * - Stores vectors locally.
+ * 
+ * Wait for confirmation: Bug / Inconsistency on folder paths!
+ * - Saves to an _absolute_ linux environment path (`/app/data/VectorStores/pdf/`).
+ * - Might fail horribly outside of a Docker setup mapping `/app`.
+ */
 async function embedPDF() {
   const loaderpdf = new PDFLoader("Documentation/docJDR.pdf");
 
@@ -33,6 +59,14 @@ async function embedPDF() {
 
   docspdf.forEach(doc => {
     doc.pageContent = doc.pageContent.replace(/(\n\s*)+/g, '\n');
+/**
+ * @function embedRules
+ * @description Extracts and processes the text from Rulebook PDF (`rulesJDR.pdf`).
+ * 
+ * Wait for confirmation: Bug / Inconsistency on folder paths!
+ * - Unlike `embedPDF`, this saves to a _relative_ path (`data/VectorStores/rules/`).
+ * - Assuming execution from `/home/moi/projets/AutoGM/` or `/app`, the generated stores are scattering.
+ */
     doc.pageContent = doc.pageContent.trim().replaceAll('\n', '  ');
   });
 

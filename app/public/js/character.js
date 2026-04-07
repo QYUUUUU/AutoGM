@@ -1,3 +1,8 @@
+/**
+ * @fileoverview character.js
+ * @description Master Frontend script mapping the interactive character sheet UI. It handles visual DOM components (like the diamond 'losange' stat trackers) and binds them dynamically to backend data models.
+ */
+
 var caracteristiqueValue;
 var competenceValue;
 var caracteristiqueMalusValue;
@@ -11,8 +16,21 @@ var legere = 0;
 var grave = 0;
 var mortelle = 0;
 
+/**
+ * @function buildPage
+ * @description Bootstraps click listeners on all character stat tracking elements (e.g. diamonds/circles representing skill points).
+ * Features:
+ * - Assigns listeners to DOM arrays `querySelectorAll('.losange')` and `.losangecarac`.
+ * - Toggles visual `<img src>` elements switching them between empty (`losange.png`) and filled (`losangered.png`) recursively up to the clicked rank.
+ * - Extracts column names natively from DOM element IDs via substring slicing (e.g., `puissancelosange3` -> `puissance`, rank 3).
+ * - Chains directly to the backend DB via `updateCharacterField(id_Character, field, note)`.
+ */
 function buildPage() {
   const losanges = document.querySelectorAll('.losange');
+  /**
+   * @function processLosanges
+   * @description Recursive binder dynamically binding the core attribute stats.
+   */
   async function processLosanges() {
     losanges.forEach(losange => {
       losange.addEventListener('click', function () {
@@ -32,6 +50,12 @@ function buildPage() {
   }
   processLosanges();
 
+  /**
+   * @function selectBlessure
+   * @description Modifies active health markers directly onto the backend.
+   * @param {string} blessure - "legere", "grave", or "mortelle"
+   * @param {number} note - The new integer value indicating wounds.
+   */
   function selectBlessure(blessure, note) {
     switch (blessure) {
       case "legere":
@@ -71,7 +95,13 @@ function buildPage() {
   var perception = 0;
   var empathie = 0;
 
-  // Fonction pour gérer la sélection de la note pour chaque caractéristique
+  /**
+   * @function selectNote
+   * @description Maps and buffers the exact core characteristic logic value dynamically into BDD mapping logic parsing switch (`puissance`, `precision`, etc).
+   * 
+   * @param {string} caracteristique - Exact target attribute field name.
+   * @param {number} note - Target integer logic mapped to clicks.
+   */
   function selectNote(caracteristique, note) {
     switch (caracteristique) {
       case "puissance":

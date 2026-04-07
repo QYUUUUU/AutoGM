@@ -1,3 +1,19 @@
+/**
+ * @fileoverview dashboardGroupe.js
+ * @description Frontend controls for managing RPG Group entities ('Groupes'), including creation, joining, leaving, and dynamic Dice pool spending.
+ */
+
+/**
+ * @function creerGroupe
+ * @description Reads user inputs to forge a new Group entity and automatically joins the current active character to it.
+ * Features:
+ * - Scrapes DOM for group name, and descriptive text related to Instincts.
+ * - Dispatches a `POST /Groupe` REST call to instantiate the group in the DB.
+ * - Chains a synchronous `POST /Character/{charId}/joinGroupe/{grp.id}` request dynamically linking the player.
+ * - Forces a page location reload to reflect new states.
+ * 
+ * @param {string|number} charId - The active character's database ID making the request.
+ */
 async function creerGroupe(charId) {
     const nom = document.getElementById('new-group-name').value;
     const instinctGrpSelect = document.getElementById('new-group-instinct');
@@ -32,6 +48,16 @@ async function creerGroupe(charId) {
     }
 }
 
+/**
+ * @function rejoindreGroupe
+ * @description Links the active character to an existing DB Group selected via dropdown.
+ * Features:
+ * - Scrapes the `group-select` dropdown element for the target Group ID.
+ * - Dispatches a generic `POST /.../joinGroupe` assignment call.
+ * - Forces UI refresh via `location.reload()`.
+ * 
+ * @param {string|number} charId - The active character's database ID.
+ */
 async function rejoindreGroupe(charId) {
     const sel = document.getElementById('group-select');
     const grpId = sel.options[sel.selectedIndex].value;
@@ -47,6 +73,15 @@ async function rejoindreGroupe(charId) {
     }
 }
 
+/**
+ * @function quitterGroupe
+ * @description Forcefully evicts the active character from their currently assigned Group.
+ * Features:
+ * - Prompts an aggressive JavaScript `confirm()` validation modal to prevent accidental clicks.
+ * - Hits the destructive `leaveGroupe` POST route stripping the assignment on the backend.
+ * 
+ * @param {string|number} charId - The active character's database ID.
+ */
 async function quitterGroupe(charId) {
     if(!confirm("Êtes-vous sûr de vouloir quitter le groupe ?")) return;
     try {
@@ -62,11 +97,31 @@ async function quitterGroupe(charId) {
 // Global variable to keep track of current reserve
 let currentReserve = -1;
 
+/**
+ * @function fetchStatsGroupe
+ * @description Incomplete placeholder for asynchronous background polling of Group stats dynamically without reloading.
+ * 
+ * Wait for obsolete code confirmation: This is a completely empty function wrapper consisting of purely dead code logic. Should I delete it, or are you planning to implement a polling system?
+ */
 async function fetchStatsGroupe(grpId) {
     // There is no route to purely fetch one group's stats yet, wait I can just update the reserve using a PUT /Groupe/:id
     // since I have the initial reserve in Twig. 
 }
 
+/**
+ * @function ajouterDesGroupe
+ * @description Extracts and increments a Group's total Dice pool linearly tied to its structural level.
+ * Features:
+ * - Scrapes the visual output string holding current dice (`Dés: 10 / 12`). Regex extracts it.
+ * - Computes maximum caps dynamically on the front end depending on Group `niveau`.
+ * - Fires a `PUT /Groupe/${grpId}` payload passing increments.
+ * - Manually alters inner DOM text directly to skip a full page refresh.
+ * 
+ * Wait for obsolete code confirmation: `reserveDes` caps are checked on the frontend (`if (current >= maxDice) return alert...`). An attacker could inject manual HTTP `PUT` requests ignoring this frontend script setting a `reserveDes` of 999 999 since the backend `userRoutes.js` route lacks validation!
+ * 
+ * @param {string|number} grpId - Target Group DB ID.
+ * @param {number} niveau - Level of the group deciding the max cap.
+ */
 async function ajouterDesGroupe(grpId, niveau) {
     const maxDice = niveau === 1 ? 12 : (niveau === 2 ? 14 : 16);
     let elem = document.getElementById('groupe-dice-display');
@@ -90,6 +145,19 @@ async function ajouterDesGroupe(grpId, niveau) {
     }
 }
 
+/**
+ * @function depenserDesGroupe
+ * @description Extracts and decrements a Group's total usable Dice pool.
+ * Features:
+ * - Same regex extraction model as `ajouterDesGroupe` fetching values physically written on-screen (`Dés: (\d+) \/`).
+ * - Validates negative decrements structurally ensuring it never falls below 0.
+ * - Overwrites the `PUT /Groupe/${grpId}` backend.
+ * - Forces UI redraw synchronously.
+ * 
+ * Wait for obsolete code confirmation: Similar vulnerability to `ajouterDesGroupe`, allowing users to maliciously bypass it or script massive expenditures. Moreover, the max calculation `let max = maxMatch ? maxMatch[1] : 12;` defaults to hardcoded `12` rendering levels 2 and 3 uncoordinated down the line if UI text breaks.
+ * 
+ * @param {string|number} grpId - Target Group DB ID.
+ */
 async function depenserDesGroupe(grpId) {
     let elem = document.getElementById('groupe-dice-display');
     let text = elem.innerText;

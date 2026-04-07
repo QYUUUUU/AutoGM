@@ -108,6 +108,8 @@ model Character {
   effort              Int?                @default(15)
   maxsangfroid        Int?                @default(8)
   sangfroid           Int?                @default(8)
+  specialites         String              @default("[]") @db.VarChar(2000)
+  langues             String              @default("[\"Babelite\"]") @db.VarChar(500)
   inventory           String?             @default("") @db.VarChar(5000)
   notes               String?             @default("") @db.VarChar(5000)
   armeEquipee         String?             @default("") @db.VarChar(500)

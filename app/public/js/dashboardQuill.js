@@ -1,3 +1,13 @@
+/**
+ * @fileoverview dashboardQuill.js
+ * @description Frontend script managing the interactive Quick Notes (Quill editor) and Character Equipment linking on the Dashboard.
+ * 
+ * Features:
+ * - Initializes Quill.js rich text editor bound to the character's 'notes' field.
+ * - Listens for dropdown generic change events on 'armeSelect' (Weapons) and 'armureSelect' (Armor) which match the screenshot provided.
+ * - Extracts `data-stats` and `data-desc` dynamically populated by Twig and renders them physically under the dropdown.
+ * - Uses `updateCharacterField` from `dashboardForm.js` mapping to save `armeEquipee` directly to the Prisma Backend via `PUT /Character`.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     let favoriteSelect = document.getElementById("favoriteCharacter");
     let armeSelect = document.getElementById("armeSelect");

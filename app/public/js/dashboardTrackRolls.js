@@ -1,6 +1,17 @@
+/**
+ * @fileoverview dashboardTrackRolls.js
+ * @description Frontend script for managing the Real-time Multiplayer Dice rolling log visualizer on the RPG Dashboard via SSE (Server-Sent Events) and initial historical REST syncing.
+ */
 let showedRolls = [];
 
-// Fonction pour appeler la route
+/**
+ * @function fetchRolls
+ * @description Initially grabs historical rolls log for the current loaded session (grouped or solo).
+ * Features:
+ * - Scrapes active session context `groupe_id` locally from a hidden DOM element (`activeGroupeId`).
+ * - Forwards context correctly to the backend `/fetch/rolls` via `PUT` to filter only relevant team chat rolls.
+ * - Bridges parsed JSON dataset to the UI rendering loop `showRollOnDashboard`.
+ */
 async function fetchRolls() {
     let url = '/fetch/rolls';
     const groupeInput = document.getElementById('activeGroupeId');
@@ -29,6 +40,18 @@ async function fetchRolls() {
         });
 }
 
+/**
+ * @function showRollOnDashboard
+ * @description Generates HTML markup natively mapping Dice rolls output data onto the screen context.
+ * Features:
+ * - Employs a local memory cache tracking `showedRolls` indices to prevent appending multiple copies of the same roll.
+ * - Extracts foreign `Character` relational mappings securely creating name headers (`nameHeader`) alongside their respective Avatars.
+ * - Dynamically inserts an "AI" badge via conditional ternary logic if `roll.thrownByAI` flag triggered true.
+ * - Encompasses simple string formatting using Regex formatting the `content` payload (numbers are wrapped in bold styled tags).
+ * - Implements automated auto-scrolling snapping bottom-up behavior when a new roll is attached to the view.
+ * 
+ * @param {Array} rolls - Array collection consisting of `{ id, content, Character, isStatRoll, thrownByAI... }` structure blocks.
+ */
 function showRollOnDashboard(rolls) {
     if (!rolls || !Array.isArray(rolls)) {
         console.warn("showRollOnDashboard called with invalid rolls data:", rolls);
@@ -99,6 +122,15 @@ function showRollOnDashboard(rolls) {
     }
 }
 
+/**
+ * @event 'DOMContentLoaded'
+ * @description Bootstraps SSE WebSocket-like connection keeping real-time sync with other Group users dynamically connected.
+ * Features:
+ * - Bootstraps historical sync `fetchRolls()` automatically.
+ * - Extracts `groupeInput` logic parameter natively appending `?groupe_id` parameter to `/stream/rolls`.
+ * - Establishes the `EventSource(sseUrl)` connecting node.
+ * - Bridges the `onmessage` raw streaming pipe down to `showRollOnDashboard(JSON)` mapping without user intervention seamlessly.
+ */
 // Ensure the DOM is fully loaded before fetching
 document.addEventListener('DOMContentLoaded', () => {
     const rollsTracking = document.querySelector(".dice-results .body-card");

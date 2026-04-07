@@ -1,3 +1,15 @@
+/**
+ * @fileoverview dashboardInventory.js
+ * @description Frontend script orchestrating the HTML inventory list presentation, addition modal mapping, and backend synchronization.
+ * 
+ * Features:
+ * - Bootstraps the `inventoryContainer` DOM node.
+ * - Extracts `data-inventory` stringified payload. Fallbacks gracefully converting legacy corrupt JSON Quill blobs into standard array mappings.
+ * - Manages an asynchronous state rendering via string literals innerHTML generation.
+ * - Interrogates the backend `/Character/Favorite/inventory` via POST updates per every CRUD UI operation.
+ * - Parses dual-tab modal structures allowing players to either select an item from `equipment.json` generated drop-down, or forge custom items manually mapping (Name, Type, Stats, Desc).
+ * - Implements automated duplicate merging based on matching item names+stats, compounding the `quantity` node directly instead of duplicating HTML cards.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const inventoryContainer = document.querySelector('.inventory');
     if (!inventoryContainer) return;

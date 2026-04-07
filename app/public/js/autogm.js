@@ -1,12 +1,25 @@
+/**
+ * @fileoverview autogm.js
+ * @description Core script managing the main chat interface, processing conversational logic against the AI AutoGM backend, handling real-time chat bubbles, and binding Favorite Character selections.
+ */
 import './bootstrap.min.js';
 
-
-
 //Conversation selection
+/**
+ * @description Extracts local conversation IDs mapped to HTML classes `.new-chat`, iteratively adding listeners to initialize active chat parsing dynamically.
+ */
 const conversations = document.getElementsByClassName("new-chat");
 var conversationId = 0;
 
 
+/**
+ * @function eventListenerFunction
+ * @description Triggers when a conversation thread is clicked. Fetches the historical log from `/Conversation/get/:id` via REST and renders it to the screen.
+ * 
+ * Wait for obsolete code confirmation: There's an unused variable `setupConversation` right after this which artificially forces an invocation on page boot but fails functionally `displayConversation(data)` which is physically NEVER implemented in this file! Did you forget to import `displayConversation`?
+ * 
+ * @param {Event|Object} event - DOM MouseEvent or Custom object wrapping the Target ID mapping.
+ */
 // Define the event listener function
 async function eventListenerFunction(event) {
   // Your event handling code goes here
@@ -77,6 +90,15 @@ button.addEventListener("click", async (event) => {
   }
 });
 
+/**
+ * @function lancementAPI
+ * @description Bundles textual input (`promptField`), temporarily locks inputs preventing flood spam, requests inference dynamically onto the `backend/autoagent` REST LangChain gateway, and injects AI response payload back to the visual DOM stream upon return.
+ * Features:
+ * - Employs simulated loading animations (`addTypingMessage()`).
+ * - Forwards contextual `conversationId` mapping for LangChain memory.
+ * - Renders conversational responses back locally by mapping them onto `addMessage(...)`.
+ * - Toggles global boolean UI restrictions securely `disableInputs()` -> `enableInputs()`.
+ */
 // This function is asynchronous and is used to handle the API launch
 async function lancementAPI() {
 

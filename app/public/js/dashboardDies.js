@@ -1,9 +1,16 @@
+/**
+ * @fileoverview dashboardDies.js
+ * @description Frontend module controlling the 3D physics rendering and logic of dice throws using Three.js and Cannon.js.
+ */
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
 import { OrbitControls } from 'OrbitControls';
 import Stats from 'stats';
 import { DiceManager, DiceD4, DiceD6, DiceD8, DiceD10, DiceD12, DiceD20 } from 'threejs-dice';
 
+/**
+ * @description Monkey patch for `DiceD4` from `threejs-dice` lib to correct the D4 upward reading logic/topology.
+ */
 // --- D4 Math Topology Fix ---
 DiceD4.prototype.shiftUpperValue = function(t){
     if (this.values === 4) {
@@ -21,7 +28,17 @@ DiceD4.prototype.shiftUpperValue = function(t){
 };
 // ----------------------------
 
-
+/**
+ * @function updateDiceInput
+ * @description Modifies the raw input string representing the dice to roll (e.g. `1d10+2d6`) according to UI interaction (`+` or `-` buttons).
+ * Features:
+ * - Uses regex interpolation to increment or decrement the count of a specific die type (e.g., parsing `(\d*)${diceType}`).
+ * - Adds a new die type with a default count of 1 if it wasn't in the input string previously upon `add`.
+ * - Cleans up dangling `+` artifacts when decremented to 0.
+ * 
+ * @param {string} diceType - The type of dice formatted as "d<N>" (d4, d6, etc).
+ * @param {string} action - 'add' or 'remove' modifying intention.
+ */
 function updateDiceInput(diceType, action) {
     const diceInput = document.getElementById("dice-input");
     let diceValue = diceInput.value;
@@ -60,6 +77,12 @@ function updateDiceInput(diceType, action) {
 
 
 
+/**
+ * @function parseDiceInput
+ * @description Extracts and catalogs discrete numbers of dice to throw from a raw string format input (`+` separated).
+ * 
+ * @returns {Object} JSON dictionary of counts, e.g. `{"d10": 2, "d8": 1}`.
+ */
 function parseDiceInput() {
     const diceInput = document.getElementById("dice-input").value;
     const diceArray = diceInput.split('+');
@@ -78,6 +101,10 @@ function parseDiceInput() {
 }
 
 const throwDiceTrigger = document.getElementById("dice-throw-trigger");
+/**
+ * @event 'click' on throwDiceTrigger
+ * @description Manual trigger for parsing user's basic input string and rolling the resulting dice immediately.
+ */
 throwDiceTrigger.addEventListener("click", () => {
     const diceCounts = parseDiceInput();
     randomDiceThrow(diceCounts); // Appeler votre fonction avec l'objet diceCounts
@@ -89,6 +116,19 @@ let clearDiceTimeoutId = null;
 
 initWorld();
 
+/**
+ * @function initWorld
+ * @description Bootstraps the complete Three.js and Cannon.js canvas rendering and physics engine for the 3D dice.
+ * Features:
+ * - Scoped locally to `#ThreeJS` container appending the `WebGLRenderer`.
+ * - Enables responsive camera metrics based on `window.innerWidth`.
+ * - Injects transparent scene (`setClearColor(0, 0)`).
+ * - Maps Lights (`AmbientLight`, `DirectionalLight`, and soft shadow mapping).
+ * - Instantiates Cannon `CANNON.World` physics parameters (gravity `y=294.6`).
+ * - Defines invisible collision walls (`CANNON.Plane` and `CANNON.Box`) acting as a cage preventing dice from flying off-screen.
+ * - Handles `onWindowResize` event updates recursively.
+ * - Loops into requestAnimationFrame -> `animate`.
+ */
 function initWorld() {
     // SCENE
     scene = new THREE.Scene();
@@ -202,6 +242,25 @@ function initWorld() {
     requestAnimationFrame(animate);
 }
 
+/**
+ * @function randomDiceThrow
+ * @description Central execution method handling mathematical creation, physical spawning, and 3D visual resolution of varying dice types.
+ * Features:
+ * - Cleans prior un-resolved physics intervals (`clearDiceTimeoutId`).
+ * - Prevents thread overlap locking via `DiceManager.throwRunning`.
+ * - Wipes the complete scene and physics meshes (`world.remove()`) making way.
+ * - Extracts `fakeDiceValues` math independently if the dice provided isn't visually mapped (e.g. `d3` instead of d4,d6,d8...).
+ * - Populates physics instances in `world` using custom constructors like `createDice()`.
+ * - Injects chaotic starting momentum (Angular & Linear `velocity` logic on XYZ coordinates).
+ * - Fires `shareThrow` callback asynchronously to persist rolled numbers immediately for the SSE stream logic.
+ * - Enforces an 8-second cleanup cycle removing objects memory post-roll.
+ * 
+ * @param {Object} diceCounts - Dictionary of requested type and quantites (i.e. `{"d10": 2}`).
+ * @param {Number} [relances=0] - Reroll metric supplied by backend logic (passed transparently to sharing logic).
+ * @param {String|null} caracteristic - Descriptive string identifier.
+ * @param {String|null} competence - Descriptive string identifier.
+ * @param {Boolean} [thrownByAI=false] - Flag differentiating if the player clicked it, or the AI triggered the roll remotely.
+ */
 export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, competence = null, thrownByAI = false) {
 
     // Clear any pending disappearing timer
@@ -288,6 +347,10 @@ export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, 
 }
 
 
+/**
+ * @function animate
+ * @description The recurrent engine cycle orchestrating graphics and mechanics processing (`requestAnimationFrame`).
+ */
 function animate() {
     updatePhysics();
     render();
@@ -297,6 +360,10 @@ function animate() {
 
 }
 
+/**
+ * @function updatePhysics
+ * @description Tells the Cannon backend engine algorithm to move one fixed step (60Hz) forward, adjusting meshes per their body state.
+ */
 function updatePhysics() {
     world.step(1.0 / 60.0);
 
@@ -305,16 +372,33 @@ function updatePhysics() {
     }
 }
 
+/**
+ * @function update
+ * @description Refreshes performance/system metadata display interface wrapper plugin.
+ */
 function update() {
     // // controls.update();
     stats.update();
 }
 
+/**
+ * @function render
+ * @description Injects the 3D graphics pipeline output from Three.js onto screen matrix wrapper (Scene + Camera).
+ */
 function render() {
     renderer.render(scene, camera);
 }
 
-// Placeholder function for creating dice of different types
+/**
+ * @function createDice
+ * @description Factory function returning instance wrapper objects natively required for physical interactions from the `threejs-dice` toolkit.
+ * 
+ * @param {string} type - Standard nomenclature string `dXX`.
+ * @param {number} size - Object 3D scaling parameter base.
+ * @param {string} backColor - Hexadecimal or color string of the internal material base.
+ * @param {string} fontColor - Color of numerical glyphs wrapper on face textures.
+ * @returns {Object} Polished and injected Object wrapper mesh tied physically to CANNON properties.
+ */
 function createDice(type, size, backColor, fontColor) {
     switch (type) {
         case 'd4':
@@ -338,8 +422,25 @@ function createDice(type, size, backColor, fontColor) {
 }
 
 
+/**
+ * @function shareThrow
+ * @description Forwards exact arrays of logical metadata from local random number generators upwards synchronously across WebSocket / SSE connections.
+ * Features:
+ * - Aggregates physical instances of dice into cleanly formatted data structures `{ value, values }`.
+ * - Fires `fetch() PUT /share/throw`.
+ * - Packages state parameters to allow rendering logic contextualization universally (`relances`, `caracteristic`, etc).
+ * 
+ * Wait for obsolete code confirmation: `dices.forEach(item => { });` is completely empty iteration overhead spanning Line 361. Please confirm if I can delete the blank iterator block.
+ * 
+ * @param {Array} dices - Formatted output mapped physically mapped dice outputs resolving random numerical outcomes.
+ * @param {Number} [relances=0] - Rerolls
+ * @param {String|null} caracteristic - Descriptors
+ * @param {String|null} competence - Descriptors
+ * @param {Boolean} [thrownByAI=false] - Identifying trigger source boolean 
+ */
 function shareThrow(dices, relances = 0, caracteristic = null, competence = null, thrownByAI = false) {
 
+    // [!] Wait for obsolete code confirmation: Empty iteration block
     dices.forEach(item => {
 
 

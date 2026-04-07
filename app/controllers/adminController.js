@@ -3,6 +3,22 @@ import path from 'path';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+/**
+ * @fileoverview adminController.js
+ * @description Master control panel logic for Game Masters (Administrators).
+ * Note: Hardcodes Administrator permissions rigidly to `userId == 1`.
+ */
+
+/**
+ * @function displayPannel
+ * @description Aggregates and renders the main Game Master dashboard `/admin/` view.
+ * Features:
+ * - Fetches all instances of Groups and defaults tracking to the first created Array item.
+ * - Extracts and creates/updates global `WorldState` metrics (Time of Day, Rational limits, Encumbrance).
+ * - Retrieves local JSON `equipment.json` definitions to cross-reference to character equip loads.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ */
 export async function displayPannel(req, res) {
   if (req.session.userId == 1) {
     try {
@@ -57,6 +73,15 @@ export async function displayPannel(req, res) {
   }
 }
 
+/**
+ * @function updateWorldState
+ * @description API Hook for the GameManager to broadcast changes in environmental settings to connected users.
+ * Features:
+ * - Mutates the `WorldState` Model mapping fields like Time of Day (Matin/Soir), Week Types, Rations, and Moon phases.
+ * - Auto-initializes if no state exists.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ */
 export async function updateWorldState(req, res) {
   if (req.session.userId == 1) {
     const { timeOfDay, weekType, dayNumber, sinlaPhase, akhatState, loisCoutumes, rations, etatMontures, encombrement, groupeId } = req.body;
@@ -97,7 +122,12 @@ export async function updateWorldState(req, res) {
       }
       
       res.json({ success: true });
-    } catch (error) {
+/**
+ * @function listAdversaries
+ * @description Fetches all stored custom NPCS / Enemies and lists them inside the GM panel.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ */    } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error updating world state" });
     }
@@ -116,6 +146,13 @@ export async function listAdversaries(req, res) {
       console.error(e);
       res.status(500).send("Error");
     }
+/**
+ * @function createAdversary
+ * @description Submits a new entity to the Prisma `adversary` table with default stat-blocks if items are omitted.
+ * Used for building encounters and enemy mobs.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ */
   } else {
     res.redirect('/');
   }
@@ -152,6 +189,12 @@ export async function createAdversary(req, res) {
       res.redirect('/admin/adversaries');
     } catch (e) {
       console.error(e);
+/**
+ * @function deleteAdversary
+ * @description Master delete hook to wipe an enemy entity from the Database via `req.params.id`.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ */
       res.status(500).send("Error saving adversary");
     }
   } else {

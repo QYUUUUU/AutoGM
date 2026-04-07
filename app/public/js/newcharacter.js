@@ -1,7 +1,15 @@
+/**
+ * @fileoverview newcharacter.js
+ * @description Frontend script dedicated entirely to the multi-step Character Creation form wizard, managing its pagination, avatar selection logic, and final bulk data submission.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     const nextButtons = document.querySelectorAll('.next-btn');
     const prevButtons = document.querySelectorAll('.prev-btn');
 
+    /**
+     * @function updateTrackerVisibility
+     * @description Toggles visibility of the sticky stats-tracker sidebar strictly during middle steps mapping mechanical attributes (Step 4 to 10).
+     */
     function updateTrackerVisibility(stepId) {
         const tracker = document.getElementById('stats-tracker');
         if (tracker) {
@@ -48,6 +56,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const customAvatarInput = document.getElementById('custom_avatar');
     const imageDataInput = document.getElementById('imageData');
 
+    /**
+     * @function populateAvatars
+     * @description Fills the visual grid wrapper fetching strictly formatted static local avatars depending conditionally on gender matching count (femme=15, else 16).
+     * Features:
+     * - Generates clickable `<img>` HTML components attached dynamically to `avatarPreset`.
+     * - Draws highlighting golden `border` identifying active selection.
+     */
     function populateAvatars() {
         if (!avatarSelection) return;
         const genre = genreSelect.value;
@@ -106,6 +121,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    /**
+     * @function createCharacter
+     * @description Master bundle extraction mechanism triggered on form `submit` click.
+     * Features:
+     * - Scrapes DOM for roughly ~64 specific names/ids.
+     * - Pulls Avatar Base64 `imageData` if assigned customly.
+     * - Resolves custom nested hidden inputs handling RPG `langues` arrays and `specialites` dynamically structured during creation.
+     * - Collects mapping arrays out of `.equip-checkbox:checked`.
+     * - Calls the secure `fetch` API `POST /create-character`.
+     * - Automatically hooks into `window.location.href = '/characters'` to redirect the user.
+     * 
+     * Wait for obsolete code confirmation: Extracting data by assuming `document.getElementsByName('nom')[0]` exists will instantly crash the entire Javascript context and permanently break the form if a single field is momentarily missing or renamed in the TWIG template. (Consider switching to standard `FormData(formElement)` map).
+     */
     function createCharacter() {
         // Gather form data
         const formData = {
@@ -158,6 +186,8 @@ document.addEventListener('DOMContentLoaded', function () {
             mythes: document.getElementsByName('mythes')[0].value,
             pantheons: document.getElementsByName('pantheons')[0].value,
             rituels: document.getElementsByName('rituels')[0].value,
+            langues: (document.getElementById('langues-hidden') ? document.getElementById('langues-hidden').value : '[]'),
+            specialites: (document.getElementById('specialites-hidden') ? document.getElementById('specialites-hidden').value : '[]'),
             equipments: Array.from(document.querySelectorAll('.equip-checkbox:checked')).map(cb => cb.value)
             // Add other fields as needed
         };
@@ -187,6 +217,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //Origin maj
 
+/**
+ * @function formatStatsWithSelection
+ * @description Parses raw origin HTML descriptions to dynamically inject Interactive Radio Buttons into the DOM for character creation bonuses.
+ * Features:
+ * - Detects "Compétence de Débutant bonus", "Avantage", "Désavantage", and "Capacité d'Instinct".
+ * - Uses Regex to extract names and descriptions.
+ * - Wraps findings in `<label><input type="radio"...>` tags to allow users to select their origin-specific perks.
+ * - Reconstructs the manipulated HTML.
+ * @param {string} rawStats - The raw text block containing predefined origin stat choices from the data objects.
+ * @returns {string} The formatted HTML string containing the interactive radio forms.
+ */
 function formatStatsWithSelection(rawStats) {
     const parts = rawStats.split('<br><br>');
     let newParts = [];
@@ -397,6 +438,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let bonusCharacteristics = {};
     let bonusSkills = {};
 
+    /**
+     * @function updateBonuses
+     * @description Recalculates the active bonus points derived from the user's chosen Astrological Sign and Origin Radio selections.
+     * Features:
+     * - Maps the text values of chosen signs (e.g. "Loup") to the internal stat name (e.g. "faune").
+     * - Parses the `origin_bonus_skill` radio buttons.
+     * - Populates `bonusCharacteristics` and `bonusSkills` dictionaries to be used by the validation tracker.
+     */
     function updateBonuses() {
         bonusCharacteristics = {};
         bonusSkills = {};
@@ -459,6 +508,15 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
     `;
+    /**
+     * @function checkValidation
+     * @description Runs continuous validation on the DOM inputs to enforce character creation rules.
+     * Features:
+     * - Validates "Caractéristiques" (Base Stats): 8 points total, max 3 per stat.
+     * - Validates "Compétences" (Skills): Exactly 1x 3D, 2x 2D, 3x 1D allocation.
+     * - Computes final totals merging user inputs and Origin/Sign track bonuses.
+     * - Modifies UI text to red (`#ff4444`) on error and locks/unlocks the Form Submission button depending on pass conditions.
+     */
     container.insertAdjacentHTML('afterbegin', trackerHTML);
 
     const charStatus = document.getElementById('char-status');
@@ -684,4 +742,86 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial check
     setTimeout(checkValidation, 100);
+});
+
+// --- DYNAMIC LANGUES ET SPECIALITES LOGIC ---
+document.addEventListener('DOMContentLoaded', function() {
+    const languesContainer = document.getElementById('dynamic-langues');
+    const specsContainer = document.getElementById('dynamic-specs');
+    if(!languesContainer || !specsContainer) return;
+
+    function updateLanguesAndSpecs() {
+        // Runes
+        const runesEl = document.querySelector('select[name="runes"]');
+        let runesVal = runesEl ? parseInt(runesEl.value) : 0;
+        
+        let numLangues = 0;
+        if(runesVal===1) numLangues = 1;
+        if(runesVal===2) numLangues = 2;
+        if(runesVal===3) numLangues = 3;
+        if(runesVal===4) numLangues = 4;
+        if(runesVal===5) numLangues = 6;
+        if(runesVal===6) numLangues = 8;
+        
+        let html = '';
+        for(let i=0; i<numLangues; i++) {
+            html += `<input type="text" class="form-control langue-input" placeholder="Langue supplémentaire ${i+1}" style="margin-bottom:5px;">`;
+        }
+        if(numLangues===0) {
+            html += `<p style="font-style:italic;">Aucune langue supplémentaire</p>`;
+        }
+        languesContainer.innerHTML = html;
+        
+        // Specialites
+        const skillsNames = ['arts', 'cite', 'civilisations', 'relationnel', 'soins', 'animalisme', 'faune', 'montures', 'pistage', 'territoire', 'adresse', 'armurerie', 'artisanat', 'mecanisme', 'runes', 'athletisme', 'discretion', 'flore', 'vigilance', 'voyage', 'bouclier', 'cac', 'lancer', 'melee', 'tir', 'eclats', 'lunes', 'mythes', 'pantheons', 'rituels'];
+        let specsHtml = '';
+        skillsNames.forEach(name => {
+            const el = document.querySelector(`select[name="${name}"]`);
+            if (el && parseInt(el.value) >= 2) {
+                specsHtml += `<div style="margin-bottom:10px;">
+                    <label>Spécialité pour <b>${name.toUpperCase()}</b> (Confirmé+):</label>
+                    <input type="text" class="form-control spec-input" data-skill="${name}" placeholder="Ex: Arc lourd">
+                </div>`;
+            }
+        });
+        if(specsHtml === '') {
+            specsHtml += `<p style="font-style:italic;">Aucune compétence n'a atteint le niveau Confirmé.</p>`;
+        }
+        specsContainer.innerHTML = specsHtml;
+
+        bindInputs();
+    }
+
+    function bindInputs() {
+        document.querySelectorAll('.langue-input, .spec-input').forEach(inp => {
+            inp.addEventListener('input', function() {
+                // update hidden fields
+                const langues = ['Babelite'];
+                document.querySelectorAll('.langue-input').forEach(l => {
+                    if(l.value.trim()) langues.push(l.value.trim());
+                });
+                document.getElementById('langues-hidden').value = JSON.stringify(langues);
+
+                const specs = [];
+                document.querySelectorAll('.spec-input').forEach(s => {
+                    if(s.value.trim()) {
+                        specs.push({ competence: s.getAttribute('data-skill'), specialite: s.value.trim() });
+                    }
+                });
+                document.getElementById('specialites-hidden').value = JSON.stringify(specs);
+            });
+        });
+        
+        // manually dispatch input to initialize hidden fields correctly
+        if(document.querySelector('.langue-input')) document.querySelector('.langue-input').dispatchEvent(new Event('input'));
+    }
+
+    // Bind change on all skills to update dynamic section
+    const skillsNames = ['arts', 'cite', 'civilisations', 'relationnel', 'soins', 'animalisme', 'faune', 'montures', 'pistage', 'territoire', 'adresse', 'armurerie', 'artisanat', 'mecanisme', 'runes', 'athletisme', 'discretion', 'flore', 'vigilance', 'voyage', 'bouclier', 'cac', 'lancer', 'melee', 'tir', 'eclats', 'lunes', 'mythes', 'pantheons', 'rituels'];
+    skillsNames.forEach(name => {
+        const el = document.querySelector(`select[name="${name}"]`);
+        if (el) el.addEventListener('change', updateLanguesAndSpecs);
+    });
+
+    updateLanguesAndSpecs();
 });

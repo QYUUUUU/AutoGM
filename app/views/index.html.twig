@@ -176,6 +176,9 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="capacites-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#capacites-tab-pane" href="#capacites-tab-pane" role="tab" aria-controls="capacites-tab-pane" aria-selected="false" style="font-weight: bold;">Personnage</a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="ressources-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#ressources-tab-pane" href="#ressources-tab-pane" role="tab" aria-controls="ressources-tab-pane" aria-selected="false" style="font-weight: bold;">Ressources</a>
+            </li>
         </ul>
         <div class="tab-content h-100" id="myTabContent" style="padding-top: 0;">
             <!-- tab résultats -->
@@ -303,6 +306,62 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <!-- tab ressources -->
+            <div class="tab-pane fade h-100" id="ressources-tab-pane" role="tabpanel" aria-labelledby="ressources-tab" tabindex="0">
+                <div class="row h-100 mx-0">
+                    <div class="col-12 h-100 px-0">
+                        <div class="head-card square-tl square-tr">Réserves & Savoir</div>
+                        <div class="body-card p-4" style="height: 100%; overflow-y: auto;">
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
+                                        <h5 class="text-warning border-bottom border-secondary pb-2"><i class="fas fa-fist-raised"></i> Effort</h5>
+                                        <div class="d-flex align-items-center justify-content-center gap-3 mt-3">
+                                            <button class="btn btn-outline-danger px-3 py-1 fs-5 rounded-circle" onclick="updateRessource('effort', -1, {{ favoriteCharacter.character.id_Character }})"><i class="fas fa-minus"></i></button>
+                                            <span id="display-effort" class="fs-2 fw-bold text-light mx-3">{{ favoriteCharacter.character.effort|default(15) }} / {{ favoriteCharacter.character.maxeffort|default(15) }}</span>
+                                            <button class="btn btn-outline-success px-3 py-1 fs-5 rounded-circle" onclick="updateRessource('effort', 1, {{ favoriteCharacter.character.id_Character }})"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
+                                        <h5 class="text-info border-bottom border-secondary pb-2"><i class="fas fa-brain"></i> Sang Froid</h5>
+                                        <div class="d-flex align-items-center justify-content-center gap-3 mt-3">
+                                            <button class="btn btn-outline-danger px-3 py-1 fs-5 rounded-circle" onclick="updateRessource('sangfroid', -1, {{ favoriteCharacter.character.id_Character }})"><i class="fas fa-minus"></i></button>
+                                            <span id="display-sangfroid" class="fs-2 fw-bold text-light mx-3">{{ favoriteCharacter.character.sangfroid|default(8) }} / {{ favoriteCharacter.character.maxsangfroid|default(8) }}</span>
+                                            <button class="btn btn-outline-success px-3 py-1 fs-5 rounded-circle" onclick="updateRessource('sangfroid', 1, {{ favoriteCharacter.character.id_Character }})"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
+                                        <h5 class="text-light border-bottom border-secondary pb-2"><i class="fas fa-language"></i> Langues</h5>
+                                        <ul id="list-langues" class="mb-0 mt-3 list-unstyled" data-langues="{{ favoriteCharacter.character.langues|default('[]')|escape('html_attr') }}">
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
+                                        <h5 class="text-light border-bottom border-secondary pb-2"><i class="fas fa-star"></i> Spécialisations</h5>
+                                        <ul id="list-specialites" class="mb-0 mt-3 list-unstyled" data-specialites="{{ favoriteCharacter.character.specialites|default('[]')|escape('html_attr') }}">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Hidden storage for max values -->
+                            <input type="hidden" id="max-effort" value="{{ favoriteCharacter.character.maxeffort|default(15) }}" />
+                            <input type="hidden" id="max-sangfroid" value="{{ favoriteCharacter.character.maxsangfroid|default(8) }}" />
                         </div>
                     </div>
                 </div>
@@ -526,6 +585,7 @@
 <script src="/js/bundle.js"></script>
 <script src="/js/dashboardInventory.js"></script>
 <script src="/js/dashboardGroupe.js"></script>
+<script src="/js/dashboardRessources.js?v=1775566186"></script>
 <script src="/js/character_data.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
