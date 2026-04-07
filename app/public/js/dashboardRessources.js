@@ -111,3 +111,64 @@ async function updateRessource(type, amount, charId) {
     }
 }
 window.updateRessource = updateRessource;
+
+async function updateBlessure(type, note, charId) {
+    if (!charId) return;
+
+    let newVal = note;
+    
+    // Check if the user is clicking the specifically active check to uncheck it (like character.js does 'if circlered.png && note == "1" then 0'). To keep it simple, let's just observe the current state.
+    // Let's get the specific image they clicked
+    const imgId = type.replace("blessure", "") + "-dash" + note;
+    const imgEl = document.getElementById(imgId);
+    if (!imgEl) return;
+    
+    // If they clicked the currently "highest" red circle, they probably want to decrement
+    // so let's check if it's currently red, and if the next one is NOT red (or doesn't exist).
+    const isRed = imgEl.src.includes("circlered.png");
+    const nextImgId = type.replace("blessure", "") + "-dash" + (note + 1);
+    const nextImg = document.getElementById(nextImgId);
+    if (isRed && (!nextImg || !nextImg.src.includes("circlered.png"))) {
+        newVal = note - 1; // Uncheck
+    }
+    
+    // Send to backend
+    try {
+        const response = await fetch('/Character', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: charId,
+                field: type,
+                value: newVal
+            })
+        });
+
+        if (response.ok) {
+            // Update UI for all circles of this type
+            let i = 1;
+            let currentCircle = document.getElementById(type.replace("blessure", "") + "-dash" + i);
+            while (currentCircle) {
+                if (i <= newVal) {
+                    currentCircle.src = '/images/circlered.png';
+                } else {
+                    currentCircle.src = '/images/circle.png';
+                }
+                i++;
+                currentCircle = document.getElementById(type.replace("blessure", "") + "-dash" + i);
+            }
+            
+            // Reload the page to reflect the -1D effects on metrics
+            location.reload();
+        } else {
+            console.error("Failed to update blessure");
+            alert("Erreur lors de la mise à jour de la blessure.");
+        }
+    } catch(err) {
+        console.error(err);
+        alert("Erreur de connexion.");
+    }
+}
+window.updateBlessure = updateBlessure;

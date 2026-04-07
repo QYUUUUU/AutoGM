@@ -347,6 +347,52 @@
                                 </div>
                             </div>
 
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
+                                        <h5 class="text-danger border-bottom border-secondary pb-2"><i class="fas fa-heartbeat"></i> Blessures</h5>
+                                        <div class="d-flex flex-wrap justify-content-around align-items-center mt-3 gap-3">
+                                            <!-- Blessures Légères -->
+                                            <div class="text-center">
+                                                <h6 class="mb-2 text-muted">Légères</h6>
+                                                <div id="blessurelegere-container">
+                                                    {% set maxlegere = favoriteCharacter.character.maxblessurelegere|default(4) %}
+                                                    {% set currentlegere = favoriteCharacter.character.blessurelegere|default(0) %}
+                                                    {% for i in 1..maxlegere %}
+                                                        <img id="legere-dash{{ i }}" src="{{ i <= currentlegere ? '/images/circlered.png' : '/images/circle.png' }}" class="circleblessure-dash" style="width: 24px; cursor: pointer; margin: 0 2px;" onclick="updateBlessure('blessurelegere', {{ i }}, {{ favoriteCharacter.character.id_Character }})">
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+
+                                            <!-- Blessures Graves -->
+                                            <div class="text-center">
+                                                <h6 class="mb-2 text-muted">Graves</h6>
+                                                <div id="blessuregrave-container">
+                                                    {% set maxgrave = favoriteCharacter.character.maxblessuregrave|default(3) %}
+                                                    {% set currentgrave = favoriteCharacter.character.blessuregrave|default(0) %}
+                                                    {% for i in 1..maxgrave %}
+                                                        <img id="grave-dash{{ i }}" src="{{ i <= currentgrave ? '/images/circlered.png' : '/images/circle.png' }}" class="circleblessure-dash" style="width: 24px; cursor: pointer; margin: 0 2px;" onclick="updateBlessure('blessuregrave', {{ i }}, {{ favoriteCharacter.character.id_Character }})">
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+
+                                            <!-- Blessures Mortelles -->
+                                            <div class="text-center">
+                                                <h6 class="mb-2 text-muted">Mortelles</h6>
+                                                <div id="blessuremortelle-container">
+                                                    {% set maxmortelle = favoriteCharacter.character.maxblessuremortelle|default(2) %}
+                                                    {% set currentmortelle = favoriteCharacter.character.blessuremortelle|default(0) %}
+                                                    {% for i in 1..maxmortelle %}
+                                                        <img id="mortelle-dash{{ i }}" src="{{ i <= currentmortelle ? '/images/circlered.png' : '/images/circle.png' }}" class="circleblessure-dash" style="width: 24px; cursor: pointer; margin: 0 2px;" onclick="updateBlessure('blessuremortelle', {{ i }}, {{ favoriteCharacter.character.id_Character }})">
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div class="p-3 bg-dark border border-secondary rounded text-light h-100">
@@ -590,7 +636,7 @@
 <script src="/js/bundle.js"></script>
 <script src="/js/dashboardInventory.js"></script>
 <script src="/js/dashboardGroupe.js"></script>
-<script src="/js/dashboardRessources.js?v=1775566186"></script>
+<script src="/js/dashboardRessources.js?v=1775566187"></script>
 <script src="/js/character_data.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {

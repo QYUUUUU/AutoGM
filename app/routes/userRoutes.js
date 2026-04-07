@@ -517,9 +517,28 @@ router.put('/Character', async (req, res) => {
       }
       // Check if the connected user is linked to the character or has the role "admin"
       if (character.User.id === id_User || character.User.role === 'admin') {
+        let updateData = { [field]: parsedValue };
+        
+        if (['blessurelegere', 'blessuregrave', 'blessuremortelle'].includes(field)) {
+          const oldVal = character[field] || 0;
+          const newVal = parsedValue;
+          if (newVal > oldVal) {
+             const difference = newVal - oldVal;
+             let perte = 0;
+             if (field === 'blessurelegere') perte = 1 * difference;
+             else if (field === 'blessuregrave') perte = 2 * difference;
+             else if (field === 'blessuremortelle') perte = 1 * difference;
+             
+             if (perte > 0) {
+               updateData.effort = Math.max(0, (character.effort || 0) - perte);
+               updateData.sangfroid = Math.max(0, (character.sangfroid || 0) - perte);
+             }
+          }
+        }
+
         const updatedCharacter = await prisma.character.update({
           where: { id_Character: parseInt(id) },
-          data: { [field]: parsedValue },
+          data: updateData,
         });
         return res.json(updatedCharacter);
       } else {
