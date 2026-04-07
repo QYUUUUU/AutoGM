@@ -53,12 +53,14 @@ While logged in as a user, navigate to the ingestion URL to process the embeddin
 
 That's it! You're now ready to start using the project. Happy coding!
 
-### Frontend Build (Webpack)
+### Frontend Build & Library Fix (Webpack) ⚠️ IMPORTANT
 
-If you modify files inside the `app/public/js/` directory that are linked to the Three.js physics engine (`dashboardDies.js`), you need to recompile the `bundle.js` file for the changes to take effect in the browser. 
+The `bundle.js` compiled by Webpack is **not just for minification**. It exists to inject a **critical bug fix** into the 3D physics libraries (`threejs-dice` / `cannon.js`) used for rendering the virtual 3D dice rolls in the browser. 
 
-To rebuild the frontend assets within the Docker container:
+If you modify `app/public/js/dashboardDies.js`, or if you upgrade/reinstall `node_modules` dependencies related to the physics engine, **you MUST recompile** the `bundle.js` file, otherwise the 3D dice feature will crash or behave inconsistently.
+
+To rebuild the frontend assets holding the fix within the Docker container:
 ```bash
 docker compose exec web npx webpack --config webpack.config.js
 ```
-Make sure to hard-refresh your browser (Ctrl+F5) to load the newly compiled assets.
+Make sure to hard-refresh your browser (Ctrl+F5) to load the newly compiled assets!
