@@ -285,6 +285,8 @@ export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, 
 
 
     // Add dice to the scene
+    const colorInput = document.getElementById('dice-color-picker');
+    const color = colorInput ? colorInput.value : "#2d2d2d";
     let fakeDiceValues = [];
     for (let [type, numberThrow] of Object.entries(diceCounts)) {
         let faces = parseInt(type.substring(1));
@@ -295,7 +297,7 @@ export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, 
                 let value = Math.floor(Math.random() * faces) + 1;
                 fakeDiceValues.push({ dice: { values: faces }, value: value });
             } else {
-                let die = createDice(type, 0.8, "#2d2d2d", "#f0f0f0");
+                let die = createDice(type, 0.8, color, "#f0f0f0");
                 scene.add(die.getObject());
                 dice.push(die);
             }
@@ -324,7 +326,15 @@ export function randomDiceThrow(diceCounts, relances = 0, caracteristic = null, 
     }
 
     const allShareValues = diceValues.concat(fakeDiceValues);
-    shareThrow(allShareValues, relances, caracteristic, competence, thrownByAI);
+    
+    // We wait exactly 4 seconds (visual dice usually take 2 to 3.5s to stably bounce) before confirming the results to the chat
+    const localThrowId = Date.now().toString(36) + Math.random().toString(36).substr(2);
+    window.myRollIds = window.myRollIds || [];
+    window.myRollIds.push(localThrowId);
+
+    setTimeout(() => {
+        shareThrow(allShareValues, relances, caracteristic, competence, thrownByAI, color, localThrowId);
+    }, 3000);
     
     if (diceValues.length > 0) {
         DiceManager.prepareValues(diceValues);
@@ -438,8 +448,8 @@ function createDice(type, size, backColor, fontColor) {
  * @param {String|null} competence - Descriptors
  * @param {Boolean} [thrownByAI=false] - Identifying trigger source boolean 
  */
-function shareThrow(dices, relances = 0, caracteristic = null, competence = null, thrownByAI = false) {
-
+function shareThrow(dices, relances = 0, caracteristic = null, competence = null, thrownByAI = false, color = "#2d2d2d", localThrowId = null) {
+    
     // [!] Wait for obsolete code confirmation: Empty iteration block
     dices.forEach(item => {
 
@@ -461,7 +471,9 @@ function shareThrow(dices, relances = 0, caracteristic = null, competence = null
         relances,
         caracteristic,
         competence,
-        thrownByAI
+        thrownByAI,
+        color,
+        localThrowId
     };
     fetch(url, {
         method: 'PUT',
@@ -481,6 +493,60 @@ function shareThrow(dices, relances = 0, caracteristic = null, competence = null
             console.error(error);
         });
 }
+
+window.animateRemoteRoll = function(diceResults, color) {
+    if (clearDiceTimeoutId !== null) {
+        clearTimeout(clearDiceTimeoutId);
+        clearDiceTimeoutId = null;
+    }
+    DiceManager.throwRunning = false;
+    dice.forEach(die => {
+        scene.remove(die.getObject());
+        if (die.getObject().body) {
+            world.remove(die.getObject().body);
+        }
+    });
+    dice = [];
+
+    var diceValues = [];
+    diceResults.forEach(item => {
+        let isFake = ![4, 6, 8, 10, 12, 20].includes(item.values);
+        if(!isFake) {
+            let die = createDice("d" + item.values, 0.8, color, "#f0f0f0");
+            scene.add(die.getObject());
+            dice.push(die);
+            diceValues.push({ dice: die, value: item.value });
+        }
+    });
+    
+    for (var i = 0; i < dice.length; i++) {
+        let yRand = Math.random() * 20;
+        dice[i].getObject().position.x = (Math.random() - 0.5) * 10;
+        dice[i].getObject().position.y = 15 + Math.random() * 10;
+        dice[i].getObject().position.z = (Math.random() - 0.5) * 10;
+        dice[i].getObject().quaternion.x = (Math.random() * 90 - 45) * Math.PI / 180;
+        dice[i].getObject().quaternion.z = (Math.random() * 90 - 45) * Math.PI / 180;
+        dice[i].updateBodyFromMesh();
+        dice[i].getObject().body.velocity.set((Math.random() - 0.5) * 10, 10 + yRand, (Math.random() - 0.5) * 10);
+        dice[i].getObject().body.angularVelocity.set(20 * Math.random() - 10, 20 * Math.random() - 10, 20 * Math.random() - 10);
+    }
+    
+    if (diceValues.length > 0) {
+        DiceManager.prepareValues(diceValues);
+    } else {
+        DiceManager.throwRunning = false;
+    }
+    
+    clearDiceTimeoutId = setTimeout(() => {
+        dice.forEach(die => {
+            scene.remove(die.getObject());
+            if (die.getObject().body) { world.remove(die.getObject().body); }
+        });
+        dice = [];
+        DiceManager.throwRunning = false;
+        clearDiceTimeoutId = null;
+    }, 8000);
+};
 
 window.updateDiceInput = updateDiceInput;
 

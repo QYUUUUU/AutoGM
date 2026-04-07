@@ -87,11 +87,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const url = '/throw';
 
+        // Check if collective action checkbox exists and is checked
+        const isCollectiveCheckbox = document.getElementById("isCollective-action");
+        const isCollective = isCollectiveCheckbox ? isCollectiveCheckbox.checked : false;
+
         // Updated payload to be sent in the request body
         const data = {
             modifier: modifierInput.value,
             competence: competenceInput.value,
-            caracteristic: caracteristicInput.value
+            caracteristic: caracteristicInput.value,
+            isCollective: isCollective
         };
         fetch(url, {
             method: 'PUT',
@@ -100,11 +105,15 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify(data) // Convert data to JSON string
         })
-            .then(response => {
+            .then(async response => {
                 if (response.ok) {
                     return response.json(); // Parse JSON response
                 } else {
-                    console.error(response.status, response.statusText);
+                    const err = await response.json();
+                    if (err.error) {
+                        alert(err.error);
+                    }
+                    throw new Error(err.error || response.statusText);
                 }
             })
             .then(responseData => {

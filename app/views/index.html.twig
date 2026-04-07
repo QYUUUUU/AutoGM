@@ -84,6 +84,10 @@
                             <input class="modifier" type="text" id="modifier" value="0">
                             <button id="decrement" class="increment-button" type="button">-</button><br>
                         </div>
+                        <div>
+                            <input type="checkbox" id="isCollective-action" name="isCollective-action">
+                            <label for="isCollective-action">Action Collective</label>
+                        </div>
                         <button id="stats-send" class="stats-send" type="button">Lancer les dés</button><br>
                     </div>
                 </div>
@@ -117,6 +121,7 @@
                         </div>
                         <label for="dice-input">Lancer les dés :</label>
                         <input type="text" id="dice-input" name="dice-input">
+                        <input type="color" id="dice-color-picker" value="#2d2d2d" title="Couleur des dés" style="height: 30px; width: 30px; border: none; background: transparent; padding: 0; vertical-align: middle;">
 
                         <input id="dice-throw-trigger" type="submit" value="Lancer les dés">
                     </div>

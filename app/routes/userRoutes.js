@@ -888,7 +888,7 @@ router.put('/throw', async (req, res) => {
     try {
       const user = await prisma.favoriteCharacter.findFirst({
         where: { userId: id_User },
-        include: { character: true },
+        include: { character: { include: { Groupe: true } } },
       });
 
       const character = user.character;
@@ -896,8 +896,23 @@ router.put('/throw', async (req, res) => {
       if (!character) {
         return res.status(404).json({ error: 'Character not found' });
       }
-      const result = getThrowsByStats(character, modifier, competence, caracteristic);
+            let maxGroupCompetence = character[competence] || 0;
+      if (req.body.isCollective && character.groupeId) {
+        const otherMembers = await prisma.character.findMany({
+          where: {
+            groupeId: character.groupeId,
+            id_Character: { not: character.id_Character }
+          },
+        });
+        for (const member of otherMembers) {
+          if (member[competence] && member[competence] > maxGroupCompetence) {
+            maxGroupCompetence = member[competence];
+          }
+        }
+      }
+      const result = getThrowsByStats(character, modifier, competence, caracteristic, req.body.isCollective, maxGroupCompetence);
 
+      if (result.error) { return res.status(403).json(result); }
       return res.json(result);
     } catch (error) {
       console.error(error);
@@ -925,7 +940,7 @@ router.put('/throw', async (req, res) => {
  */
 router.put('/share/throw', async (req, res) => {
   const id_User = req.session.userId;
-  const { result, relances, caracteristic, competence, thrownByAI } = req.body;
+  const { result, relances, caracteristic, competence, thrownByAI, color } = req.body;
 
   let rollContent = "";
 
@@ -939,7 +954,11 @@ router.put('/share/throw', async (req, res) => {
     for (const [d, vals] of Object.entries(grouped)) {
       rollParts.push(`d${d}: ${vals.join(', ')}`);
     }
-    rollContent = rollParts.join(' | ');
+    
+    // Inject custom metadata transparently as HTML comment
+    const metaColor = color || "#2d2d2d";
+    const metadata = `<!--meta:${JSON.stringify({color: metaColor, results: result})}-->`;
+    rollContent = metadata + rollParts.join(' | ');
   }
 
   if (caracteristic || competence) {

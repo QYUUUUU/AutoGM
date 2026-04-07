@@ -99,8 +99,33 @@ function showRollOnDashboard(rolls) {
             
             const textRoll = document.createElement("p");
             
+            let meta = null;
+            let rawContent = roll.content || "";
+            const metaMatch = rawContent.match(/<!--meta:(.*?)-->/);
+            if (metaMatch) {
+                try {
+                    meta = JSON.parse(metaMatch[1]);
+                    rawContent = rawContent.replace(metaMatch[0], '');
+                } catch(e) {}
+            }
+
+            if (meta && meta.color) {
+                nameHeader.style.color = meta.color;
+            }
+
+            // Animate remote roll if applicable
+            if (meta && meta.localThrowId && meta.results) {
+                window.myRollIds = window.myRollIds || [];
+                if (!window.myRollIds.includes(meta.localThrowId) && window.animateRemoteRoll) {
+                    // It's a remote throw! We animate it!
+                    window.animateRemoteRoll(meta.results, meta.color || "#2d2d2d");
+                    // Important: Since we already saw it, we can push it to myRollIds just in case although showedRolls handles it
+                    window.myRollIds.push(meta.localThrowId);
+                }
+            }
+
             // Format content: highlight numbers and make it look nicer
-            let formattedContent = roll.content.replace(/\b(\d+)\b/g, '<strong class="roll-highlight">$1</strong>');
+            let formattedContent = rawContent.replace(/\b(\d+)\b/g, '<strong class="roll-highlight">$1</strong>');
             // If there's a bar separator | let's format it a bit nicer
             formattedContent = formattedContent.replace(/\|/g, '<span style="color: rgba(199, 169, 114, 0.4); margin: 0 5px;">|</span>');
             // Format newlines

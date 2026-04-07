@@ -21,9 +21,10 @@ import path from 'path';
  * @param {Number|String} modifier - Floating situational modifier submitted from the Frontend.
  * @param {String} competence - The strict name mapping of the skill used in the action.
  * @param {String} caracteristic - The strict name mapping of the core attribute being leveraged.
+ * @param {Boolean} isCollective - Indicates if the action is a collective group action.
  * @returns {Object} `{ totalDice, relances, extraDice }` representing final instructions for random number generation.
  */
-export function getThrowsByStats(character, modifier, competence, caracteristic) {
+export function getThrowsByStats(character, modifier, competence, caracteristic, isCollective = false, maxGroupCompetence = 0) {
     const blessurelegere = character.blessurelegere;
     const blessuregrave = character.blessuregrave;
     const blessuremortelle = character.blessuremortelle;
@@ -49,9 +50,47 @@ export function getThrowsByStats(character, modifier, competence, caracteristic)
 
     const malus = getMalus(character, competence, caracteristic);
 
-    var { lancers, relances } = calculerLancersEtRelances(valueCompetence);
-    const totalDice = Number(modifier) + Number(valueCaracteristic) + Number(lancers) + Number(blessureModifier) + Number(malus) + Number(rareteMalus);
+    let exhaustionMalus = 0;
+    if (character.effort === 0 && character.sangfroid === 0) {
+        exhaustionMalus = -2;
+    } else {
+        const physiqueManuel = ['puissance', 'resistance', 'precision', 'reflexes'];
+        const mentalSocial = ['connaissance', 'perception', 'volonte', 'empathie'];
+        
+        if (character.effort === 0 && physiqueManuel.includes(caracteristic)) {
+            exhaustionMalus = -1;
+        } else if (character.sangfroid === 0 && mentalSocial.includes(caracteristic)) {
+            exhaustionMalus = -1;
+        }
+    }
 
+    let groupMoralModifier = 0;
+    if (isCollective && character.Groupe) {
+        const moral = character.Groupe.reserveDes || 0;
+        if (moral === 0) {
+            return { error: "Capacités interdites : Le moral du groupe est à 0." };
+        }
+        if (moral >= 7) {
+            groupMoralModifier = 1;
+        } else if (moral <= 2) {
+            groupMoralModifier = -1;
+        }
+        const capacites = character.Groupe.capacitesGroupe || "";
+        if (capacites.includes("Unité")) {
+            groupMoralModifier += 1; // +1D total to collective actions when whole group is present
+        }
+    }
+
+    var { lancers, relances } = calculerLancersEtRelances(valueCompetence);
+    if (isCollective && character.Groupe) {
+        const capacites = character.Groupe.capacitesGroupe || "";
+        if (capacites.includes("Expertise partagée")) {
+            if (maxGroupCompetence > valueCompetence) {
+                relances += 1; // share expert skill (+1 réussite ou relance if a member has higher competence)
+            }
+        }
+    }
+    const totalDice = Number(modifier) + Number(valueCaracteristic) + Number(lancers) + Number(blessureModifier) + Number(malus) + Number(rareteMalus) + exhaustionMalus + groupMoralModifier;
     let extraDice = {};
     const weaponComps = ["cac", "melee", "lancer", "tir"];
     
