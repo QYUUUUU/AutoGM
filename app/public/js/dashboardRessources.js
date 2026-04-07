@@ -160,8 +160,20 @@ async function updateBlessure(type, note, charId) {
                 currentCircle = document.getElementById(type.replace("blessure", "") + "-dash" + i);
             }
             
-            // Reload the page to reflect the -1D effects on metrics
-            location.reload();
+            const updatedProfile = await response.json();
+            const displayEffort = document.getElementById('display-effort');
+            const maxEffortInput = document.getElementById('max-effort');
+            const maxEffort = maxEffortInput ? maxEffortInput.value : (updatedProfile.maxeffort || 15);
+            if (displayEffort && updatedProfile.effort !== undefined) {
+                displayEffort.innerText = `${updatedProfile.effort} / ${maxEffort}`;
+            }
+            
+            const displaySangFroid = document.getElementById('display-sangfroid');
+            const maxSangFroidInput = document.getElementById('max-sangfroid');
+            const maxSangFroid = maxSangFroidInput ? maxSangFroidInput.value : (updatedProfile.maxsangfroid || 8);
+            if (displaySangFroid && updatedProfile.sangfroid !== undefined) {
+                displaySangFroid.innerText = `${updatedProfile.sangfroid} / ${maxSangFroid}`;
+            }
         } else {
             console.error("Failed to update blessure");
             alert("Erreur lors de la mise à jour de la blessure.");
