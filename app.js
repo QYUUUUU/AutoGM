@@ -4,6 +4,7 @@ import userRoutes from './app/routes/userRoutes.js';
 import backendRoutes from './app/routes/backendRoutes.js';
 import authRoutes from './app/routes/authRoutes.js';
 import adminRoutes from './app/routes/adminRoutes.js';
+import eclatsRoutes from './app/routes/eclatsRoutes.js';
 import expressSession from 'express-session';
 import { PrismaClient } from '@prisma/client';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
@@ -48,6 +49,7 @@ app.use('/auth', authRoutes); // Add this line for authentication routes
 app.use('/', userRoutes);
 app.use('/backend', backendRoutes);
 app.use('/admin', adminRoutes);
+app.use('/eclats', eclatsRoutes);
 
 app.listen(80, () => {
 

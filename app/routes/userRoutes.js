@@ -3,7 +3,9 @@ import path from "path";
 import { Router } from 'express';
 import twig from 'twig';
 import { prisma } from '../prisma/prismaClient.js';
+
 import { getThrowsByStats } from "../services/calculateThrowsService.js"
+import { getEclatCapacites } from "../langChain/data/eclatCapacites.js";
 
 const router = Router();
 const rollClients = new Set();
@@ -70,7 +72,24 @@ router.get('/dashboard', async (req, res) => {
 
         const allGroupes = await prisma.groupe.findMany();
 
-        return res.render('index.html.twig', { characters: sortedCharacters, conversation: conversation, equipmentList: equipmentList, favoriteCharacter: favoriteCharacter, allGroupes: allGroupes }); // Pass sortedCharacters as an object
+        // Fetch all available favors from the DB
+        let allFaveurs = [];
+        try {
+          allFaveurs = await prisma.faveur.findMany({ orderBy: [{ domaine: 'asc' }, { nom: 'asc' }] });
+        } catch (e) {
+          console.error('Error loading allFaveurs:', e);
+        }
+        // Centralise les capacités d'éclat (nom + desc + sphère)
+        const allEclatCapacites = getEclatCapacites();
+        return res.render('index.html.twig', {
+          characters: sortedCharacters,
+          conversation: conversation,
+          equipmentList: equipmentList,
+          favoriteCharacter: favoriteCharacter,
+          allGroupes: allGroupes,
+          allFaveurs,
+          allEclatCapacites
+        });
       } else {
         return res.render('../views/login.html.twig');
       }
@@ -1451,6 +1470,30 @@ router.post('/Character/Favorite/inventory', async (req, res) => {
   } catch (err) {
     res.status(500).send(err.message);
   }
+});
+
+
+/**
+ * @route GET /faveurs
+ * @description Renders the faveurs selection page
+ * @access Public/Private
+ */
+router.get('/faveurs', async (req, res) => {
+  const id_User = req.session?.userId;
+  let characters = [];
+  let faveurs = [];
+  try {
+    faveurs = await prisma.faveur.findMany({ orderBy: [{ domaine: 'asc' }, { nom: 'asc' }] });
+    if (id_User) {
+      characters = await prisma.character.findMany({
+        where: { userId: id_User },
+      });
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  
+  res.render('../views/faveurs.html.twig', { characters, faveurs });
 });
 
 export default router;

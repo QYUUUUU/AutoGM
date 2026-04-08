@@ -185,6 +185,9 @@
                 <a class="nav-link" id="ressources-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#ressources-tab-pane" href="#ressources-tab-pane" role="tab" aria-controls="ressources-tab-pane" aria-selected="false" style="font-weight: bold;">Ressources</a>
             </li>
             <li class="nav-item" role="presentation">
+                <a class="nav-link" id="eclat-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#eclat-tab-pane" href="#eclat-tab-pane" role="tab" aria-controls="eclat-tab-pane" aria-selected="false" style="font-weight: bold;">Éclat</a>
+            </li>
+            <li class="nav-item" role="presentation">
                 <a class="nav-link" id="rituels-tab" data-bs-toggle="tab" data-toggle="tab" data-bs-target="#rituels-tab-pane" href="#rituels-tab-pane" role="tab" aria-controls="rituels-tab-pane" aria-selected="false" style="font-weight: bold;">Rituels</a>
             </li>
         </ul>
@@ -531,6 +534,123 @@
                             <!-- Hidden storage for max values -->
                             <input type="hidden" id="max-effort" value="{{ favoriteCharacter.character.maxeffort|default(15) }}" />
                             <input type="hidden" id="max-sangfroid" value="{{ favoriteCharacter.character.maxsangfroid|default(8) }}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- tab eclat -->
+            <div class="tab-pane fade h-100" id="eclat-tab-pane" role="tabpanel" aria-labelledby="eclat-tab" tabindex="0">
+                <div class="row h-100 mx-0">
+                    <div class="col-md-6 h-100 pr-2 pl-0">
+                        <div class="d-flex flex-column h-100">
+                            <div class="head-card square-tl my-0 d-flex justify-content-between align-items-center">
+                                <span>Relique d'Éclat 
+                                {% if favoriteCharacter.character.stadeEclat %}
+                                    <span class="text-warning ml-2" style="font-size: 0.9rem;">({{ favoriteCharacter.character.stadeEclat }})</span>
+                                {% endif %}
+                                </span>
+                            </div>
+                            <div class="body-card p-3 d-flex flex-column" style="flex: 1; overflow-y: auto;">
+                                {% if not favoriteCharacter.character.stadeEclat or favoriteCharacter.character.stadeEclat == '' %}
+                                    <div class="text-center text-muted mt-3">
+                                        <em>Cette âme ne possède aucun Éclat (Pacte de Rencontre non scellé).</em>
+                                    </div>
+                                {% else %}
+                                    <div class="mb-3">
+                                        <h6 class="text-warning font-weight-bold" style="font-family: 'Cinzel', serif; border-bottom: 1px solid rgba(255,215,0,0.3); padding-bottom: 5px;">Forme et Sphère</h6>
+                                        <p class="mb-1"><strong>Forme :</strong> {{ favoriteCharacter.character.formeEclat|default('Non définie') }}</p>
+                                        <p class="mb-0"><strong>Sphère d'Influence :</strong> {{ favoriteCharacter.character.sphereEclat|default('Non définie') }}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-warning font-weight-bold" style="font-family: 'Cinzel', serif; border-bottom: 1px solid rgba(255,215,0,0.3); padding-bottom: 5px;">Apparence</h6>
+                                        <p class="mb-0" style="white-space: pre-wrap;">{{ favoriteCharacter.character.apparenceEclat|default('Aucune description') }}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-warning font-weight-bold" style="font-family: 'Cinzel', serif; border-bottom: 1px solid rgba(255,215,0,0.3); padding-bottom: 5px;">Embrasement</h6>
+                                        <p class="mb-0" style="white-space: pre-wrap; font-style: italic;">{{ favoriteCharacter.character.embrasementEclat|default("Aucune condition d'embrasement définie") }}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-warning font-weight-bold mb-2" style="font-family: 'Cinzel', serif; border-bottom: 1px solid rgba(255,215,0,0.3); padding-bottom: 5px;">Capacités d'Éclat</h6>
+                                        <ul class="list-group" id="dashboard-capacites-list" style="border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 5px; background: rgba(0,0,0,0.3);">
+                                            {% set capacites = favoriteCharacter.character.capacitesEclat|default('[]')|trim %}
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', () => {
+                                                    const container = document.getElementById('dashboard-capacites-list');
+                                                    let capsStr = `{{ capacites|raw }}`;
+                                                    let caps = [];
+                                                    try { caps = JSON.parse(capsStr); } catch(e) {}
+
+                                                    // Centralisé : allEclatCapacites injecté côté backend
+                                                    const allEclatCapacites = {{ allEclatCapacites|json_encode|raw }};
+                                                    // Crée un mapping nom -> desc
+                                                    let capDescMap = {};
+                                                    Object.values(allEclatCapacites).forEach(arr => {
+                                                        arr.forEach(obj => { capDescMap[obj.nom] = obj.desc; });
+                                                    });
+
+                                                    if (Array.isArray(caps) && caps.length > 0) {
+                                                        caps.forEach(cap => {
+                                                            const li = document.createElement('li');
+                                                            li.className = 'list-group-item bg-transparent text-light border-secondary p-2 mb-1';
+                                                            let desc = capDescMap[cap] ? `<div class='small text-warning mt-1' style='font-size:0.95em;'>${capDescMap[cap]}</div>` : "<div class='small text-muted mt-1'>Description non trouvée.</div>";
+                                                            li.innerHTML = `<i class="fas fa-bolt text-warning mr-2" style="opacity: 0.8;"></i> <span class='fw-bold'>${cap}</span>${desc}`;
+                                                            container.appendChild(li);
+                                                        });
+                                                    } else {
+                                                        container.innerHTML = '<li class="list-group-item bg-transparent text-muted border-0 p-2 text-center" style="font-style: italic;">Aucune capacité ralliée</li>';
+                                                    }
+                                                });
+                                            </script>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 h-100 pl-2 pr-0">
+                        <div class="d-flex flex-column h-100">
+                            <div class="head-card square-tr my-0">Faveurs Accordées</div>
+                            <div class="body-card p-3 d-flex flex-column" style="flex: 1; overflow-y: auto;">
+                                <!-- Faveurs List -->
+                                <div class="row mx-0" id="dashboard-faveurs-list">
+                                    {% set faveursList = favoriteCharacter.character.faveurs|default('[]')|trim %}
+                                    <script>
+                                    document.addEventListener('DOMContentLoaded', () => {
+                                        const container = document.getElementById('dashboard-faveurs-list');
+                                        let favStr = `{{ faveursList|e('js') }}`;
+                                        let allFaveurs = {{ allFaveurs|json_encode|raw }};
+                                        let allFaveursMap = {};
+                                        allFaveurs.forEach(fav => { allFaveursMap[fav.nom] = fav; });
+                                        try {
+                                            if (favStr) {
+                                                const faveurs = JSON.parse(favStr);
+                                                if (Array.isArray(faveurs) && faveurs.length > 0) {
+                                                    container.innerHTML = '';
+                                                    faveurs.forEach(f => {
+                                                        const faveur = allFaveursMap[f];
+                                                        let html = `<div class='col-12 mb-3 px-0'><div class='card h-100 bg-dark text-light' style='border: 1px solid rgba(255,215,0,0.5);'><div class='card-header font-weight-bold text-warning d-flex justify-content-between align-items-center' style='background-color: rgba(255,215,0,0.1);'><h6 class='mb-0' style="font-family: 'Cinzel', serif;">${f}</h6></div><div class='card-body p-2' style='font-size: 0.9rem;'>`;
+                                                        if (faveur) {
+                                                            html += `<p class='mb-2' style='font-size: 0.9rem; color: #aaa;'><i class='fas fa-circle' style='font-size: 0.5rem; vertical-align: middle; margin-right: 5px;'></i><strong>Type :</strong> ${faveur.type} | <strong>Stade :</strong> ${faveur.stade}</p><p class='card-text text-light' style='font-size: 0.95rem;'>${faveur.description}</p>`;
+                                                        } else {
+                                                            html += `<p class='text-muted mb-0'>Description non trouvée ou Faveur personnalisée.</p>`;
+                                                        }
+                                                        html += `</div></div></div>`;
+                                                        container.insertAdjacentHTML('beforeend', html);
+                                                    });
+                                                } else {
+                                                    container.innerHTML = "<div class='col-12 text-center text-muted mt-3'><em>Aucune faveur accordée à cette âme.</em></div>";
+                                                }
+                                            }
+                                        } catch (e) {
+                                            console.error("Error parsing faveurs JSON:", e);
+                                            container.innerHTML = "<div class='col-12 text-center text-danger mt-3'>Erreur lors de la récupération des faveurs.</div>";
+                                        }
+                                    });
+                                    </script>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,196 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class="bg-slideshow">
+    <div class="bg-slide img1"></div>
+    <div class="bg-slide img2"></div>
+    <div class="bg-slide img3"></div>
+    <div class="bg-slide img4"></div>
+</div>
+
+<div class="container mt-5 text-white p-4" style="background-color: rgba(0, 0, 0, 0.8); border-radius: 10px; border: 1px solid rgba(255,215,0,0.3); position: relative; z-index: 1;">
+    <h1 class="mb-4 text-center" style="font-family: 'Cinzel', serif; color: var(--god-gold); text-transform: uppercase;">Les Faveurs Divines</h1>
+    
+    <div class="mb-5 text-muted" style="font-size: 1.1rem; text-align: center; border-bottom: 1px solid rgba(255,215,0,0.2); padding-bottom: 20px;">
+        <p>Les Dieux accordent des dons inestimables à leurs fidèles les plus dévoués et à leurs Élus.<br>
+        Découvrez ici la liste des Faveurs accessibles listées depuis la base de données, et liez-les à vos Âmes depuis cette page.</p>
+    </div>
+
+    {% set current_domaine = '' %}
+    {% for faveur in faveurs %}
+        {% if current_domaine != faveur.domaine %}
+            {% set current_domaine = faveur.domaine %}
+            {% if loop.index0 > 0 %}</div>{% endif %}
+            <h3 class="mt-4 mb-3" style="color: #fff; font-family: 'Cinzel', serif;"><i class="fas fa-hand-holding-medical"></i> Faveurs de {{ current_domaine }}</h3>
+            <div class="row">
+        {% endif %}
+        
+        <div class="col-md-6 mb-3">
+            <div class="card h-100" style="background-color: rgba(20,20,20,0.9); border: 1px solid rgba(255,215,0,0.4);">
+                <div class="card-header d-flex justify-content-between align-items-center" style="background-color: rgba(255,215,0,0.1); border-bottom: 1px solid rgba(255,215,0,0.2); font-weight: bold; color: var(--god-gold);">
+                    <span class="faveur-title">{{ faveur.nom }}</span>
+                    <button class="btn btn-sm btn-outline-warning" onclick="openFaveurModal('{{ faveur.nom|e('js') }}', '{{ faveur.stade|e('js') }}')">
+                        <i class="fas fa-plus"></i> Accorder
+                    </button>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2" style="font-size: 0.9rem; color: #aaa;">
+                        <i class="fas fa-circle" style="font-size: 0.5rem; vertical-align: middle; margin-right: 5px;"></i>
+                        <strong>Type :</strong> {{ faveur.type }} | <strong>Stade :</strong> {{ faveur.stade }}
+                    </p>
+                    <p class="card-text text-light" style="font-size: 0.95rem;">
+                        {{ faveur.description }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p class="text-center text-muted">Aucune faveur disponible en base de données.</p>
+    {% endfor %}
+    {% if faveurs|length > 0 %}</div>{% endif %}
+
+</div>
+
+<!-- Modal Accorder Faveur -->
+<div class="modal fade" id="faveurModal" tabindex="-1" role="dialog" aria-labelledby="faveurModalLabel" aria-hidden="true" style="z-index: 10500;">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="background-color: rgba(20,20,20,0.95); border: 1px solid rgba(255,215,0,0.6); border-radius: 10px; color: #fff;">
+      <div class="modal-header" style="border-bottom: 1px solid rgba(255,215,0,0.3);">
+        <h5 class="modal-title" id="faveurModalLabel" style="font-family: 'Cinzel', serif; color: var(--god-gold);">
+          Accorder la Faveur <br><small id="faveurNameDisplay" style="color:#fff;"></small>
+        </h5>
+        <button type="button" class="close text-white" onclick="closeFaveurModal()" aria-label="Close" style="opacity: 1; text-shadow: none;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="faveurForm">
+            <div class="form-group">
+                <label for="characterSelect" style="color: #ccc;">Sélectionnez une Âme (Personnage) :</label>
+                <select class="form-control" id="characterSelect" style="background-color: #333; color: #fff; border: 1px solid rgba(255,215,0,0.5);">
+                    <option value="">-- Choisir un personnage --</option>
+                    {% for character in characters %}
+                        <option value="{{ character.id_Character }}" data-stade="{{ character.stadeEclat }}">{{ character.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer" style="border-top: 1px solid rgba(255,215,0,0.3);">
+        <button type="button" class="btn btn-secondary" onclick="closeFaveurModal()">Annuler</button>
+        <button type="button" class="btn btn-outline-danger" onclick="removeFaveurAction()"><i class="fas fa-trash-alt"></i> Retirer</button>
+        <button type="button" class="btn text-dark" style="background-color: var(--god-gold);" onclick="submitFaveur()"><i class="fas fa-hand-sparkles"></i> Accorder</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    let selectedFaveurName = '';
+    const STADE_LEVELS = {
+        'Rencontre': 1,
+        'Entente': 2,
+        'Accord': 3
+    };
+
+    function openFaveurModal(faveurName, faveurStade) {
+        selectedFaveurName = faveurName;
+        document.getElementById('faveurNameDisplay').innerText = faveurName;
+        
+        // Filter options
+        const faveurLevel = STADE_LEVELS[faveurStade] || 0;
+        const options = document.querySelectorAll('#characterSelect option');
+        
+        options.forEach(option => {
+            if (option.value === "") {
+                option.style.display = 'block'; // Always show placeholder
+                return;
+            }
+            const charStade = option.getAttribute('data-stade');
+            const charLevel = STADE_LEVELS[charStade] || 0;
+            
+            if (charLevel >= faveurLevel) {
+                option.style.display = 'block';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('characterSelect').value = ""; // Reset selection
+        
+        $('#faveurModal').modal('show');
+    }
+
+    function closeFaveurModal() {
+        $('#faveurModal').modal('hide');
+    }
+
+    function submitFaveur() {
+        const characterId = document.getElementById('characterSelect').value;
+        if (!characterId) {
+            alert('Veuillez sélectionner un personnage.');
+            return;
+        }
+
+        fetch('/eclats/faveurs/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ characterId: characterId, faveurName: selectedFaveurName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closeFaveurModal();
+                alert("Faveur accordée avec succès ! Retrouvez-la dans les détails du personnage (Onglet Éclats ou Fiche).");
+            } else {
+                alert('Erreur lors de l\'ajout de la Faveur : ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Une erreur est survenue.');
+        });
+    }
+
+    function removeFaveurAction() {
+        const characterId = document.getElementById('characterSelect').value;
+        if (!characterId) {
+            alert('Veuillez sélectionner un personnage.');
+            return;
+        }
+
+        if(!confirm(`Êtes-vous sûr de vouloir retirer la faveur "${selectedFaveurName}" de ce personnage ?`)) {
+            return;
+        }
+
+        fetch('/eclats/faveurs/remove', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ characterId: characterId, faveurName: selectedFaveurName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closeFaveurModal();
+                alert("Faveur retirée avec succès !");
+            } else {
+                alert('Erreur lors du retrait de la Faveur : ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Une erreur est survenue.');
+        });
+    }
+</script>
+{% endblock %}

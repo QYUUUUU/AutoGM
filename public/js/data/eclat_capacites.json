@@ -1,0 +1,33 @@
+{
+  "Universelle": [
+    { "nom": "Synergie", "desc": "L’Éclat fournit un bonus de +1D sur les jets d’une caractéristique spécifique (à définir avec l’Oracle)." }
+  ],
+  "Conflit": [
+    { "nom": "Puissance", "desc": "Si l’Éclat est une arme, elle inflige 1 dommage supplémentaire. Si armure/bouclier, l'indice de protection augmente de 1." },
+    { "nom": "Surcroît de puissance", "desc": "1 fois/jour, l’Élu peut doubler son score de Puissance ou de Résistance sur un jet." }
+  ],
+  "Connaissance": [
+    { "nom": "Don de Babel", "desc": "L’Éclat confère à l’Élu la capacité de comprendre toutes les langues." },
+    { "nom": "Omniscience passagère", "desc": "1 fois/jour, l’Élu peut doubler son score de Connaissance ou de Perception sur un jet." }
+  ],
+  "Domination": [
+    { "nom": "Force de Volonté", "desc": "1 fois/jour, l’Élu peut doubler son score de base de Volonté ou de Résistance sur un jet." },
+    { "nom": "Volonté inflexible", "desc": "+1D sur les jets en opposition avec la Volonté. État stabilisé si Blessure Mortelle et réussite jet Volonté (9)." }
+  ],
+  "Miséricorde": [
+    { "nom": "Sérénité accrue", "desc": "1 fois/jour, l’Élu peut doubler son score de Précision ou d’Empathie sur un jet." },
+    { "nom": "Toucher du guérisseur", "desc": "L’Élu gagne un bonus de +1D sur ses actions de soin." }
+  ],
+  "Mystique": [
+    { "nom": "Puissance spirituelle", "desc": "1 fois/jour, l’Élu peut doubler son score de Connaissance ou de Volonté sur un jet." },
+    { "nom": "Ritualiste", "desc": "L’Élu gagne un bonus de +1D sur ses jets de Rituels." }
+  ],
+  "Phantasme": [
+    { "nom": "Absence", "desc": "L’Élu gagne un bonus de +1D sur ses jets de Discrétion." },
+    { "nom": "Agilité accrue", "desc": "1 fois/jour, l’Élu peut doubler son score de Réflexes ou de Précision sur un jet." }
+  ],
+  "Trépas": [
+    { "nom": "Chaque mort m’appartient", "desc": "1 fois/jour, s'il inflige une Blessure Mortelle qui terrasse, il gagne 1D/2D dans ses Réserves et élimine 1 Blessure Légère." },
+    { "nom": "Impassibilité de la mort", "desc": "1 fois/jour, l’Élu peut doubler son score de Résistance ou de Volonté sur un jet." }
+  ]
+}

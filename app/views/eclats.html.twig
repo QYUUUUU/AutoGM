@@ -1,0 +1,1714 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Le Panthéon et l'Éclat - GODS{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Typography & Colors */
+        :root {
+            --god-gold: #D4AF37;
+            --god-gold-muted: #a38622;
+            --god-dark: #121216; /* Fallback */
+            --god-bg-translucent: rgba(18, 18, 22, 0.85);
+            --god-border: rgba(212, 175, 55, 0.25);
+            --god-text: #e0e0e0;
+            --god-danger: #c93b3b;
+            --god-success: #3bc980;
+            --god-info: #5798d1;
+        }
+
+        /* Background Animation */
+        .bg-slideshow {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            background-color: #050505;
+        }
+        .bg-slideshow::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+        .bg-slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: fadeSlide 160s infinite;
+        }
+        
+        /* FIRST slide specific animation so it does not fade in */
+        @keyframes fadeSlideFirst {
+            0% { opacity: 0.6; transform: scale(1); }
+            25% { opacity: 0.6; }
+            30% { opacity: 0; transform: scale(1.05); }
+            100% { opacity: 0; transform: scale(1.05); }
+        }
+        
+        /* Basic slide animation for all other slides */
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: scale(1); }
+            5% { opacity: 0.6; }
+            25% { opacity: 0.6; }
+            30% { opacity: 0; transform: scale(1.05); }
+            100% { opacity: 0; transform: scale(1.05); }
+        }
+
+        /* Page Layout */
+        .eclats-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .eclats-title {
+            font-family: 'Cinzel', serif;
+            color: var(--god-gold);
+            font-size: 3.5rem;
+            text-align: center;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.8);
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+        
+        .eclats-subtitle {
+            text-align: center;
+            color: #aaa;
+            font-style: italic;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Cards & Panels */
+        .god-card {
+            background: var(--god-bg-translucent);
+            border: 1px solid var(--god-border);
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: var(--god-text);
+            margin-bottom: 1.5rem;
+        }
+        .god-card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--god-border);
+            font-family: 'Cinzel', serif;
+            color: var(--god-gold);
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .god-card-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Inputs */
+        .god-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--god-text);
+            border-radius: 3px;
+        }
+        .god-input:focus {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: var(--god-gold);
+            color: #fff;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+        }
+        .god-input::placeholder {
+            color: #666;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        .god-label {
+            color: #bbb;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Tabs Styling (Custom) */
+        .nav-tabs.god-tabs {
+            border-bottom: 1px solid var(--god-border);
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .nav-tabs.god-tabs .nav-link {
+            border: none !important;
+            color: #aaa;
+            font-size: 1.1rem;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+            padding: 0.8rem 1.5rem;
+            border-bottom: 2px solid transparent !important;
+            transition: all 0.3s ease;
+            background: transparent !important;
+            cursor: pointer;
+        }
+        .nav-tabs.god-tabs .nav-link:hover {
+            color: var(--god-gold);
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3) !important;
+        }
+        .nav-tabs.god-tabs .nav-link.active {
+            color: var(--god-gold);
+            border-bottom: 2px solid var(--god-gold) !important;
+            background: transparent !important;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Buttons */
+        .btn-god {
+            background: linear-gradient(135deg, var(--god-gold-muted) 0%, var(--god-gold) 100%);
+            color: #111;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+            border-radius: 3px;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .btn-god:hover {
+            background: linear-gradient(135deg, var(--god-gold) 0%, #fff0a8 100%);
+            color: #000;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+        .btn-god-outline {
+            background: transparent;
+            border: 1px solid var(--god-gold);
+            color: var(--god-gold);
+            cursor: pointer;
+            padding: 0.6rem 1.2rem;
+            text-transform: uppercase;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+        }
+        .btn-god-outline:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--god-gold);
+        }
+        
+        .btn-danger-god {
+            background: transparent;
+            border: 1px solid var(--god-danger);
+            color: var(--god-danger);
+            cursor: pointer;
+            padding: 0.6rem 1.2rem;
+            text-transform: uppercase;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+        }
+        .btn-danger-god:hover {
+            background: var(--god-danger);
+            color: #fff;
+        }
+
+        /* Pantheon Accordion */
+        .accordion-god .card {
+            background: transparent;
+            border: none;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+        }
+        .accordion-god .card-header {
+            background: rgba(0,0,0,0.3);
+            border-bottom: none;
+            padding: 0;
+            border-radius: 4px;
+        }
+        .accordion-god .btn-link {
+            color: var(--god-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+            padding: 1rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .accordion-god .btn-link:hover {
+            background: rgba(212, 175, 55, 0.05);
+            text-decoration: none;
+        }
+        .accordion-god .collapse {
+            display: none;
+        }
+        .accordion-god .collapse.show {
+            display: block;
+        }
+        .accordion-god .card-body {
+            background: rgba(0,0,0,0.15);
+            padding: 1.2rem;
+            color: #ccc;
+            font-size: 0.95rem;
+        }
+        
+        /* Status tags */
+        .stade-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(87, 152, 209, 0.1);
+            border: 1px solid var(--god-info);
+            color: var(--god-info);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+            font-style: italic;
+        }
+        select option {
+            background-color: #111;
+            color: #fff;
+        }
+        
+        /* Tab functionality */
+        .tab-pane:not(.show) {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="bg-slideshow" id="random-slideshow"></div>
+
+<div class="eclats-container">
+    <h1 class="eclats-title">Le Panthéon & L'Éclat</h1>
+    <p class="eclats-subtitle">Façonnez vos Cultes, gravez vos Pactes, invoquez leurs Faveurs.</p>
+
+    <!-- Custom Tabs (Pure JS) -->
+    <ul class="nav nav-tabs god-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-target="#pantheon-tab-pane">Le Panthéon</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-target="#pacte-tab-pane">Le Pacte</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-target="#artifact-tab-pane">L'Éclat</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-target="#equilibre-tab-pane">L'Équilibre</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-target="#faveurs-tab-pane">Les Faveurs</a>
+        </li>
+    </ul>
+
+
+<!-- Eclat Modals -->
+<div class="modal fade" id="pactModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="color: var(--god-text);">
+        <div class="modal-content" style="background: var(--god-dark); border: 1px solid var(--god-gold);">
+            <div class="modal-header border-bottom-0" style="background: rgba(255,255,255,0.05);">
+                <h5 class="modal-title" style="color: var(--god-gold); font-family: 'Cinzel', serif;" id="pactModalTitle">Formation du Pacte</h5>
+                <button type="button" class="close" data-dismiss="modal" style="color: var(--god-gold); text-shadow: none;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4" id="pactModalDesc">L'Élu gagne de nouveaux pouvoirs. Choisissez la caractéristique et les compétences qui seront augmentées.</p>
+                <div class="form-group">
+                    <label class="god-label">Caractéristique (+1)</label>
+                    <select id="pactStat" class="form-control god-input">
+                        <option value="puissance">Puissance</option>
+                        <option value="resistance">Résistance</option>
+                        <option value="precision">Précision</option>
+                        <option value="reflexes">Réflexes</option>
+                        <option value="connaissance">Connaissance</option>
+                        <option value="perception">Perception</option>
+                        <option value="volonte">Volonté</option>
+                        <option value="empathie">Empathie</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="god-label">Compétence 1 (+1)</label>
+                    <select id="pactSkill1" class="form-control god-input">
+                        <option value="arts">Arts</option><option value="cite">Cite</option><option value="civilisations">Civilisations</option><option value="relationnel">Relationnel</option><option value="soins">Soins</option><option value="animalisme">Animalisme</option><option value="faune">Faune</option><option value="montures">Montures</option><option value="pistage">Pistage</option><option value="territoire">Territoire</option><option value="adresse">Adresse</option><option value="armurerie">Armurerie</option><option value="artisanat">Artisanat</option><option value="mecanisme">Mecanisme</option><option value="runes">Runes</option><option value="athletisme">Athletisme</option><option value="discretion">Discretion</option><option value="flore">Flore</option><option value="vigilance">Vigilance</option><option value="voyage">Voyage</option><option value="bouclier">Bouclier</option><option value="cac">Cac</option><option value="lancer">Lancer</option><option value="melee">Melee</option><option value="tir">Tir</option><option value="eclats">Eclats</option><option value="lunes">Lunes</option><option value="mythes">Mythes</option><option value="pantheons">Pantheons</option><option value="rituels">Rituels</option>
+                    </select>
+                </div>
+                <div class="form-group" id="pactSkill2Container" style="display:none;">
+                    <label class="god-label">Compétence 2 (+1)</label>
+                    <select id="pactSkill2" class="form-control god-input">
+                        <option value="">-- Aucune (Rencontre/Entente) --</option>
+                        <option value="arts">Arts</option><option value="cite">Cite</option><option value="civilisations">Civilisations</option><option value="relationnel">Relationnel</option><option value="soins">Soins</option><option value="animalisme">Animalisme</option><option value="faune">Faune</option><option value="montures">Montures</option><option value="pistage">Pistage</option><option value="territoire">Territoire</option><option value="adresse">Adresse</option><option value="armurerie">Armurerie</option><option value="artisanat">Artisanat</option><option value="mecanisme">Mecanisme</option><option value="runes">Runes</option><option value="athletisme">Athletisme</option><option value="discretion">Discretion</option><option value="flore">Flore</option><option value="vigilance">Vigilance</option><option value="voyage">Voyage</option><option value="bouclier">Bouclier</option><option value="cac">Cac</option><option value="lancer">Lancer</option><option value="melee">Melee</option><option value="tir">Tir</option><option value="eclats">Eclats</option><option value="lunes">Lunes</option><option value="mythes">Mythes</option><option value="pantheons">Pantheons</option><option value="rituels">Rituels</option>
+                    </select>
+                </div>
+                
+                <input type="hidden" id="pactActionType" value="">
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-god-outline" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-god" onclick="confirmPactAction()">Sceller</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Tabs Content -->
+    <div class="tab-content">
+        
+
+        <!-- PANTHEON TAB -->
+        <div class="tab-pane show active" id="pantheon-tab-pane">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="god-card h-100" id="god-creation-container">
+                        <div class="god-card-header"><i class="fas fa-feather-alt mr-2"></i> Élever une Divinité</div>
+                        <div class="god-card-body pb-0">
+                            
+                            <!-- STEP 1: Concept & Mots -->
+                            <div class="god-step" id="god-step-1">
+                                <h4 style="color: var(--god-gold); font-family: 'Cinzel', serif;" class="mb-3">Étape 1 : Le Souvenir</h4>
+                                <p class="text-muted small">Les dieux créés sont ceux des temps anciens, aujourd'hui simples souvenirs cherchant à s'éveiller. Définissez son nom et son concept.</p>
+                                <div class="form-group">
+                                    <label class="god-label">1. Nom du Dieu</label>
+                                    <input type="text" class="form-control god-input" id="godName" required placeholder="Ex: Mère Araignée">
+                                </div>
+                                <div class="form-group">
+                                    <label class="god-label">2. Concept / Description</label>
+                                    <textarea class="form-control god-input" id="godDesc" rows="4" placeholder="De quoi est-il le dieu ? Quel est son but ?"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- STEP 2: Domaines -->
+                            <div class="god-step" style="display:none;" id="god-step-2">
+                                <h4 style="color: var(--god-gold); font-family: 'Cinzel', serif;" class="mb-3">Étape 2 : Domaines d'influence</h4>
+                                <p class="text-muted small">Choisissez 2 ou 3 domaines compatibles avec la sphère d'influence de votre Éclat (exemples : Chaos, Mort, Guérison, Savoir...).</p>
+                                <div class="form-group">
+                                    <label class="god-label">Domaines (séparés par des virgules)</label>
+                                    <input type="text" class="form-control god-input" id="godDomains" placeholder="Ex: Nuit, Ténèbres, Assassinat">
+                                </div>
+                            </div>
+
+                            <!-- STEP 3: Essences -->
+                            <div class="god-step" style="display:none;" id="god-step-3">
+                                <h4 style="color: var(--god-gold); font-family: 'Cinzel', serif;" class="mb-3">Étape 3 : Les Essences</h4>
+                                <p class="text-muted small">Cochez jusqu'à deux essences primaires et deux essences secondaires.</p>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <label class="god-label d-block border-bottom border-secondary pb-2 mb-3">Essences Primaires <small class="text-muted">(2 max)</small></label>
+                                        <div class="d-flex flex-wrap text-light" style="font-size: 0.9em;">
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Air"> Air <small class="text-muted ml-1">(opposé Terre)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Feu"> Feu <small class="text-muted ml-1">(opposé Eau)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Mort"> Mort <small class="text-muted ml-1">(opposé Vie)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Vie"> Vie <small class="text-muted ml-1">(opposé Mort)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Soleil"> Soleil <small class="text-muted ml-1">(opposé Lunes)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Bête"> Bête <small class="text-muted ml-1">(opposé Humain)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Humain"> Humain <small class="text-muted ml-1">(opposé Bête)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Terre"> Terre <small class="text-muted ml-1">(opposé Air)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Lunes"> Lunes <small class="text-muted ml-1">(opposé Soleil)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesPrimairesCb" value="Eau"> Eau <small class="text-muted ml-1">(opposé Feu)</small></label></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-4">
+                                        <label class="god-label d-block border-bottom border-secondary pb-2 mb-3">Essences Secondaires <small class="text-muted">(2 max)</small></label>
+                                        <div class="d-flex flex-wrap text-light" style="font-size: 0.9em;">
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Air"> Air <small class="text-muted ml-1">(opposé Terre)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Feu"> Feu <small class="text-muted ml-1">(opposé Eau)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Mort"> Mort <small class="text-muted ml-1">(opposé Vie)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Vie"> Vie <small class="text-muted ml-1">(opposé Mort)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Soleil"> Soleil <small class="text-muted ml-1">(opposé Lunes)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Bête"> Bête <small class="text-muted ml-1">(opposé Humain)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Humain"> Humain <small class="text-muted ml-1">(opposé Bête)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Terre"> Terre <small class="text-muted ml-1">(opposé Air)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Lunes"> Lunes <small class="text-muted ml-1">(opposé Soleil)</small></label></div>
+                                            <div class="w-100 mb-2"><label class="cursor-pointer d-flex align-items-center"><input type="checkbox" class="mr-2 godEssencesSecondairesCb" value="Eau"> Eau <small class="text-muted ml-1">(opposé Feu)</small></label></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    // Limite à 2 max par catégorie
+                                    document.addEventListener('change', function(e) {
+                                        if (e.target.classList.contains('godEssencesPrimairesCb')) {
+                                            if (document.querySelectorAll('.godEssencesPrimairesCb:checked').length > 2) {
+                                                e.target.checked = false;
+                                                alert("Vous ne pouvez choisir que 2 essences primaires maximum.");
+                                            }
+                                        }
+                                        if (e.target.classList.contains('godEssencesSecondairesCb')) {
+                                            if (document.querySelectorAll('.godEssencesSecondairesCb:checked').length > 2) {
+                                                e.target.checked = false;
+                                                alert("Vous ne pouvez choisir que 2 essences secondaires maximum.");
+                                            }
+                                        }
+                                    });
+                                </script>
+                            </div>
+
+                            <!-- STEP 4: Désirs & Obligations -->
+                            <div class="god-step" style="display:none;" id="god-step-4">
+                                <h4 style="color: var(--god-gold); font-family: 'Cinzel', serif;" class="mb-3">Étape 4 : Les Désirs</h4>
+                                <p class="text-muted small">Qu'attend la divinité de son élu ? Choisissez 2 désirs fondateurs. L'Oracle en choisira un 3ème.</p>
+                                <div class="form-group">
+                                    <label class="god-label">Désirs et Obligations (*)</label>
+                                    <textarea class="form-control god-input" id="godDesirs" rows="3" placeholder="Ex: 1. Combattre les Ténèbres. 2. Ne jamais briser un serment (*)."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- STEP 5: Interdits -->
+                            <div class="god-step" style="display:none;" id="god-step-5">
+                                <h4 style="color: var(--god-gold); font-family: 'Cinzel', serif;" class="mb-3">Étape 5 : Les Interdits</h4>
+                                <p class="text-muted small">Des concepts simples auxquels les Élus ne doivent pas s'adonner. Vous en choisissez deux, l'Oracle un troisième.</p>
+                                <div class="form-group">
+                                    <label class="god-label">Interdits (concepts clés, séparés par virgules)</label>
+                                    <input type="text" class="form-control god-input" id="godInterditsMineurs" placeholder="Ex: Meurtre, Chaos">
+                                </div>
+                                <div class="form-group" style="display:none;">
+                                    <label class="god-label">Interdits (Oracle)</label>
+                                    <input type="hidden" class="form-control god-input" id="godInterditsMajeurs" value="">
+                                </div>
+                            </div>
+
+                            <!-- STEP 6: Objectifs -->
+                            <div class="god-step" style="display:none;" id="god-step-6">
+                                <h4 style="color: var(--god-gold); font-family: 'Cinzel', serif;" class="mb-3">Étape 6 : Les Objectifs</h4>
+                                <p class="text-muted small">Définissez une quête mineure (2D Divinité) et une majeure (Jauge Pleine / Augmentation du Pacte) pour servir le dieu.</p>
+                                <div class="form-group">
+                                    <label class="god-label">Objectif Mineur</label>
+                                    <input type="text" class="form-control god-input" id="godObjMineur" placeholder="Ex: Retrouver le temple de la forêt">
+                                </div>
+                                <div class="form-group">
+                                    <label class="god-label">Objectif Majeur</label>
+                                    <input type="text" class="form-control god-input" id="godObjMajeur" placeholder="Ex: Détruire le Culte du Soleil Noir de la région">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="god-card-footer d-flex justify-content-between mt-3">
+                            <button class="btn btn-god-outline god-prev-btn" style="display:none;" onclick="navGodStep(-1)">Précédent</button>
+                            <div class="ml-auto">
+                                <button class="btn btn-god god-next-btn" onclick="navGodStep(1)">Suivant <i class="fas fa-arrow-right ml-1"></i></button>
+                                <button class="btn btn-god god-submit-btn" style="display:none;" onclick="submitGodCreation()"><i class="fas fa-praying-hands mr-2"></i>Invoquer l’Entité</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="god-card h-100">
+                        <div class="god-card-header"><i class="fas fa-book-open mr-2"></i> Dieux Vénérés</div>
+                        <div class="god-card-body" style="max-height: 570px; overflow-y: auto;">
+                            {% if gods|length == 0 %}
+                                <div class="empty-state">
+                                    <i class="fas fa-pray fa-3x mb-3" style="color: rgba(255,255,255,0.1);"></i><br>
+                                    Votre panthéon est vide.<br>Créez votre première foi à gauche.
+                                </div>
+                            {% else %}
+                                <div class="accordion-god">
+                                    {% for god in gods %}
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <button class="btn-link" data-target="#collapseGod{{ god.id }}">
+                                                <span>{{ god.nom }}</span>
+                                                <i class="fas fa-chevron-down" style="font-size: 0.8rem; opacity: 0.5;"></i>
+                                            </button>
+                                        </div>
+                                        <div id="collapseGod{{ god.id }}" class="collapse">
+                                            <div class="card-body">
+                                                {% if god.description %}<p class="mb-3" style="color: var(--god-text);"><em>"{{ god.description }}"</em></p>{% endif %}
+                                                <div class="mb-2"><strong style="color: var(--god-gold-muted);">Domaines :</strong> <span class="ml-1">{{ god.domaines|default('Anonyme')|replace({'[': '', ']': '', '"': ''}) }}</span></div>
+                                                <div class="mb-2"><strong style="color: #d18f57;">Interdits Mineurs :</strong> <span class="ml-1">{{ god.interditsMineurs|default('Aucun')|replace({'[': '', ']': '', '"': ''}) }}</span></div>
+                                                <div class="mb-0"><strong style="color: var(--god-danger);">Interdits Majeurs :</strong> <span class="ml-1">{{ god.interditsMajeurs|default('Aucun')|replace({'[': '', ']': '', '"': ''}) }}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PACTE TAB -->
+        <div class="tab-pane" id="pacte-tab-pane">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="god-card">
+                        <div class="god-card-header text-center"><i class="fas fa-link mr-2"></i> Le Lien Divin</div>
+                        <div class="god-card-body p-4">
+                            <p class="text-center text-muted mb-4">La ferveur de votre Élu définira la puissance de son Éclat.\n Choisissez votre personnage et suivez l'ascension de sa foi: de la <strong>Rencontre</strong>, à l'<strong>Entente</strong>, jusqu'à l'<strong>Accord</strong>.</p>
+                            
+                            <div class="form-group mb-4">
+                                <label class="god-label">Sélectionnez l'Élu</label>
+                                <select id="pacteCharacterSelect" class="form-control god-input" onchange="updateCharacterPactState()">
+                                    <option value="">-- Choisir une Âme --</option>
+                                    {% for character in characters %}
+                                        <option value="{{ character.id_Character }}" 
+                                                data-god-id="{{ character.godId|default('') }}" 
+                                                data-stade="{{ character.stadeEclat|default('') }}">
+                                            {{ character.nom|length > 0 ? character.nom : 'Âme sans nom' }} {% if character.godId %}(Lié à {{ character.God.nom }}){% else %}(Âme Libre){% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div id="pacteActionsContainer" style="display:none; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                                <!-- SECTION: NON LIÉ -->
+                                <div id="unboundGodSection">
+                                    <div class="form-group mb-3">
+                                        <label class="god-label">Lier cette âme à une Entité</label>
+                                        <select id="pacteGodSelect" class="form-control god-input">
+                                            <option value="">-- Choisir une Divinité --</option>
+                                            {% for deity in gods %}
+                                                <option value="{{ deity.id }}">{{ deity.nom }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-god w-100" onclick="bindGod()">Initier la Rencontre</button>
+                                </div>
+
+                                <!-- SECTION: LIÉ -->
+                                <div id="boundGodSection" style="display:none;" class="text-center">
+                                    <div class="mb-4">
+                                        <div class="god-label mb-1">Stade d'Éclat Actuel</div>
+                                        <div class="stade-badge" id="currentStadeDisplay">Rencontre</div>
+                                    </div>
+                                    <div class="d-flex flex-wrap" style="gap: 1rem; justify-content: center;">
+                                        <button class="btn btn-god-outline flex-grow-1" id="upgradeBtn" onclick="upgradePact()">Élever le Pacte</button>
+                                        <button class="btn btn-danger-god" onclick="breakPact()"><i class="fas fa-unlink"></i> Rompre</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARTIFACT TAB -->
+        <div class="tab-pane" id="artifact-tab-pane">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="god-card">
+                        <div class="god-card-header text-center"><i class="fas fa-gem mr-2"></i> Révélation de l'Éclat</div>
+                        <div class="god-card-body p-4">
+                            <p class="text-center text-muted mb-4">Donnez forme à l'artefact surnaturel qui lie l'Élu(e) au divin. 
+                            Définissez son apparence, son embrasement initial et les pouvoirs de sa Rencontre.</p>
+
+                            <div class="form-group mb-4">
+                                <label class="god-label">Sélectionnez l'Élu</label>
+                                <select id="artifactCharacterSelect" class="form-control god-input" onchange="updateArtifactState()">
+                                    <option value="">-- Choisir une Âme --</option>
+                                    {% for character in characters %}
+                                        <option value="{{ character.id_Character }}"
+                                                data-god-id="{{ character.godId|default('') }}"
+                                                data-stade="{{ character.stadeEclat|default('') }}"
+                                                data-forme="{{ character.formeEclat|default('')|escape('html_attr') }}"
+                                                data-apparence="{{ character.apparenceEclat|default('')|escape('html_attr') }}"
+                                                data-sphere="{{ character.sphereEclat|default('')|escape('html_attr') }}"
+                                                data-embrasement="{{ character.embrasementEclat|default('')|escape('html_attr') }}"
+                                                data-capacites="{{ character.capacitesEclat|default('[]')|escape('html_attr') }}">
+                                            {{ character.nom }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div id="artifactContainer" style="display:none;">
+                                <div class="alert" id="artifactNoEclatAlert" style="display:none; background: rgba(200, 50, 50, 0.1); border: 1px solid rgba(200, 50, 50, 0.3); color: #e57373;">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i> Cette âme ne possède aucun Éclat actif. Scellez d'abord un Pacte de la Rencontre.
+                                </div>
+
+                                <div id="artifactFormArea" style="display:none;">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label class="god-label">Forme de l'Éclat</label>
+                                                <input type="text" id="artifactForme" class="form-control god-input" placeholder="Ex: Épée bâtarde, amulette en os, armure gravée..." onchange="saveArtifact()">
+                                            </div>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label class="god-label">Sphère d'Influence</label>
+                                                <select id="artifactSphere" class="form-control god-input" onchange="saveArtifact()">
+                                                    <option value="">-- Choisir --</option>
+                                                    <option value="Conflit">Conflit</option>
+                                                    <option value="Connaissance">Connaissance</option>
+                                                    <option value="Domination">Domination</option>
+                                                    <option value="Miséricorde">Miséricorde</option>
+                                                    <option value="Mystique">Mystique</option>
+                                                    <option value="Phantasme">Phantasme</option>
+                                                    <option value="Trépas">Trépas</option>
+                                                    <option value="Universelle">Universelle (Seulement)</option>
+                                                </select>
+                                                <small class="text-muted d-block mt-1">La sphère de l'Éclat ne peut jamais être modifiée par la suite !</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label class="god-label">Apparence / Détails Cosmetiques</label>
+                                                <textarea id="artifactApparence" class="form-control god-input" rows="4" placeholder="Ex: Des veines semblent pulser dessus au rythme du cœur de l'Élu. Les gemmes deviennent rouges quand on l'utilise..." onchange="saveArtifact()"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group mb-4 mt-2">
+                                        <label class="god-label text-warning"><i class="fas fa-fire-alt mr-2"></i> L'Embrasement</label>
+                                        <textarea id="artifactEmbrasement" class="form-control god-input" rows="3" placeholder="Description de l'effet unique et exceptionnel lié à l'Essence primaire du dieu déclenché lors du premier éveil face au danger..." onchange="saveArtifact()"></textarea>
+                                        <small class="text-muted">Rappel Essence Air: esquive automatique 3 tours. Feu: Déflagration 10 dmg etc. A voir avec l'Oracle.</small>
+                                    </div>
+
+                                    <!-- CAPACITÉS AREA -->
+                                    <div class="card bg-transparent border-secondary mt-4">
+                                        <div class="card-header border-secondary border-bottom-0">
+                                            <h5 class="god-label mb-0"><i class="fas fa-bolt mr-2"></i> Capacités d'Éclats</h5>
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            <p class="text-muted small">À la création (Rencontre), l'Élu dispose de la capacité universelle "Synergie" (+1D) et d'une capacité liée à la sphère sélectionnée, d'autres seront disponibles avec les dés d'Expérience.</p>
+                                            
+                                            <div class="input-group mb-3">
+                                                <select id="artifactCapaciteInput" class="form-control god-input" onchange="showDescAndOptionallyAdd()">
+                                                    <option value="">-- Sélectionnez une Sphère d'abord --</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-god" type="button" onclick="addArtifactCapacite()">Ajouter</button>
+                                                </div>
+                                            </div>
+                                            <small id="artifactCapaciteDesc" class="text-info d-block mb-3" style="min-height: 2em;"></small>
+                                            
+                                            <ul class="list-group" id="artifactCapacitesList" style="background: transparent;">
+                                                <!-- Javascript injects capacties -->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EQUILIBRE TAB -->
+        <div class="tab-pane" id="equilibre-tab-pane">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="god-card">
+                        <div class="god-card-header text-center"><i class="fas fa-balance-scale mr-2"></i> Équilibre & Aspects</div>
+                        <div class="god-card-body p-4">
+                            <p class="text-center text-muted mb-4">Gérez les jauges d'Humanité et de Divinité de l'Élu.</p>
+
+                            <div class="form-group mb-4">
+                                <label class="god-label">Sélectionnez l'Élu</label>
+                                <select id="equilibreCharacterSelect" class="form-control god-input" onchange="updateEquilibreState()">
+                                    <option value="">-- Choisir une Âme --</option>
+                                    {% for character in characters %}
+                                        <option value="{{ character.id_Character }}"
+                                                data-god-id="{{ character.godId|default('') }}"
+                                                data-stade="{{ character.stadeEclat|default('') }}"
+                                                data-humanite="{{ character.humanite|default('0') }}"
+                                                data-divinite="{{ character.divinite|default('0') }}">
+                                            {{ character.nom }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div id="equilibreContainer" style="display:none;">
+                                <div class="alert" id="noEclatAlert" style="display:none; background: rgba(200, 50, 50, 0.1); border: 1px solid rgba(200, 50, 50, 0.3); color: #e57373;">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i> Cette âme ne possède pas d'Éclat. 
+                                </div>
+                                <div id="equilibreGaugesArea" style="display:none;">
+                                    <!-- Jauges Display -->
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-center w-50 pe-2">
+                                            <h5 class="god-label" style="color:var(--god-light);">Humanité</h5>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <button class="btn btn-god" style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;" onclick="changeEquilibre(-1, 'h')"><i class="fas fa-minus"></i></button>
+                                                <span class="mx-3 fw-bold text-light" style="font-size: 1.8rem;" id="displayHumanite">0</span>
+                                                <button class="btn btn-god" style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;" onclick="changeEquilibre(1, 'h')"><i class="fas fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="text-center w-50 border-start border-secondary ps-2">
+                                            <h5 class="god-label" style="color:var(--god-gold);">Divinité</h5>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <button class="btn btn-god" style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;" onclick="changeEquilibre(-1, 'd')"><i class="fas fa-minus"></i></button>
+                                                <span class="mx-3 fw-bold text-light" style="font-size: 1.8rem;" id="displayDivinite">0</span>
+                                                <button class="btn btn-god" style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;" onclick="changeEquilibre(1, 'd')"><i class="fas fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-center text-muted small mt-3" id="equilibreLimitText"></p>
+                                    
+                                    <div class="alert text-center mt-3" id="desequilibreWarning" style="display:none; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); color: #ffca28;">
+                                        <i class="fas fa-exclamation-circle mr-2"></i> <span id="desequilibreText">Déséquilibre</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAVEURS TAB -->
+        <div class="tab-pane" id="faveurs-tab-pane">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="god-card">
+                        <div class="god-card-header text-center"><i class="fas fa-star mr-2"></i> Exaucer les Faveurs</div>
+                        <div class="god-card-body p-4">
+                            <p class="text-center text-muted mb-4">Notez ici les miracles et dons surnaturels accordés à l'Élu.</p>
+
+                            <div class="form-group mb-4">
+                                <label class="god-label">Sélectionnez l'Élu</label>
+                                <select id="faveurCharacterSelect" class="form-control god-input" onchange="updateCharacterFaveurState()">
+                                    <option value="">-- Choisir une Âme --</option>
+                                    {% for character in characters %}
+                                        <option value="{{ character.id_Character }}" 
+                                                data-god-id="{{ character.godId|default('') }}" 
+                                                data-faveurs="{{ character.faveurs|default('[]')|escape('html_attr') }}">
+                                            {{ character.nom }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div id="faveursContainer" style="display:none;">
+                                <div class="alert" id="noGodAlert" style="display:none; background: rgba(200, 50, 50, 0.1); border: 1px solid rgba(200, 50, 50, 0.3); color: #e57373;">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i> Cette âme erre sans guide. Veuillez forger un Pacte d'abord.
+                                </div>
+                                
+                                <div id="faveursListArea" style="display:none;">
+                                    <div class="form-group mb-4">
+                                        <select id="faveursSelectInput" class="form-control god-input" onchange="showFaveurDesc()">
+                                            <option value="">-- Choisir une Faveur --</option>
+                                        </select>
+                                        <div id="faveurDescDisplay" class="mt-3 p-3" style="display:none; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,215,0,0.3); border-radius:4px; font-size:0.9rem; color:#ddd; font-style:italic;"></div>
+                                        <button class="btn btn-god mt-3 w-100" id="addSelectedFaveurBtn" type="button" onclick="addFaveur()" style="display:none;"><i class="fas fa-hand-sparkles mr-2"></i> Accorder cette Faveur</button>
+                                    </div>
+
+                                    <h5 class="god-label border-bottom pb-2 mb-3" style="border-color: rgba(255,255,255,0.05)!important;">Faveurs du Panthéon obtenues</h5>
+                                    <ul class="list-group" id="currentFaveursList" style="background: transparent;">
+                                        <!-- Injectées via JS -->
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    // ARTIFACT MANAGEMENT
+    let currentlySelectedArtifactChar = null;
+
+    
+
+    const FAVEURS_LIVRE = {
+    "Faveurs de la Mort": {
+        "Décret de mort (Accord)": "L’Élu peut pointer du doigt une personne qu’il voit dans un rayon de [Volonté de l’Élu x 5] mètres et la condamner à mort. S’il possède la compétence Occultisme au niveau Apprenti (ou dépense 1D d’Humanité), il lance 1d10 + Volonté + Occultisme en opposition avec la cible sur le tableau des Séquelles. Le nombre de réussites indique le nombre de blessures infligées (1 = Légère, 3 = Grave).",
+        "Emprise de la mort (Rencontre)": "Un nombre de fois par jour égal à sa Volonté, l’Élu peut tenter de soumettre une créature morte-vivante qu’il voit (jet Volonté + Relationnel Difficile 7). S'il réussit, le cadavre animé passe sous son contrôle permanent.",
+        "Flétrissement (Entente)": "Une fois par jour, l’Élu peut flétrir tous les végétaux dans un rayon de [Volonté x 10] mètres autour de lui. S’il a atteint l’Accord et que sa Jauge de Divinité est pleine, la terre elle-même sera stérile durant 1d10 ans.",
+        "In carcerem (Accord)": "L’Élu peut emprisonner l’âme d’une personne qu’il vient de tuer personnellement dans l’un de ses yeux ou dans le propre corps de la victime. L'âme souffre atrocement et sera détruite au bout de 1d10 jours. L'élu bénéficie d'une compétence de la victime au niveau Confirmé. Utilisable [Volonté] fois/jour.",
+        "Infertilité (Rencontre)": "Une fois par jour, l’Élu peut toucher une personne qui deviendra définitivement infertile. Sur un Élu, requiert l'Accord, Jauge Divinité pleine, et un jet opposé (Difficile 7, coûte 1D Humanité).",
+        "Nécrognosie (Entente)": "En mangeant un morceau de chair de cadavre, l’Élu a accès à toutes les spécialisations du défunt durant [Volonté] heures (+1D bonus), voire une compétence au niveau Confirmé s'il a 5D en Divinité. 1 fois/jour.",
+        "Putréfaction (Entente)": "Une fois par jour, au toucher (jet d'attaque), l'Élu inflige une terrible maladie de Virulence 8. La cible subit chaque jour deux Blessures Légères tant que non guérie.",
+        "Sceau de la non-mort (Accord)": "L’Élu dépense 1D d’Humanité et marque un être vivant du sceau de la non-mort. S'il meurt, son âme est emprisonnée dans son corps et il continue à se mouvoir durant 10 jours (ou indéfiniment si Divinité pleine).",
+        "Thanatomnésie (Rencontre)": "Un nombre de fois par jour égal à sa Connaissance, l’Élu peut choisir n’importe quelle compétence qu'il possède alors au niveau Expert le temps d’un seul et unique jet."
+    },
+    "Faveurs du Soleil (Mineures)": {
+        "Déjà-vu (Rencontre)": "Une fois par jour, l’Élu peut annuler un jet et le refaire (sauf si capacité d'Éclat, rituel ou Divinité utilisés).",
+        "L’œil exercé (Rencontre)": "L’Élu gagne un bonus de +1D sur ses jets de Perception.",
+        "Nature véritable (Rencontre)": "L’Élu reconnaît automatiquement les contrefaçons (objets ou documents).",
+        "Nul n’échappe à ses rayons (Entente)": "Une fois par jour, l’Élu sait quand une personne connue a été touchée par le soleil pour la dernière fois, sa direction et sa distance (difficulté variable selon la météo).",
+        "Salutation au soleil (Entente)": "Une fois par jour, en méditant 10 min devant le lever du soleil, l’Élu regagne 1D de Divinité."
+    },
+    "Faveurs du Soleil (Majeures)": {
+        "Aura éclatante (Accord)": "Une fois par jour, l’Élu brille (1 heure, [Volonté x 5] m). Malus de -2D aux créatures de la nuit attaquant l'Élu (ou subissent Blessures Légères si Divinité>=5D). Annule toute dissimulation.",
+        "Aura impérieuse (Rencontre)": "Une fois par jour, durant [Volonté] tours. Inflige un malus de -1D aux assaillants. +1D sur les jets de Volonté de l'Élu.",
+        "Il guide ma main (Accord)": "De jour, l’Élu remporte toutes les égalités d'esquive/parade contre lui. Si l'ennemi ne peut parer/esquiver, +1 dommage.",
+        "Sincérité (Entente)": "Il est impossible de mentir ouvertement à l’Élu (mensonge par omission reste possible). L'Élu l'active et désactive à volonté.",
+        "Sous sa protection (Accord)": "De jour, dépensez 1D d'Humanité pour ignorer une Blessure Grave reçue (+2D/supplémentaire). Utilisable 1 fois par tour.",
+        "Sous son jugement (Accord)": "Comme Sincérité, mais un mensonge par omission inflige une Blessure Légère. Les menteurs surnaturels doivent réussir un jet Très Difficile (9) avec Handicap (I) ou subir la blessure.",
+        "Souveraineté (Entente)": "(Prérequis : Aura impérieuse) +2D aux jets pour résister aux effets négatifs (manipulation/mensonge). Immunité peur/contrôle mental, vision totale dans le noir. Dure 10 min, 1/jour."
+    },
+    "Faveurs de la Terre (Mineures)": {
+        "Aplomb (Entente)": "La Réserve de Sang-Froid augmente de +2D de façon permanente.",
+        "Endurance de la Terre (Rencontre)": "L’Élu gagne un cercle de Blessure Légère supplémentaire.",
+        "Impassibilité (Rencontre)": "Une fois par jour, l’Élu peut régénérer 2D dans sa Réserve de Sang-Froid.",
+        "Résilience de la pierre (Entente)": "Le seuil de Blessures Légères de l’Élu augmente de 1.",
+        "Sens de la terre (Rencontre)": "En dépensant 1D Sang-Froid, ressentez minéraux/métaux identiques dans une zone en réussissant un jet (Perception + Artisanat). Quantité et direction estimables."
+    },
+    "Faveurs de la Terre (Majeures)": {
+        "Chair de granite (Accord)": "La peau possède un indice de protection 2 (ne se cumule pas aux armures). L'Élu peut dépenser 1D Humanité (IP 3) ou 1D Humanité+Divinité (IP 4).",
+        "Emprunter à la terre (Rencontre)": "Une fois par jour, en contact avec le sol, passez 1 tour immobile pour rétrograder une Blessure (Légère, Grave à l'Accord, Mortelle si Divinité pleine).",
+        "Éperon rocheux (Accord)": "([Volonté / 2] fois/j) Fait jaillir un pic sous un adversaire dans [Puissance x 2] m. Très difficile à esquiver (9). 9 dgts perforants. 1D Humanité pour 2ème cible.",
+        "Façonner la pierre (Entente)": "L’Élu peut façonner la pierre brute comme de la glaise (+1D Artisanat sculpture). Possibilité de créer des armes de pierre.",
+        "Immobilité de la pierre (Accord)": "1 fois/j. Transformé en pierre pdnt 1h max. Insensible au feu/poison/noyade/mort lente, incapable de bouger. Résistance pure = Volonté."
+    },
+    "Faveurs de la Vie (Mineures)": {
+        "Adepte de la Vie (Rencontre)": "L’Élu gagne un bonus de +1D sur ses jets de Faune et de Flore.",
+        "Diagnostique (Rencontre)": "Connaissance médicale exacte au toucher (blessures, seuils, poisons... ou grossesse).",
+        "Égratignure (Rencontre)": "1 fois/jour, dépensez des dés d'Effort plutôt que subir la blessure (2D Effort = Légère. 4D Effort = Grave (Entente), 6D Effort = Mortelle (Accord)).",
+        "Régénération volontaire (Entente)": "Guerison de plusieurs blessures après un repos long possible (via Effort/Sang-Froid). Autorise la repousse d'organes/membres amputés au fil des heures.",
+        "Soin du corps et de l’esprit (Entente)": "Gagnez +1D Effort supp (ou +2D si Accord) en réussissant un jet de soin restaurant de l'Effort.",
+        "Stabilisation (Rencontre)": "Soin d'urgence automatique en dépensant 1D d'Humanité.",
+        "Toucher guérisseur (Rencontre)": "+1D bonus aux soins (+ relance si Entente, -1 difficulté si Accord)."
+    },
+    "Faveurs de la Vie (Majeures)": {
+        "Anesthésie (Accord)": "1 fois/j. Ignorer malus de blessures (Nb tours = Volonté). Empêche sombrer inconscient pour Blessure Mortelle si 1 case libre.",
+        "Bannir la blessure (Accord)": "1 fois/j, guérissez au toucher (pas soi-même) : Légère (gratuit), Grave (1D Humanité), Mortelle (si Divinité>=5D + 1D Humanité).",
+        "Cercle de grâce (Accord)": "1 fois/j, 1D Humanité. Cercle sol 5m pdnt 4h : ceux à l'intérieur ne subissent aucun dommage des combats y ayant lieu.",
+        "Fertilité (Entente)": "Au toucher (+ 1D Humanité), restaure la fertilité ou refait fleurir un champ dans [Volonté x 10] m.",
+        "Immunité (Entente)": "Immunité totale aux poisons, venins, maladies et infections (non magiques).",
+        "Pérennité (Accord)": "Cesse de vieillir (ou retrouve apparence jeune).",
+        "Régénération d’autrui (Entente)": "Toucher pour repousser un membre/organe (1D Humanité + réusite Difficile 7). Prend qq jours.",
+        "Rejet de la mort (Rencontre)": "1D Humanité pour se stabiliser automatiquement (même inconscient).",
+        "Sacrifice (Accord)": "Explosion de vie ! Ressuscite tous les êtres récents dans [Volonté x 25] m. La vie et l'Éclat de l'Élu sont détruits à jamais.",
+        "Toucher neutralisant (Entente)": "Élimine 2 pts Virgulence pour chaque réussite en jet de soin (+3 si Accord + Divinité>=5D).",
+        "Végétalisation (Accord)": "1 fois/jour (1 dgt Léger + 1D Humanité) fait pousser des plantes en 1 mn dans [Volonté x 5] m."
+    }
+};
+
+    function populateFaveursDropdown() {
+        const select = document.getElementById('faveursSelectInput');
+        if(!select) return;
+        select.innerHTML = '<option value="">-- Révéler une Faveur du Domaine --</option>';
+        for (const [domaine, faveurs] of Object.entries(FAVEURS_LIVRE)) {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = domaine;
+            for (const name in faveurs) {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                optgroup.appendChild(opt);
+            }
+            select.appendChild(optgroup);
+        }
+    }
+    
+    function showFaveurDesc() {
+        const select = document.getElementById('faveursSelectInput');
+        const descDiv = document.getElementById('faveurDescDisplay');
+        const val = select.value;
+        
+        if(!val) {
+            descDiv.style.display = 'none';
+            document.getElementById('addSelectedFaveurBtn').style.display = 'none';
+            return;
+        }
+        
+        for (const domaine in FAVEURS_LIVRE) {
+            if(FAVEURS_LIVRE[domaine][val]) {
+                descDiv.style.display = 'block';
+                descDiv.innerHTML = '<strong>' + val + '</strong><br>' + FAVEURS_LIVRE[domaine][val];
+                document.getElementById('addSelectedFaveurBtn').style.display = 'inline-block';
+                return;
+            }
+        }
+    }
+
+    const ECLAT_CAPACITES = {
+        "Universelle": [
+            { nom: "Synergie", desc: "L’Éclat fournit un bonus de +1D sur les jets d’une caractéristique spécifique (à définir avec l’Oracle)." }
+        ],
+        "Conflit": [
+            { nom: "Puissance", desc: "Si l’Éclat est une arme, elle inflige 1 dommage supplémentaire. Si armure/bouclier, l'indice de protection augmente de 1." },
+            { nom: "Surcroît de puissance", desc: "1 fois/jour, l’Élu peut doubler son score de Puissance ou de Résistance sur un jet." }
+        ],
+        "Connaissance": [
+            { nom: "Don de Babel", desc: "L’Éclat confère à l’Élu la capacité de comprendre toutes les langues." },
+            { nom: "Omniscience passagère", desc: "1 fois/jour, l’Élu peut doubler son score de Connaissance ou de Perception sur un jet." }
+        ],
+        "Domination": [
+            { nom: "Force de Volonté", desc: "1 fois/jour, l’Élu peut doubler son score de base de Volonté ou de Résistance sur un jet." },
+            { nom: "Volonté inflexible", desc: "+1D sur les jets en opposition avec la Volonté. État stabilisé si Blessure Mortelle et réussite jet Volonté (9)." }
+        ],
+        "Miséricorde": [
+            { nom: "Sérénité accrue", desc: "1 fois/jour, l’Élu peut doubler son score de Précision ou d’Empathie sur un jet." },
+            { nom: "Toucher du guérisseur", desc: "L’Élu gagne un bonus de +1D sur ses actions de soin." }
+        ],
+        "Mystique": [
+            { nom: "Puissance spirituelle", desc: "1 fois/jour, l’Élu peut doubler son score de Connaissance ou de Volonté sur un jet." },
+            { nom: "Ritualiste", desc: "L’Élu gagne un bonus de +1D sur ses jets de Rituels." }
+        ],
+        "Phantasme": [
+            { nom: "Absence", desc: "L’Élu gagne un bonus de +1D sur ses jets de Discrétion." },
+            { nom: "Agilité accrue", desc: "1 fois/jour, l’Élu peut doubler son score de Réflexes ou de Précision sur un jet." }
+        ],
+        "Trépas": [
+            { nom: "Chaque mort m’appartient", desc: "1 fois/jour, s'il inflige une Blessure Mortelle qui terrasse, il gagne 1D/2D dans ses Réserves et élimine 1 Blessure Légère." },
+            { nom: "Impassibilité de la mort", desc: "1 fois/jour, l’Élu peut doubler son score de Résistance ou de Volonté sur un jet." }
+        ]
+    };
+
+    function populateArtifactCapacitesDropdown(sphere) {
+        const select = document.getElementById('artifactCapaciteInput');
+        const descElem = document.getElementById('artifactCapaciteDesc');
+        
+        select.innerHTML = '<option value="">-- Choisir une Capacité --</option>';
+        descElem.innerText = '';
+        
+        // Add Universelle specifically
+        if (ECLAT_CAPACITES["Universelle"]) {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = "Sphère Universelle";
+            ECLAT_CAPACITES["Universelle"].forEach(cap => {
+                const opt = document.createElement('option');
+                opt.value = cap.nom;
+                opt.text = cap.nom;
+                opt.dataset.desc = cap.desc;
+                optgroup.appendChild(opt);
+            });
+            select.appendChild(optgroup);
+        }
+        
+        // Add Specific Sphere
+        if (sphere && sphere !== "Universelle" && ECLAT_CAPACITES[sphere]) {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = `Sphère de ${sphere}`;
+            ECLAT_CAPACITES[sphere].forEach(cap => {
+                const opt = document.createElement('option');
+                opt.value = cap.nom;
+                opt.text = cap.nom;
+                opt.dataset.desc = cap.desc;
+                optgroup.appendChild(opt);
+            });
+            select.appendChild(optgroup);
+        }
+        
+        // Remove setup listener here, now it's in HTML with showDescAndOptionallyAdd()
+    }
+
+    function showDescAndOptionallyAdd() {
+        const select = document.getElementById('artifactCapaciteInput');
+        const descElem = document.getElementById('artifactCapaciteDesc');
+        
+        if(select.selectedIndex > 0) {
+            descElem.innerText = select.options[select.selectedIndex].dataset.desc || '';
+        } else {
+            descElem.innerText = '';
+        }
+    }
+
+    function updateArtifactState() {
+        const select = document.getElementById('artifactCharacterSelect');
+        const container = document.getElementById('artifactContainer');
+        const alertNoEclat = document.getElementById('artifactNoEclatAlert');
+        const formArea = document.getElementById('artifactFormArea');
+
+        if(!select.value) {
+            container.style.display = 'none';
+            currentlySelectedArtifactChar = null;
+            return;
+        }
+
+        container.style.display = 'block';
+        const option = select.options[select.selectedIndex];
+        const stade = option.getAttribute('data-stade');
+
+        if(!stade) {
+            alertNoEclat.style.display = 'block';
+            formArea.style.display = 'none';
+            currentlySelectedArtifactChar = null;
+        } else {
+            alertNoEclat.style.display = 'none';
+            formArea.style.display = 'block';
+            
+            let parsedCapacites = [];
+            try {
+                const str = option.getAttribute('data-capacites');
+                parsedCapacites = JSON.parse(str || '[]');
+            } catch(e) {
+                console.error('Failed to parse capacites', e);
+            }
+
+            currentlySelectedArtifactChar = {
+                id: select.value,
+                stade: stade,
+                forme: option.getAttribute('data-forme'),
+                apparence: option.getAttribute('data-apparence'),
+                sphere: option.getAttribute('data-sphere'),
+                embrasement: option.getAttribute('data-embrasement'),
+                capacites: parsedCapacites
+            };
+
+            document.getElementById('artifactForme').value = currentlySelectedArtifactChar.forme || '';
+            document.getElementById('artifactSphere').value = currentlySelectedArtifactChar.sphere || '';
+            document.getElementById('artifactApparence').value = currentlySelectedArtifactChar.apparence || '';
+            document.getElementById('artifactEmbrasement').value = currentlySelectedArtifactChar.embrasement || '';
+
+            populateArtifactCapacitesDropdown(currentlySelectedArtifactChar.sphere);
+            renderArtifactCapacites();
+        }
+    }
+
+    function saveArtifact() {
+        if(!currentlySelectedArtifactChar) return;
+        const forme = document.getElementById('artifactForme').value;
+        const sphere = document.getElementById('artifactSphere').value;
+        const apparence = document.getElementById('artifactApparence').value;
+        const embrasement = document.getElementById('artifactEmbrasement').value;
+        
+        const previousSphere = currentlySelectedArtifactChar.sphere;
+        
+        currentlySelectedArtifactChar.forme = forme;
+        currentlySelectedArtifactChar.sphere = sphere;
+        currentlySelectedArtifactChar.apparence = apparence;
+        currentlySelectedArtifactChar.embrasement = embrasement;
+
+        const select = document.getElementById('artifactCharacterSelect');
+        const option = select.options[select.selectedIndex];
+        option.setAttribute('data-forme', forme);
+        option.setAttribute('data-sphere', sphere);
+        option.setAttribute('data-apparence', apparence);
+        option.setAttribute('data-embrasement', embrasement);
+
+        if (previousSphere !== sphere) {
+            populateArtifactCapacitesDropdown(sphere);
+        }
+
+        syncArtifactToServer();
+    }
+
+    function addArtifactCapacite() {
+        if(!currentlySelectedArtifactChar) return;
+        const input = document.getElementById('artifactCapaciteInput');
+        const val = input.value.trim();
+        if(!val) return;
+        
+        currentlySelectedArtifactChar.capacites.push(val);
+        
+        const option = document.getElementById('artifactCharacterSelect').options[document.getElementById('artifactCharacterSelect').selectedIndex];
+        option.setAttribute('data-capacites', JSON.stringify(currentlySelectedArtifactChar.capacites));
+        
+        input.selectedIndex = 0;
+        document.getElementById('artifactCapaciteDesc').innerText = '';
+        renderArtifactCapacites();
+        syncArtifactToServer();
+    }
+
+    function removeArtifactCapacite(index) {
+        if(!currentlySelectedArtifactChar) return;
+        currentlySelectedArtifactChar.capacites.splice(index, 1);
+        
+        const option = document.getElementById('artifactCharacterSelect').options[document.getElementById('artifactCharacterSelect').selectedIndex];
+        option.setAttribute('data-capacites', JSON.stringify(currentlySelectedArtifactChar.capacites));
+        
+        renderArtifactCapacites();
+        syncArtifactToServer();
+    }
+
+    function renderArtifactCapacites() {
+        const list = document.getElementById('artifactCapacitesList');
+        list.innerHTML = '';
+        
+        let caps = [];
+        try { caps = currentlySelectedArtifactChar.capacites || []; } catch(e) {}
+        
+        if (caps.length === 0) {
+            list.innerHTML = '<li class="list-group-item text-center" style="background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); color: #888;">Aucune capacité n\'a été ralliée.</li>';
+            return;
+        }
+
+        caps.forEach((cap, index) => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center mb-2';
+            li.style.cssText = 'background: rgba(87, 152, 209, 0.05); border: 1px solid rgba(87, 152, 209, 0.2); border-radius: 4px; color: #ccc;';
+            
+            const span = document.createElement('span');
+            span.innerHTML = `<span style="font-family: 'Cinzel', serif; letter-spacing: 0.5px; color: var(--god-gold);"><i class="fas fa-bolt text-warning mr-2" style="font-size: 0.8rem; opacity: 0.8;"></i> ${cap}</span>`;
+            
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-danger-god btn-sm';
+            btn.innerHTML = '<i class="fas fa-times"></i>';
+            btn.onclick = () => removeArtifactCapacite(index);
+            
+            li.appendChild(span);
+            li.appendChild(btn);
+            list.appendChild(li);
+        });
+    }
+
+    function syncArtifactToServer() {
+        if(!currentlySelectedArtifactChar) return;
+        
+        fetch('/eclats/artifact/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                characterId: currentlySelectedArtifactChar.id,
+                formeEclat: currentlySelectedArtifactChar.forme,
+                apparenceEclat: currentlySelectedArtifactChar.apparence,
+                sphereEclat: currentlySelectedArtifactChar.sphere,
+                embrasementEclat: currentlySelectedArtifactChar.embrasement,
+                capacitesEclat: JSON.stringify(currentlySelectedArtifactChar.capacites)
+            })
+        }).then(res => res.json())
+          .catch(err => console.error("Error saving artifact", err));
+    }
+
+
+    // EQUILIBRE MANAGEMENT
+    let currentlySelectedEquilibreChar = null;
+    let originalHumanite = 0;
+    let originalDivinite = 0;
+
+    function getEquilibreLimits(stade) {
+        if(stade === 'Accord') return { maxTotal: 12, maxAspect: 7, diffWarning: 4 };
+        if(stade === 'Entente') return { maxTotal: 8, maxAspect: 5, diffWarning: 3 };
+        return { maxTotal: 4, maxAspect: 3, diffWarning: 99 }; // Rencontre
+    }
+
+    function updateEquilibreState() {
+        const select = document.getElementById('equilibreCharacterSelect');
+        const container = document.getElementById('equilibreContainer');
+        const alertNoEclat = document.getElementById('noEclatAlert');
+        const gaugesArea = document.getElementById('equilibreGaugesArea');
+        const deseqWarning = document.getElementById('desequilibreWarning');
+        const deseqText = document.getElementById('desequilibreText');
+
+        if(!select.value) {
+            container.style.display = 'none';
+            currentlySelectedEquilibreChar = null;
+            return;
+        }
+        
+        container.style.display = 'block';
+        const option = select.options[select.selectedIndex];
+        const stade = option.getAttribute('data-stade');
+        const divinite = parseInt(option.getAttribute('data-divinite'));
+        const humanite = parseInt(option.getAttribute('data-humanite'));
+        
+        if(!stade) {
+            alertNoEclat.style.display = 'block';
+            gaugesArea.style.display = 'none';
+            currentlySelectedEquilibreChar = null;
+        } else {
+            alertNoEclat.style.display = 'none';
+            gaugesArea.style.display = 'block';
+            currentlySelectedEquilibreChar = {
+                id: select.value,
+                stade: stade,
+                humanite: isNaN(humanite) ? 0 : humanite,
+                divinite: isNaN(divinite) ? 0 : divinite
+            };
+            originalHumanite = currentlySelectedEquilibreChar.humanite;
+            originalDivinite = currentlySelectedEquilibreChar.divinite;
+            renderEquilibre();
+        }
+    }
+
+    function renderEquilibre() {
+        if (!currentlySelectedEquilibreChar) return;
+        
+        document.getElementById('displayHumanite').innerText = currentlySelectedEquilibreChar.humanite;
+        document.getElementById('displayDivinite').innerText = currentlySelectedEquilibreChar.divinite;
+        
+        const stade = currentlySelectedEquilibreChar.stade;
+        const h = currentlySelectedEquilibreChar.humanite;
+        const d = currentlySelectedEquilibreChar.divinite;
+        const limits = getEquilibreLimits(stade);
+        
+        document.getElementById('equilibreLimitText').innerText = 
+            `Stade ${stade}: ${limits.maxTotal}D total max, ${limits.maxAspect}D max par jauge.`;
+        
+        const deseqWarning = document.getElementById('desequilibreWarning');
+        const deseqText = document.getElementById('desequilibreText');
+        
+        let warnings = [];
+        
+        // 0D Warning
+        if (h === 0 && d > 0) warnings.push("Humanité à 0D : -1D aux jets de l'Homme, de l'Outil et de l'Arme.");
+        if (d === 0 && h > 0) warnings.push("Divinité à 0D : -1D aux jets de l'Animal, Terres et l'Inconnu.");
+        
+        // Difference Warning
+        let diff = Math.abs(h - d);
+        if (diff >= limits.diffWarning) {
+            if (h > d) warnings.push("Déséquilibre (Humanité dominante): Handicap (I) sur l'Animal et l'Inconnu.");
+            else warnings.push("Déséquilibre (Divinité dominante): Handicap (I) sur l'Homme et l'Outil.");
+        }
+        
+        if (warnings.length > 0) {
+            deseqWarning.style.display = 'block';
+            deseqText.innerHTML = warnings.join('<br>');
+        } else {
+            deseqWarning.style.display = 'none';
+        }
+        
+        // Save to backend every time we change it
+        if (h !== originalHumanite || d !== originalDivinite) {
+            saveEquilibre(currentlySelectedEquilibreChar.id, h, d);
+            originalHumanite = h;
+            originalDivinite = d;
+            
+            const select = document.getElementById('equilibreCharacterSelect');
+            const option = select.options[select.selectedIndex];
+            option.setAttribute('data-humanite', h);
+            option.setAttribute('data-divinite', d);
+        }
+    }
+
+    function changeEquilibre(amount, type) {
+        if (!currentlySelectedEquilibreChar) return;
+        const limits = getEquilibreLimits(currentlySelectedEquilibreChar.stade);
+        let h = currentlySelectedEquilibreChar.humanite;
+        let d = currentlySelectedEquilibreChar.divinite;
+        
+        if (type === 'h') {
+            h += amount;
+            if (h < 0) h = 0;
+            if (h > limits.maxAspect) h = limits.maxAspect;
+        } else {
+            d += amount;
+            if (d < 0) d = 0;
+            if (d > limits.maxAspect) d = limits.maxAspect;
+        }
+        
+        // Overflow check total
+        if (h + d > limits.maxTotal) {
+            if (type === 'h' && amount > 0) d -= 1;
+            else if (type === 'd' && amount > 0) h -= 1;
+        }
+        if (h < 0) h = 0;
+        if (d < 0) d = 0;
+        
+        currentlySelectedEquilibreChar.humanite = h;
+        currentlySelectedEquilibreChar.divinite = d;
+        renderEquilibre();
+    }
+
+    function saveEquilibre(charId, h, d) {
+        fetch('/eclats/equilibre/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ characterId: charId, humanite: h, divinite: d })
+        });
+    }
+
+    // Vanilla JS Modal Management
+            function showModal(id) {
+        const modal = document.getElementById(id);
+        if(!modal) return;
+        
+        // Move modal outside of stacking contexts to prevent backdrop overlay issues
+        if (modal.parentElement !== document.body) {
+            document.body.appendChild(modal);
+        }
+
+        modal.style.display = 'block';
+        // Force reflow
+        void modal.offsetWidth;
+        modal.classList.add('show');
+        
+        // Add backdrop if it doesn't exist
+        if(!document.querySelector('.modal-backdrop')) {
+            const backdrop = document.createElement('div');
+            backdrop.className = 'modal-backdrop fade show';
+            document.body.appendChild(backdrop);
+        }
+        document.body.classList.add('modal-open');
+    }
+
+    function hideModal(id) {
+        const modal = document.getElementById(id);
+        if(!modal) return;
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 150); // match bootstrap fade out
+        
+        const backdrop = document.querySelector('.modal-backdrop');
+        if(backdrop) {
+            backdrop.classList.remove('show');
+            setTimeout(() => backdrop.remove(), 150);
+        }
+        document.body.classList.remove('modal-open');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // 1. Background Scroller Initialization
+        const images = [
+            "/images/background-ool.png", 
+            "/images/background-aon.png", 
+            "/images/background-tegee.png", 
+            "/images/background-avorae.png"
+        ];
+        
+        for (let i = images.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [images[i], images[j]] = [images[j], images[i]];
+        }
+        
+        const container = document.getElementById('random-slideshow');
+        images.forEach((img, index) => {
+            const div = document.createElement('div');
+            div.className = 'bg-slide';
+            div.style.backgroundImage = `url('${img}')`;
+            
+            if (index === 0) {
+                // First slide: starts visible without fading in
+                div.style.animation = `fadeSlideFirst 160s infinite`;
+                div.style.opacity = '0.6';
+            } else {
+                // Subsequent slides fade in normally
+                div.style.animation = `fadeSlide 160s infinite`;
+                div.style.animationDelay = `${index * 40}s`;
+            }
+            container.appendChild(div);
+        });
+
+        // 2. Custom Pure JS Tabs
+        const tabs = document.querySelectorAll('.god-tabs .nav-link');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Deactivate all
+                tabs.forEach(t => t.classList.remove('active'));
+                // Activate clicked
+                tab.classList.add('active');
+                
+                // Hide all panes
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('show', 'active');
+                });
+                
+                // Show requested pane
+                const targetSelector = tab.getAttribute('data-target');
+                const targetPane = document.querySelector(targetSelector);
+                if (targetPane) {
+                    targetPane.classList.add('show', 'active');
+                }
+            });
+        });
+
+        // 3. Custom Pure JS Accordions
+        const accordions = document.querySelectorAll('.accordion-god .btn-link');
+        accordions.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetSelector = btn.getAttribute('data-target');
+                const targetPane = document.querySelector(targetSelector);
+                
+                const isCurrentlyOpen = targetPane.classList.contains('show');
+                
+                // Close all blocks
+                document.querySelectorAll('.accordion-god .collapse').forEach(pane => {
+                    pane.classList.remove('show');
+                });
+
+                // Toggle logic
+                if (!isCurrentlyOpen) {
+                    targetPane.classList.add('show');
+                }
+            });
+        });
+
+        // Vanilla JS for data-dismiss
+        document.querySelectorAll('[data-dismiss="modal"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modal = e.target.closest('.modal');
+                if(modal) hideModal(modal.id);
+            });
+        });
+
+        // Vanilla JS for data-dismiss
+        document.querySelectorAll('[data-dismiss="modal"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modal = e.target.closest('.modal');
+                if(modal) hideModal(modal.id);
+            });
+        });
+    });
+
+
+    // 5. Progressive Form Logic for Gods
+    let currentGodStep = 1;
+    const maxGodSteps = 6;
+
+    function navGodStep(dir) {
+        document.getElementById('god-step-' + currentGodStep).style.display = 'none';
+        currentGodStep += dir;
+        
+        if(currentGodStep < 1) currentGodStep = 1;
+        if(currentGodStep > maxGodSteps) currentGodStep = maxGodSteps;
+        
+        document.getElementById('god-step-' + currentGodStep).style.display = 'block';
+        
+        const prevBtn = document.querySelector('.god-prev-btn');
+        const nextBtn = document.querySelector('.god-next-btn');
+        const submitBtn = document.querySelector('.god-submit-btn');
+
+        if(currentGodStep === 1) {
+            prevBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'inline-block';
+        }
+
+        if(currentGodStep === maxGodSteps) {
+            nextBtn.style.display = 'none';
+            submitBtn.style.display = 'inline-block';
+        } else {
+            nextBtn.style.display = 'inline-block';
+            submitBtn.style.display = 'none';
+        }
+    }
+
+    // 4. Exposed Action Functions (Creation, Pact, Favors)
+    function submitGodCreation() {
+        const nom = document.getElementById('godName').value;
+        const description = document.getElementById('godDesc').value;
+        const domaines = document.getElementById('godDomains').value;
+        const essencesPrimaires = Array.from(document.querySelectorAll('.godEssencesPrimairesCb:checked')).map(cb => cb.value).join(', ');
+        const essencesSecondaires = Array.from(document.querySelectorAll('.godEssencesSecondairesCb:checked')).map(cb => cb.value).join(', ');
+        const desirs = document.getElementById('godDesirs').value;
+        const interditsMineurs = document.getElementById('godInterditsMineurs').value;
+        const interditsMajeurs = document.getElementById('godInterditsMajeurs').value;
+        const objectifsMineurs = document.getElementById('godObjMineur').value;
+        const objectifsMajeurs = document.getElementById('godObjMajeur').value;
+
+        if(!nom) {
+            alert("L'Entité exige un Nom ! (Étape 1)");
+            navGodStep(1 - currentGodStep); // Return to step 1
+            return;
+        }
+
+        const data = { 
+            nom, description, domaines, 
+            essencesPrimaires, essencesSecondaires, 
+            desirs, interditsMineurs, interditsMajeurs, 
+            objectifsMineurs, objectifsMajeurs 
+        };
+
+
+        fetch('/eclats/gods/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(payload => {
+            if(payload.success) window.location.reload();
+            else alert("Erreur lors de la genèse: " + payload.message);
+        })
+        .catch(err => alert("Erreur Serveur."));
+    }
+
+    function updateCharacterPactState() {
+        const select = document.getElementById('pacteCharacterSelect');
+        const container = document.getElementById('pacteActionsContainer');
+        const unboundSection = document.getElementById('unboundGodSection');
+        const boundSection = document.getElementById('boundGodSection');
+        const currentStadeDisplay = document.getElementById('currentStadeDisplay');
+        const upgradeBtn = document.getElementById('upgradeBtn');
+
+        if(!select.value) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'block';
+        const option = select.options[select.selectedIndex];
+        const godId = option.getAttribute('data-god-id');
+        const stade = option.getAttribute('data-stade');
+
+        if(godId && godId.trim() !== '') {
+            unboundSection.style.display = 'none';
+            boundSection.style.display = 'block';
+            currentStadeDisplay.innerText = stade || 'Rencontre';
+            
+            if(stade === 'Accord') {
+                upgradeBtn.disabled = true;
+                upgradeBtn.innerHTML = "<i class='fas fa-check-circle mr-2'></i> Ascendance Maximale (Accord)";
+                upgradeBtn.classList.remove('btn-god-outline');
+                upgradeBtn.classList.add('btn-god');
+            } else {
+                upgradeBtn.disabled = false;
+                upgradeBtn.innerHTML = "Élever le Pacte <i class='fas fa-arrow-up ml-1'></i>";
+                upgradeBtn.classList.add('btn-god-outline');
+                upgradeBtn.classList.remove('btn-god');
+            }
+        } else {
+            unboundSection.style.display = 'block';
+            boundSection.style.display = 'none';
+        }
+    }
+
+    
+    function bindGod() {
+        const characterId = document.getElementById('pacteCharacterSelect').value;
+        const godId = document.getElementById('pacteGodSelect').value;
+        if(!characterId || !godId) return alert("Sélectionnez l'âme et la divinité.");
+
+        document.getElementById('pactModalTitle').innerText = 'Initier la Rencontre';
+        document.getElementById('pactModalDesc').innerText = `L'Élu entre en possession de son Éclat.\nIl gagne +1 Caractéristique et +1 Compétence.`;
+        document.getElementById('pactSkill2Container').style.display = 'none';
+        document.getElementById('pactActionType').value = 'bind';
+        showModal('pactModal');
+    }
+
+            function upgradePact() {
+        const select = document.getElementById('pacteCharacterSelect');
+        const option = select.options[select.selectedIndex];
+        const stade = option.getAttribute('data-stade') || 'Rencontre';
+
+        document.getElementById('pactModalTitle').innerText = 'Élever le Pacte';
+        document.getElementById('pactActionType').value = 'upgrade';
+
+        if (stade === 'Rencontre') {
+            document.getElementById('pactModalDesc').innerText = "Passage à l'Entente. L'Élu gagne +1 Caractéristique et +1 Compétence.";
+            document.getElementById('pactSkill2Container').style.display = 'none';
+        } else if (stade === 'Entente') {
+            document.getElementById('pactModalDesc').innerText = "Passage à l'Accord. L'Élu gagne +1 Caractéristique et DEUX Compétences.";
+            document.getElementById('pactSkill2Container').style.display = 'block';
+        }
+        
+        showModal('pactModal');
+    }
+
+    function confirmPactAction() {
+        const type = document.getElementById('pactActionType').value;
+        const characterId = document.getElementById('pacteCharacterSelect').value;
+        const stat = document.getElementById('pactStat').value;
+        const skill1 = document.getElementById('pactSkill1').value;
+        let skill2 = document.getElementById('pactSkill2').value;
+        
+        if (document.getElementById('pactSkill2Container').style.display === 'none') {
+            skill2 = null;
+        }
+
+        if (type === 'bind') {
+            const godId = document.getElementById('pacteGodSelect').value;
+            fetch('/eclats/pacte/bind', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ characterId, godId, stat, skill1 })
+            }).then(res => res.json()).then(data => {
+                if(data.success) { hideModal('pactModal'); location.reload(); }
+                else alert('Erreur: ' + data.message);
+            });
+        } else if (type === 'upgrade') {
+            fetch('/eclats/pacte/upgrade', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ characterId, statToUpgrade: stat, skillToUpgrade1: skill1, skillToUpgrade2: skill2 })
+            }).then(res => res.json()).then(data => {
+                if(data.success) { hideModal('pactModal'); location.reload(); }
+                else alert('Erreur: ' + data.message);
+            });
+        }
+    }
+
+    function breakPact() {
+        if(!confirm("Êtes-vous certain de vouloir briser ce lien sacré ? La colère du Dieu et la perte de toutes faveurs en découleront.")) return;
+        const characterId = document.getElementById('pacteCharacterSelect').value;
+        fetch('/eclats/pacte/break', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ characterId })
+        }).then(res => res.json()).then(data => {
+            if(data.success) location.reload();
+            else alert('Erreur: ' + data.message);
+        });
+    }
+
+    function updateCharacterFaveurState() {
+        const select = document.getElementById('faveurCharacterSelect');
+        const container = document.getElementById('faveursContainer');
+        const noGodAlert = document.getElementById('noGodAlert');
+        const faveursListArea = document.getElementById('faveursListArea');
+
+        if(!select.value) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'block';
+        const option = select.options[select.selectedIndex];
+        const godId = option.getAttribute('data-god-id');
+        const faveursStr = option.getAttribute('data-faveurs');
+
+        if(!godId || godId.trim() === '') {
+            noGodAlert.style.display = 'block';
+            faveursListArea.style.display = 'none';
+        } else {
+            noGodAlert.style.display = 'none';
+            faveursListArea.style.display = 'block';
+            
+            const list = document.getElementById('currentFaveursList');
+            list.innerHTML = '';
+            try {
+                let decodedStr = faveursStr;
+                if (!decodedStr || decodedStr === '') decodedStr = '[]';
+                const faveurs = JSON.parse(decodedStr);
+                
+                if(faveurs.length === 0) {
+                    list.innerHTML = '<li class="list-group-item text-center" style="background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); color: #888;">Aucune Grâce n\'a encore été octroyée.</li>';
+                } else {
+                    faveurs.forEach(f => {
+                        const safeName = f.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        list.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center mb-2" style="background: rgba(87, 152, 209, 0.05); border: 1px solid rgba(87, 152, 209, 0.2); border-radius: 4px; color: #ccc;">
+                            <span style="font-family: 'Cinzel', serif; letter-spacing: 0.5px; color: var(--god-gold);"><i class="fas fa-sparkles mr-2" style="font-size: 0.8rem; opacity: 0.6;"></i> ${f}</span>
+                            <button class="btn btn-sm btn-danger-god" onclick="removeFaveur('${safeName}')" title="Répudier"><i class="fas fa-times"></i></button>
+                        </li>`;
+                    });
+                }
+            } catch(e) { console.error('Erreur parsing faveurs:', e); }
+        }
+    }
+
+    function addFaveur() {
+        const characterId = document.getElementById('faveurCharacterSelect').value;
+        const faveurName = document.getElementById('faveursSelectInput').value;
+        if(!characterId || !faveurName.trim()) return alert("Le nom de la faveur est requis pour l'invocation.");
+
+        fetch('/eclats/faveurs/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ characterId, faveurName })
+        }).then(res => res.json()).then(data => {
+            if(data.success) location.reload();
+            else alert('Erreur serveur.');
+        });
+    }
+
+    function removeFaveur(faveurName) {
+        if(!confirm(`Répudier la faveur divinement accordée : "${faveurName}" ?`)) return;
+        const characterId = document.getElementById('faveurCharacterSelect').value;
+
+        fetch('/eclats/faveurs/remove', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ characterId, faveurName })
+        }).then(res => res.json()).then(data => {
+            if(data.success) location.reload();
+            else alert('Erreur serveur.');
+        });
+    }
+</script>
+{% endblock %}

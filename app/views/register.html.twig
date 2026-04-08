@@ -2,42 +2,193 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <style>
+        :root {
+            --god-gold: #D4AF37;
+            --god-gold-muted: #a38622;
+            --god-dark: #121216;
+            --god-bg-translucent: rgba(18, 18, 22, 0.85);
+            --god-border: rgba(212, 175, 55, 0.25);
+            --god-text: #e0e0e0;
+            --god-danger: #c93b3b;
+            --god-success: #3bc980;
+            --god-info: #5798d1;
+        }
+        .bg-slideshow {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            background-color: #050505;
+        }
+        .bg-slideshow::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+        .bg-slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: fadeSlide 160s infinite;
+        }
+        @keyframes fadeSlideFirst {
+            0% { opacity: 0.6; transform: scale(1); }
+            25% { opacity: 0.6; }
+            30% { opacity: 0; transform: scale(1.05); }
+            100% { opacity: 0; transform: scale(1.05); }
+        }
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: scale(1); }
+            5% { opacity: 0.6; }
+            25% { opacity: 0.6; }
+            30% { opacity: 0; transform: scale(1.05); }
+            100% { opacity: 0; transform: scale(1.05); }
+        }
+        .register-container {
+            max-width: 420px;
+            margin: 5rem auto 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        .god-card {
+            background: var(--god-bg-translucent);
+            border: 1px solid var(--god-border);
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: var(--god-text);
+            margin-bottom: 1.5rem;
+        }
+        .god-card-header {
+            padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+            border-bottom: 1px solid var(--god-border);
+            font-family: 'Cinzel', serif;
+            color: var(--god-gold);
+            font-size: 2.1rem;
+            text-align: center;
+            letter-spacing: 1px;
+            background: transparent;
+        }
+        .god-card-body {
+            padding: 2rem 2rem 2rem 2rem;
+        }
+        .god-label {
+            color: #bbb;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+        .god-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--god-text);
+            border-radius: 3px;
+        }
+        .god-input:focus {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: var(--god-gold);
+            color: #fff;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+        }
+        .god-input::placeholder {
+            color: #666;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        .btn-god {
+            background: linear-gradient(135deg, var(--god-gold-muted) 0%, var(--god-gold) 100%);
+            color: #111;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+            border-radius: 3px;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1.2rem;
+        }
+        .btn-god:hover {
+            background: linear-gradient(135deg, var(--god-gold) 0%, #fff0a8 100%);
+            color: #000;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+        .alert-god {
+            background: rgba(200, 50, 50, 0.1);
+            border: 1px solid rgba(200, 50, 50, 0.3);
+            color: #e57373;
+            border-radius: 3px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-
-    <h3>
-        Register
-    </h3>
-    
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form action="/auth/register" method="POST">
-                    {% if error %}
-                        <div class="alert alert-danger" role="alert">
-                            {{ error }}
-                        </div>
-                    {% endif %}
-                    <div class="form-group">
-                        <label for="firstname">Pseudo</label>
-                        <input type="text" name="pseudo" id="pseudo" class="form-control" required>
+<div class="bg-slideshow" id="random-slideshow"></div>
+<div class="register-container">
+    <div class="god-card">
+        <div class="god-card-header">Inscription</div>
+        <div class="god-card-body">
+            <form action="/auth/register" method="POST">
+                {% if error %}
+                    <div class="alert-god" role="alert">
+                        {{ error }}
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control" required>
-                    </div>
-                    </br>
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary">Register</button>
-                    </div>
-                </form>
-            </div>
+                {% endif %}
+                <div class="form-group mb-3">
+                    <label for="pseudo" class="god-label">Pseudo</label>
+                    <input type="text" name="pseudo" id="pseudo" class="form-control god-input" required placeholder="Votre pseudo...">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="email" class="god-label">Email</label>
+                    <input type="email" name="email" id="email" class="form-control god-input" required placeholder="Votre email...">
+                </div>
+                <div class="form-group mb-4">
+                    <label for="password" class="god-label">Mot de passe</label>
+                    <input type="password" name="password" id="password" class="form-control god-input" required placeholder="Votre mot de passe...">
+                </div>
+                <button type="submit" class="btn-god">S'inscrire</button>
+            </form>
         </div>
     </div>
-
+</div>
+<script>
+    // Fond animé comme sur /eclats
+    document.addEventListener('DOMContentLoaded', () => {
+        const images = [
+            "/images/background-ool.png",
+            "/images/background-aon.png",
+            "/images/background-tegee.png",
+            "/images/background-avorae.png"
+        ];
+        for (let i = images.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [images[i], images[j]] = [images[j], images[i]];
+        }
+        const container = document.getElementById('random-slideshow');
+        images.forEach((img, index) => {
+            const div = document.createElement('div');
+            div.className = 'bg-slide';
+            div.style.backgroundImage = `url('${img}')`;
+            if (index === 0) {
+                div.style.animation = `fadeSlideFirst 160s infinite`;
+                div.style.opacity = '0.6';
+            } else {
+                div.style.animation = `fadeSlide 160s infinite`;
+                div.style.animationDelay = `${index * 40}s`;
+            }
+            container.appendChild(div);
+        });
+    });
+</script>
 {% endblock %}

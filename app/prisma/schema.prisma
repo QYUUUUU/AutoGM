@@ -25,6 +25,24 @@ model User {
   FavoriteCharacter FavoriteCharacter[]
   Adversary         Adversary[]
   Conversation      Conversation[]
+  Gods              God[]
+}
+
+model God {
+  id                  Int         @id @default(autoincrement())
+  nom                 String
+  description         String?     @db.Text
+  domaines            String?     @default("[]") @db.Text 
+  interditsMajeurs    String?     @default("[]") @db.Text
+  interditsMineurs    String?     @default("[]") @db.Text
+  essencesPrimaires   String?     @default("[]") @db.Text 
+  essencesSecondaires String?     @default("[]") @db.Text 
+  desirs              String?     @default("[]") @db.Text 
+  objectifsMineurs    String?     @default("[]") @db.Text 
+  objectifsMajeurs    String?     @default("[]") @db.Text 
+  User                User?       @relation(fields: [userId], references: [id])
+  userId              Int?
+  Characters          Character[]
 }
 
 model Session {
@@ -117,6 +135,20 @@ model Character {
   armureEquipee       String?             @default("") @db.VarChar(500)
   User                User?               @relation(fields: [userId], references: [id])
   userId              Int?
+  
+  // ECLATS ET DIEUX
+  God                 God?                @relation(fields: [godId], references: [id])
+  godId               Int?
+  stadeEclat          String?             @default("") @db.VarChar(50)
+  faveurs             String?             @default("[]") @db.Text
+  humanite            Int?                @default(0)
+  divinite            Int?                @default(0)
+  formeEclat          String?             @default("") @db.VarChar(255)
+  apparenceEclat      String?             @default("") @db.Text
+  sphereEclat         String?             @default("") @db.VarChar(50)
+  embrasementEclat    String?             @default("") @db.Text
+  capacitesEclat      String?             @default("[]") @db.Text
+
   FavoriteCharacter   FavoriteCharacter[]
   Roll                Roll[]
   Groupe              Groupe?             @relation(fields: [groupeId], references: [id])
@@ -209,4 +241,13 @@ model Adversary {
   capacites          String? @db.Text
   userId             Int?
   User               User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Faveur {
+  id          Int      @id @default(autoincrement())
+  nom         String
+  domaine     String
+  type        String   @default("Mineure")
+  stade       String   @default("Rencontre")
+  description String   @db.Text
 }

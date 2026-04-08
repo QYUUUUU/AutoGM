@@ -481,6 +481,7 @@ Note : ce rituel ne peut être pratiqué que sur soi.</p>
       </div>
       <div class="modal-footer bg-dark">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-outline-danger" onclick="removeRitualAction()"><i class="fas fa-trash-alt"></i> Oublier</button>
         <button type="button" class="btn btn-primary" onclick="submitRitual()">Ajouter</button>
       </div>
     </div>
@@ -546,6 +547,44 @@ Note : ce rituel ne peut être pratiqué que sur soi.</p>
         .catch(err => {
             console.error(err);
             alert("Une erreur est survenue lors de l'ajout.");
+        });
+    }
+
+    function removeRitualAction() {
+        const characterId = document.getElementById('characterSelect').value;
+        if (!characterId) {
+            alert("Veuillez sélectionner un personnage.");
+            return;
+        }
+
+        if(!confirm(`Êtes-vous sûr de vouloir faire oublier le rituel "${selectedRitualName}" à ce personnage ?`)) {
+            return;
+        }
+
+        fetch('/rituels/remove', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                characterId: characterId,
+                ritualName: selectedRitualName
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Rituel oublié avec succès !");
+                var modalEl = document.getElementById("ritualModal");
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+            } else {
+                alert("Erreur lors du retrait : " + data.message);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Une erreur technique est survenue.");
         });
     }
 </script>
