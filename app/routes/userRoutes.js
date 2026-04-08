@@ -135,6 +135,101 @@ router.get('/maps', (req, res) => {
   res.render('../views/maps.html.twig');
 });
 
+/**
+ * @route GET /rituels
+ * @description Renders the rituals rules and lists page.
+ */
+router.get('/rituels', async (req, res) => {
+  const id_User = req.session.userId;
+  let characters = [];
+  if (id_User) {
+    try {
+      characters = await prisma.character.findMany({
+        where: { userId: id_User },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  res.render('../views/rituels.html.twig', { characters });
+});
+
+/**
+ * @route POST /rituels/add
+ * @description Adds a mastered ritual to a character
+ */
+router.post('/rituels/add', async (req, res) => {
+  const id_User = req.session.userId;
+  if (!id_User) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+  const { characterId, ritualName } = req.body;
+  if (!characterId || !ritualName) return res.status(400).json({ success: false, message: 'Missing data' });
+
+  try {
+    const character = await prisma.character.findFirst({
+      where: { id_Character: parseInt(characterId), userId: id_User }
+    });
+
+    if (!character) return res.status(403).json({ success: false, message: 'Character not found or not owned by user' });
+
+    let rituelsMaitrises = [];
+    try {
+      if (character.rituelsMaitrises) rituelsMaitrises = JSON.parse(character.rituelsMaitrises);
+    } catch(e) {}
+
+    if (!rituelsMaitrises.includes(ritualName)) {
+      rituelsMaitrises.push(ritualName);
+    }
+
+    await prisma.character.update({
+      where: { id_Character: character.id_Character },
+      data: { rituelsMaitrises: JSON.stringify(rituelsMaitrises) }
+    });
+
+    res.json({ success: true, message: 'Rituel maitrisé ajouté' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+/**
+ * @route POST /rituels/remove
+ * @description Removes a mastered ritual from a character
+ */
+router.post('/rituels/remove', async (req, res) => {
+  const id_User = req.session.userId;
+  if (!id_User) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+  const { characterId, ritualName } = req.body;
+  if (!characterId || !ritualName) return res.status(400).json({ success: false, message: 'Missing data' });
+
+  try {
+    const character = await prisma.character.findFirst({
+      where: { id_Character: parseInt(characterId), userId: id_User }
+    });
+
+    if (!character) return res.status(403).json({ success: false, message: 'Character not found or not owned by user' });
+
+    let rituelsMaitrises = [];
+    try {
+      if (character.rituelsMaitrises) rituelsMaitrises = JSON.parse(character.rituelsMaitrises);
+    } catch(e) {}
+
+    rituelsMaitrises = rituelsMaitrises.filter(r => r !== ritualName);
+
+    await prisma.character.update({
+      where: { id_Character: character.id_Character },
+      data: { rituelsMaitrises: JSON.stringify(rituelsMaitrises) }
+    });
+
+    res.json({ success: true, message: 'Rituel retiré avec succès' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 
 /**
  * @route GET /newcharacter

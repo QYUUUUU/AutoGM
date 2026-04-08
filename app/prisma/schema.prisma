@@ -111,6 +111,7 @@ model Character {
   specialites         String              @default("[]") @db.VarChar(2000)
   langues             String              @default("[\"Babelite\"]") @db.VarChar(500)
   inventory           String?             @default("") @db.VarChar(5000)
+  rituelsMaitrises    String?             @default("[]") @db.Text
   notes               String?             @default("") @db.VarChar(5000)
   armeEquipee         String?             @default("") @db.VarChar(500)
   armureEquipee       String?             @default("") @db.VarChar(500)

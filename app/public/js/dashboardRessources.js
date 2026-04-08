@@ -147,6 +147,8 @@ async function updateBlessure(type, note, charId) {
         });
 
         if (response.ok) {
+            const updatedCharacter = await response.json();
+            
             // Update UI for all circles of this type
             let i = 1;
             let currentCircle = document.getElementById(type.replace("blessure", "") + "-dash" + i);
@@ -160,20 +162,19 @@ async function updateBlessure(type, note, charId) {
                 currentCircle = document.getElementById(type.replace("blessure", "") + "-dash" + i);
             }
             
-            const updatedProfile = await response.json();
+            // Update Effort and SangFroid dynamically without reload
             const displayEffort = document.getElementById('display-effort');
-            const maxEffortInput = document.getElementById('max-effort');
-            const maxEffort = maxEffortInput ? maxEffortInput.value : (updatedProfile.maxeffort || 15);
-            if (displayEffort && updatedProfile.effort !== undefined) {
-                displayEffort.innerText = `${updatedProfile.effort} / ${maxEffort}`;
+            const maxEffort = document.getElementById('max-effort');
+            if (displayEffort && maxEffort && updatedCharacter.effort !== undefined) {
+                 displayEffort.innerText = updatedCharacter.effort + ' / ' + maxEffort.value;
+            }
+
+            const displaySangfroid = document.getElementById('display-sangfroid');
+            const maxSangfroid = document.getElementById('max-sangfroid');
+            if (displaySangfroid && maxSangfroid && updatedCharacter.sangfroid !== undefined) {
+                 displaySangfroid.innerText = updatedCharacter.sangfroid + ' / ' + maxSangfroid.value;
             }
             
-            const displaySangFroid = document.getElementById('display-sangfroid');
-            const maxSangFroidInput = document.getElementById('max-sangfroid');
-            const maxSangFroid = maxSangFroidInput ? maxSangFroidInput.value : (updatedProfile.maxsangfroid || 8);
-            if (displaySangFroid && updatedProfile.sangfroid !== undefined) {
-                displaySangFroid.innerText = `${updatedProfile.sangfroid} / ${maxSangFroid}`;
-            }
         } else {
             console.error("Failed to update blessure");
             alert("Erreur lors de la mise à jour de la blessure.");
