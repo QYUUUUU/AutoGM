@@ -159,7 +159,7 @@ function showRollOnDashboard(rolls) {
 // Ensure the DOM is fully loaded before fetching
 document.addEventListener('DOMContentLoaded', () => {
     const rollsTracking = document.querySelector(".dice-results .body-card");
-    if(rollsTracking) {
+    if (rollsTracking) {
         fetchRolls();
 
         let sseUrl = '/stream/rolls';
@@ -168,13 +168,27 @@ document.addEventListener('DOMContentLoaded', () => {
             sseUrl += `?groupe_id=${groupeInput.value}`;
         }
         
-        const evtSource = new EventSource(sseUrl);
+        let evtSource = new EventSource(sseUrl);
+
         evtSource.onmessage = function(event) {
-            const newRolls = JSON.parse(event.data);
-            showRollOnDashboard(newRolls);
+            try {
+                const newRolls = JSON.parse(event.data);
+                showRollOnDashboard(newRolls);
+            } catch (e) {
+                // Ignore keep-alive comments / pings
+            }
         };
+
         evtSource.onerror = function() {
-            console.error("EventSource failed.");
+            // EventSource auto-reconnects natively; log cleanly instead of crashing script
+            console.warn("SSE connection lost. Reconnecting...");
         };
+
+        // Close connection cleanly when user leaves or refreshes page
+        window.addEventListener('beforeunload', () => {
+            if (evtSource) {
+                evtSource.close();
+            }
+        });
     }
 });

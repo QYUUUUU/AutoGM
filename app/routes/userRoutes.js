@@ -1004,91 +1004,100 @@ router.get('/Conversation/delete/:conversationId', async (req, res) => {
 
 
 
-
-
 /**
  * @route PUT /throw
  * @description In-game mechanical action triggering a dice roll resolution check for the active character.
- * Features:
- * - Requires body attributes: `modifier`, `competence` (skill name), `caracteristic` (stat name).
- * - Validates input presence early (HTTP 400).
- * - Identifies the rolling user's active `FavoriteCharacter`.
- * - Relies on `getThrowsByStats` external calculation service to merge stats, skill level, and modifiers into a result.
- * - Responds as JSON with roll interpretation details.
- * 
- * Wait for obsolete code confirmation: `user.character` assignment relies entirely on `favoriteCharacter` array. If the user hasn't favorited a character yet, `user.character` throws `TypeError` crashing the API due to unhandled undefined `user` fetch returning null!
  */
 router.put('/throw', async (req, res) => {
   const id_User = req.session.userId;
   const { modifier, competence, caracteristic } = req.body;
 
-  // Make sure the required parameters are present in the request body
   if (!modifier || !competence || !caracteristic) {
     return res.status(400).json({ error: 'Missing required parameters in the request body.' });
   }
 
-  if (id_User) {
-    try {
-      const user = await prisma.favoriteCharacter.findFirst({
-        where: { userId: id_User },
-        include: { character: { include: { Groupe: true } } },
-      });
-
-      const character = user.character;
-
-      if (!character) {
-        return res.status(404).json({ error: 'Character not found' });
-      }
-            let maxGroupCompetence = character[competence] || 0;
-      if (req.body.isCollective && character.groupeId) {
-        const otherMembers = await prisma.character.findMany({
-          where: {
-            groupeId: character.groupeId,
-            id_Character: { not: character.id_Character }
-          },
-        });
-        for (const member of otherMembers) {
-          if (member[competence] && member[competence] > maxGroupCompetence) {
-            maxGroupCompetence = member[competence];
-          }
-        }
-      }
-      const result = getThrowsByStats(character, modifier, competence, caracteristic, req.body.isCollective, maxGroupCompetence);
-
-      if (result.error) { return res.status(403).json(result); }
-      return res.json(result);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  } else {
+  if (!id_User) {
     return res.render('../views/login.html.twig');
   }
 
+  try {
+    // 1. Fetch favorite character
+    const favorite = await prisma.favoriteCharacter.findFirst({
+      where: { userId: id_User },
+      include: { character: { include: { Groupe: true } } },
+    });
+
+    let character = favorite?.character;
+
+    // 2. Fallback to latest character if no favorite is set
+    if (!character) {
+      character = await prisma.character.findFirst({
+        where: { userId: id_User },
+        orderBy: { id_Character: 'desc' },
+        include: { Groupe: true }
+      });
+    }
+
+    if (!character) {
+      return res.status(404).json({ error: 'Character not found' });
+    }
+
+    let maxGroupCompetence = character[competence] || 0;
+    if (req.body.isCollective && character.groupeId) {
+      const otherMembers = await prisma.character.findMany({
+        where: {
+          groupeId: character.groupeId,
+          id_Character: { not: character.id_Character }
+        },
+      });
+      for (const member of otherMembers) {
+        if (member[competence] && member[competence] > maxGroupCompetence) {
+          maxGroupCompetence = member[competence];
+        }
+      }
+    }
+
+    const result = getThrowsByStats(
+      character,
+      modifier,
+      competence,
+      caracteristic,
+      req.body.isCollective,
+      maxGroupCompetence
+    );
+
+    if (result.error) {
+      return res.status(403).json(result);
+    }
+    return res.json(result);
+
+  } catch (error) {
+    console.error('Error in /throw:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 
 /**
  * @route PUT /share/throw
- * @description Persists a dice roll result to the database and broadcasts it in real-time to active listeners via Server-Sent Events (SSE).
- * Features:
- * - Accepts parsed dice roll attributes: `result` arrays, `relances` quantities, `caracteristic`, `competence`, `thrownByAI`.
- * - Aggregates duplicate dice formats into a readable log string (e.g., `d6: 4, 2 | d10: 8`).
- * - Formats text dynamically depending on remaining rerolls.
- * - Extracts `id_User` to map the roll onto their active `favoriteCharacter`.
- * - Writes the historical roll into `prisma.roll.create(...)`.
- * - Interacts directly with the global `rollClients` Set (SSE streaming pool), pushing stringified JSON blocks directly to any connected client in the same RPG `groupeId` or user session.
- * 
- * Wait for obsolete code confirmation: Similar to `/throw`, it misses `if (!user || !user.character)` safety check. Also, this endpoint relies entirely on `rollClients` being an in-memory Set; this application CANNOT be horizontally scaled/load-balanced across multiple Node.js instances (e.g. Docker swarm) because the SSE connections are bound to local RAM, a classic obsolete monolithic pattern.
+ * @description Persists a dice roll result to the database and broadcasts it via SSE.
  */
 router.put('/share/throw', async (req, res) => {
   const id_User = req.session.userId;
   const { result, relances, caracteristic, competence, thrownByAI, color } = req.body;
 
+  if (!result) {
+    return res.status(400).json({ error: 'Missing required parameters in the request body.' });
+  }
+
+  if (!id_User) {
+    return res.render('../views/login.html.twig');
+  }
+
   let rollContent = "";
 
   const grouped = {};
-  if (result && Array.isArray(result)) {
+  if (Array.isArray(result)) {
     result.forEach(dice => {
       if (!grouped[dice.value]) grouped[dice.value] = [];
       grouped[dice.value].push(dice.values);
@@ -1098,9 +1107,8 @@ router.put('/share/throw', async (req, res) => {
       rollParts.push(`d${d}: ${vals.join(', ')}`);
     }
     
-    // Inject custom metadata transparently as HTML comment
     const metaColor = color || "#2d2d2d";
-    const metadata = `<!--meta:${JSON.stringify({color: metaColor, results: result})}-->`;
+    const metadata = `<!--meta:${JSON.stringify({ color: metaColor, results: result })}-->`;
     rollContent = metadata + rollParts.join(' | ');
   }
 
@@ -1115,177 +1123,178 @@ router.put('/share/throw', async (req, res) => {
     rollContent += "\n Vous avez " + relances + " relances possibles.";
   }
 
-  // Make sure the required parameters are present in the request body
-  if (!result) {
-    return res.status(400).json({ error: 'Missing required parameters in the request body.' });
-  }
+  try {
+    // 1. Fetch favorite character
+    const favorite = await prisma.favoriteCharacter.findFirst({
+      where: { userId: id_User },
+      include: { character: true },
+    });
 
+    let character = favorite?.character;
 
-
-  if (id_User) {
-    try {
-      const user = await prisma.favoriteCharacter.findFirst({
+    // 2. Fallback to latest character if no favorite is set
+    if (!character) {
+      character = await prisma.character.findFirst({
         where: { userId: id_User },
-        include: { character: true },
+        orderBy: { id_Character: 'desc' }
       });
-
-      const character = user.character;
-
-
-
-      const roll = await prisma.roll.create({
-        data: {
-          content: rollContent,
-          characterId_Character: character.id_Character,
-          isStatRoll: !!(caracteristic || competence),
-          caracteristic: caracteristic || null,
-          competence: competence || null,
-          thrownByAI: thrownByAI || false
-        },
-        include: {
-          Character: { select: { nom: true, avatar: true, genre: true } }
-        }
-      });
-
-      
-      for (const client of rollClients) {
-          if ((character.groupeId && client.groupeId === character.groupeId) || client.userId === id_User) {
-              client.res.write(`data: ${JSON.stringify([roll])}\n\n`);
-          }
-      }
-      return res.json("No soucis roll créé");
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Internal server error' });
     }
-  } else {
-    return res.render('../views/login.html.twig');
+
+    if (!character) {
+      return res.status(404).json({ error: 'No character found for this user.' });
+    }
+
+    const roll = await prisma.roll.create({
+      data: {
+        content: rollContent,
+        characterId_Character: character.id_Character,
+        isStatRoll: !!(caracteristic || competence),
+        caracteristic: caracteristic || null,
+        competence: competence || null,
+        thrownByAI: thrownByAI || false
+      },
+      include: {
+        Character: { select: { nom: true, avatar: true, genre: true } }
+      }
+    });
+
+    // Broadcast to active SSE streams matching group or user ID
+    for (const client of rollClients) {
+      if ((character.groupeId && client.groupeId === character.groupeId) || client.userId === id_User) {
+        client.res.write(`data: ${JSON.stringify([roll])}\n\n`);
+      }
+    }
+
+    return res.json("No soucis roll créé");
+
+  } catch (error) {
+    console.error('Error in /share/throw:', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
-
 });
-
 
 
 /**
  * @route GET /stream/rolls
- * @description Establishes a long-lived Server-Sent Events (SSE) connection stream to broadcast real-time game rolls.
- * Features:
- * - Demands `userId` from session (HTTP 401 fallback).
- * - Identifies user's active `character` to figure out which RPG `groupeId` they belong to (to filter incoming broadcasted rolls).
- * - Sets necessary HTTP headers (`text/event-stream`, `keep-alive`, `no-cache`).
- * - Emits immediate blank connection acknowledgment (`: connected`).
- * - Keeps connection alive every 15 seconds using a setInterval heartbeat (`: ping`).
- * - Caches `res` context globally in `rollClients` to be iterated on when `/share/throw` is hit.
- * - Adds a `close` listener strictly required to run cleanup (clearing intervals and removing `client` from memory `Set`).
- * 
- * Wait for obsolete code confirmation: Once again, relying on `rollClients` Set in a single Node process means users on different load balancer nodes won't see each other's rolls.
+ * @description Establishes a long-lived SSE connection stream to broadcast real-time game rolls.
  */
 router.get('/stream/rolls', async (req, res) => {
   const id_User = req.session.userId;
 
   if (!id_User) return res.status(401).send("Unauthorized");
-  
+
   try {
-      const queryGroupeId = req.query.groupe_id ? parseInt(req.query.groupe_id) : null;
-      
-      const user = await prisma.favoriteCharacter.findFirst({
+    const queryGroupeId = req.query.groupe_id ? parseInt(req.query.groupe_id) : null;
+    
+    const favorite = await prisma.favoriteCharacter.findFirst({
+      where: { userId: id_User },
+      include: { character: true },
+    });
+
+    let character = favorite?.character;
+    if (!character) {
+      character = await prisma.character.findFirst({
         where: { userId: id_User },
-        include: { character: true },
+        orderBy: { id_Character: 'desc' }
       });
-      const character = user?.character;
-      const groupeId = queryGroupeId || character?.groupeId;
+    }
 
+    const groupeId = queryGroupeId || character?.groupeId;
 
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.setHeader('Connection', 'keep-alive');
+    // SSE headers + Nginx anti-buffering
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no'
+    });
+
+    if (typeof res.flushHeaders === 'function') {
       res.flushHeaders();
-      
-      // Send an initial comment to keep the connection alive immediately
-      res.write(': connected\n\n');
+    }
 
-      // Keepalive heartbeat
-      const heartbeat = setInterval(() => {
-          res.write(': ping\n\n');
-      }, 15000);
+    res.write(': connected\n\n');
 
-      const client = { res, groupeId, userId: id_User };
-      rollClients.add(client);
+    // Keepalive heartbeat every 15s
+    const heartbeat = setInterval(() => {
+      res.write(': ping\n\n');
+    }, 15000);
 
-      req.on('close', () => {
+    const client = { res, groupeId, userId: id_User };
+    rollClients.add(client);
 
-          clearInterval(heartbeat);
-          rollClients.delete(client);
-      });
+    req.on('close', () => {
+      clearInterval(heartbeat);
+      rollClients.delete(client);
+    });
+
   } catch (err) {
-      console.error("SSE Error:", err);
-      res.status(500).end();
+    console.error("SSE Error:", err);
+    res.status(500).end();
   }
 });
+
 
 /**
  * @route PUT /fetch/rolls
- * @description Initially loads the historical dice roll context/log for the user's current group or character.
- * Features:
- * - Extracts `id_User` to locate their active `favoriteCharacter`.
- * - Calculates query scope recursively: if the caller sends a `?groupe_id=` param query, overrides their default group. Otherwise fetches the character's `groupeId` from DB.
- * - Extracts all correlated `prisma.roll.findMany` matching either the Group (`groupeId`) or the distinct standalone Character (`characterId_Character`).
- * - Formats results hierarchically (`orderBy: { id: 'asc' }`).
- * - Bundles nested avatar details inside `Character` mapping for UI rendering.
- * 
- * Wait for obsolete code confirmation: Why is this endpoint a `PUT`? It only retrieves (`fetch`) data and doesn't update the database. REST standards mandate `GET` for data retrieval endpoints. Also, `queryGroupeId` query usage can be spoofed by any user modifying the URL, so users can spy on rolls of *any* `groupe_id` due to pure lack of ownership validation.
+ * @description Initially loads historical dice rolls for the active group or character.
  */
 router.put('/fetch/rolls', async (req, res) => {
   const id_User = req.session.userId;
-  if (id_User) {
-    try {
-      const queryGroupeId = req.query.groupe_id ? parseInt(req.query.groupe_id) : null;
-      let whereClause = {};
 
-      if (queryGroupeId) {
-          whereClause = { Character: { groupeId: queryGroupeId } };
-      } else {
-          const user = await prisma.favoriteCharacter.findFirst({
-            where: { userId: id_User },
-            include: { character: true },
-          });
-
-          const character = user?.character;
-          if (!character) {
-              return res.json([]);
-          }
-
-          whereClause = character.groupeId ? {
-            Character: {
-              groupeId: character.groupeId,
-            },
-          } : {
-            characterId_Character: character.id_Character,
-          };
-      }
-
-      const rolls = await prisma.roll.findMany({
-        where: whereClause,
-        orderBy: { id: 'asc' },
-        include: {
-          Character: { select: { nom: true, avatar: true, genre: true } }
-        }
-      });
-
-
-
-      return res.json(rolls);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  } else {
+  if (!id_User) {
     return res.render('../views/login.html.twig');
   }
 
+  try {
+    const queryGroupeId = req.query.groupe_id ? parseInt(req.query.groupe_id) : null;
+    let whereClause = {};
+
+    if (queryGroupeId) {
+      whereClause = { Character: { groupeId: queryGroupeId } };
+    } else {
+      const favorite = await prisma.favoriteCharacter.findFirst({
+        where: { userId: id_User },
+        include: { character: true },
+      });
+
+      let character = favorite?.character;
+
+      if (!character) {
+        character = await prisma.character.findFirst({
+          where: { userId: id_User },
+          orderBy: { id_Character: 'desc' }
+        });
+      }
+
+      if (!character) {
+        return res.json([]);
+      }
+
+      whereClause = character.groupeId ? {
+        Character: {
+          groupeId: character.groupeId,
+        },
+      } : {
+        characterId_Character: character.id_Character,
+      };
+    }
+
+    const rolls = await prisma.roll.findMany({
+      where: whereClause,
+      orderBy: { id: 'asc' },
+      include: {
+        Character: { select: { nom: true, avatar: true, genre: true } }
+      }
+    });
+
+    return res.json(rolls);
+
+  } catch (error) {
+    console.error('Error in /fetch/rolls:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 });
-
-
 
 
 

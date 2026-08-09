@@ -135,6 +135,16 @@ document.addEventListener('DOMContentLoaded', function () {
      * Wait for obsolete code confirmation: Extracting data by assuming `document.getElementsByName('nom')[0]` exists will instantly crash the entire Javascript context and permanently break the form if a single field is momentarily missing or renamed in the TWIG template. (Consider switching to standard `FormData(formElement)` map).
      */
     function createCharacter() {
+
+        const submitBtn = document.getElementById('submit');
+    
+        // Prevent double submission
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Création en cours...';
+        }
+
+
         // Gather form data
         const formData = {
             nom: document.getElementsByName('nom')[0].value,
