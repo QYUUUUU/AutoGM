@@ -489,6 +489,16 @@ router.post('/create-character', async (req, res) => {
         },
       });
 
+      // Automatically set this new character as the user's favorite
+      await prisma.favoriteCharacter.upsert({
+        where: { userId: id_User },
+        update: { characterId: newCharacter.id_Character },
+        create: {
+          userId: id_User,
+          characterId: newCharacter.id_Character,
+        },
+      });
+
       // Respond with a success message or the created character object
       res.status(201).json(newCharacter);
     } catch (error) {
