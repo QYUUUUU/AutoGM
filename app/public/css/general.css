@@ -33,3 +33,15 @@ main > div {
   margin-left: 50px;
 
 }
+
+/* Ensure navbar items stay in a single row and don't wrap */
+.navbar-nav {
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.navbar-nav .nav-item {
+  white-space: nowrap;
+}
