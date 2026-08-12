@@ -3,6 +3,74 @@
  * @description Frontend script for managing the Real-time Multiplayer Dice rolling log visualizer on the RPG Dashboard via SSE (Server-Sent Events) and initial historical REST syncing.
  */
 let showedRolls = [];
+let rollStreamSource = null;
+let rollStreamReconnectTimer = null;
+let rollStreamReconnectAttempt = 0;
+
+function scheduleRollStreamReconnect() {
+    if (rollStreamReconnectTimer) {
+        return;
+    }
+
+    const delay = Math.min(30000, 1000 * Math.pow(2, rollStreamReconnectAttempt));
+    rollStreamReconnectAttempt += 1;
+
+    rollStreamReconnectTimer = setTimeout(() => {
+        rollStreamReconnectTimer = null;
+        connectRollStream();
+    }, delay);
+}
+
+function connectRollStream() {
+    const rollsTracking = document.querySelector(".dice-results .body-card");
+    if (!rollsTracking) return;
+
+    if (rollStreamSource) {
+        rollStreamSource.close();
+        rollStreamSource = null;
+    }
+
+    let sseUrl = '/stream/rolls';
+    const groupeInput = document.getElementById('activeGroupeId');
+    if (groupeInput && groupeInput.value) {
+        sseUrl += `?groupe_id=${groupeInput.value}`;
+    }
+
+    const evtSource = new EventSource(sseUrl);
+    rollStreamSource = evtSource;
+
+    evtSource.onopen = function() {
+        rollStreamReconnectAttempt = 0;
+        if (rollStreamReconnectTimer) {
+            clearTimeout(rollStreamReconnectTimer);
+            rollStreamReconnectTimer = null;
+        }
+        fetchRolls();
+    };
+
+    evtSource.onmessage = function(event) {
+        try {
+            const newRolls = JSON.parse(event.data);
+            showRollOnDashboard(newRolls);
+        } catch (e) {
+            // Ignore malformed data or keep-alive noise
+        }
+    };
+
+    evtSource.onerror = function() {
+        // Recreate the connection explicitly so it comes back after proxy or network drops.
+        console.warn("SSE connection lost. Reconnecting...");
+
+        if (evtSource.readyState === EventSource.CLOSED) {
+            scheduleRollStreamReconnect();
+            return;
+        }
+
+        evtSource.close();
+        rollStreamSource = null;
+        scheduleRollStreamReconnect();
+    };
+}
 
 /**
  * @function fetchRolls
@@ -162,32 +230,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (rollsTracking) {
         fetchRolls();
 
-        let sseUrl = '/stream/rolls';
-        const groupeInput = document.getElementById('activeGroupeId');
-        if (groupeInput && groupeInput.value) {
-            sseUrl += `?groupe_id=${groupeInput.value}`;
-        }
-        
-        let evtSource = new EventSource(sseUrl);
-
-        evtSource.onmessage = function(event) {
-            try {
-                const newRolls = JSON.parse(event.data);
-                showRollOnDashboard(newRolls);
-            } catch (e) {
-                // Ignore keep-alive comments / pings
-            }
-        };
-
-        evtSource.onerror = function() {
-            // EventSource auto-reconnects natively; log cleanly instead of crashing script
-            console.warn("SSE connection lost. Reconnecting...");
-        };
+        connectRollStream();
 
         // Close connection cleanly when user leaves or refreshes page
         window.addEventListener('beforeunload', () => {
-            if (evtSource) {
-                evtSource.close();
+            if (rollStreamReconnectTimer) {
+                clearTimeout(rollStreamReconnectTimer);
+            }
+            if (rollStreamSource) {
+                rollStreamSource.close();
             }
         });
     }

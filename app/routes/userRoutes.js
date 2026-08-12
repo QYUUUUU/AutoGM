@@ -10,6 +10,30 @@ import { getEclatCapacites } from "../langChain/data/eclatCapacites.js";
 const router = Router();
 const rollClients = new Set();
 
+function removeRollClient(client) {
+  if (!client) return;
+  if (client.heartbeat) {
+    clearInterval(client.heartbeat);
+  }
+  rollClients.delete(client);
+}
+
+function safeWriteToRollClient(client, payload) {
+  if (!client?.res || client.res.writableEnded || client.res.destroyed) {
+    removeRollClient(client);
+    return false;
+  }
+
+  try {
+    client.res.write(payload);
+    return true;
+  } catch (error) {
+    console.warn('Dropping dead SSE client:', error.message);
+    removeRollClient(client);
+    return false;
+  }
+}
+
 /**
  * @route GET /dashboard
  * @description Handles rendering the main dashboard for the user.
@@ -1159,9 +1183,9 @@ router.put('/share/throw', async (req, res) => {
     });
 
     // Broadcast to active SSE streams matching group or user ID
-    for (const client of rollClients) {
+    for (const client of Array.from(rollClients)) {
       if ((character.groupeId && client.groupeId === character.groupeId) || client.userId === id_User) {
-        client.res.write(`data: ${JSON.stringify([roll])}\n\n`);
+        safeWriteToRollClient(client, `data: ${JSON.stringify([roll])}\n\n`);
       }
     }
 
@@ -1213,19 +1237,27 @@ router.get('/stream/rolls', async (req, res) => {
       res.flushHeaders();
     }
 
+    res.write('retry: 5000\n\n');
     res.write(': connected\n\n');
 
-    // Keepalive heartbeat every 15s
+    // Keepalive heartbeat every 10s so proxies do not close the stream.
     const heartbeat = setInterval(() => {
-      res.write(': ping\n\n');
-    }, 15000);
+      safeWriteToRollClient(client, ': ping\n\n');
+    }, 10000);
 
-    const client = { res, groupeId, userId: id_User };
+    const client = { res, groupeId, userId: id_User, heartbeat };
     rollClients.add(client);
 
     req.on('close', () => {
-      clearInterval(heartbeat);
-      rollClients.delete(client);
+      removeRollClient(client);
+    });
+
+    req.on('aborted', () => {
+      removeRollClient(client);
+    });
+
+    res.on('error', () => {
+      removeRollClient(client);
     });
 
   } catch (err) {
