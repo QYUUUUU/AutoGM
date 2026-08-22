@@ -100,7 +100,7 @@
     "price": 75,
     "rarity": 9,
     "type": "Armes",
-    "stats": "Dégâts: 1D6 Perforant (P)",
+    "stats": "Dégâts: 5(P) flat",
     "desc": "Arme de type perforant (p)."
   },
   {
@@ -108,7 +108,7 @@
     "price": 10,
     "rarity": 5,
     "type": "Armes",
-    "stats": "Dégâts: 1D6 Perforant (P)",
+    "stats": "Dégâts: 3(P) flat",
     "desc": "Arme de type perforant (p)."
   },
   {
@@ -116,7 +116,7 @@
     "price": 25,
     "rarity": 7,
     "type": "Armes",
-    "stats": "Dégâts: 2D6 Perforant (P)",
+    "stats": "Dégâts: 4(P) flat",
     "desc": "Arme de type perforant (p)."
   },
   {
@@ -124,15 +124,15 @@
     "price": 4,
     "rarity": 4,
     "type": "Armes",
-    "stats": "Dégâts: 1D4 Tranchant (T)",
-    "desc": "Arme de type tranchant (t)."
+    "stats": "Dégâts: 0(P)",
+    "desc": "Arme de type perforant (p)."
   },
   {
     "name": "Couteau",
     "price": 3,
     "rarity": 3,
     "type": "Armes",
-    "stats": "Dégâts: 1D4 Tranchant (T)",
+    "stats": "Dégâts: 0(T)",
     "desc": "Arme de type tranchant (t)."
   },
   {
@@ -140,7 +140,7 @@
     "price": 18,
     "rarity": 7,
     "type": "Armes",
-    "stats": "Dégâts: 2D6 Tranchant (T)",
+    "stats": "Dégâts: 2(T)",
     "desc": "Arme de type tranchant (t)."
   },
   {
@@ -148,7 +148,7 @@
     "price": 10,
     "rarity": 5,
     "type": "Armes",
-    "stats": "Dégâts: 1D6 Tranchant (T)",
+    "stats": "Dégâts: 1(T)",
     "desc": "Arme de type tranchant (t)."
   },
   {
@@ -156,15 +156,15 @@
     "price": 0.5,
     "rarity": 3,
     "type": "Armes",
-    "stats": "Dégâts: 1D4 Mixte",
-    "desc": "Arme de type mixte."
+    "stats": "Dégâts: 2(C) flat",
+    "desc": "Arme de type contondant (c)."
   },
   {
     "name": "Javelot",
     "price": 8,
     "rarity": 5,
     "type": "Armes",
-    "stats": "Dégâts: 1D6 Perforant (P)",
+    "stats": "Dégâts: 1(P)",
     "desc": "Arme de type perforant (p)."
   },
   {
@@ -172,7 +172,7 @@
     "price": 12,
     "rarity": 6,
     "type": "Armes",
-    "stats": "Dégâts: 1D6 Perforant (P)",
+    "stats": "Dégâts: 1(P)",
     "desc": "Arme de type perforant (p)."
   },
   {
@@ -180,7 +180,7 @@
     "price": 3,
     "rarity": 5,
     "type": "Armes",
-    "stats": "Dégâts: 2D6 Contondant (C)",
+    "stats": "Dégâts: 1(C)",
     "desc": "Arme de type contondant (c)."
   },
   {
@@ -188,7 +188,7 @@
     "price": 2,
     "rarity": 3,
     "type": "Armes",
-    "stats": "Dégâts: 1D6 Contondant (C)",
+    "stats": "Dégâts: 0(C)",
     "desc": "Arme de type contondant (c)."
   },
   {
@@ -196,8 +196,8 @@
     "price": 2,
     "rarity": 4,
     "type": "Armes",
-    "stats": "Dégâts: 1D4 Mixte",
-    "desc": "Arme de type mixte."
+    "stats": "Dégâts: 1(P) flat",
+    "desc": "Arme de type perforant."
   },
   {
     "name": "Scie",
