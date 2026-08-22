@@ -178,6 +178,17 @@ router.get('/maps', (req, res) => {
   res.render('../views/maps.html.twig');
 });
 
+
+/**
+ * @route GET /monde
+ * @description Renders the application monde page.
+ * Features:
+ * - Simple rendering of the `monde.html.twig` view.
+ */
+router.get('/monde', (req, res) => {
+  res.render('../views/monde.html.twig');
+});
+
 /**
  * @route GET /rituels
  * @description Renders the rituals rules and lists page.
@@ -310,7 +321,7 @@ router.get('/newcharacter', (req, res) => {
  * Wait for obsolete code confirmation: There are missing variable bounds check. 
  */
 router.post('/create-character', async (req, res) => {
-  const id_User = req.session.userId; // Assuming you have the user ID stored in req.session.userId
+  const id_User = req.session.userId;
 
   if (id_User) {
     try {
@@ -364,42 +375,27 @@ router.post('/create-character', async (req, res) => {
         pantheons,
         rituels,
         avatar,
-        imageData
+        imageData,
+        langues,       // <-- AJOUTÉ ICI
+        specialites    // <-- AJOUTÉ ICI
       } = req.body;
 
-      // Handle custom image upload
+      // (Votre code de gestion d'image personnalisé reste ici...)
       if (imageData && imageData.startsWith('data:image')) {
         const matches = imageData.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
         if (matches && matches.length === 3) {
           const extension = matches[1].split('/')[1] || 'png';
           const buffer = Buffer.from(matches[2], 'base64');
           const fileName = `custom/avatar_${Date.now()}_${Math.floor(Math.random() * 1000)}.${extension}`;
-          // Correct path knowing we run from app.js in /app
           const uploadPath = path.join(process.cwd(), 'app/public/images/characters', fileName);
           fs.writeFileSync(uploadPath, buffer);
           avatar = `/images/characters/${fileName}`;
         }
       }
 
+      // Parse des caractéristiques et compétences...
       puissance = parseInt(puissance);
       resistance = parseInt(resistance);
-
-        let defaultLegere = 4;
-        let defaultGrave = 3;
-        let defaultMortelle = 2;
-
-        if (age) {
-          const ageLower = age.toLowerCase();
-          if (ageLower.includes('jeune')) {
-            defaultLegere = 4;
-            defaultGrave = 3;
-            defaultMortelle = 1;
-          } else if (ageLower.includes('ancien')) {
-            defaultLegere = 3;
-            defaultGrave = 2;
-            defaultMortelle = 1;
-          }
-        }
       precision = parseInt(precision);
       reflexes = parseInt(reflexes);
       connaissance = parseInt(connaissance);
@@ -437,8 +433,20 @@ router.post('/create-character', async (req, res) => {
       pantheons = parseInt(pantheons);
       rituels = parseInt(rituels);
 
+      let defaultLegere = 4;
+      let defaultGrave = 3;
+      let defaultMortelle = 2;
 
-      // Create the character in the database
+      if (age) {
+        const ageLower = age.toLowerCase();
+        if (ageLower.includes('jeune')) {
+          defaultLegere = 4; defaultGrave = 3; defaultMortelle = 1;
+        } else if (ageLower.includes('ancien')) {
+          defaultLegere = 3; defaultGrave = 2; defaultMortelle = 1;
+        }
+      }
+
+      // Création du personnage dans Prisma
       const newCharacter = await prisma.character.create({
         data: {
           nom,
@@ -490,6 +498,8 @@ router.post('/create-character', async (req, res) => {
           mythes,
           pantheons,
           rituels,
+          langues: langues || '[]',         // <-- AJOUTÉ ICI (sauvegarde les langues)
+          specialites: specialites || '[]', // <-- AJOUTÉ ICI (sauvegarde les spécialités)
           maxblessurelegere: defaultLegere,
           maxblessuregrave: defaultGrave,
           maxblessuremortelle: defaultMortelle,
@@ -508,12 +518,11 @@ router.post('/create-character', async (req, res) => {
             (req.body.equipments ? 
               (Array.isArray(req.body.equipments) ? req.body.equipments : [req.body.equipments])
               .map(e => ({ name: e, quantity: 1, type: "Équipement de départ", desc: "", stats: "" }))
-            : [])
+              : [])
           )
         },
       });
 
-      // Automatically set this new character as the user's favorite
       await prisma.favoriteCharacter.upsert({
         where: { userId: id_User },
         update: { characterId: newCharacter.id_Character },
@@ -523,7 +532,6 @@ router.post('/create-character', async (req, res) => {
         },
       });
 
-      // Respond with a success message or the created character object
       res.status(201).json(newCharacter);
     } catch (error) {
       console.error('Error creating character:', error);
@@ -607,25 +615,89 @@ router.get('/Character/:id_Character', async (req, res) => {
   }
 
 });
+// ─── 1. Configuration globale pour le SSE des Personnages ─────────────
+const characterClients = new Set();
 
+function safeWriteToCharClient(client, data) {
+  try {
+    client.res.write(data);
+  } catch (e) {
+    clearInterval(client.heartbeat);
+    characterClients.delete(client);
+  }
+}
+
+// ─── 2. Nouvelle route pour s'abonner au flux des personnages ─────────
+/**
+ * @route GET /stream/characters
+ * @description Flux SSE pour écouter les modifications des personnages en direct
+ */
+router.get('/stream/characters', async (req, res) => {
+  const id_User = req.session.userId;
+  if (!id_User) return res.status(401).send("Unauthorized");
+
+  try {
+    // Si l'admin passe un groupe spécifique, on l'écoute, sinon on déduit le groupe du joueur
+    const queryGroupeId = req.query.groupe_id ? parseInt(req.query.groupe_id) : null;
+    let groupeId = queryGroupeId;
+
+    if (!groupeId) {
+      const favorite = await prisma.favoriteCharacter.findFirst({
+        where: { userId: id_User },
+        include: { character: true },
+      });
+      let character = favorite?.character;
+      if (!character) {
+        character = await prisma.character.findFirst({
+          where: { userId: id_User },
+          orderBy: { id_Character: 'desc' }
+        });
+      }
+      groupeId = character?.groupeId;
+    }
+
+    // Headers SSE + anti-buffering Nginx
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no'
+    });
+
+    if (typeof res.flushHeaders === 'function') {
+      res.flushHeaders();
+    }
+
+    res.write('retry: 5000\n\n');
+    res.write(': connected\n\n');
+
+    // Heartbeat pour maintenir la connexion ouverte
+    const heartbeat = setInterval(() => {
+      safeWriteToCharClient(client, ': ping\n\n');
+    }, 10000);
+
+    const client = { res, groupeId, userId: id_User, heartbeat };
+    characterClients.add(client);
+
+    req.on('close', () => { clearInterval(heartbeat); characterClients.delete(client); });
+    req.on('aborted', () => { clearInterval(heartbeat); characterClients.delete(client); });
+    res.on('error', () => { clearInterval(heartbeat); characterClients.delete(client); });
+
+  } catch (err) {
+    console.error("SSE Character Error:", err);
+    res.status(500).end();
+  }
+});
+
+
+// ─── 3. Route PUT existante modifiée pour diffuser l'événement ────────
 /**
  * @route PUT /Character
- * @description Updates a single field for a given character dynamically.
- * Features:
- * - Accepts an `{ id, field, value }` object from the request body.
- * - Handles base64 encoded image uploads dynamically if the field is 'avatar'.
- * - Extracts base64 strings, creates random files (`custom/avatar_Date_Random.ext`).
- * - Forwards any non-string numeric values by parsing them to an integer.
- * - Ensures security by verifying the user requesting the change owns the character or is 'admin'.
- * - Performs a direct Prisma `update` on the dynamic `[field]` key.
- * 
- * Wait for obsolete code confirmation: `!isNaN(value) && field !== 'avatar'` means if someone updates their character's "nom" (name) to "123", it parses to `int`, which will crash Prisma if the `nom` column expects a `String`. This is extremely dangerous and obsolete inline logic.
  */
 router.put('/Character', async (req, res) => {
   const id_User = req.session.userId;
   const { id, field, value } = req.body;
 
-  // Make sure the required parameters are present in the request body
   if (!id || !field) {
     return res.status(400).json({ error: 'Missing required parameters in the request body.' });
   }
@@ -634,6 +706,7 @@ router.put('/Character', async (req, res) => {
 
   if (id_User) {
     if (field === 'avatar' && value && value.startsWith('data:image')) {
+      // ... (Ton code de traitement d'image intact) ...
       const matches = value.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
       if (matches && matches.length === 3) {
         const extension = matches[1].split('/')[1] || 'png';
@@ -652,18 +725,15 @@ router.put('/Character', async (req, res) => {
     }
 
     try {
-
       const character = await prisma.character.findUnique({
         where: { id_Character: parseInt(id) },
-        include: {
-          User: true,
-        },
+        include: { User: true },
       });
 
       if (!character) {
         return res.status(404).json({ error: 'Character not found' });
       }
-      // Check if the connected user is linked to the character or has the role "admin"
+
       if (character.User.id === id_User || character.User.role === 'admin') {
         let updateData = { [field]: parsedValue };
         
@@ -688,6 +758,27 @@ router.put('/Character', async (req, res) => {
           where: { id_Character: parseInt(id) },
           data: updateData,
         });
+
+        // 🔥 NOUVEAU : Diffusion de la mise à jour via SSE
+        const payload = JSON.stringify({
+          characterId: updatedCharacter.id_Character,
+          updates: updateData 
+        });
+
+        for (const client of Array.from(characterClients)) {
+          // On prévient le client SI :
+          // 1. Il est dans le même groupe que le personnage
+          // 2. OU il est le propriétaire du personnage (updatedCharacter.userId)
+          // 3. OU il est l'auteur de la modification (le MJ)
+          if (
+            (updatedCharacter.groupeId && client.groupeId === updatedCharacter.groupeId) || 
+            client.userId === updatedCharacter.userId || 
+            client.userId === id_User
+          ) {
+            safeWriteToCharClient(client, `data: ${payload}\n\n`);
+          }
+        }
+
         return res.json(updatedCharacter);
       } else {
         return res.status(403).json({ error: 'Unauthorized access' });
@@ -699,9 +790,7 @@ router.put('/Character', async (req, res) => {
   } else {
     return res.render('../views/login.html.twig');
   }
-
 });
-
 
 /**
  * @route GET /Character/create/new/
@@ -1027,7 +1116,6 @@ router.get('/Conversation/delete/:conversationId', async (req, res) => {
 });
 
 
-
 /**
  * @route PUT /throw
  * @description In-game mechanical action triggering a dice roll resolution check for the active character.
@@ -1036,8 +1124,16 @@ router.put('/throw', async (req, res) => {
   const id_User = req.session.userId;
   const { modifier, competence, caracteristic } = req.body;
 
-  if (!modifier || !competence || !caracteristic) {
-    return res.status(400).json({ error: 'Missing required parameters in the request body.' });
+  // modifier may legitimately be 0, so don't use a truthiness check.
+  if (
+    modifier === undefined ||
+    modifier === null ||
+    !competence ||
+    !caracteristic
+  ) {
+    return res.status(400).json({
+      error: 'Missing required parameters in the request body.'
+    });
   }
 
   if (!id_User) {
@@ -1067,6 +1163,7 @@ router.put('/throw', async (req, res) => {
     }
 
     let maxGroupCompetence = character[competence] || 0;
+
     if (req.body.isCollective && character.groupeId) {
       const otherMembers = await prisma.character.findMany({
         where: {
@@ -1074,6 +1171,7 @@ router.put('/throw', async (req, res) => {
           id_Character: { not: character.id_Character }
         },
       });
+
       for (const member of otherMembers) {
         if (member[competence] && member[competence] > maxGroupCompetence) {
           maxGroupCompetence = member[competence];
@@ -1093,6 +1191,7 @@ router.put('/throw', async (req, res) => {
     if (result.error) {
       return res.status(403).json(result);
     }
+
     return res.json(result);
 
   } catch (error) {
@@ -1110,6 +1209,13 @@ router.put('/share/throw', async (req, res) => {
   const id_User = req.session.userId;
   const { result, relances, caracteristic, competence, thrownByAI, color } = req.body;
 
+  
+  console.log('🔥 /throw BODY:', req.body);
+  console.log('🔥 modifier:', req.body?.modifier);
+  console.log('🔥 competence:', req.body?.competence);
+  console.log('🔥 caracteristic:', req.body?.caracteristic);
+
+  
   if (!result) {
     return res.status(400).json({ error: 'Missing required parameters in the request body.' });
   }

@@ -1,0 +1,19 @@
+{% extends '/layouts/base.html.twig' %}
+
+{% block title %}GODS - Le Monde
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/css/monde.css">
+
+{% endblock %}
+
+{% block body %}
+	{# 
+		        Page "Le Monde". Mounted by /js/monde.js (built from /frontend/src/monde/).
+		        Header and footer are inherited from base.html.twig.
+		    #}
+	<div id="gods-monde-root"></div>
+	<script type="module" src="/js/monde.js"></script>
+{% endblock %}

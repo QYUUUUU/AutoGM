@@ -6,12 +6,13 @@ services:
       - mariadb
     volumes: 
       - .:/app/
+      - /app/node_modules
     ports:
       - 80:80
     command: ["sh", "-c", "cd /app && npm install --legacy-peer-deps && npx prisma generate --schema=/app/app/prisma/schema.prisma && npm start"]
 
   mariadb:
-    image: mariadb:latest  
+    image: mariadb:11.4  
     volumes:
       - ../.data_mysql:/var/lib/mysql
     command:

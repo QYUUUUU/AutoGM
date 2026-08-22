@@ -1,63 +1,65 @@
 {% extends '/layouts/base.html.twig' %}
 
+{% block title %}Les Cartes - GODS{% endblock %}
+
 {% block stylesheets %}
-    {{ parent() }}
+	{{ parent() }}
+	{#
+		maps.css is no longer used -- this page's layout was rebuilt with
+		the shared gods: utility classes (see /frontend/src/shared/styles/
+		tailwind.css) instead of the old .gallery/.grid-container/.title-text
+		classes maps.css targeted. Safe to delete that file once confirmed.
+	#}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 {% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-4"><h2 class="title-text">Les Terres sauvages</h2></div>
-        <div id="gallery" class="col-8 gallery row justify-content-end">
-            <div class="grid-container">
-                <a class="image" href="images/maps/aon.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/aon_thumb.png" alt="Aon">
-                </a>
-                <a class="image" href="images/maps/avhorae.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/avhorae_thumb.png" alt="avhorae">
-                </a>
-                <a class="image" href="images/maps/royaumesdivises.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/royaumesdivises_thumb.png" alt="royaumesdivises">
-                </a>
-                <a class="image" href="images/maps/fakhar.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/fakhar_thumb.png" alt="fakhar">
-                </a>
-                <a class="image" href="images/maps/horde.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/horde_thumb.png" alt="horde">
-                </a>
-                <a class="image" href="images/maps/khashan.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/khashan_thumb.png" alt="khashan">
-                </a>
-                <a class="image" href="images/maps/ool.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/ool_thumb.png" alt="ool">
-                </a>
-                <a class="image" href="images/maps/saeth.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/saeth_thumb.png" alt="saeth">
-                </a>
-                <a class="image" href="images/maps/soleilnoir.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/soleilnoir_thumb.png" alt="soleilnoir">
-                </a>
-                <a class="image" href="images/maps/babel.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/babel_thumb.png" alt="babel">
-                </a>
-                <a class="image" href="images/maps/tuuhle.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/tuuhle_thumb.png" alt="tuuhle">
-                </a>
-                <a class="image" href="images/maps/vaelor.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/vaelor_thumb.png" alt="vaelor">
-                </a>
-                <a class="image" href="images/maps/tegee.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/tegee_thumb.png" alt="tegee">
-                </a>
-                <a class="image" href="images/maps/valdheim.png" data-lightbox="gallery">
-                    <img src="images/maps/thumbnails/valdheim_thumb.png" alt="valdheim">
-                </a>
-                <!-- Add more images and thumbnails as needed -->
-            </div>
-        </div>
-    </div>
+	<div class="gods:max-w-6xl gods:mx-auto gods:px-6 gods:py-16">
+		<div class="gods:text-center gods:mb-14">
+			<span class="gods:text-[10px] gods:tracking-[0.35em] gods:uppercase gods:text-primary/80 gods:font-[family-name:var(--gods-font-display)]">Cartographie</span>
+			<h1 class="gods:font-[family-name:var(--gods-font-display)] gods:text-3xl gods:md:text-4xl gods:tracking-widest gods:uppercase gods:text-foreground gods:mt-3">
+				Les Terres Sauvages
+			</h1>
+		</div>
 
-    <link rel="stylesheet" href="css/maps.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+		<div class="gods:grid gods:grid-cols-2 gods:sm:grid-cols-3 gods:lg:grid-cols-4 gods:gap-4">
+			{% set maps = [
+				{ file: 'aon', alt: 'Aon' },
+				{ file: 'avhorae', alt: 'avhorae' },
+				{ file: 'royaumesdivises', alt: 'royaumesdivises' },
+				{ file: 'fakhar', alt: 'fakhar' },
+				{ file: 'horde', alt: 'horde' },
+				{ file: 'khashan', alt: 'khashan' },
+				{ file: 'ool', alt: 'ool' },
+				{ file: 'saeth', alt: 'saeth' },
+				{ file: 'soleilnoir', alt: 'soleilnoir' },
+				{ file: 'babel', alt: 'babel' },
+				{ file: 'tuuhle', alt: 'tuuhle' },
+				{ file: 'vaelor', alt: 'vaelor' },
+				{ file: 'tegee', alt: 'tegee' },
+				{ file: 'valdheim', alt: 'valdheim' }
+			] %}
+			{% for map in maps %}
+				<a
+					class="gods:group gods:relative gods:block gods:aspect-square gods:overflow-hidden gods:rounded-lg gods:border gods:border-border gods:bg-card"
+					href="/images/maps/{{ map.file }}.png"
+					data-lightbox="gallery"
+					data-title="{{ map.alt }}"
+				>
+					<img
+						src="/images/maps/thumbnails/{{ map.file }}_thumb.png"
+						alt="{{ map.alt }}"
+						class="gods:w-full gods:h-full gods:object-cover gods:transition-transform gods:duration-500 gods:group-hover:scale-105"
+					>
+					<div class="gods:absolute gods:inset-0 gods:bg-gradient-to-t gods:from-black/70 gods:via-transparent gods:to-transparent gods:opacity-0 gods:group-hover:opacity-100 gods:transition-opacity gods:duration-300"></div>
+					<span class="gods:absolute gods:bottom-2 gods:left-3 gods:right-3 gods:text-white gods:text-sm gods:tracking-wide gods:capitalize gods:font-[family-name:var(--gods-font-display)] gods:opacity-0 gods:group-hover:opacity-100 gods:transition-opacity gods:duration-300">
+						{{ map.alt }}
+					</span>
+				</a>
+			{% endfor %}
+		</div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 {% endblock %}

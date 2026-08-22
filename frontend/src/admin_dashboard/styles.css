@@ -1,0 +1,8 @@
+/* Admin dashboard: intentionally light. The visual language comes from the same GODS tokens/classes as DashboardApp.tsx. */
+#gods-admin-dashboard-root {
+  --admin-scrollbar-size: 8px;
+}
+#gods-admin-dashboard-root * { box-sizing: border-box; }
+#gods-admin-dashboard-root ::-webkit-scrollbar { width: var(--admin-scrollbar-size); height: var(--admin-scrollbar-size); }
+#gods-admin-dashboard-root ::-webkit-scrollbar-thumb { background: rgba(120,120,120,.22); border-radius: 999px; }
+#gods-admin-dashboard-root ::-webkit-scrollbar-track { background: transparent; }

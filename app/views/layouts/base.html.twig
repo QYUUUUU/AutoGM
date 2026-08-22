@@ -13,52 +13,41 @@
 		{% endblock %}
 
 		<script type="module" src="/js/jquery-3.5.1.slim.min.js"></script>
-		
-		
+
+
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-</head>
-	<header>
-		<nav id="main-navbar" class="navbar navbar-expand-lg navbar-light">
-			<!-- Container wrapper -->
-			<div class="container d-flex align-items-center justify-content-start no-margin-left">
-				<!-- Brand -->
-				<a class="logo-brand" href="/home">
-					<img src="/images/gods-logo-grey.png">
-				</a>
-				<!-- Search form -->
-				<div class="nav-group">
-					<ul class="navbar-nav">
-						<li class="nav-item">
-							<a class="nav-link" href="/login">Se connecter</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/register">Créer un compte</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/dashboard">Mon Assistant</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/characters">Mes Personnages</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/maps">Les cartes</a></li>
-							<li class="nav-item"><a class="nav-link" href="/rituels">Rituels</a></li>
-                                              <li class="nav-item"><a class="nav-link" href="/faveurs">Faveurs</a></li>
-                                                        <li class="nav-item"><a class="nav-link text-info" href="/eclats" style="font-family: Cinzel\, serif;"><i class="fas fa-gem"></i> Éclats</a></li>
-                                                {% if isAdmin %}
-                                                <li class="nav-item">
-                                                        <a class="nav-link text-warning font-weight-bold" href="/admin/pannel"><i class="fas fa-crown"></i> Dashboard MJ</a>
-                                                        <a class="nav-link text-danger font-weight-bold" href="/admin/adversaries"><i class="fas fa-dragon"></i> Bestiary</a>
-                                                {% endif %}
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
-	<main>
-		{% block body %}{% endblock %}
-	</main>
+
+		{#
+			New sitewide chrome (header/footer/theme). Loaded LAST, after
+			Bootstrap/FontAwesome above, so its rules win where they need to
+			(e.g. body background/font). All new utility classes are prefixed
+			`gods:` (see /frontend/src/shared/styles/tailwind.css) so they
+			can NEVER collide with any Bootstrap class name on pages that
+			haven't been migrated off Bootstrap yet. Safe to load everywhere.
+		#}
+		<link rel="stylesheet" href="/css/tailwind.css">
+		<link rel="stylesheet" href="/css/chrome.css">
+	</head>
+	<body>
+		{#
+			Header/footer are mounted here by /js/chrome.js (built from
+			/frontend/src/chrome/). isAdmin is passed the exact same way it
+			always has been -- {% if isAdmin %} elsewhere in the codebase
+			reads from this same res.locals.isAdmin value.
+		#}
+		<div id="gods-header-root"></div>
+
+		<main>
+			{% block body %}{% endblock %}
+		</main>
+
+		<div id="gods-footer-root"></div>
+
+		<script>
+			window.__GODS_SITE__ = { isAdmin: {{ isAdmin ? 'true' : 'false' }} };
+		</script>
+		<script type="module" src="/js/chrome.js"></script>
+	</body>
 </html>
