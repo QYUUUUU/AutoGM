@@ -55,12 +55,12 @@ export default function RituelsTab({ character }: { character: any }) {
 
   return (
     <div className="gods:h-full gods:overflow-y-auto gods:p-6 gods:bg-background">
-      <h2 className="gods:font-[family-name:var(--font-display)] gods:text-2xl gods:tracking-widest gods:uppercase gods:text-primary gods:mb-6 gods:border-b gods:border-border gods:pb-2">
+      <h2 className="gods:text-3xl gods:tracking-wider gods:uppercase gods:text-primary gods:mb-6 gods:border-b gods:border-border gods:pb-2">
         Rituels Maîtrisés
       </h2>
 
       {rituels.length === 0 ? (
-        <p className="gods:text-foreground/40 gods:italic gods:text-center gods:mt-10">
+        <p className="gods:text-muted-foreground gods:text-base gods:italic gods:text-center gods:mt-10">
           Aucun rituel maîtrisé pour ce personnage.
         </p>
       ) : (
@@ -75,11 +75,11 @@ export default function RituelsTab({ character }: { character: any }) {
                 <div className="gods:bg-muted/30 gods:border-b gods:border-border gods:px-4 gods:py-3 gods:flex gods:items-start gods:justify-between">
                   <div className="gods:flex gods:flex-col gods:gap-1">
                     <div className="gods:flex gods:items-center gods:gap-3">
-                      <h3 className="gods:font-[family-name:var(--font-display)] gods:text-warning gods:text-lg gods:truncate">
+                      <h3 className="gods:text-xl gods:tracking-wider gods:text-primary gods:truncate">
                         {ritualName}
                       </h3>
                       {details && (
-                        <span className={`gods:text-[10px] gods:px-1.5 gods:py-0.5 gods:rounded gods:font-[family-name:var(--font-display)] gods:uppercase gods:tracking-widest gods:border ${
+                        <span className={`gods:text-xs gods:px-1.5 gods:py-0.5 gods:rounded gods:font-display gods:uppercase gods:tracking-widest gods:border ${
                           details.level.toLowerCase() === 'mineur' 
                             ? 'gods:bg-blue-500/10 gods:text-blue-400 gods:border-blue-500/20' 
                             : 'gods:bg-orange-500/10 gods:text-orange-400 gods:border-orange-500/20'
@@ -90,7 +90,7 @@ export default function RituelsTab({ character }: { character: any }) {
                     </div>
                     {/* Affichage de l'Élément (Catégorie) */}
                     {details && (
-                      <span className="gods:text-xs gods:text-foreground/50 gods:uppercase gods:tracking-widest">
+                      <span className="gods:text-xs gods:text-muted-foreground gods:uppercase gods:tracking-widest">
                         {details.categoryTitle}
                       </span>
                     )}
@@ -98,7 +98,7 @@ export default function RituelsTab({ character }: { character: any }) {
                   
                   <button 
                     onClick={() => removeRitual(ritualName)}
-                    className="gods:text-foreground/40 hover:gods:text-destructive gods:transition-colors gods:-mr-1 gods:p-1 !gods:outline-none"
+                    className="gods:text-muted-foreground hover:gods:text-destructive gods:transition-colors gods:-mr-1 gods:p-1 !gods:outline-none"
                     title="Oublier ce rituel"
                   >
                     <Trash2 size={16} />
@@ -109,18 +109,18 @@ export default function RituelsTab({ character }: { character: any }) {
                 <div className="gods:p-4 gods:flex-1 gods:flex gods:flex-col gods:gap-4">
                   {details ? (
                     <>
-                      <p className="gods:text-sm gods:text-foreground/80 gods:leading-relaxed">
+                      <p className="gods:text-muted-foreground gods:text-base gods:leading-relaxed">
                         {details.description}
                       </p>
 
                       {details.receptacle && (
                         <div className="gods:bg-background/50 gods:border gods:border-border/50 gods:rounded-md gods:p-3 gods:flex gods:gap-2 gods:mt-auto">
-                          <Droplets size={14} className="gods:text-foreground/40 gods:shrink-0 gods:mt-0.5" />
+                          <Droplets size={14} className="gods:text-muted-foreground gods:shrink-0 gods:mt-0.5" />
                           <div>
-                            <span className="gods:block gods:text-[10px] gods:font-[family-name:var(--font-display)] gods:tracking-widest gods:uppercase gods:text-foreground/50 gods:mb-0.5">
+                            <span className="gods:block gods:text-xs gods:font-display gods:tracking-widest gods:uppercase gods:text-muted-foreground gods:mb-0.5">
                               Réceptacle Courant
                             </span>
-                            <p className="gods:text-xs gods:text-foreground/70 gods:leading-relaxed">
+                            <p className="gods:text-muted-foreground gods:text-base gods:leading-relaxed">
                               {details.receptacle}
                             </p>
                           </div>
@@ -128,13 +128,13 @@ export default function RituelsTab({ character }: { character: any }) {
                       )}
 
                       {details.note && (
-                        <p className="gods:text-xs gods:italic gods:text-foreground/50">
+                        <p className="gods:text-muted-foreground gods:text-base gods:italic">
                           <strong className="gods:font-semibold gods:not-italic">Note :</strong> {details.note}
                         </p>
                       )}
                     </>
                   ) : (
-                    <p className="gods:text-sm gods:text-foreground/40 gods:italic">
+                    <p className="gods:text-muted-foreground gods:text-base gods:italic">
                       Détails introuvables. Le nom du rituel a peut-être été modifié dans les données.
                     </p>
                   )}

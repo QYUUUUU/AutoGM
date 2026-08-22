@@ -232,20 +232,20 @@ export default function ResultsTab({
             ROLLS BOX
             =================================================== */}
         <div className="gods:flex-1 gods:bg-card gods:border gods:border-border gods:rounded-lg gods:flex gods:flex-col gods:overflow-hidden">
-          <div className="gods:bg-muted gods:px-3 gods:py-2 gods:border-b gods:border-border gods:font-[family-name:var(--gods-font-display)] gods:uppercase gods:text-sm">
+          <div className="gods:bg-muted gods:px-3 gods:py-2 gods:border-b gods:border-border gods:font-display gods:uppercase gods:text-xl gods:tracking-wider">
             Résultats des dés
           </div>
 
           <div className="gods:flex-1 gods:overflow-y-auto gods:p-3 gods:space-y-3">
             {rolls.length === 0 ? (
-              <div className="gods:text-sm gods:text-foreground/50 gods:text-center gods:py-4">
+              <div className="gods:text-base gods:text-muted-foreground gods:text-center gods:py-4">
                 Aucun résultat de dé.
               </div>
             ) : (
               rolls.map((roll) => (
                 <div
                   key={roll.id}
-                  className="gods:text-sm gods:text-foreground"
+                  className="gods:text-base gods:text-foreground"
                 >
                   <div className="gods:flex gods:items-center gods:gap-1">
                     <strong className="gods:text-primary">
@@ -253,7 +253,7 @@ export default function ResultsTab({
                     </strong>
 
                     {roll.thrownByAI && (
-                      <span className="gods:ml-2 gods:border gods:border-primary gods:text-primary gods:px-1 gods:text-[10px] gods:rounded">
+                      <span className="gods:ml-2 gods:border gods:border-primary gods:text-primary gods:px-1 gods:text-xs gods:tracking-widest gods:rounded">
                         AI
                       </span>
                     )}
@@ -281,13 +281,13 @@ export default function ResultsTab({
         <div className="gods:flex-1 gods:bg-card gods:border gods:border-border gods:rounded-lg gods:flex gods:flex-col gods:overflow-hidden gods:relative">
           {/* Inventory Header */}
           <div className="gods:bg-muted gods:px-3 gods:py-2 gods:border-b gods:border-border gods:flex gods:justify-between gods:items-center">
-            <span className="gods:font-[family-name:var(--gods-font-display)] gods:uppercase gods:text-sm">
+            <span className="gods:font-display gods:uppercase gods:text-xl gods:tracking-wider">
               Inventaire
             </span>
 
             <button
               onClick={() => setShowAddModal(true)}
-              className="gods:text-primary gods:hover:text-primary/80 gods:transition-colors"
+              className="gods:text-primary gods:hover:text-primary gods:transition-colors"
               title="Ajouter un objet"
             >
               <Plus size={16} />
@@ -305,13 +305,13 @@ export default function ResultsTab({
                   >
                     {/* Item name + delete */}
                     <div className="gods:flex gods:justify-between gods:items-center">
-                      <h6 className="gods:text-primary gods:text-sm gods:font-bold">
+                      <h6 className="gods:text-primary gods:text-base gods:font-bold">
                         {item.name} x{item.quantity}
                       </h6>
 
                       <button
                         onClick={() => removeInventoryItem(idx)}
-                        className="gods:text-destructive gods:hover:text-destructive/80 gods:transition-colors"
+                        className="gods:text-destructive gods:hover:text-destructive gods:transition-colors"
                         title="Supprimer"
                       >
                         <Trash size={14} />
@@ -319,11 +319,11 @@ export default function ResultsTab({
                     </div>
 
                     {/* Item type + stats */}
-                    <div className="gods:flex gods:justify-between gods:gap-2 gods:text-xs gods:text-foreground/70">
+                    <div className="gods:flex gods:justify-between gods:gap-2 gods:text-xs gods:tracking-widest gods:text-muted-foreground">
                       <span>{item.type}</span>
 
                       {item.stats && (
-                        <span className="gods:text-green-500">
+                        <span className="gods:text-primary">
                           {item.stats}
                         </span>
                       )}
@@ -331,7 +331,7 @@ export default function ResultsTab({
 
                     {/* Item description */}
                     {item.desc && (
-                      <div className="gods:mt-1 gods:text-xs gods:text-foreground/60">
+                      <div className="gods:mt-1 gods:text-xs gods:tracking-widest gods:text-muted-foreground">
                         {item.desc}
                       </div>
                     )}
@@ -339,7 +339,7 @@ export default function ResultsTab({
                 )
               )
             ) : (
-              <div className="gods:text-sm gods:text-foreground/50 gods:text-center gods:py-4">
+              <div className="gods:text-base gods:text-muted-foreground gods:text-center gods:py-4">
                 Inventaire vide.
               </div>
             )}
@@ -352,13 +352,13 @@ export default function ResultsTab({
             <div className="gods:absolute gods:inset-0 gods:bg-card/95 gods:backdrop-blur-sm gods:z-10 gods:p-4 gods:flex gods:flex-col gods:overflow-y-auto">
               {/* Modal Header */}
               <div className="gods:flex gods:justify-between gods:items-center gods:mb-4">
-                <h4 className="gods:font-[family-name:var(--gods-font-display)]">
+                <h4 className="gods:text-xl gods:tracking-wider">
                   Ajouter un objet
                 </h4>
 
                 <button
                   onClick={closeAddModal}
-                  className="gods:text-foreground/60 gods:hover:text-foreground"
+                  className="gods:text-muted-foreground gods:hover:text-foreground"
                   title="Fermer"
                 >
                   <X size={18} />
@@ -379,7 +379,7 @@ export default function ResultsTab({
                     setManualDesc("");
                   }
                 }}
-                className="gods:mb-4 gods:w-full gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded"
+                className="gods:mb-4 gods:w-full gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded gods:text-base"
               >
                 <option value="">
                   -- Choisir dans le manuel --
@@ -393,7 +393,7 @@ export default function ResultsTab({
               </select>
 
               {/* Divider */}
-              <div className="gods:text-center gods:text-sm gods:mb-4 gods:text-foreground/50">
+              <div className="gods:text-center gods:text-xs gods:tracking-widest gods:mb-4 gods:text-muted-foreground">
                 -- OU --
               </div>
 
@@ -410,7 +410,7 @@ export default function ResultsTab({
                     setSelectedPremade("");
                   }
                 }}
-                className="gods:mb-2 gods:w-full gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded"
+                className="gods:mb-2 gods:w-full gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded gods:text-base"
               />
 
               <input
@@ -418,7 +418,7 @@ export default function ResultsTab({
                 placeholder="Type"
                 value={manualType}
                 onChange={(e) => setManualType(e.target.value)}
-                className="gods:mb-2 gods:w-full gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded"
+                className="gods:mb-2 gods:w-full gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded gods:text-base"
               />
 
               <input
@@ -426,21 +426,21 @@ export default function ResultsTab({
                 placeholder="Stats"
                 value={manualStats}
                 onChange={(e) => setManualStats(e.target.value)}
-                className="gods:mb-2 gods:w-full gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded"
+                className="gods:mb-2 gods:w-full gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded gods:text-base"
               />
 
               <textarea
                 placeholder="Description"
                 value={manualDesc}
                 onChange={(e) => setManualDesc(e.target.value)}
-                className="gods:mb-2 gods:w-full gods:min-h-[80px] gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded gods:resize-none"
+                className="gods:mb-2 gods:w-full gods:min-h-[80px] gods:bg-background gods:border gods:border-border gods:p-2 gods:rounded gods:resize-none gods:text-base"
               />
 
               {/* Modal Buttons */}
               <div className="gods:mt-auto gods:pt-4 gods:flex gods:gap-2">
                 <button
                   onClick={closeAddModal}
-                  className="gods:flex-1 gods:bg-muted gods:text-foreground gods:p-2 gods:rounded gods:hover:bg-muted/80"
+                  className="gods:flex-1 gods:bg-muted gods:text-foreground gods:p-2 gods:rounded gods:text-base gods:hover:bg-muted"
                 >
                   Annuler
                 </button>
@@ -448,7 +448,7 @@ export default function ResultsTab({
                 <button
                   onClick={handleAddItem}
                   disabled={!selectedPremade && !manualName.trim()}
-                  className="gods:flex-1 gods:bg-primary gods:text-primary-foreground gods:p-2 gods:rounded gods:disabled:opacity-50 gods:disabled:cursor-not-allowed"
+                  className="gods:flex-1 gods:bg-primary gods:text-primary-foreground gods:p-2 gods:rounded gods:text-base gods:disabled:opacity-50 gods:disabled:cursor-not-allowed"
                 >
                   Ajouter
                 </button>
@@ -463,14 +463,14 @@ export default function ResultsTab({
           ===================================================== */}
       <div className="gods:h-full gods:bg-card gods:border gods:border-border gods:rounded-lg gods:flex gods:flex-col gods:overflow-hidden">
         {/* Notes Header */}
-        <div className="gods:bg-muted gods:px-3 gods:py-2 gods:border-b gods:border-border gods:font-[family-name:var(--gods-font-display)] gods:uppercase gods:text-sm">
+        <div className="gods:bg-muted gods:px-3 gods:py-2 gods:border-b gods:border-border gods:font-display gods:uppercase gods:text-xl gods:tracking-wider">
           Notes
         </div>
 
         {/* Notes Editor */}
         <div className="gods:flex-1 gods:p-0">
           <textarea
-            className="gods:w-full gods:h-full gods:bg-transparent gods:text-foreground gods:p-3 gods:resize-none gods:focus:outline-none"
+            className="gods:w-full gods:h-full gods:bg-transparent gods:text-foreground gods:p-3 gods:resize-none gods:focus:outline-none gods:text-base"
             value={character.notes || ""}
             onChange={(e) => handleNotesChange(e.target.value)}
             placeholder="Prenez vos notes ici..."

@@ -1,10 +1,7 @@
 /*
-  This stylesheet is intentionally inert: no `transition`, no
-  `@keyframes` for anything scene-related. Every animated value
-  (position, size, color, opacity) is driven by GSAP from
-  OriginExperience.tsx. CSS here only does static layout, type, and
-  color-at-rest, so there is exactly one system moving things instead
-  of CSS and JS fighting over the same properties.
+  Static layout/typography only — no `transition`, no `@keyframes` for
+  anything scene-related. Every animated value is driven by GSAP from
+  OriginExperience.tsx, so there is exactly one system moving things.
 */
 
 .monde-show {
@@ -42,9 +39,40 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190' viewBox='0 0 190 190'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* PERSISTENT STAGE — GSAP tweens top/left/width/height/border-radius/
-   background-color/opacity/scale directly on these nodes. They exist
-   once, for the life of the whole show. */
+/* BACKGROUND TYPOGRAPHY — a compositional layer in its own right, not
+   decoration bolted onto the reading text. Color carries the "at
+   rest" faintness; GSAP only ever tweens opacity/scale/position. */
+.stage-watermark {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 21vw/1 Georgia, "Iowan Old Style", serif;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.032);
+  white-space: nowrap;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.stage-numeral {
+  position: absolute;
+  left: 4vw;
+  bottom: 5vh;
+  z-index: 1;
+  font: 700 13vw/1 Georgia, serif;
+  color: rgba(255, 255, 255, 0.055);
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* PERSISTENT CAST — GSAP tweens top/left/width/height/border-radius/
+   background-color/opacity/scale directly on these nodes. Each exists
+   once, for the life of the whole show, but is only ever "on" for the
+   scenes that authored it that way. */
 .flow-stage {
   position: absolute;
   inset: 0;
@@ -52,27 +80,34 @@
   z-index: 2;
 }
 
-.flow-panel,
-.flow-axis,
-.flow-aperture {
+.flow-carrier,
+.flow-spine,
+.flow-ring {
   position: absolute;
   will-change: transform, width, height, background-color, opacity, border-radius;
 }
 
-.flow-panel {
-  transform: translate(0, 0);
-}
-
-.flow-axis {
+.flow-spine {
   width: 1px;
   background: rgba(231, 219, 199, 0.55);
   transform-origin: top center;
 }
 
-.flow-aperture {
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.flow-ring {
+  border-radius: 50%;
   transform: translate(-50%, -50%);
   transform-origin: center;
+  /* concentric bands baked into one gradient — GSAP only moves/scales
+     the whole element, never the gradient itself */
+  background: radial-gradient(
+    circle,
+    transparent 57%,
+    rgba(233, 225, 214, 0.5) 58%,
+    transparent 60%,
+    transparent 74%,
+    rgba(233, 225, 214, 0.32) 75%,
+    transparent 77%
+  );
 }
 
 /* CONTENT STAGE */
@@ -107,17 +142,35 @@
   align-items: center;
 }
 
+/* The closing image: still `contain`, still showing the whole frame —
+   just stacked under the text rather than beside it. */
+.scene-content-stage[data-image-side="center"] .scene-inner {
+  flex-direction: column;
+  text-align: center;
+}
+.scene-content-stage[data-image-side="center"] .content-text-col {
+  max-width: 62ch;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.scene-content-stage[data-image-side="center"] .content-visual-col {
+  max-width: 62vw;
+}
+
 .scene-content-stage[data-kind="rupture-black-sun"] .scene-inner {
   justify-content: space-between;
 }
-
 .scene-content-stage[data-kind="rupture-black-sun"] .content-text-col {
   max-width: 42ch;
 }
 
-.scene-content-stage[data-kind="cinematic-hero"] .content-text-col,
-.scene-content-stage[data-kind="cinematic-finale"] .content-text-col {
-  max-width: 40ch;
+/* A title allowed to spill into the visual column instead of staying
+   in its own lane. Used for exactly two beats. */
+.scene-content-stage[data-emphasis="overlap"] .content-title {
+  margin-right: -8vw;
+  position: relative;
+  z-index: 3;
+  text-shadow: 0 6px 30px rgba(0, 0, 0, 0.55);
 }
 
 /* Reading measure & typography */
@@ -129,13 +182,27 @@
   flex-direction: column;
 }
 
+.content-kicker-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.1rem;
+}
+
 .content-kicker {
   display: inline-block;
   font: 600 11px/1.2 ui-monospace, "SF Mono", monospace;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #a6a096;
-  margin-bottom: 1rem;
+}
+
+.kicker-rule {
+  display: inline-block;
+  width: 34px;
+  height: 1px;
+  background: #caa06a;
+  transform-origin: left center;
 }
 
 .content-title {
@@ -145,8 +212,46 @@
   margin: 0 0 1.25rem;
 }
 
+/* Per-`kind` scale, so the show has real typographic rhythm instead
+   of one size doing every job. */
+.scene-content-stage[data-kind="cinematic-hero"] .content-title,
+.scene-content-stage[data-kind="cinematic-finale"] .content-title {
+  font-size: clamp(40px, 5.6vw, 84px);
+}
+.scene-content-stage[data-kind="rupture-black-sun"] .content-title {
+  font-size: clamp(38px, 5vw, 76px);
+}
+.scene-content-stage[data-kind="reading-quiet"] .content-title {
+  font-size: clamp(30px, 3.4vw, 46px);
+  max-width: 16ch;
+}
+/* Overlap beats get the last word on size — placed after the `kind`
+   rules above so it wins on source order. */
+.scene-content-stage[data-emphasis="overlap"] .content-title {
+  font-size: clamp(46px, 6vw, 92px);
+}
+
+.content-title .accent {
+  color: #caa06a;
+}
+
+/* Word-reveal mask, used only for the high-impact kinds (see
+   SPLIT_TITLE_KINDS in OriginExperience.tsx). GSAP animates
+   `.word-inner`'s transform/opacity/filter; this overflow:hidden mask
+   is what turns that into a reveal instead of a slide. */
+.content-title .word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.content-title .word-inner {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
 .content-subtitle {
   font-size: 1.1rem;
+  font-style: italic;
   line-height: 1.55;
   color: #c7c0b7;
   max-width: 60ch;
@@ -312,7 +417,7 @@
 }
 
 /* Layout adjustments for narrower desktop widths so text never
-   collides with the persistent panel/art column. */
+   collides with the persistent carrier/art column. */
 @media (max-width: 1180px) {
   .scene-content-stage .scene-inner {
     flex-direction: column;
@@ -330,5 +435,8 @@
   }
   .content-visual-col {
     max-height: 40vh;
+  }
+  .scene-content-stage[data-emphasis="overlap"] .content-title {
+    margin-right: 0;
   }
 }

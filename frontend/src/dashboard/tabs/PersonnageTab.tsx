@@ -45,57 +45,60 @@ export default function PersonnageTab({ character }: { character: any }) {
       
       {/* ─── Instinct Section ────────────────────────────────────────────── */}
       <section>
-        <h3 className="gods:font-[family-name:var(--font-display)] gods:text-xl gods:tracking-widest gods:uppercase gods:text-primary gods:mb-4 gods:flex gods:items-center gods:gap-2">
-          <span className="gods:text-2xl">◈</span> Capacité d'Instinct
+        {/* Removed font-display because h3 gets it from base layer */}
+        <h3 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-primary gods:mb-4 gods:flex gods:items-center gods:gap-2">
+          <span>◈</span> Capacité d'Instinct
         </h3>
         <div className="gods:bg-card/40 gods:border gods:border-border gods:rounded-lg gods:p-5">
           <div className="gods:flex gods:items-center gods:justify-between gods:border-b gods:border-border/50 gods:pb-3 gods:mb-3">
-            <span className="gods:text-foreground/60 gods:uppercase gods:tracking-widest gods:text-sm">Instinct</span>
-            <span className="gods:font-bold gods:text-lg">{character.instinct || "Aucun"}</span>
+            {/* Standardized to text-xs with tracking-widest and semantic muted color */}
+            <span className="gods:text-muted-foreground gods:uppercase gods:tracking-widest gods:text-xs">Instinct</span>
+            <span className="gods:font-bold gods:text-xl gods:tracking-wider">{character.instinct || "Aucun"}</span>
           </div>
           {character.capaciteInstinct1 && character.capaciteInstinct1 !== "none" ? (
             <div>
-              <span className="gods:text-primary gods:font-medium gods:block gods:mb-2">{character.capaciteInstinct1}</span>
+              <span className="gods:text-primary gods:text-base gods:font-medium gods:block gods:mb-2">{character.capaciteInstinct1}</span>
               {instinctDesc ? (
-                <div className="gods:text-sm gods:text-foreground/80 gods:leading-relaxed" dangerouslySetInnerHTML={{ __html: instinctDesc }} />
+                <div className="gods:text-base gods:text-muted-foreground gods:leading-relaxed" dangerouslySetInnerHTML={{ __html: instinctDesc }} />
               ) : (
-                <p className="gods:text-foreground/50 gods:text-sm gods:italic">Description introuvable dans les archives.</p>
+                <p className="gods:text-muted-foreground gods:text-base gods:italic">Description introuvable dans les archives.</p>
               )}
             </div>
           ) : (
-            <p className="gods:text-foreground/40 gods:italic">Aucune capacité d'instinct sélectionnée.</p>
+            <p className="gods:text-muted-foreground gods:text-base gods:italic">Aucune capacité d'instinct sélectionnée.</p>
           )}
         </div>
       </section>
 
       {/* ─── Origine Section ─────────────────────────────────────────────── */}
       <section>
-        <h3 className="gods:font-[family-name:var(--font-display)] gods:text-xl gods:tracking-widest gods:uppercase gods:text-primary gods:mb-4 gods:flex gods:items-center gods:gap-2">
-          <span className="gods:text-2xl">⌖</span> Origine
+        <h3 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-primary gods:mb-4 gods:flex gods:items-center gods:gap-2">
+          <span>⌖</span> Origine
         </h3>
-        <p className="gods:text-2xl gods:font-[family-name:var(--font-display)] gods:mb-4">{character.origine || "Aucune"}</p>
+        {/* Paragraphs don't get base layer fonts by default, so we use gods:font-display here */}
+        <p className="gods:text-3xl gods:tracking-wider gods:font-display gods:mb-4">{character.origine || "Aucune"}</p>
         
         <div className="gods:grid gods:grid-cols-2 gods:gap-4">
           
           {/* Avantage */}
           <div className="gods:bg-card/40 gods:border gods:border-[rgba(42,107,82,0.3)] gods:rounded-lg gods:p-4">
-            <h4 className="gods:text-[#2A6B52] gods:font-semibold gods:mb-2 gods:uppercase gods:tracking-wider gods:text-xs">Avantage d'origine</h4>
-            <p className="gods:text-foreground gods:font-medium gods:mb-2">
+            <h4 className="gods:text-[#2A6B52] gods:mb-2 gods:uppercase gods:tracking-widest gods:text-xs">Avantage d'origine</h4>
+            <p className="gods:text-foreground gods:text-base gods:font-medium gods:mb-2">
               {character.avantage && character.avantage !== "none" ? character.avantage : "Aucun avantage"}
             </p>
             {avantageDesc && (
-              <div className="gods:text-sm gods:text-foreground/70 gods:leading-relaxed gods:pt-2 gods:border-t gods:border-[rgba(42,107,82,0.2)]" dangerouslySetInnerHTML={{ __html: avantageDesc }} />
+              <div className="gods:text-base gods:text-muted-foreground gods:leading-relaxed gods:pt-2 gods:border-t gods:border-[rgba(42,107,82,0.2)]" dangerouslySetInnerHTML={{ __html: avantageDesc }} />
             )}
           </div>
 
           {/* Désavantage */}
           <div className="gods:bg-card/40 gods:border gods:border-destructive/30 gods:rounded-lg gods:p-4">
-            <h4 className="gods:text-destructive gods:font-semibold gods:mb-2 gods:uppercase gods:tracking-wider gods:text-xs">Désavantage d'origine</h4>
-            <p className="gods:text-foreground gods:font-medium gods:mb-2">
+            <h4 className="gods:text-destructive gods:mb-2 gods:uppercase gods:tracking-widest gods:text-xs">Désavantage d'origine</h4>
+            <p className="gods:text-foreground gods:text-base gods:font-medium gods:mb-2">
               {character.desavantage && character.desavantage !== "none" ? character.desavantage : "Aucun désavantage"}
             </p>
             {desavantageDesc && (
-              <div className="gods:text-sm gods:text-foreground/70 gods:leading-relaxed gods:pt-2 gods:border-t gods:border-destructive/20" dangerouslySetInnerHTML={{ __html: desavantageDesc }} />
+              <div className="gods:text-base gods:text-muted-foreground gods:leading-relaxed gods:pt-2 gods:border-t gods:border-destructive/20" dangerouslySetInnerHTML={{ __html: desavantageDesc }} />
             )}
           </div>
 
@@ -107,34 +110,34 @@ export default function PersonnageTab({ character }: { character: any }) {
         
         {/* Langues */}
         <div className="gods:bg-card/20 gods:border gods:border-border gods:rounded-lg gods:p-5">
-          <h4 className="gods:font-[family-name:var(--font-display)] gods:text-lg gods:tracking-widest gods:uppercase gods:border-b gods:border-border gods:pb-2 gods:mb-4 gods:text-primary">Langues</h4>
+          <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:border-b gods:border-border gods:pb-2 gods:mb-4 gods:text-primary">Langues</h4>
           <ul className="gods:space-y-2">
             {langues.length > 0 ? langues.map((l: string, i: number) => (
-              <li key={i} className="gods:text-foreground/80 gods:flex gods:items-center gods:gap-3 gods:bg-muted/30 gods:px-3 gods:py-2 gods:rounded-md">
+              <li key={i} className="gods:text-muted-foreground gods:text-base gods:flex gods:items-center gods:gap-3 gods:bg-muted/30 gods:px-3 gods:py-2 gods:rounded-md">
                 <span className="gods:w-1.5 gods:h-1.5 gods:rounded-full gods:bg-primary/50" /> {l}
               </li>
-            )) : <li className="gods:text-foreground/40 gods:italic">Aucune langue spécifiée</li>}
+            )) : <li className="gods:text-muted-foreground gods:text-base gods:italic">Aucune langue spécifiée</li>}
           </ul>
         </div>
 
         {/* Spécialisations */}
         <div className="gods:bg-card/20 gods:border gods:border-border gods:rounded-lg gods:p-5">
-          <h4 className="gods:font-[family-name:var(--font-display)] gods:text-lg gods:tracking-widest gods:uppercase gods:border-b gods:border-border gods:pb-2 gods:mb-4 gods:text-primary">Spécialisations</h4>
+          <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:border-b gods:border-border gods:pb-2 gods:mb-4 gods:text-primary">Spécialisations</h4>
           <ul className="gods:space-y-2">
             {specialites.length > 0 ? specialites.map((s: any, i: number) => {
               const comp = s.competence || "Spécialité";
               const spec = s.specialite || s;
 
               return (
-                <li key={i} className="gods:text-foreground/80 gods:flex gods:items-center gods:gap-3 gods:bg-muted/30 gods:px-3 gods:py-2 gods:rounded-md">
+                <li key={i} className="gods:text-muted-foreground gods:text-base gods:flex gods:items-center gods:gap-3 gods:bg-muted/30 gods:px-3 gods:py-2 gods:rounded-md">
                   <span className="gods:w-1.5 gods:h-1.5 gods:rounded-full gods:bg-primary/50 gods:shrink-0" />
                   <div className="gods:flex gods:items-baseline gods:gap-2">
-                    <span className="gods:uppercase gods:tracking-widest gods:text-[10px] gods:text-foreground/50">{comp}</span>
-                    <span className="gods:font-medium">{spec}</span>
+                    <span className="gods:uppercase gods:tracking-widest gods:text-xs gods:text-muted-foreground">{comp}</span>
+                    <span className="gods:font-medium gods:text-base">{spec}</span>
                   </div>
                 </li>
               );
-            }) : <li className="gods:text-foreground/40 gods:italic">Aucune spécialisation</li>}
+            }) : <li className="gods:text-muted-foreground gods:text-base gods:italic">Aucune spécialisation</li>}
           </ul>
         </div>
       </section>

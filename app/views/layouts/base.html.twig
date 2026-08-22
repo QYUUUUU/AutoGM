@@ -7,36 +7,34 @@
 			{% block title %}Assistant GODS
 			{% endblock %}
 		</title>
-		{% block stylesheets %}
-			<link rel="stylesheet" href="/css/user.css">
-			<link rel="stylesheet" href="/css/general.css">
-		{% endblock %}
+		{% block stylesheets %}{% endblock %}
 
 		<script type="module" src="/js/jquery-3.5.1.slim.min.js"></script>
 
 
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 		{#
-			New sitewide chrome (header/footer/theme). Loaded LAST, after
-			Bootstrap/FontAwesome above, so its rules win where they need to
-			(e.g. body background/font). All new utility classes are prefixed
-			`gods:` (see /frontend/src/shared/styles/tailwind.css) so they
-			can NEVER collide with any Bootstrap class name on pages that
-			haven't been migrated off Bootstrap yet. Safe to load everywhere.
-		#}
+				New sitewide chrome (header/footer/theme). Loaded LAST, after
+				Bootstrap/FontAwesome above, so its rules win where they need to
+				(e.g. body background/font). All new utility classes are prefixed
+				`gods:` (see /frontend/src/shared/styles/tailwind.css) so they
+				can NEVER collide with any Bootstrap class name on pages that
+				haven't been migrated off Bootstrap yet. Safe to load everywhere.
+			#}
 		<link rel="stylesheet" href="/css/tailwind.css">
 		<link rel="stylesheet" href="/css/chrome.css">
+		<link rel="stylesheet" href="/css/theme.css">
 	</head>
 	<body>
 		{#
-			Header/footer are mounted here by /js/chrome.js (built from
-			/frontend/src/chrome/). isAdmin is passed the exact same way it
-			always has been -- {% if isAdmin %} elsewhere in the codebase
-			reads from this same res.locals.isAdmin value.
-		#}
+				Header/footer are mounted here by /js/chrome.js (built from
+				/frontend/src/chrome/). isAdmin is passed the exact same way it
+				always has been -- {% if isAdmin %} elsewhere in the codebase
+				reads from this same res.locals.isAdmin value.
+			#}
 		<div id="gods-header-root"></div>
 
 		<main>
@@ -46,7 +44,9 @@
 		<div id="gods-footer-root"></div>
 
 		<script>
-			window.__GODS_SITE__ = { isAdmin: {{ isAdmin ? 'true' : 'false' }} };
+			window.__GODS_SITE__ = {
+isAdmin: {{ isAdmin ? 'true' : 'false' }}
+};
 		</script>
 		<script type="module" src="/js/chrome.js"></script>
 	</body>

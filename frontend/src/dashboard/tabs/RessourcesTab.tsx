@@ -46,13 +46,13 @@ export default function RessourcesTab({ character, onUpdate }: Props) {
         
         {/* Effort */}
         <div className="gods:bg-card/40 gods:border gods:border-warning/30 gods:rounded-lg gods:p-5 gods:text-center">
-          <h4 className="gods:font-[family-name:var(--font-display)] gods:text-warning gods:tracking-widest gods:uppercase gods:mb-4">Effort</h4>
+          <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-warning gods:mb-4">Effort</h4>
           <div className="gods:flex gods:items-center gods:justify-center gods:gap-4">
             <button onClick={() => updateResource("effort", -1, character.maxeffort || 15)} className="gods:w-10 gods:h-10 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-muted gods:transition-colors">
               <Minus size={18} />
             </button>
-            <span className="gods:text-3xl gods:font-bold gods:font-[family-name:var(--font-display)] gods:min-w-[4rem]">
-              {character.effort ?? 15} <span className="gods:text-foreground/30 gods:text-xl">/ {character.maxeffort || 15}</span>
+            <span className="gods:text-3xl gods:tracking-wider gods:font-bold gods:font-display gods:min-w-[4rem]">
+              {character.effort ?? 15} <span className="gods:text-muted-foreground gods:text-xl">/ {character.maxeffort || 15}</span>
             </span>
             <button onClick={() => updateResource("effort", 1, character.maxeffort || 15)} className="gods:w-10 gods:h-10 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-muted gods:transition-colors">
               <Plus size={18} />
@@ -62,13 +62,13 @@ export default function RessourcesTab({ character, onUpdate }: Props) {
 
         {/* Sang Froid */}
         <div className="gods:bg-card/40 gods:border gods:border-info/30 gods:rounded-lg gods:p-5 gods:text-center">
-          <h4 className="gods:font-[family-name:var(--font-display)] gods:text-info gods:tracking-widest gods:uppercase gods:mb-4">Sang Froid</h4>
+          <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-info gods:mb-4">Sang Froid</h4>
           <div className="gods:flex gods:items-center gods:justify-center gods:gap-4">
             <button onClick={() => updateResource("sangfroid", -1, character.maxsangfroid || 8)} className="gods:w-10 gods:h-10 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-muted gods:transition-colors">
               <Minus size={18} />
             </button>
-            <span className="gods:text-3xl gods:font-bold gods:font-[family-name:var(--font-display)] gods:min-w-[4rem]">
-              {character.sangfroid ?? 8} <span className="gods:text-foreground/30 gods:text-xl">/ {character.maxsangfroid || 8}</span>
+            <span className="gods:text-3xl gods:tracking-wider gods:font-bold gods:font-display gods:min-w-[4rem]">
+              {character.sangfroid ?? 8} <span className="gods:text-muted-foreground gods:text-xl">/ {character.maxsangfroid || 8}</span>
             </span>
             <button onClick={() => updateResource("sangfroid", 1, character.maxsangfroid || 8)} className="gods:w-10 gods:h-10 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-muted gods:transition-colors">
               <Plus size={18} />
@@ -79,20 +79,20 @@ export default function RessourcesTab({ character, onUpdate }: Props) {
 
       {/* Techniques de combat */}
       <section>
-        <h3 className="gods:font-[family-name:var(--font-display)] gods:text-xl gods:tracking-widest gods:uppercase gods:text-foreground/80 gods:border-b gods:border-border gods:pb-2 gods:mb-4">
+        <h3 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-foreground gods:border-b gods:border-border gods:pb-2 gods:mb-4">
           Techniques de Combat Débloquées
         </h3>
         {techniques.length > 0 ? (
           <div className="gods:grid gods:grid-cols-2 gods:gap-4">
             {techniques.map((t, i) => (
               <div key={i} className="gods:bg-card/20 gods:border gods:border-border gods:rounded-md gods:p-3">
-                <span className="gods:text-primary gods:font-semibold gods:block">{t.n}</span>
-                <span className="gods:text-foreground/60 gods:text-sm">{t.d}</span>
+                <span className="gods:text-base gods:text-primary gods:font-semibold gods:block">{t.n}</span>
+                <span className="gods:text-base gods:text-muted-foreground">{t.d}</span>
               </div>
             ))}
           </div>
         ) : (
-          <p className="gods:text-foreground/40 gods:italic">Aucune technique de combat débloquée. Augmentez vos compétences (Niv. 3+).</p>
+          <p className="gods:text-base gods:text-muted-foreground gods:italic">Aucune technique de combat débloquée. Augmentez vos compétences (Niv. 3+).</p>
         )}
       </section>
     </div>

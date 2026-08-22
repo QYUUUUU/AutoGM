@@ -22,6 +22,9 @@ const entries = {
   dashboard: path.resolve(__dirname, 'src/dashboard/main.tsx'),
   rituals: path.resolve(__dirname, 'src/rituals/main.tsx'),
   monde: path.resolve(__dirname, 'src/monde/main.tsx'),
+  maps: path.resolve(__dirname, 'src/maps/main.tsx'),
+  faveurs: path.resolve(__dirname, 'src/faveurs/main.tsx'),
+  eclats: path.resolve(__dirname, 'src/eclats/main.tsx'),
   character_sheet: path.resolve(__dirname, 'src/character_sheet/main.tsx'),
   create_character: path.resolve(__dirname, 'src/create_character/main.tsx'),  // Add more entries here as needed for other pages/components
 }

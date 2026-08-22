@@ -82,7 +82,7 @@ const handleSubmit = async () => {
       <div className="gods:max-w-7xl gods:mx-auto gods:h-[calc(100vh-8rem)] gods:flex gods:gap-6 gods:relative gods:z-10">
         
         {/* ── SIDEBAR ─────────────────────────────────────────────── */}
-        <aside className="gods:w-72 gods:shrink-0 gods:flex gods:flex-col gods:bg-card/60 gods:border gods:border-border gods:rounded-xl gods:overflow-hidden gods:shadow-xl">
+        <aside className="gods:shrink-0 gods:flex gods:flex-col gods:bg-card/60 gods:border gods:border-border gods:rounded-xl gods:overflow-hidden gods:shadow-xl">
           <div className="gods:p-6 gods:border-b gods:border-border gods:bg-card/40">
             <h1 className="gods:font-[family-name:var(--font-display)] gods:text-2xl gods:tracking-widest gods:uppercase gods:text-foreground">
               Création

@@ -50,7 +50,21 @@ export interface StoryScene {
 
   image?: string;
   imageSide?: "left" | "right" | "center";
+
+  /** A word inside `title` to typographically emphasize (color +
+   * weight). Matched as a case-insensitive substring of each word, so
+   * "insoumise" also matches the token "l'insoumise". */
   accentWord?: string;
+
+  /** Giant, near-invisible background word for this beat. Omit to
+   * derive one from `kicker`; set to "" to explicitly go silent
+   * (used once, by the black sun rupture). */
+  watermark?: string;
+
+  /** Lets this scene's title spill over into the visual column
+   * instead of staying in its own lane. Used sparingly — a beat has
+   * to earn it. */
+  emphasis?: "overlap";
 }
 
 export interface CountryExperience {

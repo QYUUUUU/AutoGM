@@ -1,65 +1,20 @@
+```twig
 {% extends '/layouts/base.html.twig' %}
 
-{% block title %}Les Cartes - GODS{% endblock %}
+{% block title %}Les Cartes - GODS
+{% endblock %}
 
 {% block stylesheets %}
 	{{ parent() }}
-	{#
-		maps.css is no longer used -- this page's layout was rebuilt with
-		the shared gods: utility classes (see /frontend/src/shared/styles/
-		tailwind.css) instead of the old .gallery/.grid-container/.title-text
-		classes maps.css targeted. Safe to delete that file once confirmed.
-	#}
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 {% endblock %}
 
 {% block body %}
-	<div class="gods:max-w-6xl gods:mx-auto gods:px-6 gods:py-16">
-		<div class="gods:text-center gods:mb-14">
-			<span class="gods:text-[10px] gods:tracking-[0.35em] gods:uppercase gods:text-primary/80 gods:font-[family-name:var(--gods-font-display)]">Cartographie</span>
-			<h1 class="gods:font-[family-name:var(--gods-font-display)] gods:text-3xl gods:md:text-4xl gods:tracking-widest gods:uppercase gods:text-foreground gods:mt-3">
-				Les Terres Sauvages
-			</h1>
-		</div>
-
-		<div class="gods:grid gods:grid-cols-2 gods:sm:grid-cols-3 gods:lg:grid-cols-4 gods:gap-4">
-			{% set maps = [
-				{ file: 'aon', alt: 'Aon' },
-				{ file: 'avhorae', alt: 'avhorae' },
-				{ file: 'royaumesdivises', alt: 'royaumesdivises' },
-				{ file: 'fakhar', alt: 'fakhar' },
-				{ file: 'horde', alt: 'horde' },
-				{ file: 'khashan', alt: 'khashan' },
-				{ file: 'ool', alt: 'ool' },
-				{ file: 'saeth', alt: 'saeth' },
-				{ file: 'soleilnoir', alt: 'soleilnoir' },
-				{ file: 'babel', alt: 'babel' },
-				{ file: 'tuuhle', alt: 'tuuhle' },
-				{ file: 'vaelor', alt: 'vaelor' },
-				{ file: 'tegee', alt: 'tegee' },
-				{ file: 'valdheim', alt: 'valdheim' }
-			] %}
-			{% for map in maps %}
-				<a
-					class="gods:group gods:relative gods:block gods:aspect-square gods:overflow-hidden gods:rounded-lg gods:border gods:border-border gods:bg-card"
-					href="/images/maps/{{ map.file }}.png"
-					data-lightbox="gallery"
-					data-title="{{ map.alt }}"
-				>
-					<img
-						src="/images/maps/thumbnails/{{ map.file }}_thumb.png"
-						alt="{{ map.alt }}"
-						class="gods:w-full gods:h-full gods:object-cover gods:transition-transform gods:duration-500 gods:group-hover:scale-105"
-					>
-					<div class="gods:absolute gods:inset-0 gods:bg-gradient-to-t gods:from-black/70 gods:via-transparent gods:to-transparent gods:opacity-0 gods:group-hover:opacity-100 gods:transition-opacity gods:duration-300"></div>
-					<span class="gods:absolute gods:bottom-2 gods:left-3 gods:right-3 gods:text-white gods:text-sm gods:tracking-wide gods:capitalize gods:font-[family-name:var(--gods-font-display)] gods:opacity-0 gods:group-hover:opacity-100 gods:transition-opacity gods:duration-300">
-						{{ map.alt }}
-					</span>
-				</a>
-			{% endfor %}
-		</div>
-	</div>
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+	{#
+			Map gallery mounted by /js/maps.js (built from
+			/frontend/src/maps/). Header and footer are inherited
+			from base.html.twig.
+		#}
+	<div id="gods-maps-root"></div>
+	<script type="module" src="/js/maps.js"></script>
 {% endblock %}
+```

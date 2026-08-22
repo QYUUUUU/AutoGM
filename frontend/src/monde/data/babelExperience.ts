@@ -16,6 +16,8 @@ export const babelExperience: CountryExperience = {
       subtitle: "Un royaume raffiné, puissant, civilisé — et déjà en train de changer.",
       image: "babel",
       imageSide: "right",
+      watermark: "BABEL",
+      emphasis: "overlap",
     },
     {
       id: "kingdom",
@@ -24,6 +26,8 @@ export const babelExperience: CountryExperience = {
       motif: "panel-reading",
       kicker: "01 — L'ARKADIE",
       title: "Le cœur du royaume",
+      accentWord: "royaume",
+      watermark: "ARKADIE",
       paragraphs: [
         "Babel désigne en réalité l'ensemble des terres contrôlées par la reine de Sabaah. Son cœur historique est l'Arkadie, riche en cyprès plantés pour modérer la puissance des vents du désert.",
         "La langue de Babel, son calendrier et sa monnaie rayonnent depuis longtemps jusqu'aux endroits les plus reculés du monde connu.",
@@ -37,6 +41,8 @@ export const babelExperience: CountryExperience = {
       motif: "panel-left",
       kicker: "02 — UNE SOCIÉTÉ STRUCTURÉE",
       title: "Chacun possède une place.",
+      accentWord: "place",
+      watermark: "CASTES",
       image: "society",
       imageSide: "right",
       paragraphs: [
@@ -52,6 +58,8 @@ export const babelExperience: CountryExperience = {
       motif: "pillar-center",
       kicker: "03 — LA FIN DES AMUZAZELS",
       title: "Une prophétie devenue condamnation",
+      accentWord: "condamnation",
+      watermark: "AMUZAZEL",
       paragraphs: [
         "Depuis la disparition des anciens dieux, les prostituées sacrées d'Amura formaient une caste à part entière dotée de capacités oraculaires.",
         "Lorsque la reine Taerhonis se convertit au Dieu Unique, elle ordonna la dissolution de cette caste. Les Filles d'Amura eurent la langue coupée, les lèvres cousues, et le fer rouge fut apposé sur leur visage.",
@@ -65,6 +73,8 @@ export const babelExperience: CountryExperience = {
       motif: "panel-right",
       kicker: "04 — LA MULTITUDE DIVINE",
       title: "Les dieux ne revenaient pas.",
+      accentWord: "dieux",
+      watermark: "ENU",
       image: "goddess",
       imageSide: "left",
       paragraphs: [
@@ -80,6 +90,8 @@ export const babelExperience: CountryExperience = {
       motif: "void",
       kicker: "05 — L'AVÈNEMENT",
       title: "Et le soleil devint noir.",
+      accentWord: "noir",
+      watermark: "",
       paragraphs: [
         "Depuis l'orient, un nouveau dieu se fit connaître. Ses prêtres le disaient né du Soleil Noir, Dieu Unique et parfait, destiné à remplacer tous les autres.",
       ],
@@ -91,6 +103,8 @@ export const babelExperience: CountryExperience = {
       motif: "panel-left",
       kicker: "06 — LA CAPITALE",
       title: "Sabaah-aux-jardins-célestes",
+      watermark: "SABAAH",
+      emphasis: "overlap",
       image: "sabaah",
       imageSide: "right",
       paragraphs: [
@@ -106,6 +120,8 @@ export const babelExperience: CountryExperience = {
       motif: "panel-right",
       kicker: "07 — LA RÉSISTANCE",
       title: "Uruk l'insoumise",
+      accentWord: "insoumise",
+      watermark: "URUK",
       image: "warrior",
       imageSide: "left",
       paragraphs: [
@@ -121,6 +137,8 @@ export const babelExperience: CountryExperience = {
       motif: "panel-reading",
       kicker: "ÉQUILIBRE",
       title: "Le monde regarde Sabaah.",
+      accentWord: "Sabaah",
+      watermark: "ÉQUILIBRE",
       subtitle: "Le royaume se réarme. Les intentions de Taerhonis sont évidentes. Reste à savoir qui sera sa première cible.",
       image: "babel",
       imageSide: "center",

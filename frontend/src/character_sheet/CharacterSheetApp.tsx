@@ -97,8 +97,8 @@ function PipTrack({
             className={`gods:w-3.5 gods:h-3.5 gods:shrink-0 gods:rotate-45 gods:border gods:p-0 gods:transition-all hover:gods:scale-110 ${i < safeValue ? `${activeColor} gods:border-current` : "gods:bg-transparent gods:border-border hover:gods:border-foreground/50"}`} />
         ))}
       </div>
-      {showLevelName ? <span className="gods:min-w-[5.8rem] gods:text-sm gods:font-[family-name:var(--font-display)] gods:tracking-wide gods:text-foreground/65 gods:whitespace-nowrap">{levelName}</span>
-        : <span className="gods:min-w-5 gods:text-sm gods:font-semibold gods:tabular-nums gods:text-foreground/70 gods:text-center">{safeValue}</span>}
+      {showLevelName ? <span className="gods:min-w-[5.8rem] gods:text-xs gods:font-display gods:tracking-widest gods:text-muted-foreground gods:whitespace-nowrap">{levelName}</span>
+        : <span className="gods:min-w-5 gods:text-base gods:font-semibold gods:tabular-nums gods:text-muted-foreground gods:text-center">{safeValue}</span>}
     </div>
   );
 }
@@ -106,10 +106,10 @@ function PipTrack({
 function CapacityStepper({ onIncrement, onDecrement }: { onIncrement: () => void; onDecrement: () => void }) {
   return (
     <div className="gods:flex gods:gap-1 gods:ml-2">
-      <button type="button" onClick={onDecrement} className="gods:text-foreground/30 hover:gods:text-foreground gods:transition-colors !gods:outline-none">
+      <button type="button" onClick={onDecrement} className="gods:text-muted-foreground hover:gods:text-foreground gods:transition-colors !gods:outline-none">
         <Minus size={10} strokeWidth={3} />
       </button>
-      <button type="button" onClick={onIncrement} className="gods:text-foreground/30 hover:gods:text-foreground gods:transition-colors !gods:outline-none">
+      <button type="button" onClick={onIncrement} className="gods:text-muted-foreground hover:gods:text-foreground gods:transition-colors !gods:outline-none">
         <Plus size={10} strokeWidth={3} />
       </button>
     </div>
@@ -140,7 +140,7 @@ function AutoField({
       placeholder={placeholder}
       onChange={(e) => { setLocal(e.target.value); scheduleCommit(e.target.value); }}
       onBlur={() => { if (timer.current) clearTimeout(timer.current); onCommit(local); }}
-      className={`gods:h-10 gods:bg-input-background gods:border gods:border-border/70 gods:rounded-md gods:px-3 gods:py-1 gods:text-base gods:text-foreground gods:shadow-sm placeholder:gods:text-foreground/30 hover:gods:border-foreground/25 focus:gods:outline-none focus:gods:border-primary/60 focus:gods:ring-2 focus:gods:ring-primary/10 gods:transition-all ${textCenter ? "gods:text-center" : ""} ${className}`}
+      className={`gods:h-10 gods:bg-input-background gods:border gods:border-border/70 gods:rounded-md gods:px-3 gods:py-1 gods:text-base gods:text-foreground gods:shadow-sm placeholder:gods:text-muted-foreground hover:gods:border-foreground/25 focus:gods:outline-none focus:gods:border-primary/60 focus:gods:ring-2 focus:gods:ring-primary/10 gods:transition-all ${textCenter ? "gods:text-center" : ""} ${className}`}
     />
   );
 }
@@ -184,8 +184,9 @@ function SignedIntField({
 }
 
 function DSLabel({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  // Converted to our standard gods:text-xl size. h2 naturally receives the display font via theme.css
   return (
-    <h2 className={`gods:text-base gods:tracking-[0.14em] gods:uppercase gods:text-foreground/80 gods:font-[family-name:var(--font-display)] gods:font-semibold gods:border-b gods:border-border/50 gods:pb-1.5 gods:mb-3 ${className}`}>
+    <h2 className={`gods:text-xl gods:tracking-wider gods:uppercase gods:text-foreground/80 gods:font-semibold gods:border-b gods:border-border/50 gods:pb-1.5 gods:mb-3 ${className}`}>
       {children}
     </h2>
   );
@@ -234,20 +235,21 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
   const charInitial = character?.nom ? character.nom.charAt(0).toUpperCase() : "?";
 
   return (
-    <div className="gods:box-border gods:h-full gods:min-h-0 gods:flex gods:flex-col gods:bg-background gods:text-foreground gods:font-[family-name:var(--font-body)] gods:overflow-hidden">
+    // Removed explicit font-body variable, relying on the @layer base globally applied font.
+    <div className="gods:box-border gods:h-full gods:min-h-0 gods:flex gods:flex-col gods:bg-background gods:text-foreground gods:overflow-hidden">
       <div aria-hidden className="gods:h-16 gods:shrink-0" />
 
       {/* ── MAIN AREA: Dense Mechanical Grid ───────────────────────────── */}
       <main className="gods:flex-1 gods:min-h-0 gods:overflow-y-auto gods:px-6 gods:py-8 lg:gods:px-10 lg:gods:py-10 gods:relative">
         <div className="gods:max-w-6xl gods:mx-auto gods:pb-10">
           <header className="gods:mb-9 gods:border-b gods:border-border gods:pb-5">
-            <p className="gods:text-sm gods:font-[family-name:var(--font-display)] gods:tracking-[0.2em] gods:uppercase gods:text-primary gods:mb-2">Fiche de personnage</p>
+            <p className="gods:text-xs gods:font-display gods:tracking-widest gods:uppercase gods:text-primary gods:mb-2">Fiche de personnage</p>
             <div className="gods:flex gods:flex-wrap gods:items-end gods:justify-between gods:gap-4">
               <div>
-                <h1 className="gods:font-[family-name:var(--font-display)] gods:text-3xl lg:gods:text-4xl gods:tracking-wide gods:text-foreground">{character.nom || "Personnage"}</h1>
-                <p className="gods:text-base gods:text-foreground/55 gods:mt-2">Caractéristiques, compétences, santé et réserves</p>
+                <h1 className="gods:text-3xl gods:tracking-wider gods:text-foreground">{character.nom || "Personnage"}</h1>
+                <p className="gods:text-base gods:text-muted-foreground gods:mt-2">Caractéristiques, compétences, santé et réserves</p>
               </div>
-              <span className={`gods:flex gods:items-center gods:gap-2 gods:text-sm gods:font-[family-name:var(--font-display)] ${saveStatus === "saved" ? "gods:text-[#2A6B52]" : "gods:text-foreground/45"}`}>
+              <span className={`gods:flex gods:items-center gods:gap-2 gods:text-xs gods:font-display gods:tracking-widest ${saveStatus === "saved" ? "gods:text-primary" : "gods:text-muted-foreground"}`}>
                 {saveStatus === "saved" ? <Check size={14} /> : <Loader2 size={14} className="gods:animate-spin" />}
                 {saveStatus === "saved" ? "Sauvegardé" : "Sauvegarde…"}
               </span>
@@ -269,7 +271,7 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
                     onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                   />
                 ) : (
-                  <div className="gods:w-full gods:h-full gods:flex gods:items-center gods:justify-center gods:text-4xl gods:font-[family-name:var(--font-display)] gods:text-foreground/25">{charInitial}</div>
+                  <div className="gods:w-full gods:h-full gods:flex gods:items-center gods:justify-center gods:text-3xl gods:font-display gods:text-muted-foreground">{charInitial}</div>
                 )}
                 <div className="gods:absolute gods:inset-0 gods:flex gods:items-center gods:justify-center gods:bg-background/65 gods:opacity-0 group-hover:gods:opacity-100 gods:transition-opacity">
                   {avatarUploading ? <Loader2 size={18} className="gods:text-primary gods:animate-spin" /> : <Camera size={18} className="gods:text-primary" />}
@@ -290,12 +292,12 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
                   { key: "age", label: "Âge" },
                 ].map((f) => (
                   <div key={f.key} className="gods:min-w-0 gods:flex gods:items-center gods:gap-3 gods:min-h-10">
-                    <label className="gods:shrink-0 gods:text-sm gods:tracking-[0.1em] gods:uppercase gods:text-foreground/50 gods:font-[family-name:var(--font-display)]">{f.label}</label>
+                    <label className="gods:shrink-0 gods:text-xs gods:tracking-widest gods:uppercase gods:text-muted-foreground gods:font-display">{f.label}</label>
                     <AutoField
                       value={character[f.key] || ""}
                       onCommit={(v) => commitField(f.key, v)}
                       placeholder={f.placeholder}
-                      className={`gods:min-w-0 gods:flex-1 ${f.emphasis ? "!gods:text-xl gods:font-[family-name:var(--font-display)] gods:text-primary" : "!gods:text-lg gods:font-medium"}`}
+                      className={`gods:min-w-0 gods:flex-1 ${f.emphasis ? "!gods:text-xl gods:font-display gods:tracking-wider gods:text-primary" : "!gods:text-base gods:font-medium"}`}
                     />
                   </div>
                 ))}
@@ -305,7 +307,6 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
 
           <div className="gods:grid gods:grid-cols-1 lg:gods:grid-cols-12 gods:gap-7">
           
-
             {/* Column 1: Caractéristiques */}
             <div className="lg:gods:col-span-5 gods:space-y-5">
               <section>
@@ -317,15 +318,15 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
                     { title: "Social & Mental", groups: ["Social", "Mental"] },
                   ].map((island) => (
                     <div key={island.title} className="gods:bg-card/25 gods:border gods:border-border/50 gods:rounded-lg gods:p-5">
-                      <h3 className="gods:text-sm gods:font-[family-name:var(--font-display)] gods:tracking-[0.16em] gods:uppercase gods:text-foreground/45 gods:mb-4">{island.title}</h3>
+                      <h3 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-muted-foreground gods:mb-4">{island.title}</h3>
                       <div className="gods:grid gods:grid-cols-2 gods:gap-x-7 gods:gap-y-5">
                         {island.groups.map((group) => (
                           <div key={group} className="gods:min-w-0">
-                            <div className="gods:text-xs gods:font-[family-name:var(--font-display)] gods:tracking-[0.18em] gods:uppercase gods:text-primary/80 gods:mb-3 gods:pb-1.5 gods:border-b gods:border-border/40">{group}</div>
+                            <div className="gods:text-xs gods:font-display gods:tracking-widest gods:uppercase gods:text-primary gods:mb-3 gods:pb-1.5 gods:border-b gods:border-border/40">{group}</div>
                             <div className="gods:space-y-3">
                               {CARACTERISTIQUES.filter(c => c.group === group).map((c) => (
                                 <div key={c.key} className="gods:flex gods:items-center gods:justify-between gods:gap-3 gods:min-w-0">
-                                  <span className="gods:text-base gods:font-medium gods:text-foreground/85 gods:truncate">{c.label}</span>
+                                  <span className="gods:text-base gods:font-medium gods:text-foreground gods:truncate">{c.label}</span>
                                   <PipTrack value={character[c.key] || 0} max={5} onChange={(v) => commitField(c.key, v)} />
                                 </div>
                               ))}
@@ -337,11 +338,11 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
                   ))}
                 </div>
                 <div className="gods:mt-4 gods:pt-4 gods:border-t gods:border-border/50">
-                  <p className="gods:text-sm gods:tracking-[0.12em] gods:uppercase gods:text-foreground/50 gods:mb-3">Malus de conditions</p>
+                  <p className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-muted-foreground gods:mb-3">Malus de conditions</p>
                   <div className="gods:grid gods:grid-cols-2 gods:gap-x-6 gods:gap-y-3">
                     {CARAC_MALUS.map((m) => (
                       <div key={m.key} className="gods:flex gods:items-center gods:gap-3">
-                        <span className="gods:text-base gods:text-foreground/65 gods:min-w-0">{m.label}</span>
+                        <span className="gods:text-base gods:text-muted-foreground gods:min-w-0">{m.label}</span>
                         <SignedIntField value={character[m.key]} onCommit={(v) => commitField(m.key, Number(v))} />
                       </div>
                     ))}
@@ -356,7 +357,7 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
               <div className="gods:space-y-4">
                 {SKILL_GROUPS.map((group) => (
                   <div key={group.title} className="gods:bg-card/20 gods:p-5 gods:pb-6 gods:rounded-lg gods:border gods:border-border/40 gods:shadow-sm">
-                    <h3 className="gods:text-sm gods:tracking-[0.14em] gods:uppercase gods:text-foreground/55 gods:font-[family-name:var(--font-display)] gods:mb-4 gods:text-center">
+                    <h3 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-muted-foreground gods:mb-4 gods:text-center">
                       {group.title}
                     </h3>
                     
@@ -364,11 +365,11 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
                       {group.rows.map(([left, right]) => (
                         <Fragment key={`${left.key}-${right.key}`}>
                           <div className="gods:flex gods:items-center gods:justify-between gods:gap-4 gods:border-b gods:border-border/30 gods:pb-2 gods:group">
-                            <span className="gods:text-lg gods:text-foreground/75 group-hover:gods:text-foreground gods:transition-colors">{left.label}</span>
+                            <span className="gods:text-base gods:text-muted-foreground group-hover:gods:text-foreground gods:transition-colors">{left.label}</span>
                             <PipTrack value={character[left.key] || 0} max={6} showLevelName onChange={(v) => commitField(left.key, v)} />
                           </div>
                           <div className="gods:flex gods:items-center gods:justify-between gods:gap-4 gods:border-b gods:border-border/30 gods:pb-2 gods:group">
-                            <span className="gods:text-lg gods:text-foreground/75 group-hover:gods:text-foreground gods:transition-colors">{right.label}</span>
+                            <span className="gods:text-base gods:text-muted-foreground group-hover:gods:text-foreground gods:transition-colors">{right.label}</span>
                             <PipTrack value={character[right.key] || 0} max={6} showLevelName onChange={(v) => commitField(right.key, v)} />
                           </div>
                         </Fragment>
@@ -377,11 +378,11 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
 
                     <div className="gods:grid gods:grid-cols-2 gods:gap-4 gods:mt-3 gods:pt-3 gods:border-t gods:border-border/40">
                       <div className="gods:flex gods:items-center gods:justify-between">
-                        <span className="gods:text-xs gods:uppercase gods:tracking-wider gods:text-foreground/40">{group.malusLeftLabel}</span>
+                        <span className="gods:text-xs gods:uppercase gods:tracking-widest gods:text-muted-foreground">{group.malusLeftLabel}</span>
                         <SignedIntField value={character[group.malusLeftKey]} onCommit={(v) => commitField(group.malusLeftKey, Number(v))} />
                       </div>
                       <div className="gods:flex gods:items-center gods:justify-between">
-                        <span className="gods:text-xs gods:uppercase gods:tracking-wider gods:text-foreground/40">{group.malusRightLabel}</span>
+                        <span className="gods:text-xs gods:uppercase gods:tracking-widest gods:text-muted-foreground">{group.malusRightLabel}</span>
                         <SignedIntField value={character[group.malusRightKey]} onCommit={(v) => commitField(group.malusRightKey, Number(v))} />
                       </div>
                     </div>
@@ -398,13 +399,13 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
                   
                   {/* Blessures */}
                   <div className="gods:bg-destructive/5 gods:border gods:border-destructive/10 gods:p-5 gods:rounded-lg">
-                    <p className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-destructive/70 gods:font-bold gods:mb-3">Blessures</p>
+                    <p className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-destructive gods:font-bold gods:mb-3">Blessures</p>
                     <div className="gods:space-y-4">
                       {INJURY_CONFIG.map((inj) => {
                         const max = character[inj.maxKey] ?? inj.defaultMax;
                         return (
                           <div key={inj.key} className="gods:flex gods:items-center gods:gap-4">
-                            <span className="gods:text-lg gods:text-foreground/75 gods:font-medium">{inj.label}</span>
+                            <span className="gods:text-base gods:text-muted-foreground gods:font-medium">{inj.label}</span>
                             <div className="gods:flex gods:items-center">
                               <PipTrack value={character[inj.key] || 0} max={max} activeColor={inj.activeColor} onChange={(v) => commitField(inj.key, v)} />
                               <CapacityStepper onIncrement={() => commitField(inj.maxKey, max + 1)} onDecrement={() => commitField(inj.maxKey, Math.max(0, max - 1))} />
@@ -417,13 +418,13 @@ export default function CharacterSheetApp({ initialCharacter }: { initialCharact
 
                   {/* Réserves */}
                   <div className="gods:bg-primary/5 gods:border gods:border-primary/10 gods:p-5 gods:rounded-lg">
-                    <p className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-primary/70 gods:font-bold gods:mb-3">Jauges</p>
+                    <p className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-primary gods:font-bold gods:mb-3">Jauges</p>
                     <div className="gods:space-y-4">
                       {RESERVE_CONFIG.map((r) => {
                         const max = character[r.maxKey] ?? r.defaultMax;
                         return (
                           <div key={r.key} className="gods:flex gods:items-center gods:gap-4">
-                            <span className="gods:text-lg gods:text-foreground/75 gods:font-medium">{r.label}</span>
+                            <span className="gods:text-base gods:text-muted-foreground gods:font-medium">{r.label}</span>
                             <div className="gods:flex gods:items-center">
                               <PipTrack value={character[r.key] || 0} max={max} onChange={(v) => commitField(r.key, v)} />
                               <CapacityStepper onIncrement={() => commitField(r.maxKey, max + 1)} onDecrement={() => commitField(r.maxKey, Math.max(0, max - 1))} />

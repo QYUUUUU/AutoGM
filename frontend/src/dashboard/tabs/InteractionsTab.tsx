@@ -60,8 +60,9 @@ export default function InteractionsTab({ character }: { character: any }) {
 
   return (
     <div className="gods:h-full gods:flex gods:flex-col gods:bg-background">
-      <div className="gods:px-4 gods:py-3 gods:border-b gods:border-border gods:bg-card/40">
-        <h2 className="gods:font-[family-name:var(--font-display)] gods:text-xl gods:tracking-wider gods:text-foreground">
+      <div className="gods:px-4 gods:py-3 gods:border-b gods:border-border">
+        {/* Base layer applies font-display automatically to h2 */}
+        <h2 className="gods:text-xl gods:tracking-wider gods:text-foreground">
           Assistant des Règles
         </h2>
       </div>
@@ -72,13 +73,13 @@ export default function InteractionsTab({ character }: { character: any }) {
             <div className={`gods:max-w-[75%] gods:rounded-lg gods:p-3 ${
               msg.role === "user" 
                 ? "gods:bg-primary/20 gods:border gods:border-primary/30 gods:text-foreground" 
-                : "gods:bg-card gods:border gods:border-border gods:text-foreground/80"
+                : "gods:bg-card gods:border gods:border-border gods:text-foreground"
             }`}>
               <div 
                 className="gods:text-base gods:leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: msg.content.replace(/\n/g, "<br>") }} 
               />
-              <div className={`gods:text-xs gods:mt-2 ${msg.role === "user" ? "gods:text-primary/70 gods:text-right" : "gods:text-foreground/40"}`}>
+              <div className={`gods:text-xs gods:tracking-widest gods:uppercase gods:mt-2 ${msg.role === "user" ? "gods:text-primary gods:text-right" : "gods:text-muted-foreground"}`}>
                 {msg.time}
               </div>
             </div>
@@ -86,7 +87,7 @@ export default function InteractionsTab({ character }: { character: any }) {
         ))}
         {isLoading && (
           <div className="gods:flex gods:justify-start">
-            <div className="gods:bg-card gods:border gods:border-border gods:rounded-lg gods:p-3 gods:text-foreground/50 gods:flex gods:gap-1">
+            <div className="gods:bg-card gods:border gods:border-border gods:rounded-lg gods:p-3 gods:text-muted-foreground gods:flex gods:gap-1">
               <span className="gods:animate-bounce">.</span>
               <span className="gods:animate-bounce gods:delay-100">.</span>
               <span className="gods:animate-bounce gods:delay-200">.</span>
@@ -96,7 +97,7 @@ export default function InteractionsTab({ character }: { character: any }) {
         <div ref={chatEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="gods:p-4 gods:border-t gods:border-border gods:bg-card/30">
+      <form onSubmit={handleSubmit} className="gods:p-4 gods:border-t gods:border-border">
         <div className="gods:flex gods:items-center gods:gap-2 gods:bg-input-background gods:border gods:border-border gods:rounded-full gods:pr-2 gods:pl-4 gods:py-1">
           <input 
             type="text" 
@@ -104,12 +105,12 @@ export default function InteractionsTab({ character }: { character: any }) {
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
             placeholder="Posez vos questions sur les règles..."
-            className="gods:flex-1 gods:bg-transparent gods:border-none gods:outline-none gods:text-foreground gods:py-2 gods:placeholder:text-foreground/30"
+            className="gods:flex-1 gods:bg-transparent gods:border-none gods:outline-none gods:text-base gods:text-foreground gods:py-2 gods:placeholder:text-muted-foreground"
           />
           <button 
             type="submit" 
             disabled={isLoading || !input.trim()}
-            className="gods:w-10 gods:h-10 gods:rounded-full gods:bg-primary gods:text-primary-foreground gods:flex gods:items-center gods:justify-center hover:gods:bg-primary/85 disabled:gods:opacity-50 disabled:gods:cursor-not-allowed gods:transition-colors"
+            className="gods:w-10 gods:h-10 gods:rounded-full gods:bg-primary gods:text-primary-foreground gods:flex gods:items-center gods:justify-center gods:hover:bg-primary/85 gods:disabled:opacity-50 gods:disabled:cursor-not-allowed gods:transition-colors"
           >
             <Send size={16} className="gods:-ml-0.5" />
           </button>

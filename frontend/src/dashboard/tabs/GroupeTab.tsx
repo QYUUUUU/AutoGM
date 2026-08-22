@@ -215,18 +215,18 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
         <div className="gods:max-w-2xl gods:mx-auto gods:space-y-8">
           
           <div className="gods:text-center gods:mb-8">
-            <h2 className="gods:font-[family-name:var(--font-display)] gods:text-2xl gods:tracking-widest gods:text-primary">Gestion de Groupe</h2>
-            <p className="gods:text-foreground/50 gods:mt-2">Rejoignez un groupe existant ou créez-en un nouveau pour partager vos ressources.</p>
+            <h2 className="gods:text-3xl gods:tracking-wider gods:text-primary">Gestion de Groupe</h2>
+            <p className="gods:text-muted-foreground gods:text-base gods:mt-2">Rejoignez un groupe existant ou créez-en un nouveau pour partager vos ressources.</p>
           </div>
 
           {/* Formulaire Rejoindre */}
           <section className="gods:bg-card/40 gods:border gods:border-border gods:rounded-lg gods:p-5">
-            <h3 className="gods:font-[family-name:var(--font-display)] gods:text-xl gods:tracking-wide gods:text-foreground gods:mb-4">Rejoindre un groupe</h3>
+            <h3 className="gods:text-xl gods:tracking-wider gods:text-foreground gods:mb-4">Rejoindre un groupe</h3>
             <div className="gods:flex gods:gap-3">
               <select 
                 value={selectedJoinGrp}
                 onChange={(e) => setSelectedJoinGrp(e.target.value)}
-                className="gods:flex-1 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:px-3 gods:py-2 gods:text-foreground focus:gods:border-primary/50 gods:outline-none"
+                className="gods:flex-1 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:px-3 gods:py-2 gods:text-foreground focus:gods:border-primary/50 gods:outline-none gods:text-base"
               >
                 <option value="">Sélectionnez un groupe disponible...</option>
                 {allGroupes.map((g: any) => (
@@ -235,7 +235,7 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
               </select>
               <button 
                 onClick={handleJoinGroup}
-                className="gods:px-4 gods:py-2 gods:bg-primary gods:text-primary-foreground gods:rounded-md gods:font-[family-name:var(--font-display)] gods:tracking-wider hover:gods:bg-primary/85 gods:transition-colors"
+                className="gods:px-4 gods:py-2 gods:bg-primary gods:text-primary-foreground gods:rounded-md gods:font-display gods:text-base gods:tracking-wider hover:gods:bg-primary/85 gods:transition-colors"
               >
                 Rejoindre
               </button>
@@ -244,25 +244,25 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
 
           {/* Formulaire Créer */}
           <section className="gods:bg-card/40 gods:border gods:border-border gods:rounded-lg gods:p-5">
-            <h3 className="gods:font-[family-name:var(--font-display)] gods:text-xl gods:tracking-wide gods:text-foreground gods:mb-4">Créer un nouveau groupe</h3>
+            <h3 className="gods:text-xl gods:tracking-wider gods:text-foreground gods:mb-4">Créer un nouveau groupe</h3>
             <form onSubmit={handleCreateGroup} className="gods:space-y-4">
               <div>
-                <label className="gods:block gods:text-sm gods:text-foreground/60 gods:mb-1 gods:uppercase gods:tracking-wider">Nom du groupe</label>
+                <label className="gods:block gods:text-xs gods:text-muted-foreground gods:mb-1 gods:uppercase gods:tracking-widest">Nom du groupe</label>
                 <input 
                   type="text" 
                   value={newGroupName}
                   onChange={(e) => setNewGroupName(e.target.value)}
                   placeholder="Les voyageurs de l'aube..."
-                  className="gods:w-full gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:px-3 gods:py-2 gods:text-foreground focus:gods:border-primary/50 gods:outline-none"
+                  className="gods:w-full gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:px-3 gods:py-2 gods:text-foreground focus:gods:border-primary/50 gods:outline-none gods:text-base"
                   required
                 />
               </div>
               <div>
-                <label className="gods:block gods:text-sm gods:text-foreground/60 gods:mb-1 gods:uppercase gods:tracking-wider">Instinct fondateur</label>
+                <label className="gods:block gods:text-xs gods:text-muted-foreground gods:mb-1 gods:uppercase gods:tracking-widest">Instinct fondateur</label>
                 <select 
                   value={selectedInstinct}
                   onChange={(e) => setSelectedInstinct(e.target.value)}
-                  className="gods:w-full gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:px-3 gods:py-2 gods:text-foreground focus:gods:border-primary/50 gods:outline-none"
+                  className="gods:w-full gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:px-3 gods:py-2 gods:text-foreground focus:gods:border-primary/50 gods:outline-none gods:text-base"
                 >
                   {Object.entries(GROUP_INSTINCTS).map(([key, desc]) => (
                     <option key={key} value={key}>{desc.title}</option>
@@ -272,21 +272,21 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
 
               {/* Aperçu de l'instinct */}
               <div className="gods:bg-background/50 gods:border gods:border-border gods:rounded-md gods:p-4 gods:mt-4">
-                <h4 className="gods:text-primary gods:font-bold gods:mb-2">{activeDesc.title}</h4>
-                <p className="gods:text-foreground/80 gods:text-sm gods:italic gods:mb-3">{activeDesc.text}</p>
-                <div className="gods:space-y-1.5 gods:text-sm gods:border-t gods:border-border gods:pt-3">
-                  <p><strong className="gods:text-foreground/60">Exemples :</strong> {activeDesc.exemples}</p>
-                  <p><strong className="gods:text-warning/80">Principes :</strong> {activeDesc.principes}</p>
-                  <p><strong className="gods:text-destructive/80">Interdits :</strong> {activeDesc.interdits}</p>
+                <h4 className="gods:text-xl gods:tracking-wider gods:text-primary gods:mb-2">{activeDesc.title}</h4>
+                <p className="gods:text-muted-foreground gods:text-base gods:italic gods:mb-3">{activeDesc.text}</p>
+                <div className="gods:space-y-1.5 gods:text-base gods:border-t gods:border-border gods:pt-3">
+                  <p><strong className="gods:text-muted-foreground">Exemples :</strong> {activeDesc.exemples}</p>
+                  <p><strong className="gods:text-primary">Principes :</strong> {activeDesc.principes}</p>
+                  <p><strong className="gods:text-destructive">Interdits :</strong> {activeDesc.interdits}</p>
                 </div>
-                <div className="gods:mt-3 gods:pt-3 gods:border-t gods:border-border gods:text-sm gods:text-warning">
+                <div className="gods:mt-3 gods:pt-3 gods:border-t gods:border-border gods:text-base gods:text-primary">
                   <strong>Capacité spéciale :</strong> {activeDesc.stats}
                 </div>
               </div>
 
               <button 
                 type="submit"
-                className="gods:w-full gods:py-2.5 gods:bg-primary gods:text-primary-foreground gods:rounded-md gods:font-[family-name:var(--font-display)] gods:tracking-wider hover:gods:bg-primary/85 gods:transition-colors gods:mt-4"
+                className="gods:w-full gods:py-2.5 gods:bg-primary gods:text-primary-foreground gods:rounded-md gods:font-display gods:text-base gods:tracking-wider hover:gods:bg-primary/85 gods:transition-colors gods:mt-4"
               >
                 Fonder le groupe
               </button>
@@ -308,10 +308,10 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
   return (
     <div className="gods:h-full gods:overflow-y-auto gods:p-6 gods:space-y-8 gods:bg-background">
       <div className="gods:border-b gods:border-border gods:pb-4 gods:flex gods:items-end gods:justify-between">
-        <h2 className="gods:font-[family-name:var(--font-display)] gods:text-3xl gods:tracking-widest gods:text-primary">{groupe.nom}</h2>
+        <h2 className="gods:text-3xl gods:tracking-wider gods:text-primary">{groupe.nom}</h2>
         <button 
           onClick={handleLeaveGroup}
-          className="gods:flex gods:items-center gods:gap-2 gods:text-destructive/60 hover:gods:text-destructive gods:transition-colors gods:text-sm gods:pb-1"
+          className="gods:flex gods:items-center gods:gap-2 gods:text-muted-foreground hover:gods:text-destructive gods:transition-colors gods:text-base gods:pb-1"
         >
           <LogOut size={16} /> Quitter le groupe
         </button>
@@ -319,17 +319,17 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
 
       <div className="gods:grid gods:grid-cols-3 gods:gap-4">
         <div className="gods:bg-card/40 gods:border gods:border-border gods:rounded-lg gods:p-4 gods:text-center">
-          <span className="gods:text-foreground/50 gods:uppercase gods:text-sm gods:tracking-widest">Niveau</span>
-          <p className="gods:text-3xl gods:font-[family-name:var(--font-display)] gods:mt-1">{groupe.niveau}</p>
+          <span className="gods:text-muted-foreground gods:uppercase gods:text-xs gods:tracking-widest">Niveau</span>
+          <p className="gods:text-3xl gods:font-display gods:mt-1">{groupe.niveau}</p>
         </div>
         <div className="gods:bg-card/40 gods:border gods:border-border gods:rounded-lg gods:p-4 gods:text-center">
-          <span className="gods:text-foreground/50 gods:uppercase gods:text-sm gods:tracking-widest">Réputation</span>
-          <p className="gods:text-3xl gods:font-[family-name:var(--font-display)] gods:mt-1">{groupe.reputation}</p>
+          <span className="gods:text-muted-foreground gods:uppercase gods:text-xs gods:tracking-widest">Réputation</span>
+          <p className="gods:text-3xl gods:font-display gods:mt-1">{groupe.reputation}</p>
         </div>
         <div className="gods:bg-card/40 gods:border gods:border-primary/50 gods:rounded-lg gods:p-4 gods:text-center">
-          <span className="gods:text-primary/70 gods:uppercase gods:text-sm gods:tracking-widest">Réserve de Dés</span>
-          <p className="gods:text-3xl gods:font-[family-name:var(--font-display)] gods:mt-1 gods:text-primary">
-            {reserveDes} <span className="gods:text-foreground/30 gods:text-xl">/ {maxDes}</span>
+          <span className="gods:text-primary gods:uppercase gods:text-xs gods:tracking-widest">Réserve de Dés</span>
+          <p className="gods:text-3xl gods:font-display gods:mt-1 gods:text-primary">
+            {reserveDes} <span className="gods:text-muted-foreground gods:text-xl">/ {maxDes}</span>
           </p>
         </div>
       </div>
@@ -337,13 +337,13 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
       <div className="gods:flex gods:justify-center gods:gap-6">
         <button 
           onClick={() => modifierDes('add')} 
-          className="gods:flex gods:items-center gods:gap-2 gods:px-6 gods:py-3 gods:rounded-full gods:bg-primary/10 gods:text-primary hover:gods:bg-primary/20 gods:border gods:border-primary/30 gods:transition-all gods:font-[family-name:var(--font-display)] gods:tracking-wider"
+          className="gods:flex gods:items-center gods:gap-2 gods:px-6 gods:py-3 gods:rounded-full gods:bg-primary/10 gods:text-primary hover:gods:bg-primary/20 gods:border gods:border-primary/30 gods:transition-all gods:font-display gods:text-base gods:tracking-wider"
         >
           <PlusCircle size={18} /> Ajouter 1 Dé
         </button>
         <button 
           onClick={() => modifierDes('remove')} 
-          className="gods:flex gods:items-center gods:gap-2 gods:px-6 gods:py-3 gods:rounded-full gods:bg-destructive/10 gods:text-destructive hover:gods:bg-destructive/20 gods:border gods:border-destructive/30 gods:transition-all gods:font-[family-name:var(--font-display)] gods:tracking-wider"
+          className="gods:flex gods:items-center gods:gap-2 gods:px-6 gods:py-3 gods:rounded-full gods:bg-destructive/10 gods:text-destructive hover:gods:bg-destructive/20 gods:border gods:border-destructive/30 gods:transition-all gods:font-display gods:text-base gods:tracking-wider"
         >
           <MinusCircle size={18} /> Dépenser 1 Dé
         </button>
@@ -351,30 +351,30 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
 
       {/* Détails de l'Instinct du Groupe */}
       <div className="gods:bg-card/40 gods:border gods:border-border gods:rounded-lg gods:p-5">
-        <h4 className="gods:font-[family-name:var(--font-display)] gods:text-xl gods:tracking-widest gods:uppercase gods:mb-3 gods:text-primary">
+        <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:mb-3 gods:text-primary">
           Instinct: {groupe.instinctGroupe}
         </h4>
         
         {currentInstinctDetails ? (
           <>
-            <p className="gods:text-foreground/80 gods:italic gods:mb-4">{currentInstinctDetails.text}</p>
-            <div className="gods:grid gods:grid-cols-2 gods:gap-6 gods:text-sm gods:border-t gods:border-border gods:pt-4">
+            <p className="gods:text-muted-foreground gods:text-base gods:italic gods:mb-4">{currentInstinctDetails.text}</p>
+            <div className="gods:grid gods:grid-cols-2 gods:gap-6 gods:text-base gods:border-t gods:border-border gods:pt-4">
               <div>
-                <strong className="gods:text-warning/90 gods:block gods:mb-1">Principes (Gains de Dés) :</strong> 
-                <p className="gods:text-foreground/70">{currentInstinctDetails.principes}</p>
+                <strong className="gods:text-primary gods:block gods:mb-1">Principes (Gains de Dés) :</strong> 
+                <p className="gods:text-muted-foreground">{currentInstinctDetails.principes}</p>
               </div>
               <div>
-                <strong className="gods:text-destructive/90 gods:block gods:mb-1">Interdits (Pertes de Dés) :</strong> 
-                <p className="gods:text-foreground/70">{currentInstinctDetails.interdits}</p>
+                <strong className="gods:text-destructive gods:block gods:mb-1">Interdits (Pertes de Dés) :</strong> 
+                <p className="gods:text-muted-foreground">{currentInstinctDetails.interdits}</p>
               </div>
             </div>
-            <div className="gods:mt-4 gods:pt-4 gods:border-t gods:border-border gods:text-warning/90">
+            <div className="gods:mt-4 gods:pt-4 gods:border-t gods:border-border gods:text-primary">
               <strong className="gods:block gods:mb-1">Capacité Spéciale :</strong>
-              <p className="gods:text-sm">{currentInstinctDetails.stats}</p>
+              <p className="gods:text-base gods:text-muted-foreground">{currentInstinctDetails.stats}</p>
             </div>
           </>
         ) : (
-          <p className="gods:text-foreground/60 gods:italic">{groupe.capacitesInstinctGroupe}</p>
+          <p className="gods:text-muted-foreground gods:text-base gods:italic">{groupe.capacitesInstinctGroupe}</p>
         )}
       </div>
 

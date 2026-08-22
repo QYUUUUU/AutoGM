@@ -20,15 +20,18 @@ export default function App({ characters }: { characters: Character[] }) {
   };
 
   return (
-    <div className="gods:min-h-[calc(100vh-4rem)] gods:bg-background gods:font-[family-name:var(--gods-font-body)]">
+    // Removed specific font class here since body inherently applies var(--font-body) via your base layer
+    <div className="gods:min-h-[calc(100vh-4rem)] gods:bg-background">
       <div className="gods:max-w-7xl gods:mx-auto gods:px-6 gods:py-24">
         
         {/* ── EN-TÊTE ── */}
         <div className="gods:text-center gods:mb-16">
-          <h1 className="gods:font-[family-name:var(--gods-font-display)] gods:text-4xl gods:md:text-5xl gods:tracking-widest gods:uppercase gods:text-foreground gods:mb-5">
+          {/* Removed explicit font-display, mapped to text-3xl per guidelines */}
+          <h1 className="gods:text-3xl gods:tracking-wider gods:uppercase gods:text-foreground gods:mb-5">
             Vos Personnages
           </h1>
-          <p className="gods:text-foreground/65 gods:text-lg gods:max-w-2xl gods:mx-auto gods:leading-relaxed">
+          {/* Mapped to text-base and semantic text-muted-foreground */}
+          <p className="gods:text-muted-foreground gods:text-base gods:max-w-2xl gods:mx-auto gods:leading-relaxed">
             Sélectionnez un Élu pour poursuivre l'aventure ou créez-en un nouveau.
           </p>
         </div>
@@ -44,7 +47,8 @@ export default function App({ characters }: { characters: Character[] }) {
             <div className="gods:w-16 gods:h-16 gods:rounded-full gods:bg-primary/20 gods:border gods:border-primary/30 gods:flex gods:items-center gods:justify-center gods:mb-5 gods:group-hover:scale-110 gods:transition-transform gods:duration-300 gods:text-primary">
               <Plus size={32} />
             </div>
-            <h3 className="gods:font-[family-name:var(--gods-font-display)] gods:text-xl gods:tracking-widest gods:uppercase gods:text-foreground gods:group-hover:text-primary gods:transition-colors">
+            {/* Standardized to text-xl and tracking-wider, explicit font removed */}
+            <h3 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-foreground gods:group-hover:text-primary gods:transition-colors">
               Créer un Élu
             </h3>
           </a>
@@ -53,7 +57,7 @@ export default function App({ characters }: { characters: Character[] }) {
           {characters.map((char) => (
             <a
               key={char.id_Character}
-              href={`/Character/show/${char.id_Character}`} /* 👈 Route Node exacte */
+              href={`/Character/show/${char.id_Character}`}
               className="gods:group gods:relative gods:rounded-lg gods:overflow-hidden gods:border gods:border-border gods:bg-card gods:hover:border-primary/50 gods:hover:shadow-lg gods:transition-all gods:duration-300 gods:min-h-[350px] gods:flex gods:flex-col gods:cursor-pointer"
             >
               {/* Image & Gradient */}
@@ -63,18 +67,18 @@ export default function App({ characters }: { characters: Character[] }) {
                   alt={char.nom}
                   className="gods:w-full gods:h-full gods:object-cover gods:object-top gods:transition-transform gods:duration-700 gods:group-hover:scale-105"
                 />
-                {/* Dégradé qui fusionne parfaitement l'image avec le fond de la carte en bas */}
                 <div className="gods:absolute gods:inset-0 gods:bg-gradient-to-t gods:from-card gods:via-card/40 gods:to-transparent" />
               </div>
 
               {/* Textes (superposés sur la fin du dégradé) */}
               <div className="gods:p-5 gods:text-center gods:flex-1 gods:flex gods:flex-col gods:justify-center gods:-mt-10 gods:relative gods:z-10">
-                <h2 className="gods:font-[family-name:var(--gods-font-display)] gods:text-2xl gods:tracking-wider gods:uppercase gods:text-foreground gods:drop-shadow-md">
+                {/* Standardized to text-xl to match other cards, explicit font removed */}
+                <h2 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-foreground gods:drop-shadow-md">
                   {char.nom}
                 </h2>
                 
                 {(char.origine || char.instinct) && (
-                  <p className="gods:text-[10px] gods:text-primary/80 gods:mt-2 gods:uppercase gods:tracking-[0.2em] gods:font-[family-name:var(--gods-font-display)]">
+                  <p className="gods:text-xs gods:text-primary gods:mt-2 gods:uppercase gods:tracking-widest gods:font-display">
                     {char.origine || "Inconnu"}
                     {char.instinct ? ` • ${char.instinct}` : ""}
                   </p>

@@ -5,7 +5,6 @@ import * as Dialog from "@radix-ui/react-dialog";
 import * as Popover from "@radix-ui/react-popover";
 import { throwStatCheck, updateCharacterField } from "./api";
 
-
 // Imports des onglets
 import InteractionsTab from "./tabs/InteractionsTab";
 import PersonnageTab from "./tabs/PersonnageTab";
@@ -13,6 +12,7 @@ import RessourcesTab from "./tabs/RessourcesTab";
 import EclatTab from "./tabs/EclatTab";
 import RituelsTab from "./tabs/RituelsTab";
 import GroupeTab from "./tabs/GroupeTab";
+
 // ─── Types ──────────────────────────────────────────────────────────────────
 
 interface DiceRoll { die: string; value: number; }
@@ -56,8 +56,6 @@ const DICE_TYPES = [
   { die: "d20", sides: 20 },
 ];
 
-// Characteristics only carry their own identity now — skills are NOT scoped
-// to a characteristic. Any skill can be rolled against any characteristic.
 const REAL_CHARACTERISTICS = [
   { name: "Puissance",     value: "puissance",     key: "PUI" },
   { name: "Précision",     value: "precision",     key: "PRE" },
@@ -69,9 +67,6 @@ const REAL_CHARACTERISTICS = [
   { name: "Empathie",      value: "empathie",      key: "EMP" },
 ];
 
-// The full skill list. Any skill here is selectable regardless of which
-// characteristic was clicked to open the popover — skills aren't scoped to
-// a characteristic, so there are no sub-groups, just one flat, sorted list.
 const ALL_SKILLS: Skill[] = [
   { l: "Adresse", v: "adresse" },
   { l: "Animalisme", v: "animalisme" },
@@ -124,7 +119,7 @@ const TAB_META: Record<string, { desc: string; glyph: string }> = {
 
 function DSLabel({ children }: { children: string }) {
   return (
-    <p className="gods:text-sm gods:tracking-[0.12em] gods:uppercase gods:text-foreground/75 gods:font-[family-name:var(--font-display)] gods:font-semibold gods:mb-2">
+    <p className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-muted-foreground gods:font-display gods:font-semibold gods:mb-2">
       {children}
     </p>
   );
@@ -134,18 +129,17 @@ function SelectArrow() {
   return (
     <ChevronDown
       size={12}
-      className="gods:absolute gods:right-2.5 gods:top-1/2 gods:-translate-y-1/2 gods:text-foreground/40 gods:pointer-events-none"
+      className="gods:absolute gods:right-2.5 gods:top-1/2 gods:-translate-y-1/2 gods:text-muted-foreground gods:pointer-events-none"
     />
   );
 }
 
-// Resilient Avatar Component: Tries to load the image, falls back to colored initials if missing/broken
 function AvatarImage({ src, fallback, color, className, style }: { src: string; fallback: string; color: string; className: string; style?: React.CSSProperties }) {
   const [error, setError] = useState(false);
 
   if (error || !src) {
     return (
-      <div className={`gods:flex gods:items-center gods:justify-center gods:text-sm gods:font-bold gods:shrink-0 gods:font-[family-name:var(--font-display)] ${className}`}
+      <div className={`gods:flex gods:items-center gods:justify-center gods:text-xs gods:font-bold gods:shrink-0 gods:font-display ${className}`}
         style={{ backgroundColor: color, color: "#F6F2EC", ...style }}>
         {fallback}
       </div>
@@ -168,29 +162,22 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
 
   const charInitial = character?.nom ? character.nom.charAt(0).toUpperCase() : "?";
 
-  // Dice roller
   const [diceCounts, setDiceCounts] = useState<Record<string, number>>(
     Object.fromEntries(DICE_TYPES.map(({ die }) => [die, 0]))
   );
   const [diceColor, setDiceColor] = useState("#9A7818");
   const colorRef = useRef<HTMLInputElement>(null);
 
-  // Character / characteristics — step-based popover flow:
-  //   openCharIdx === null        -> no popover open
-  //   openCharIdx !== null, step "skills"  -> showing the full skill list
-  //   openCharIdx !== null, step "details" -> showing modifier/group/submit
   const [openCharIdx, setOpenCharIdx] = useState<number | null>(null);
   const [popoverStep, setPopoverStep] = useState<"skills" | "details">("skills");
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [rollModifier, setRollModifier] = useState("0");
   const [isGroupAction, setIsGroupAction] = useState(false);
 
-  // Results / tabs
   const [activeTab, setActiveTab] = useState<Tab>("Résultats");
   const [results, setResults] = useState<RollResult[]>([]);
   const chatRef = useRef<HTMLDivElement>(null);
 
-  // Inventory
   const [inventory, setInventory] = useState<InventoryItem[]>(
     Array.isArray(character.inventory) ? character.inventory.map((i: any, idx: number) => ({ id: idx, ...i })) : []
   );
@@ -199,11 +186,9 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
   const [selectedManualItem, setSelectedManualItem] = useState("");
   const [customItem, setCustomItem] = useState({ name: "", type: "", stats: "", description: "" });
 
-  // Notes
   const [notes, setNotes] = useState(character.notes || "");
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving">("saved");
 
-  // Resizable Results layout
   const [notesWidth, setNotesWidth] = useState(288);
   const [inventoryHeight, setInventoryHeight] = useState(240);
 
@@ -266,7 +251,6 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
     }
   };
 
-  // ── Auto-Save Notes ───────────────────────────────────────────────────────
   useEffect(() => {
     if (notes === character.notes) return;
     setSaveStatus("saving");
@@ -277,7 +261,6 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
     return () => clearTimeout(t);
   }, [notes]);
 
-  // 🔥 NOUVEAU : Écoute SSE pour les mises à jour en direct du personnage (ex: blessures modifiées par le MJ)
   useEffect(() => {
     const charId = character.id_Character || character.id;
     if (!charId) return;
@@ -288,13 +271,8 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
     evtSource.onmessage = (e) => {
       try {
         const { characterId, updates } = JSON.parse(e.data);
-        
-        // Si la mise à jour concerne bien CE personnage
         if (String(characterId) === String(charId)) {
-          setCharacter((prev: any) => ({
-            ...prev,
-            ...updates // Fusionne dynamiquement toutes les données modifiées (blessurelegere, effort, etc.)
-          }));
+          setCharacter((prev: any) => ({ ...prev, ...updates }));
         }
       } catch (err) {
         console.error("Erreur de parsing SSE Personnage", err);
@@ -304,8 +282,6 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
     return () => evtSource.close();
   }, [character.id_Character, character.id, character.groupeId]);
 
-
-  // ── SSE Real-Time Rolls ───────────────────────────────────────────────────
   useEffect(() => {
     let evtSource: EventSource | null = null;
     const fetchHistory = async () => {
@@ -369,19 +345,6 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
   }
 }, [results, activeTab]);
 
-  // Render dice values in a neutral chat style.
-  // A natural 10 is highlighted in gold only when the roll contains a d10.
-  const formatRollHtml = (rawHtml: string = "") => {
-    const hasD10 = /\bd10\b/i.test(rawHtml);
-
-    return rawHtml.replace(/\b(\d+)\b/g, (match) => {
-      const value = Number(match);
-      const color = hasD10 && value === 10 ? "#C9A227" : "#242424";
-      return `<strong style="color:${color}">${match}</strong>`;
-    });
-  };
-
-  // ── Dice Logic ────────────────────────────────────────────────────────────
   const adjustDice = (die: string, delta: number) =>
     setDiceCounts((prev) => ({ ...prev, [die]: Math.max(0, (prev[die] || 0) + delta) }));
 
@@ -392,8 +355,6 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
     .filter(({ die }) => (diceCounts[die] || 0) > 0)
     .map(({ die }) => `${diceCounts[die]}${die}`)
     .join("+") || "—";
-
-  // ── Characteristic/skill popover flow ─────────────────────────────────────
 
   const closeCharPopover = () => {
     setOpenCharIdx(null);
@@ -447,17 +408,13 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
     resetDice();
   };
 
-  // ── Injuries ──────────────────────────────────────────────────────────────
   const toggleInjury = (type: string, index: number) => {
     const current = character[type] || 0;
     const newVal = current === index + 1 ? index : index + 1;
-    // Mise à jour optimiste
     setCharacter((prev: any) => ({ ...prev, [type]: newVal }));
-    // Envoi au serveur (qui va ensuite émettre le SSE pour informer le MJ et les autres fenêtres)
     updateCharacterField(character.id_Character || character.id, type, newVal);
   };
 
-  // ── Inventory & Equipment ─────────────────────────────────────────────────
   const saveInventoryToDB = (newInv: InventoryItem[]) => {
     updateCharacterField(character.id_Character || character.id, "inventory", JSON.stringify(newInv.map(({id, ...rest}) => rest)));
   };
@@ -492,41 +449,31 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
     updateCharacterField(character.id_Character || character.id, field, val);
   };
 
-  // ── Render ────────────────────────────────────────────────────────────────
-
   return (
-    <div className="gods:h-full gods:flex gods:flex-col gods:bg-background gods:text-foreground gods:font-[family-name:var(--font-body)] gods:overflow-hidden">
+    <div className="gods:h-full gods:flex gods:flex-col gods:bg-background gods:text-foreground gods:overflow-hidden">
 
       {/* Paper grain */}
       <div aria-hidden className="gods:pointer-events-none gods:fixed gods:inset-0 gods:z-[500] gods:mix-blend-multiply gods:opacity-[0.055]"
         style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='pn'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23pn)'/%3E%3C/svg%3E")` }} />
 
-      {/* ── Board layout ─────────────────────────────────────────── */}
       <div className="gods:flex gods:flex-1 gods:overflow-hidden">
-
         {/* ── LEFT COLUMN ────────────────────────────────────────── */}
-        <aside className="gods:w-72 gods:shrink-0 gods:border-r gods:border-border gods:flex gods:flex-col gods:overflow-y-auto gods:bg-card/40 gods:z-10">
-
-          {/* Character Selection */}
+        <aside className="gods:shrink-0 gods:border-r gods:border-border gods:flex gods:flex-col gods:overflow-y-auto gods:bg-card/40 gods:z-10">
           <div className="gods:p-4 gods:border-b gods:border-border gods:flex gods:items-center gods:gap-3">
-
-            {/* Fallback resilient Avatar for the Left Column */}
             <AvatarImage
               src={getAvatar(character)}
               fallback={charInitial}
               color={diceColor}
               className="gods:w-8 gods:h-8 gods:rounded-full gods:border gods:border-primary/30"
             />
-
             <select
               value={character.id_Character || character.id}
               onChange={(e) => switchCharacter(e.target.value)}
-              className="gods:bg-transparent gods:border-none gods:outline-none gods:text-base gods:font-[family-name:var(--font-display)] gods:tracking-wide gods:cursor-pointer gods:flex-1 gods:text-foreground">
+              className="gods:bg-transparent gods:border-none gods:outline-none gods:text-base gods:font-display gods:tracking-wider gods:cursor-pointer gods:flex-1 gods:text-foreground">
               {characters.map((c: any) => <option key={c.id_Character || c.id} value={c.id_Character || c.id}>{c.nom}</option>)}
             </select>
           </div>
 
-          {/* Dice roller ─────────────────────────────────────────── */}
           <div className="gods:p-4 gods:border-b gods:border-border">
             <div className="gods:flex gods:items-center gods:justify-between gods:mb-3">
               <DSLabel>Lancer de dés</DSLabel>
@@ -540,28 +487,26 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
               />
             </div>
 
-            {/* Formula */}
             <div className="gods:mb-3 gods:px-3 gods:py-1.5 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:min-h-[2rem] gods:flex gods:items-center">
-              <span className={`gods:font-[family-name:var(--font-display)] gods:text-base gods:tracking-wider ${diceFormula === "—" ? "gods:text-foreground/30" : "gods:text-foreground"}`}>
+              <span className={`gods:font-display gods:text-base gods:tracking-wider ${diceFormula === "—" ? "gods:text-muted-foreground" : "gods:text-foreground"}`}>
                 {diceFormula}
               </span>
             </div>
 
-            {/* Dice rows */}
             <div className="gods:space-y-1.5 gods:mb-4">
               {DICE_TYPES.map(({ die }) => (
                 <div key={die} className="gods:flex gods:items-center gods:justify-between">
-                  <span className="gods:font-[family-name:var(--font-display)] gods:text-xs gods:tracking-widest gods:text-foreground/55 gods:uppercase gods:w-7">{die}</span>
+                  <span className="gods:font-display gods:text-xs gods:tracking-widest gods:text-muted-foreground gods:uppercase gods:w-7">{die}</span>
                   <div className="gods:flex gods:items-center gods:gap-2">
                     <button onClick={() => adjustDice(die, -1)}
-                      className="gods:w-6 gods:h-6 gods:rounded gods:border gods:border-border gods:text-foreground/55 hover:gods:border-primary/40 hover:gods:text-foreground gods:flex gods:items-center gods:justify-center gods:leading-none gods:transition-all gods:text-lg">
+                      className="gods:w-6 gods:h-6 gods:rounded gods:border gods:border-border gods:text-muted-foreground hover:gods:border-primary/40 hover:gods:text-foreground gods:flex gods:items-center gods:justify-center gods:leading-none gods:transition-all gods:text-base">
                       −
                     </button>
-                    <span className="gods:w-5 gods:text-center gods:text-base gods:font-[family-name:var(--font-display)] gods:text-foreground gods:tabular-nums">
+                    <span className="gods:w-5 gods:text-center gods:text-base gods:font-display gods:text-foreground gods:tabular-nums">
                       {diceCounts[die]}
                     </span>
                     <button onClick={() => adjustDice(die, 1)}
-                      className="gods:w-6 gods:h-6 gods:rounded gods:border gods:border-border gods:text-foreground/55 hover:gods:border-primary/40 hover:gods:text-foreground gods:flex gods:items-center gods:justify-center gods:leading-none gods:transition-all gods:text-lg">
+                      className="gods:w-6 gods:h-6 gods:rounded gods:border gods:border-border gods:text-muted-foreground hover:gods:border-primary/40 hover:gods:text-foreground gods:flex gods:items-center gods:justify-center gods:leading-none gods:transition-all gods:text-base">
                       +
                     </button>
                   </div>
@@ -569,36 +514,29 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
               ))}
             </div>
 
-            {/* Roll + reset — plain dice, no characteristic/skill involved */}
             <div className="gods:flex gods:gap-2">
               <button onClick={handleRoll} disabled={diceFormula === "—"}
-                className="gods:flex-1 gods:py-2 gods:bg-primary gods:text-primary-foreground gods:text-base gods:font-medium gods:rounded-md hover:gods:bg-primary/85 disabled:gods:opacity-35 disabled:gods:cursor-not-allowed gods:transition-all gods:font-[family-name:var(--font-display)] gods:tracking-wider">
+                className="gods:flex-1 gods:py-2 gods:bg-primary gods:text-primary-foreground gods:text-base gods:font-medium gods:rounded-md hover:gods:bg-primary/85 disabled:gods:opacity-35 disabled:gods:cursor-not-allowed gods:transition-all gods:font-display gods:tracking-wider">
                 Lancer
               </button>
               <button onClick={resetDice}
-                className="gods:px-3 gods:py-2 gods:border gods:border-border gods:text-foreground/50 hover:gods:text-foreground gods:rounded-md gods:transition-colors">
+                className="gods:px-3 gods:py-2 gods:border gods:border-border gods:text-muted-foreground hover:gods:text-foreground gods:rounded-md gods:transition-colors">
                 <RotateCcw size={14} />
               </button>
             </div>
           </div>
 
-          {/* Character display ────────────────────────────────────── */}
           <div className="gods:p-4 gods:border-b gods:border-border">
-
-            {/* Injuries */}
             <div className="gods:mb-4 gods:space-y-2">
               <DSLabel>Blessures</DSLabel>
               {INJURY_CONFIG.map((inj) => {
                 const max = character[`max${inj.key}`] || inj.defaultMax;
-                
-                // 1. Récupération de la stat Résistance (assurez-vous que la clé est bien "resistance")
                 const baseResistance = Number(character.resistance) || 0;
-                // 2. Calcul du seuil dynamique (Résistance + offset)
                 const threshold = baseResistance + inj.offset;
                 
                 return (
                   <div key={inj.key} className="gods:flex gods:items-center gods:justify-between">
-                    <span className="gods:text-sm gods:text-foreground/55">
+                    <span className="gods:text-base gods:text-muted-foreground">
                       {inj.label} ({threshold})
                     </span>
                     <div className="gods:flex gods:gap-1.5">
@@ -617,7 +555,6 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
               })}
             </div>
 
-            {/* Characteristics grid — click one to open the picker popover */}
             <DSLabel>Caractéristiques</DSLabel>
             <div className="gods:grid gods:grid-cols-2 gods:gap-1.5">
               {REAL_CHARACTERISTICS.map((char, i) => {
@@ -639,10 +576,10 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                         hasSkill
                           ? "gods:border-[rgba(42,107,82,0.5)] gods:bg-[rgba(42,107,82,0.08)] gods:text-[#2A6B52]"
                           : isOpen
-                          ? "gods:border-primary/40 gods:bg-primary/6 gods:text-primary"
-                          : "gods:border-border gods:text-foreground/65 hover:gods:border-primary/30 hover:gods:text-foreground"
+                          ? "gods:border-primary/40 gods:bg-primary/20 gods:text-primary"
+                          : "gods:border-border gods:text-muted-foreground hover:gods:border-primary/30 hover:gods:text-foreground"
                       }`}>
-                        <div className="gods:font-[family-name:var(--font-display)] gods:tracking-wide gods:text-base gods:font-medium gods:truncate">
+                        <div className="gods:font-display gods:tracking-wider gods:text-base gods:font-medium gods:truncate">
                           {hasSkill ? selectedSkill!.l : char.name}
                         </div>
                       </button>
@@ -655,17 +592,16 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                         sideOffset={10} side="right" align="center" collisionPadding={16} avoidCollisions
                         onEscapeKeyDown={closeCharPopover}
                       >
-                        {/* ── Step 1: full skill list (not scoped to this characteristic) ── */}
                         {popoverStep === "skills" && (
                           <>
                             <div className="gods:flex gods:items-center gods:gap-2 gods:px-3 gods:py-3 gods:border-b gods:border-border gods:shrink-0">
                               <button onClick={closeCharPopover}
                                 style={{ outline: "none", boxShadow: "none" }}
-                                className="gods:flex gods:items-center gods:justify-center gods:w-8 gods:h-8 gods:-ml-1 gods:rounded-md gods:text-foreground/50 hover:gods:text-foreground hover:gods:bg-muted gods:transition-colors !gods:outline-none focus:!gods:outline-none active:!gods:outline-none"
+                                className="gods:flex gods:items-center gods:justify-center gods:w-8 gods:h-8 gods:-ml-1 gods:rounded-md gods:text-muted-foreground hover:gods:text-foreground hover:gods:bg-muted gods:transition-colors !gods:outline-none focus:!gods:outline-none active:!gods:outline-none"
                                 title="Annuler">
                                 <ChevronLeft size={18} />
                               </button>
-                              <p className="gods:text-base gods:tracking-wide gods:text-foreground/70 gods:font-[family-name:var(--font-display)]">
+                              <p className="gods:text-base gods:tracking-wider gods:text-muted-foreground gods:font-display">
                                 {char.name} — choisir une compétence
                               </p>
                             </div>
@@ -674,7 +610,7 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                                 <button key={skill.v}
                                   onClick={() => pickSkill(skill)}
                                   style={{ outline: "none", boxShadow: "none" }}
-                                  className="gods:w-full gods:flex gods:items-center gods:px-3 gods:py-2.5 gods:text-lg gods:rounded-md gods:text-left gods:transition-colors gods:text-foreground/75 hover:gods:bg-muted hover:gods:text-foreground !gods:outline-none focus:!gods:outline-none active:!gods:outline-none">
+                                  className="gods:w-full gods:flex gods:items-center gods:px-3 gods:py-2.5 gods:text-base gods:rounded-md gods:text-left gods:transition-colors gods:text-muted-foreground hover:gods:bg-muted hover:gods:text-foreground !gods:outline-none focus:!gods:outline-none active:!gods:outline-none">
                                   {skill.l}
                                 </button>
                               ))}
@@ -682,32 +618,31 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                           </>
                         )}
 
-                        {/* ── Step 2: modifier, group action, submit ── */}
                         {popoverStep === "details" && selectedSkill && (
                           <div className="gods:flex gods:flex-col">
                             <div className="gods:flex gods:items-center gods:gap-2 gods:px-3 gods:py-3 gods:border-b gods:border-border gods:shrink-0">
                               <button onClick={backToSkillList}
                                 style={{ outline: "none", boxShadow: "none" }}
-                                className="gods:flex gods:items-center gods:justify-center gods:w-8 gods:h-8 gods:-ml-1 gods:rounded-md gods:text-foreground/50 hover:gods:text-foreground hover:gods:bg-muted gods:transition-colors !gods:outline-none focus:!gods:outline-none active:!gods:outline-none"
+                                className="gods:flex gods:items-center gods:justify-center gods:w-8 gods:h-8 gods:-ml-1 gods:rounded-md gods:text-muted-foreground hover:gods:text-foreground hover:gods:bg-muted gods:transition-colors !gods:outline-none focus:!gods:outline-none active:!gods:outline-none"
                                 title="Retour">
                                 <ChevronLeft size={18} />
                               </button>
-                              <p className="gods:text-base gods:text-[#2A6B52] gods:tracking-wide gods:font-[family-name:var(--font-display)] gods:truncate">
+                              <p className="gods:text-base gods:text-[#2A6B52] gods:tracking-wider gods:font-display gods:truncate">
                                 {char.name} / {selectedSkill.l}
                               </p>
                             </div>
 
                             <div className="gods:p-4 gods:space-y-4">
                               <div>
-                                <label className="gods:block gods:text-sm gods:text-foreground/55 gods:mb-1.5">Modificateur</label>
+                                <label className="gods:block gods:text-xs gods:tracking-widest gods:uppercase gods:font-display gods:text-muted-foreground gods:mb-1.5">Modificateur</label>
                                 <input type="number" placeholder="±0" value={rollModifier}
                                   onChange={(e) => setRollModifier(e.target.value)}
                                   style={{ outline: "none" }}
-                                  className="gods:w-full gods:px-3 gods:py-2.5 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:text-lg gods:text-foreground gods:placeholder:text-foreground/35 focus:gods:border-primary/40 focus:gods:ring-1 focus:gods:ring-primary/20 !gods:outline-none" />
+                                  className="gods:w-full gods:px-3 gods:py-2.5 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:text-base gods:text-foreground gods:placeholder:text-muted-foreground focus:gods:border-primary/40 focus:gods:ring-1 focus:gods:ring-primary/20 !gods:outline-none" />
                               </div>
 
                               <div className="gods:flex gods:items-center gods:justify-between">
-                                <span className="gods:text-lg gods:text-foreground/70">Action de groupe</span>
+                                <span className="gods:text-base gods:text-muted-foreground">Action de groupe</span>
                                 <Switch.Root checked={isGroupAction} onCheckedChange={setIsGroupAction}
                                   className={`gods:relative gods:inline-flex gods:h-7 gods:w-12 gods:items-center gods:rounded-full gods:border gods:transition-colors gods:cursor-pointer focus-visible:gods:outline-none focus-visible:gods:ring-2 focus-visible:gods:ring-primary/30 ${
                                     isGroupAction
@@ -724,7 +659,7 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
 
                               <button onClick={handleRoll}
                                 style={{ outline: "none", boxShadow: "none" }}
-                                className="gods:w-full gods:py-2.5 gods:bg-primary gods:text-primary-foreground gods:text-lg gods:font-medium gods:rounded-md hover:gods:bg-primary/85 gods:transition-all gods:font-[family-name:var(--font-display)] gods:tracking-wider !gods:outline-none focus:!gods:outline-none active:!gods:outline-none">
+                                className="gods:w-full gods:py-2.5 gods:bg-primary gods:text-primary-foreground gods:text-base gods:font-medium gods:rounded-md hover:gods:bg-primary/85 gods:transition-all gods:font-display gods:tracking-wider !gods:outline-none focus:!gods:outline-none active:!gods:outline-none">
                                 Lancer
                               </button>
                             </div>
@@ -738,12 +673,11 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
             </div>
           </div>
 
-          {/* Equipped gear ────────────────────────────────────────── */}
           <div className="gods:p-4">
             <DSLabel>Équipement actif</DSLabel>
             <div className="gods:space-y-3">
               <div>
-                <label className="gods:text-sm gods:text-foreground/55 gods:mb-1 gods:block">Armure</label>
+                <label className="gods:text-xs gods:tracking-widest gods:uppercase gods:font-display gods:text-muted-foreground gods:mb-1 gods:block">Armure</label>
                 <div className="gods:relative">
                   <select value={character.armureEquipee || ""} onChange={(e) => handleEquip("armureEquipee", e.target.value)}
                     className="gods:w-full gods:appearance-none gods:px-3 gods:py-2 gods:pr-7 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:text-base gods:text-foreground focus:gods:outline-none focus:gods:border-primary/40 gods:transition-all">
@@ -754,7 +688,7 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                 </div>
               </div>
               <div>
-                <label className="gods:text-sm gods:text-foreground/55 gods:mb-1 gods:block">Arme</label>
+                <label className="gods:text-xs gods:tracking-widest gods:uppercase gods:font-display gods:text-muted-foreground gods:mb-1 gods:block">Arme</label>
                 <div className="gods:relative">
                   <select value={character.armeEquipee || ""} onChange={(e) => handleEquip("armeEquipee", e.target.value)}
                     className="gods:w-full gods:appearance-none gods:px-3 gods:py-2 gods:pr-7 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:text-base gods:text-foreground focus:gods:outline-none focus:gods:border-primary/40 gods:transition-all">
@@ -770,38 +704,27 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
 
         {/* ── RIGHT AREA: tabs + content ───────────────────────────── */}
         <main className="gods:flex-1 gods:flex gods:flex-col gods:min-w-0 gods:h-full gods:overflow-hidden">
-
-          {/* Tab bar */}
           <div className="gods:flex gods:shrink-0 gods:border-b gods:border-border gods:bg-card/30 gods:overflow-x-auto">
             {TABS.map((tab) => (
               <button key={tab} onClick={() => setActiveTab(tab)}
                 style={{ outline: 'none', boxShadow: 'none', WebkitTapHighlightColor: 'transparent' }}
-                className={`!gods:outline-none !gods:ring-0 focus:!gods:outline-none focus:!gods:ring-0 active:!gods:outline-none gods:px-5 gods:py-3 gods:text-base gods:whitespace-nowrap gods:font-[family-name:var(--font-display)] gods:tracking-wide gods:transition-all gods:border-0 gods:border-b-2 ${
+                className={`!gods:outline-none !gods:ring-0 focus:!gods:outline-none focus:!gods:ring-0 active:!gods:outline-none gods:px-5 gods:py-3 gods:text-base gods:whitespace-nowrap gods:font-display gods:tracking-wider gods:transition-all gods:border-0 gods:border-b-2 ${
                   activeTab === tab
                     ? "gods:border-b-primary gods:text-primary gods:bg-transparent"
-                    : "gods:border-b-transparent gods:text-foreground/55 hover:gods:text-foreground hover:gods:border-b-foreground/20 gods:bg-transparent"
+                    : "gods:border-b-transparent gods:text-muted-foreground hover:gods:text-foreground hover:gods:border-b-foreground/20 gods:bg-transparent"
                 }`}>
                 {tab}
               </button>
             ))}
           </div>
 
-          {/* Tab content */}
           <div className="gods:flex-1 gods:overflow-hidden">
-
-            {/* ── RÉSULTATS TAB ──────────────────────────────────── */}
             {activeTab === "Résultats" && (
               <div className="gods:flex gods:h-full gods:overflow-hidden">
-
-                {/* Middle: results chat + inventory */}
                 <div className="gods:flex-1 gods:flex gods:flex-col gods:overflow-hidden gods:border-r gods:border-border">
-
-                  {/* Results chat */}
                   <div ref={chatRef} className="gods:flex-1 gods:overflow-y-auto gods:p-4 gods:space-y-3">
                     {results.map((result) => (
                       <div key={result.id} className="gods:flex gods:gap-3 gods:group">
-
-                        {/* Fallback resilient Avatar for Chat Log */}
                         <AvatarImage
                           src={result.avatarUrl}
                           fallback={result.initial}
@@ -812,30 +735,16 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
 
                         <div className="gods:flex-1 gods:min-w-0">
                           <div className="gods:flex gods:items-baseline gods:gap-2 gods:mb-1 gods:flex-wrap">
-                            <span className="gods:font-[family-name:var(--font-display)] gods:text-base gods:tracking-wide gods:text-foreground">
+                            <span className="gods:font-display gods:text-base gods:tracking-wider gods:text-foreground">
                               {result.character}
                             </span>
-                            <span className="gods:text-xs gods:text-foreground/35">{result.timestamp}</span>
+                            <span className="gods:text-xs gods:tracking-widest gods:text-muted-foreground">{result.timestamp}</span>
                           </div>
 
-                          {/* Parse raw html from backend */}
                           <div className="gods:bg-card gods:border gods:border-border gods:rounded-md gods:px-3 gods:py-2.5 gods:inline-block gods:max-w-xs gods:text-base"
                             dangerouslySetInnerHTML={{
                               __html: (() => {
                                 const html = result.rawHtml || "";
-
-                                /*
-                                * First protect ONLY values of exactly 10 that occur inside
-                                * a d10 result list.
-                                *
-                                * Examples:
-                                *   d10: 5, 4, 3, 8, 7
-                                *   d10: 4, 2, 6, 7, 2, 1, 6, 8, 10, 7
-                                *   d6: 10
-                                *   d20: 10
-                                *
-                                * Only the d10 cases are marked.
-                                */
                                 const markedD10 = html.replace(
                                   /(d10\s*:\s*)([^|<]*?)(?=\||<|$)/gi,
                                   (_match, prefix, values) => {
@@ -843,22 +752,13 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                                       /\b10\b/g,
                                       "__GOLD_D10_10__"
                                     );
-
                                     return prefix + highlighted;
                                   }
                                 );
-
-                                /*
-                                * All ordinary numbers are dark grey/black.
-                                */
                                 const darkNumbers = markedD10.replace(
                                   /\b\d+\b/g,
                                   (number) => `<strong style="color:#262626">${number}</strong>`
                                 );
-
-                                /*
-                                * Restore the protected d10 natural 10s as gold.
-                                */
                                 return darkNumbers.replace(
                                   /__GOLD_D10_10__/g,
                                   '<strong style="color:#C9A227">10</strong>'
@@ -871,12 +771,10 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                     ))}
                   </div>
 
-                  {/* Inventory ──────────────────────────────────── */}
                   <div
                     className="gods:shrink-0 gods:border-t gods:border-border gods:flex gods:flex-col gods:relative"
                     style={{ height: `${inventoryHeight}px` }}
                   >
-                    {/* Drag handle: resize Inventory / Results vertically */}
                     <div
                       role="separator"
                       aria-orientation="horizontal"
@@ -888,35 +786,35 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                     </div>
 
                     <div className="gods:flex gods:items-center gods:justify-between gods:px-4 gods:py-2.5 gods:border-b gods:border-border gods:shrink-0">
-                      <span className="gods:text-xs gods:tracking-[0.25em] gods:uppercase gods:text-foreground/55 gods:font-[family-name:var(--font-display)]">
+                      <span className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-muted-foreground gods:font-display">
                         Inventaire
                       </span>
                       <button onClick={() => setShowAddItem(true)}
-                        className="gods:flex gods:items-center gods:gap-1.5 gods:px-2.5 gods:py-1 gods:text-sm gods:bg-primary gods:text-primary-foreground gods:rounded hover:gods:bg-primary/85 gods:transition-colors gods:font-[family-name:var(--font-display)] gods:tracking-wider">
+                        className="gods:flex gods:items-center gods:gap-1.5 gods:px-2.5 gods:py-1 gods:text-base gods:bg-primary gods:text-primary-foreground gods:rounded hover:gods:bg-primary/85 gods:transition-colors gods:font-display gods:tracking-wider">
                         <Plus size={11} /> Ajouter
                       </button>
                     </div>
                     <div className="gods:flex-1 gods:overflow-y-auto">
                       {inventory.length === 0 && (
-                        <div className="gods:flex gods:items-center gods:justify-center gods:h-full gods:text-base gods:text-foreground/35 gods:italic">
+                        <div className="gods:flex gods:items-center gods:justify-center gods:h-full gods:text-base gods:text-muted-foreground gods:italic">
                           Inventaire vide
                         </div>
                       )}
                       {inventory.map((item) => (
                         <div key={item.id}
-                          className="gods:flex gods:items-center gods:gap-3 gods:px-4 gods:py-2.5 gods:border-b gods:border-border/60 last:gods:border-b-0 hover:gods:bg-muted/50 gods:transition-colors gods:group">
-                          <Package size={13} className="gods:text-foreground/30 gods:shrink-0" />
+                          className="gods:flex gods:items-center gods:gap-3 gods:px-4 gods:py-2.5 gods:border-b gods:border-border gods:last:border-b-0 hover:gods:bg-muted gods:transition-colors gods:group">
+                          <Package size={13} className="gods:text-muted-foreground gods:shrink-0" />
                           <div className="gods:flex-1 gods:min-w-0">
                             <div className="gods:flex gods:items-center gods:gap-2 gods:flex-wrap">
                               <span className="gods:text-base gods:text-foreground">{item.name}</span>
-                              <span className="gods:text-[11px] gods:text-foreground/45 gods:border gods:border-border gods:rounded gods:px-1.5 gods:py-0.5 gods:font-[family-name:var(--font-display)] gods:tracking-widest gods:uppercase gods:shrink-0">
+                              <span className="gods:text-xs gods:text-muted-foreground gods:border gods:border-border gods:rounded gods:px-1.5 gods:py-0.5 gods:font-display gods:tracking-widest gods:uppercase gods:shrink-0">
                                 {item.type}
                               </span>
                             </div>
-                            <div className="gods:text-sm gods:text-foreground/45 gods:mt-0.5">{item.stats}</div>
+                            <div className="gods:text-base gods:text-muted-foreground gods:mt-0.5">{item.stats}</div>
                           </div>
                           <button onClick={() => removeItem(item.id)}
-                            className="gods:text-foreground/30 hover:gods:text-destructive gods:transition-colors gods:ml-2 !gods:outline-none focus:!gods:outline-none"
+                            className="gods:text-muted-foreground hover:gods:text-destructive gods:transition-colors gods:ml-2 !gods:outline-none focus:!gods:outline-none"
                             title="Retirer l'objet">
                             <Trash2 size={14} />
                           </button>
@@ -926,12 +824,10 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                   </div>
                 </div>
 
-                {/* Right: Notes ─────────────────────────────────── */}
                 <div
                   className="gods:shrink-0 gods:flex gods:flex-col gods:relative"
                   style={{ width: `${notesWidth}px` }}
                 >
-                  {/* Drag handle: resize Notes / Results horizontally */}
                   <div
                     role="separator"
                     aria-orientation="vertical"
@@ -943,25 +839,24 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                   </div>
 
                   <div className="gods:flex gods:items-center gods:justify-between gods:px-4 gods:py-2.5 gods:border-b gods:border-border gods:shrink-0">
-                    <span className="gods:text-xs gods:tracking-[0.25em] gods:uppercase gods:text-foreground/55 gods:font-[family-name:var(--font-display)]">
+                    <span className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-muted-foreground gods:font-display">
                       Notes de session
                     </span>
-                    <span className={`gods:text-[11px] gods:font-[family-name:var(--font-display)] gods:tracking-widest gods:transition-colors ${
-                      saveStatus === "saved" ? "gods:text-[#2A6B52]" : "gods:text-foreground/35"
+                    <span className={`gods:text-xs gods:font-display gods:tracking-widest gods:transition-colors ${
+                      saveStatus === "saved" ? "gods:text-[#2A6B52]" : "gods:text-muted-foreground"
                     }`}>
                       {saveStatus === "saved" ? "✓ Sauvegardé" : "Sauvegarde…"}
                     </span>
                   </div>
                   <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
-                    className="gods:flex-1 gods:p-4 gods:bg-transparent gods:resize-none gods:text-lg gods:text-foreground placeholder:gods:text-foreground/30 focus:gods:outline-none gods:leading-relaxed"
+                    className="gods:flex-1 gods:p-4 gods:bg-transparent gods:resize-none gods:text-base gods:text-foreground gods:placeholder:text-muted-foreground focus:gods:outline-none gods:leading-relaxed"
                     placeholder={"Prenez vos notes ici…\n\nCe champ est sauvegardé automatiquement."} />
                 </div>
               </div>
             )}
 
-            {/* ── OTHER TABS (Remplace le placeholder) ────────────────────────── */}
             {activeTab === "Interactions" && (
-              <InteractionsTab character={character} />
+              <InteractionsTab character={{...character, conversationId}} />
             )}
             
             {activeTab === "Personnage" && (
@@ -989,10 +884,6 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
             {activeTab === "Groupe" && (
               <GroupeTab character={character} allGroupes={allGroupes} />
             )}
-
-            {activeTab === "Interactions" && (
-              <InteractionsTab character={{...character, conversationId}} />
-            )}
             
           </div>
         </main>
@@ -1004,24 +895,23 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
           <Dialog.Overlay className="gods:fixed gods:inset-0 gods:bg-foreground/18 gods:backdrop-blur-sm gods:z-[400]" />
           <Dialog.Content className="gods:fixed gods:top-1/2 gods:left-1/2 gods:-translate-x-1/2 gods:-translate-y-1/2 gods:z-[401] gods:w-96 gods:bg-popover gods:border gods:border-border gods:rounded-lg gods:shadow-2xl gods:shadow-foreground/12 gods:p-6 !gods:outline-none">
             <div className="gods:flex gods:items-center gods:justify-between gods:mb-5">
-              <Dialog.Title className="gods:font-[family-name:var(--font-display)] gods:text-xl gods:tracking-wider gods:text-foreground">
+              <Dialog.Title className="gods:text-xl gods:tracking-wider gods:text-foreground">
                 Ajouter un objet
               </Dialog.Title>
               <Dialog.Close asChild>
-                <button className="gods:text-foreground/40 hover:gods:text-foreground gods:transition-colors !gods:outline-none">
+                <button className="gods:text-muted-foreground hover:gods:text-foreground gods:transition-colors !gods:outline-none">
                   <X size={18} />
                 </button>
               </Dialog.Close>
             </div>
 
-            {/* Mode toggle */}
             <div className="gods:flex gods:gap-1 gods:mb-5 gods:p-1 gods:bg-muted gods:rounded-md">
               {(["manual", "custom"] as const).map((mode) => (
                 <button key={mode} onClick={() => setAddMode(mode)}
-                  className={`gods:flex-1 gods:py-1.5 gods:text-sm gods:rounded gods:font-[family-name:var(--font-display)] gods:tracking-wider gods:transition-all !gods:outline-none ${
+                  className={`gods:flex-1 gods:py-1.5 gods:text-base gods:rounded gods:font-display gods:tracking-wider gods:transition-all !gods:outline-none ${
                     addMode === mode
                       ? "gods:bg-background gods:border gods:border-border gods:text-foreground gods:shadow-sm"
-                      : "gods:text-foreground/50 hover:gods:text-foreground"
+                      : "gods:text-muted-foreground hover:gods:text-foreground"
                   }`}>
                   {mode === "manual" ? "Dans le manuel" : "Objet personnalisé"}
                 </button>
@@ -1031,7 +921,7 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
             {addMode === "manual" ? (
               <div className="gods:space-y-4">
                 <div>
-                  <label className="gods:block gods:text-sm gods:text-foreground/60 gods:mb-1.5 gods:font-[family-name:var(--font-display)] gods:tracking-wide gods:uppercase">
+                  <label className="gods:block gods:text-xs gods:text-muted-foreground gods:mb-1.5 gods:font-display gods:tracking-widest gods:uppercase">
                     Sélectionner un objet
                   </label>
                   <div className="gods:relative">
@@ -1048,7 +938,7 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                   </div>
                 </div>
                 <button onClick={addManualItem} disabled={!selectedManualItem}
-                  className="gods:w-full gods:py-2.5 gods:bg-primary gods:text-primary-foreground gods:text-base gods:font-medium gods:rounded-md hover:gods:bg-primary/85 disabled:gods:opacity-35 disabled:gods:cursor-not-allowed gods:transition-all gods:font-[family-name:var(--font-display)] gods:tracking-wider !gods:outline-none">
+                  className="gods:w-full gods:py-2.5 gods:bg-primary gods:text-primary-foreground gods:text-base gods:font-medium gods:rounded-md hover:gods:bg-primary/85 disabled:gods:opacity-35 disabled:gods:cursor-not-allowed gods:transition-all gods:font-display gods:tracking-wider !gods:outline-none">
                   Ajouter à l'inventaire
                 </button>
               </div>
@@ -1060,26 +950,26 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
                   { key: "stats", label: "Stats",       placeholder: "DMG 2d8+5" },
                 ].map((field) => (
                   <div key={field.key}>
-                    <label className="gods:block gods:text-sm gods:text-foreground/60 gods:mb-1 gods:font-[family-name:var(--font-display)] gods:tracking-wide gods:uppercase">
+                    <label className="gods:block gods:text-xs gods:text-muted-foreground gods:mb-1 gods:font-display gods:tracking-widest gods:uppercase">
                       {field.label}
                     </label>
                     <input type="text" placeholder={field.placeholder}
                       value={(customItem as any)[field.key]}
                       onChange={(e) => setCustomItem((prev) => ({ ...prev, [field.key]: e.target.value }))}
-                      className="gods:w-full gods:px-3 gods:py-2 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:text-base gods:text-foreground placeholder:gods:text-foreground/30 focus:gods:outline-none focus:gods:border-primary/40" />
+                      className="gods:w-full gods:px-3 gods:py-2 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:text-base gods:text-foreground gods:placeholder:text-muted-foreground focus:gods:outline-none focus:gods:border-primary/40" />
                   </div>
                 ))}
                 <div>
-                  <label className="gods:block gods:text-sm gods:text-foreground/60 gods:mb-1 gods:font-[family-name:var(--font-display)] gods:tracking-wide gods:uppercase">
+                  <label className="gods:block gods:text-xs gods:text-muted-foreground gods:mb-1 gods:font-display gods:tracking-widest gods:uppercase">
                     Description
                   </label>
                   <textarea rows={2} placeholder="Forgée par Héphaïstos lui-même…"
                     value={customItem.description}
                     onChange={(e) => setCustomItem((prev) => ({ ...prev, description: e.target.value }))}
-                    className="gods:w-full gods:px-3 gods:py-2 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:text-base gods:text-foreground placeholder:gods:text-foreground/30 focus:gods:outline-none focus:gods:border-primary/40 gods:resize-none" />
+                    className="gods:w-full gods:px-3 gods:py-2 gods:bg-input-background gods:border gods:border-border gods:rounded-md gods:text-base gods:text-foreground gods:placeholder:text-muted-foreground focus:gods:outline-none focus:gods:border-primary/40 gods:resize-none" />
                 </div>
                 <button onClick={addCustomItem} disabled={!customItem.name}
-                  className="gods:w-full gods:py-2.5 gods:bg-primary gods:text-primary-foreground gods:text-base gods:font-medium gods:rounded-md hover:gods:bg-primary/85 disabled:gods:opacity-35 disabled:gods:cursor-not-allowed gods:transition-all gods:font-[family-name:var(--font-display)] gods:tracking-wider !gods:outline-none">
+                  className="gods:w-full gods:py-2.5 gods:bg-primary gods:text-primary-foreground gods:text-base gods:font-medium gods:rounded-md hover:gods:bg-primary/85 disabled:gods:opacity-35 disabled:gods:cursor-not-allowed gods:transition-all gods:font-display gods:tracking-wider !gods:outline-none">
                   Ajouter à l'inventaire
                 </button>
               </div>

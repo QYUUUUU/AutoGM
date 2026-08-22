@@ -1,13 +1,12 @@
 {% extends '/layouts/base.html.twig' %}
 
-{% block title %}Faveurs Divines - GODS
+{% block title %}Faveurs Divines | GODS
 {% endblock %}
 
 {% block stylesheets %}
 	{{ parent() }}
-	<link rel="stylesheet" href="/css/dashboard.css">
 	<style>
-		/* Forcefully hide the global footer injected by chrome.js */
+		/* Forcefully hide the global footer so the full-height flex layout works */
 		#gods-footer-root {
 			display: none !important;
 		}
@@ -15,39 +14,19 @@
 {% endblock %}
 
 {% block body %}
-	<!-- 1. React Mount Point (Includes a placeholder while React is unmounted/in progress) -->
-	<div
-		id="gods-faveurs-root" class="gods:w-full gods:overflow-hidden gods:bg-background gods:text-foreground gods:border-t gods:border-border" style="margin-top: 64px; height: calc(100vh - 64px);">
+	<!-- 1. React Mount Point -->
+	<div id="gods-faveurs-root"></div>
 
-		<!-- Placeholder : En cours de développement -->
-		<div class="gods:flex gods:items-center gods:justify-center gods:h-full gods:p-8">
-			<div class="gods:text-center gods:max-w-md">
-				<div class="gods:text-5xl gods:mb-5 gods:opacity-15 gods:select-none">✦</div>
-				<h2 class="gods:font-[family-name:var(--font-display)] gods:text-2xl gods:tracking-widest gods:uppercase gods:text-foreground gods:mb-3">
-					Les Faveurs Divines
-				</h2>
-				<p class="gods:text-foreground/60 gods:text-lg gods:leading-relaxed gods:mb-6">
-					L'interface d'attribution des dons et miracles divins est actuellement en cours de refonte. Les Dieux préparent de nouveaux mystères.
-				</p>
-				<span class="gods:inline-block gods:px-4 gods:py-1.5 gods:border gods:border-border gods:rounded-md gods:text-base gods:text-foreground/40 gods:font-[family-name:var(--font-display)] gods:tracking-wide">
-					Disponible prochainement
-				</span>
-			</div>
-		</div>
-
-	</div>
-
-	<!-- 2. Data Injection for the future React App -->
+	<!-- 2. Data Injection for the React App -->
 	<script id="gods-faveurs-data" type="application/json">
 		{
-				            "faveurs":
+		            "faveurs":
 		{{ faveurs | default('[]') | json_encode | raw }},
-				            "characters":
+		            "characters":
 		{{ characters | default('[]') | json_encode | raw }}
 		}
 	</script>
 
-	<!-- 3. Legacy scripts & React Application -->
-	<!-- Décommentez ces lignes une fois l'application React prête -->
-	<!-- <script src="/js/bundle.js"></script> --><script type="module" src="/js/faveurs.js"> </script>
+	<!-- 3. React Application Script -->
+	<script type="module" src="/js/faveurs.js"></script>
 {% endblock %}
