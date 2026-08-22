@@ -376,8 +376,8 @@ router.post('/create-character', async (req, res) => {
         rituels,
         avatar,
         imageData,
-        langues,       // <-- AJOUTÉ ICI
-        specialites    // <-- AJOUTÉ ICI
+        langues,
+        specialites
       } = req.body;
 
       // (Votre code de gestion d'image personnalisé reste ici...)
@@ -504,16 +504,7 @@ router.post('/create-character', async (req, res) => {
           maxblessuregrave: defaultGrave,
           maxblessuremortelle: defaultMortelle,
           userId: id_User,
-          notes: JSON.stringify({
-            ops: [
-              {
-                insert: "15 Sabiirihs d'Argent\n" + 
-                        (req.body.equipments ? 
-                          (Array.isArray(req.body.equipments) ? req.body.equipments.join('\n') + '\n' : req.body.equipments + '\n') 
-                          : "")
-              }
-            ]
-          }),
+          notes: "15 Sabiirihs d'Argent",
           inventory: JSON.stringify(
             (req.body.equipments ? 
               (Array.isArray(req.body.equipments) ? req.body.equipments : [req.body.equipments])
