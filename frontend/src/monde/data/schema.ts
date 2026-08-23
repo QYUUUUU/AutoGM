@@ -49,6 +49,11 @@ export interface StoryScene {
   notes?: StoryNote[];
 
   image?: string;
+  /** Which side the image sits on. When a scene has no `image`, this
+   * still controls which side the text column hugs (the composition
+   * is authored to expect it there) — "right" (or omitted) keeps text
+   * flush left, "left" pushes it flush right, "center" stacks text
+   * over a full-width image below it. */
   imageSide?: "left" | "right" | "center";
 
   /** A word inside `title` to typographically emphasize (color +

@@ -169,6 +169,16 @@ router.get('/home', (req, res) => {
 });
 
 /**
+ * @route GET /show
+ * @description Renders the application show page.
+ * Features:
+ * - Simple rendering of the `show.html.twig` view.
+ */
+router.get('/show', (req, res) => {
+  res.render('../views/show.html.twig');
+});
+
+/**
  * @route GET /maps
  * @description Renders the game maps viewing page.
  * Features:

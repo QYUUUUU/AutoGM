@@ -14,7 +14,7 @@ const FEATURE_CARDS = [
   },
   {
     title: "Mes Personnages",
-    description: "Créez et gérez vos héros divins. Statistiques, compétences, et historique au fil de vos campagnes.",
+    description: "Créez et gérez vos élus. Caractéristiques, compétences et autres statistiques.",
     Icon: Sword,
     href: ROUTES.characters,
   },
@@ -120,19 +120,20 @@ export default function App({ isAdmin = false }: { isAdmin?: boolean }) {
   return (
     <div>
       {/* ── HERO ────────────────────────────────────────────────── */}
-      <section className="gods:relative gods:min-h-[85vh] gods:flex gods:flex-col gods:items-center gods:justify-center gods:px-6 gods:text-center gods:overflow-hidden">
+      <section className="gods:relative gods:min-h-[85vh] gods:pt-20 gods:flex gods:flex-col gods:items-center gods:justify-center gods:text-center gods:overflow-hidden">
         <div className="gods:absolute gods:inset-0 gods:pointer-events-none gods:select-none gods:overflow-hidden">
           <div className="gods:absolute gods:inset-0 gods:bg-gradient-to-b gods:from-[#E8C97A]/12 gods:via-transparent gods:to-transparent" />
-          <div className="gods:absolute gods:z-0 gods:left-0 gods:bottom-0 gods:h-[100%] gods:w-auto gods:max-w-[85vw] gods:hidden gods:xl:block">
+          <div className="gods:absolute gods:z-0 gods:left-0 gods:bottom-0 gods:h-[100%] gods:w-auto gods:max-w-[85vw] gods:hidden gods:[@media(min-width:1350px)]:block">
             <img src="/images/background_illustration.png" alt="" aria-hidden="true" className="gods:w-auto gods:h-full gods:max-w-none gods:object-contain gods:object-left-bottom gods:opacity-90" />
           </div>
-          <div className="gods:absolute gods:z-0 gods:right-0 gods:bottom-0 gods:h-[90%] gods:w-auto gods:max-w-[72vw] gods:hidden gods:xl:block">
+          <div className="gods:absolute gods:z-0 gods:right-0 gods:bottom-0 gods:h-[90%] gods:w-auto gods:max-w-[72vw] gods:hidden gods:[@media(min-width:1350px)]:block">
             <img src="/images/landing_llustration.png" alt="" aria-hidden="true" className="gods:w-auto gods:h-full gods:max-w-none gods:object-contain gods:object-right-bottom gods:opacity-90" />
           </div>
           <div className="gods:absolute gods:top-1/3 gods:left-1/2 gods:-translate-x-1/2 gods:-translate-y-1/2 gods:w-[700px] gods:h-[600px] gods:rounded-full gods:bg-primary/5 gods:blur-[140px]" />
         </div>
 
-        <div className="gods:relative gods:z-10 gods:max-w-4xl gods:mx-auto gods:px-6 gods:py-10 gods:rounded-2xl gods:transition-all gods:xl:bg-transparent gods:xl:backdrop-blur-none gods:xl:border-transparent gods:xl:shadow-none gods:bg-background/70 gods:backdrop-blur-md gods:border gods:border-border/60 gods:shadow-2xl">
+        {/* Solid opacity glass card active strictly below 1700px width */}
+        <div className="gods:relative gods:z-10 gods:max-w-4xl gods:mx-auto gods:px-6 gods:py-10 gods:rounded-2xl gods:transition-all gods:duration-500 gods:bg-transparent gods:border gods:border-transparent gods:shadow-none gods:[@media(min-width:1350px)_and_(max-width:1700px)]:bg-background/90 gods:[@media(min-width:1350px)_and_(max-width:1700px)]:backdrop-blur-md gods:[@media(min-width:1350px)_and_(max-width:1700px)]:border-border/80 gods:[@media(min-width:1350px)_and_(max-width:1700px)]:shadow-2xl">
           <div className="gods:inline-flex gods:items-center gods:gap-2.5 gods:mb-10 gods:px-5 gods:py-1.5 gods:border gods:border-primary/30 gods:rounded-full gods:text-xs gods:tracking-widest gods:text-primary gods:uppercase gods:font-display">
             <span className="gods:w-1 gods:h-1 gods:rounded-full gods:bg-primary/60" />
             Plateforme de jeu de rôle

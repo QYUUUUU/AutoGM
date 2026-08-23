@@ -1,0 +1,23 @@
+{% extends '/layouts/base.html.twig' %}
+
+{% block title %}GODS - Show
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/css/show.css">
+	<style>
+		/* Forcefully hide the global footer injected by chrome.js */
+		#gods-header-root {
+			display: none !important;
+		}
+		#gods-footer-root {
+			display: none !important;
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<div id="gods-show-root"></div>
+	<script type="module" src="/js/show.js"></script>
+{% endblock %}

@@ -1,21 +1,6 @@
-/* Sitewide, collision-safe Tailwind:
-   - `prefix(gods)` -> every generated utility is `gods:*`, so it can never
-     collide with Bootstrap's `.container`, `.mb-4`, `.text-center`, etc.
-     which are also loaded on every not-yet-migrated page.
-   - We deliberately import `theme` + `utilities` only, NOT the full
-     `tailwindcss` package (which also drags in Tailwind's Preflight/reset
-     layer). Preflight resets element selectors like h1-h6/button/ul
-     globally and is NOT scoped by the prefix -- importing it would still
-     silently fight Bootstrap sitewide. Skipping it means: no global
-     resets, zero regression risk on pages we haven't touched yet.
-   As pages get migrated off Bootstrap entirely, this constraint can be
-   relaxed for good and prefixing dropped -- not before. */
 @import "tailwindcss/theme" prefix(gods);
 @import "tailwindcss/utilities" prefix(gods);
 @source '../../**/*.{ts,tsx}';
-/* Lets plain server-rendered Twig pages (no React needed, e.g. maps.html.twig)
-   use gods: utility classes directly. AutoGM/app/views is 4 levels up from
-   this file (styles -> shared -> src -> frontend -> AutoGM root -> app/views). */
 @source '../../../../app/views/**/*.twig';
 
 @theme {

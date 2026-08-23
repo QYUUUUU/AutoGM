@@ -15,10 +15,12 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
   const allNavFeatures = isAdmin ? [...NAV_FEATURES, ...ADMIN_NAV] : NAV_FEATURES;
   const isAdminHref = (href: string) => ADMIN_NAV.some((a) => a.href === href);
 
+  const isSolid = scrolled || menuOpen;
+
   return (
     <header
-      className={`gods:fixed gods:top-0 gods:left-0 gods:right-0 gods:z-50 gods:transition-all gods:duration-500 ${
-        scrolled
+      className={`gods:fixed gods:top-0 gods:left-0 gods:right-0 gods:z-[100] gods:transform-gpu gods:transition-all gods:duration-500 ${
+        isSolid
           ? "gods:bg-background/95 gods:backdrop-blur-md gods:border-b gods:border-border gods:shadow-sm"
           : "gods:bg-transparent gods:border-b gods:border-transparent"
       }`}
@@ -32,7 +34,7 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
         </a>
 
         {/* Desktop Navigation */}
-        <div className="gods:hidden gods:lg:flex gods:items-center gods:gap-2">
+        <div className="gods:hidden gods:xl:flex gods:items-center gods:gap-2">
           {allNavFeatures.map((link) => (
             <a
               key={link.href}
@@ -48,7 +50,7 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
           ))}
         </div>
 
-        <div className="gods:hidden gods:lg:flex gods:items-center gods:gap-3">
+        <div className="gods:hidden gods:xl:flex gods:items-center gods:gap-3">
           <a
             href={ROUTES.login}
             className="gods:px-4 gods:py-1.5 gods:text-base gods:font-medium !gods:text-foreground gods:hover:!text-primary gods:border gods:border-border gods:hover:border-primary/40 gods:rounded-md gods:transition-all"
@@ -66,7 +68,7 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
         {/* Mobile menu trigger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="gods:lg:hidden gods:p-2 gods:text-foreground gods:hover:text-primary gods:transition-colors gods:bg-transparent gods:border-0 gods:cursor-pointer"
+          className="gods:xl:hidden gods:p-2 gods:text-foreground gods:hover:text-primary gods:transition-colors gods:bg-transparent gods:border-0 gods:cursor-pointer"
           aria-label="Menu"
         >
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -75,7 +77,7 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
 
       {/* Mobile Navigation */}
       <div
-        className={`gods:lg:hidden gods:bg-background gods:border-b gods:border-border gods:overflow-hidden gods:transition-all gods:duration-300 ${
+        className={`gods:xl:hidden gods:bg-background gods:border-b gods:border-border gods:overflow-hidden gods:transition-all gods:duration-300 ${
           menuOpen ? "gods:max-h-screen" : "gods:max-h-0"
         }`}
       >
@@ -103,7 +105,7 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
             </a>
             <a
               href={ROUTES.register}
-              className="gods:block gods:px-3 gods:py-2.5 gods:text-base gods:font-medium gods:text-center gods:bg-primary gods:!text-primary-foreground gods:hover:bg-primary/85 gods:rounded-md gods:transition-colors"
+              className="gods:px-4 gods:py-1.5 gods:text-base gods:font-medium gods:bg-primary gods:!text-primary-foreground gods:hover:bg-primary/85 gods:rounded-md gods:transition-colors"
             >
               Créer un compte
             </a>

@@ -5,7 +5,7 @@ import {
   getCastFrame,
   deriveNumeral,
   resolveWatermark,
-  MOOD_COLORS,
+  MOOD_PALETTE,
   type CastFrame,
   type CarrierTarget,
   type SpineTarget,
@@ -34,10 +34,10 @@ function carrierVars(t: CarrierTarget) {
   return { top: t.top, left: t.left, width: t.width, height: t.height, borderRadius: t.borderRadius, backgroundColor: t.background, opacity: t.opacity };
 }
 function spineVars(t: SpineTarget) {
-  return { top: t.top, left: t.left, height: t.height, opacity: t.opacity, scaleY: t.scaleY };
+  return { top: t.top, left: t.left, width: t.width, height: t.height, backgroundColor: t.color, opacity: t.opacity, scaleY: t.scaleY };
 }
 function ringVars(t: RingTarget) {
-  return { top: t.top, left: t.left, width: t.size, height: t.size, opacity: t.opacity, scale: t.scale };
+  return { top: t.top, left: t.left, width: t.size, height: t.size, borderWidth: t.borderWidth, borderColor: t.color, opacity: t.opacity, scale: t.scale };
 }
 
 /** Does a word (post-punctuation) contain the accent target? Substring
@@ -147,7 +147,7 @@ export function OriginExperience({ country, onExit }: Props) {
   }
 
   function tweenMood(mood: StoryScene["mood"], duration: number) {
-    if (moodBgRef.current) gsap.to(moodBgRef.current, { backgroundColor: MOOD_COLORS[mood], duration, ease: "power2.inOut" });
+    if (moodBgRef.current) gsap.to(moodBgRef.current, { backgroundColor: MOOD_PALETTE[mood].bg, duration, ease: "power2.inOut" });
   }
 
   function tweenProgress(fraction: number, duration: number) {
@@ -344,7 +344,7 @@ export function OriginExperience({ country, onExit }: Props) {
     gsap.set(carrierRef.current, carrierVars(openingCast.carrier));
     gsap.set(spineRef.current, spineVars(openingCast.spine));
     gsap.set(ringRef.current, ringVars(openingCast.ring));
-    gsap.set(moodBgRef.current, { backgroundColor: MOOD_COLORS[opening.mood] });
+    gsap.set(moodBgRef.current, { backgroundColor: MOOD_PALETTE[opening.mood].bg });
     gsap.set(progressBarRef.current, { width: `${(1 / country.scenes.length) * 100}%` });
 
     return () => {
@@ -407,9 +407,11 @@ export function OriginExperience({ country, onExit }: Props) {
 
   const split = SPLIT_TITLE_KINDS.has(displayed.kind);
 
+  const accentStyle = { "--scene-accent": MOOD_PALETTE[displayed.mood].accent } as React.CSSProperties;
+
   return (
-    <div className="monde-show" ref={rootRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-      <div className="scene-mood-bg" ref={moodBgRef} style={{ backgroundColor: MOOD_COLORS[displayed.mood] }} />
+    <div className="monde-show" ref={rootRef} style={accentStyle} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <div className="scene-mood-bg" ref={moodBgRef} style={{ backgroundColor: MOOD_PALETTE[displayed.mood].bg }} />
       <div className="scene-environment-gradient" />
       <div className="scene-grain" />
 
@@ -432,7 +434,7 @@ export function OriginExperience({ country, onExit }: Props) {
 
       <div
         className="scene-content-stage"
-        data-image-side={displayed.imageSide ?? "none"}
+        data-image-side={displayed.imageSide ?? "right"}
         data-kind={displayed.kind}
         data-emphasis={displayed.emphasis ?? "none"}
       >
