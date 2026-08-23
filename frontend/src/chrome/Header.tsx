@@ -26,7 +26,7 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
       <nav className="gods:max-w-7xl gods:mx-auto gods:px-6 gods:flex gods:items-center gods:justify-between gods:h-16">
         <a
           href={ROUTES.home}
-          className="gods:font-display gods:text-3xl gods:tracking-widest gods:text-primary gods:font-medium gods:uppercase gods:select-none"
+          className="gods:font-display gods:text-3xl gods:tracking-widest gods:text-primary gods:uppercase gods:select-none"
         >
           GODS
         </a>
@@ -37,10 +37,10 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
             <a
               key={link.href}
               href={link.href}
-              className={`gods:px-3 gods:py-2 gods:text-base gods:font-medium gods:rounded-md gods:transition-colors ${
+              className={`gods:px-3 gods:py-2 gods:text-base gods:font-medium gods:transition-colors ${
                 isAdminHref(link.href)
-                  ? "gods:text-primary gods:hover:bg-muted"
-                  : "gods:text-muted-foreground gods:hover:text-foreground gods:hover:bg-muted"
+                  ? "gods:text-primary hover:gods:text-primary/80"
+                  : "!gods:text-foreground gods:hover:!text-primary"
               }`}
             >
               {link.label}
@@ -51,13 +51,13 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
         <div className="gods:hidden gods:lg:flex gods:items-center gods:gap-3">
           <a
             href={ROUTES.login}
-            className="gods:px-4 gods:py-1.5 gods:text-base gods:font-medium gods:text-muted-foreground gods:hover:text-foreground gods:border gods:border-border gods:hover:border-primary/40 gods:rounded-md gods:transition-all"
+            className="gods:px-4 gods:py-1.5 gods:text-base gods:font-medium !gods:text-foreground gods:hover:!text-primary gods:border gods:border-border gods:hover:border-primary/40 gods:rounded-md gods:transition-all"
           >
             Se connecter
           </a>
           <a
             href={ROUTES.register}
-            className="gods:px-4 gods:py-1.5 gods:text-base gods:bg-primary gods:!text-primary-foreground gods:hover:bg-primary/85 gods:rounded-md gods:transition-colors gods:font-medium"
+            className="gods:px-4 gods:py-1.5 gods:text-base gods:font-medium gods:bg-primary gods:!text-primary-foreground gods:hover:bg-primary/85 gods:rounded-md gods:transition-colors"
           >
             Créer un compte
           </a>
@@ -66,7 +66,7 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
         {/* Mobile menu trigger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="gods:lg:hidden gods:p-2 gods:text-muted-foreground gods:hover:text-foreground gods:transition-colors gods:bg-transparent gods:border-0 gods:cursor-pointer"
+          className="gods:lg:hidden gods:p-2 gods:text-foreground gods:hover:text-primary gods:transition-colors gods:bg-transparent gods:border-0 gods:cursor-pointer"
           aria-label="Menu"
         >
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -79,31 +79,31 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
           menuOpen ? "gods:max-h-screen" : "gods:max-h-0"
         }`}
       >
-        <div className="gods:px-6 gods:py-4 gods:space-y-0.5">
+        <div className="gods:px-6 gods:py-4 gods:space-y-2">
           {allNavFeatures.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className={`gods:block gods:px-3 gods:py-2.5 gods:text-base gods:font-medium gods:rounded-md gods:transition-colors ${
+              className={`gods:block gods:px-3 gods:py-2.5 gods:text-base gods:font-medium gods:transition-colors ${
                 isAdminHref(link.href)
-                  ? "gods:text-primary gods:hover:bg-muted"
-                  : "gods:text-muted-foreground gods:hover:text-foreground gods:hover:bg-muted"
+                  ? "gods:text-primary hover:gods:text-primary/80"
+                  : "!gods:text-foreground gods:hover:!text-primary"
               }`}
             >
               {link.label}
             </a>
           ))}
-          <div className="gods:pt-4 gods:mt-3 gods:border-t gods:border-border gods:flex gods:flex-col gods:gap-2">
+          <div className="gods:pt-4 gods:mt-3 gods:border-t gods:border-border gods:flex gods:flex-col gods:gap-3">
             <a
               href={ROUTES.login}
-              className="gods:block gods:px-3 gods:py-2.5 gods:text-base gods:font-medium gods:text-center gods:border gods:border-border gods:rounded-md gods:text-muted-foreground gods:hover:text-foreground gods:transition-colors"
+              className="gods:block gods:px-3 gods:py-2.5 gods:text-base gods:font-medium gods:text-center gods:border gods:border-border gods:rounded-md !gods:text-foreground gods:hover:!text-primary gods:hover:border-primary/40 gods:transition-all"
             >
               Se connecter
             </a>
             <a
               href={ROUTES.register}
-              className="gods:block gods:px-3 gods:py-2.5 gods:text-base gods:text-center gods:bg-primary gods:!text-primary-foreground gods:rounded-md gods:font-medium"
+              className="gods:block gods:px-3 gods:py-2.5 gods:text-base gods:font-medium gods:text-center gods:bg-primary gods:!text-primary-foreground gods:hover:bg-primary/85 gods:rounded-md gods:transition-colors"
             >
               Créer un compte
             </a>

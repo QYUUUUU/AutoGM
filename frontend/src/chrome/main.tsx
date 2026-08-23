@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import { readIsAdmin } from "../shared/routes";
 import "../shared/styles/fonts.css";
 import "../shared/styles/tailwind.css";
+import "../shared/styles/theme.css";
 import "./chrome.css";
 
 const isAdmin = readIsAdmin();

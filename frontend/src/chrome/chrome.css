@@ -1,31 +1,7 @@
-/* Sitewide "vibe" layer.
-   Deliberately plain element selectors (body, h1-h4, a, ::selection) --
-   NOT reusable class names -- so there's zero risk of colliding with any
-   Bootstrap class on pages we haven't migrated yet. This intentionally
-   DOES override Bootstrap's own body/heading/link defaults (that's the
-   point -- it's the "overall vibe" the person asked for). It does NOT
-   touch Bootstrap component classes (.btn, .card, .navbar, etc.) --
-   those still render exactly as Bootstrap styles them until each page
-   is migrated off Bootstrap individually.
-
-   Loaded via base.html.twig AFTER the Bootstrap CDN link so these rules
-   win on equal specificity (single element selector each). */
-
 html {
   background: var(--gods-color-background);
 }
 
-/* Defensive reset: general.css/user.css predate this redesign and were
-   written for the old fixed-height, single-screen "app" layout (header +
-   main as direct <html> children, no <body>, likely main { height: 100vh;
-   overflow: ... } so the assistant dashboard could scroll internally
-   without moving the whole page). Our new, much taller, scrollable pages
-   need normal document flow instead -- without this, content taller than
-   one viewport gets silently clipped inside <main>, and anything after it
-   (like the footer) collapses up to sit right at the one-viewport mark.
-   This rule intentionally targets bare elements, not classes, so it can't
-   collide with any Bootstrap class -- and since this file loads after
-   general.css/user.css in <head>, it wins on the tie. */
 html, body {
   height: auto;
   min-height: 100%;
@@ -49,24 +25,11 @@ h1, h2, h3, h4 {
 }
 
 a {
-  color: var(--gods-color-primary);
+  color: var(--gods-color-muted-foreground);
   text-decoration: none;
 }
 
-/* Bootstrap's own `a:hover { color: ...; text-decoration: underline }` is
-   MORE specific than a plain gods: utility class (element+pseudo-class
-   beats a single class), so on hover it was winning and reverting links
-   to Bootstrap's default blue+underline even where a component set its
-   own color. Matching that specificity here, loaded after Bootstrap, lets
-   it win the tie instead -- links stay gold with no underline by default.
-   Any component that wants its OWN hover behavior (e.g. gods:hover:text-
-   foreground on a nav link) still overrides this correctly, since a
-   class+pseudo-class selector is more specific than this element+pseudo-
-   class rule. */
-a:hover,
-a:focus,
-a:active,
-a:visited {
+a:hover{
   color: var(--gods-color-primary);
   text-decoration: none;
 }
