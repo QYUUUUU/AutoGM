@@ -1,6 +1,24 @@
-import { Trash2, Droplets } from "lucide-react";
+import React from "react";
+import { Trash2 } from "lucide-react";
 // Assurez-vous d'ajuster le chemin d'import selon l'emplacement exact de votre dossier tabs
 import { RITUAL_CATEGORIES } from "../../rituals/data/ritualsData"; 
+
+// ─── Composants de typographie repris de votre design system ───────────────
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-primary gods:font-display">
+      {children}
+    </span>
+  );
+}
+
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="gods:text-3xl gods:tracking-wider gods:uppercase gods:text-foreground gods:mt-2 gods:mb-8">
+      {children}
+    </h2>
+  );
+}
 
 export default function RituelsTab({ character }: { character: any }) {
   // ─── Extraction sécurisée des noms des Rituels ────────────────────────────
@@ -21,7 +39,7 @@ export default function RituelsTab({ character }: { character: any }) {
       if (found) {
         return {
           ...found,
-          categoryTitle: category.title // On récupère "Rituels de l'Air", etc.
+          categoryTitle: category.title // Ex: "Rituels de l'Air"
         };
       }
     }
@@ -54,97 +72,101 @@ export default function RituelsTab({ character }: { character: any }) {
   };
 
   return (
-    <div className="gods:h-full gods:overflow-y-auto gods:p-6 gods:bg-background">
-      <h2 className="gods:text-3xl gods:tracking-wider gods:uppercase gods:text-primary gods:mb-6 gods:border-b gods:border-border gods:pb-2">
-        Rituels Maîtrisés
-      </h2>
+    <div className="gods:h-full gods:overflow-y-auto gods:p-6 gods:lg:p-12 gods:bg-background gods:relative gods:z-10">
+      <div className="gods:max-w-6xl gods:mx-auto">
+        
+        <div className="gods:mb-12">
+          <SectionLabel>Grimoire du Personnage</SectionLabel>
+          <SectionTitle>Rituels Maîtrisés</SectionTitle>
+        </div>
 
-      {rituels.length === 0 ? (
-        <p className="gods:text-muted-foreground gods:text-base gods:italic gods:text-center gods:mt-10">
-          Aucun rituel maîtrisé pour ce personnage.
-        </p>
-      ) : (
-        <div className="gods:grid gods:grid-cols-2 gods:gap-6">
-          {rituels.map((ritualName: string, i: number) => {
-            const details = getRitualDetails(ritualName);
+        {rituels.length === 0 ? (
+          <p className="gods:text-muted-foreground gods:text-base gods:italic gods:leading-relaxed">
+            Aucun rituel maîtrisé pour ce personnage.
+          </p>
+        ) : (
+          <div className="gods:grid gods:grid-cols-1 gods:lg:grid-cols-2 gods:gap-6">
+            {rituels.map((ritualName: string, i: number) => {
+              const details = getRitualDetails(ritualName);
 
-            return (
-              <div key={i} className="gods:bg-card gods:border gods:border-border gods:rounded-lg gods:flex gods:flex-col gods:overflow-hidden gods:shadow-sm">
-                
-                {/* En-tête de la carte */}
-                <div className="gods:bg-muted/30 gods:border-b gods:border-border gods:px-4 gods:py-3 gods:flex gods:items-start gods:justify-between">
-                  <div className="gods:flex gods:flex-col gods:gap-1">
-                    <div className="gods:flex gods:items-center gods:gap-3">
-                      <h3 className="gods:text-xl gods:tracking-wider gods:text-primary gods:truncate">
+              return (
+                <div key={i} className="gods:p-6 gods:xl:p-8 gods:flex gods:flex-col gods:rounded-lg gods:border gods:border-border gods:bg-card">
+                  
+                  {/* En-tête de la carte */}
+                  <div className="gods:flex gods:items-start gods:justify-between gods:mb-4">
+                    <div>
+                      <h3 className="gods:text-xl gods:text-foreground gods:tracking-wider gods:pr-4">
                         {ritualName}
                       </h3>
                       {details && (
-                        <span className={`gods:text-xs gods:px-1.5 gods:py-0.5 gods:rounded gods:font-display gods:uppercase gods:tracking-widest gods:border ${
-                          details.level.toLowerCase() === 'mineur' 
-                            ? 'gods:bg-blue-500/10 gods:text-blue-400 gods:border-blue-500/20' 
-                            : 'gods:bg-orange-500/10 gods:text-orange-400 gods:border-orange-500/20'
-                        }`}>
-                          {details.level}
+                        <span className="gods:block gods:text-xs gods:text-muted-foreground gods:uppercase gods:tracking-widest gods:font-display gods:mt-1">
+                          {details.categoryTitle}
                         </span>
                       )}
                     </div>
-                    {/* Affichage de l'Élément (Catégorie) */}
                     {details && (
-                      <span className="gods:text-xs gods:text-muted-foreground gods:uppercase gods:tracking-widest">
-                        {details.categoryTitle}
+                      <span className={`gods:shrink-0 gods:text-xs gods:px-2 gods:py-0.5 gods:rounded gods:font-display gods:uppercase gods:tracking-widest gods:border ${
+                        details.level.toLowerCase() === 'mineur' 
+                          ? 'gods:bg-blue-500/5 gods:text-blue-500 gods:border-blue-500/20' 
+                          : 'gods:bg-orange-500/5 gods:text-orange-500 gods:border-orange-500/20'
+                      }`}>
+                        {details.level}
                       </span>
                     )}
                   </div>
                   
-                  <button 
-                    onClick={() => removeRitual(ritualName)}
-                    className="gods:text-muted-foreground hover:gods:text-destructive gods:transition-colors gods:-mr-1 gods:p-1 !gods:outline-none"
-                    title="Oublier ce rituel"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-                
-                {/* Corps de la carte */}
-                <div className="gods:p-4 gods:flex-1 gods:flex gods:flex-col gods:gap-4">
+                  {/* Corps de la carte */}
                   {details ? (
                     <>
-                      <p className="gods:text-muted-foreground gods:text-base gods:leading-relaxed">
+                      <p className="gods:text-base gods:text-muted-foreground gods:leading-relaxed gods:mb-8 gods:flex-1">
                         {details.description}
                       </p>
 
-                      {details.receptacle && (
-                        <div className="gods:bg-background/50 gods:border gods:border-border/50 gods:rounded-md gods:p-3 gods:flex gods:gap-2 gods:mt-auto">
-                          <Droplets size={14} className="gods:text-muted-foreground gods:shrink-0 gods:mt-0.5" />
-                          <div>
-                            <span className="gods:block gods:text-xs gods:font-display gods:tracking-widest gods:uppercase gods:text-muted-foreground gods:mb-0.5">
-                              Réceptacle Courant
-                            </span>
-                            <p className="gods:text-muted-foreground gods:text-base gods:leading-relaxed">
-                              {details.receptacle}
-                            </p>
-                          </div>
-                        </div>
-                      )}
+                      {(details.receptacle || details.note) && (
+                        <div className="gods:space-y-4 gods:mb-8">
+                          {details.receptacle && (
+                            <div className="gods:p-4 gods:bg-background/50 gods:border gods:border-border/50 gods:rounded-md">
+                              <span className="gods:block gods:text-xs gods:font-display gods:tracking-widest gods:uppercase gods:text-primary gods:mb-1">
+                                Réceptacle Courant
+                              </span>
+                              <p className="gods:text-sm gods:text-muted-foreground">
+                                {details.receptacle}
+                              </p>
+                            </div>
+                          )}
 
-                      {details.note && (
-                        <p className="gods:text-muted-foreground gods:text-base gods:italic">
-                          <strong className="gods:font-semibold gods:not-italic">Note :</strong> {details.note}
-                        </p>
+                          {details.note && (
+                            <p className="gods:text-sm gods:italic gods:text-muted-foreground">
+                              <strong className="gods:font-semibold gods:not-italic">Note :</strong> {details.note}
+                            </p>
+                          )}
+                        </div>
                       )}
                     </>
                   ) : (
-                    <p className="gods:text-muted-foreground gods:text-base gods:italic">
+                    <p className="gods:text-base gods:text-muted-foreground gods:italic gods:mb-8 gods:flex-1">
                       Détails introuvables. Le nom du rituel a peut-être été modifié dans les données.
                     </p>
                   )}
-                </div>
 
-              </div>
-            );
-          })}
-        </div>
-      )}
+                  {/* Action */}
+                  <div className="gods:mt-2">
+                    <button 
+                      onClick={() => removeRitual(ritualName)}
+                      className="gods:flex gods:items-center gods:justify-center gods:gap-2 gods:px-8 gods:py-3 gods:border gods:border-border gods:text-muted-foreground hover:gods:text-destructive hover:gods:border-destructive/35 gods:rounded-md gods:transition-all gods:text-base gods:tracking-wider gods:font-display gods:w-fit !gods:outline-none"
+                      title="Oublier ce rituel"
+                    >
+                      <Trash2 size={15} />
+                      Oublier le rituel
+                    </button>
+                  </div>
+
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

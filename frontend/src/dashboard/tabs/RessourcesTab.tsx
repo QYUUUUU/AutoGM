@@ -5,6 +5,22 @@ interface Props {
   onUpdate: (field: string, val: any) => void;
 }
 
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-primary gods:font-display">
+      {children}
+    </span>
+  );
+}
+
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="gods:text-3xl gods:tracking-wider gods:uppercase gods:text-foreground gods:mt-2 gods:mb-8">
+      {children}
+    </h2>
+  );
+}
+
 export default function RessourcesTab({ character, onUpdate }: Props) {
   const updateResource = (field: string, delta: number, max: number) => {
     const current = character[field] || 0;
@@ -12,7 +28,6 @@ export default function RessourcesTab({ character, onUpdate }: Props) {
     onUpdate(field, next);
   };
 
-  // Logique des techniques de combat traduite depuis Twig
   const getTechniques = () => {
     const m = character.melee || 0, c = character.cac || 0, t = character.tir || 0;
     const l = character.lancer || 0, b = character.bouclier || 0, d = character.discretion || 0;
@@ -41,60 +56,71 @@ export default function RessourcesTab({ character, onUpdate }: Props) {
   const techniques = getTechniques();
 
   return (
-    <div className="gods:h-full gods:overflow-y-auto gods:p-6 gods:space-y-8 gods:bg-background">
-      <div className="gods:grid gods:grid-cols-2 gods:gap-6">
+    <div className="gods:h-full gods:overflow-y-auto gods:p-6 gods:lg:p-12 gods:bg-background gods:relative gods:z-10">
+      <div className="gods:max-w-6xl gods:mx-auto">
         
-        {/* Effort */}
-        <div className="gods:bg-card/40 gods:border gods:border-warning/30 gods:rounded-lg gods:p-5 gods:text-center">
-          <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-warning gods:mb-4">Effort</h4>
-          <div className="gods:flex gods:items-center gods:justify-center gods:gap-4">
-            <button onClick={() => updateResource("effort", -1, character.maxeffort || 15)} className="gods:w-10 gods:h-10 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-muted gods:transition-colors">
-              <Minus size={18} />
-            </button>
-            <span className="gods:text-3xl gods:tracking-wider gods:font-bold gods:font-display gods:min-w-[4rem]">
-              {character.effort ?? 15} <span className="gods:text-muted-foreground gods:text-xl">/ {character.maxeffort || 15}</span>
-            </span>
-            <button onClick={() => updateResource("effort", 1, character.maxeffort || 15)} className="gods:w-10 gods:h-10 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-muted gods:transition-colors">
-              <Plus size={18} />
-            </button>
+        <div className="gods:mb-12">
+          <SectionLabel>État</SectionLabel>
+          <SectionTitle>Ressources & Combat</SectionTitle>
+        </div>
+
+        <div className="gods:grid gods:grid-cols-1 gods:md:grid-cols-2 gods:gap-8 gods:mb-12">
+          {/* Effort */}
+          <div className="gods:p-8 gods:rounded-lg gods:border gods:border-[#9A7818]/30 gods:bg-card gods:text-center gods:hover:shadow-lg gods:transition-all gods:duration-300">
+            <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-primary gods:mb-6">Effort</h4>
+            <div className="gods:flex gods:items-center gods:justify-center gods:gap-6">
+              <button onClick={() => updateResource("effort", -1, character.maxeffort || 15)} className="gods:w-12 gods:h-12 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-background hover:gods:border-primary/50 gods:text-foreground gods:transition-all !gods:outline-none">
+                <Minus size={20} />
+              </button>
+              <span className="gods:text-5xl gods:tracking-wider gods:font-medium gods:font-display gods:text-foreground">
+                {character.effort ?? 15} <span className="gods:text-muted-foreground gods:text-2xl">/ {character.maxeffort || 15}</span>
+              </span>
+              <button onClick={() => updateResource("effort", 1, character.maxeffort || 15)} className="gods:w-12 gods:h-12 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-background hover:gods:border-primary/50 gods:text-foreground gods:transition-all !gods:outline-none">
+                <Plus size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* Sang Froid */}
+          <div className="gods:p-8 gods:rounded-lg gods:border gods:border-[#5A3A8A]/30 gods:bg-card gods:text-center gods:hover:shadow-lg gods:transition-all gods:duration-300">
+            <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-[#5A3A8A] gods:mb-6">Sang Froid</h4>
+            <div className="gods:flex gods:items-center gods:justify-center gods:gap-6">
+              <button onClick={() => updateResource("sangfroid", -1, character.maxsangfroid || 8)} className="gods:w-12 gods:h-12 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-background hover:gods:border-[#5A3A8A]/50 gods:text-foreground gods:transition-all !gods:outline-none">
+                <Minus size={20} />
+              </button>
+              <span className="gods:text-5xl gods:tracking-wider gods:font-medium gods:font-display gods:text-foreground">
+                {character.sangfroid ?? 8} <span className="gods:text-muted-foreground gods:text-2xl">/ {character.maxsangfroid || 8}</span>
+              </span>
+              <button onClick={() => updateResource("sangfroid", 1, character.maxsangfroid || 8)} className="gods:w-12 gods:h-12 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-background hover:gods:border-[#5A3A8A]/50 gods:text-foreground gods:transition-all !gods:outline-none">
+                <Plus size={20} />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Sang Froid */}
-        <div className="gods:bg-card/40 gods:border gods:border-info/30 gods:rounded-lg gods:p-5 gods:text-center">
-          <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-info gods:mb-4">Sang Froid</h4>
-          <div className="gods:flex gods:items-center gods:justify-center gods:gap-4">
-            <button onClick={() => updateResource("sangfroid", -1, character.maxsangfroid || 8)} className="gods:w-10 gods:h-10 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-muted gods:transition-colors">
-              <Minus size={18} />
-            </button>
-            <span className="gods:text-3xl gods:tracking-wider gods:font-bold gods:font-display gods:min-w-[4rem]">
-              {character.sangfroid ?? 8} <span className="gods:text-muted-foreground gods:text-xl">/ {character.maxsangfroid || 8}</span>
-            </span>
-            <button onClick={() => updateResource("sangfroid", 1, character.maxsangfroid || 8)} className="gods:w-10 gods:h-10 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-muted gods:transition-colors">
-              <Plus size={18} />
-            </button>
+        <section>
+          <div className="gods:mb-8">
+            <SectionLabel>Capacités</SectionLabel>
+            <h3 className="gods:text-2xl gods:tracking-wider gods:uppercase gods:text-foreground gods:mt-2">
+              Techniques de Combat Débloquées
+            </h3>
           </div>
-        </div>
+          {techniques.length > 0 ? (
+            <div className="gods:grid gods:grid-cols-1 gods:md:grid-cols-2 gods:lg:grid-cols-3 gods:gap-6">
+              {techniques.map((t, i) => (
+                <div key={i} className="gods:p-6 gods:rounded-lg gods:border gods:border-border gods:bg-card gods:hover:border-primary/40 gods:transition-colors">
+                  <h4 className="gods:text-lg gods:text-foreground gods:tracking-wider gods:mb-2">{t.n}</h4>
+                  <p className="gods:text-base gods:text-muted-foreground gods:leading-relaxed">{t.d}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="gods:text-base gods:text-muted-foreground gods:italic gods:leading-relaxed">
+              Aucune technique de combat débloquée. Augmentez vos compétences (Niv. 3+).
+            </p>
+          )}
+        </section>
       </div>
-
-      {/* Techniques de combat */}
-      <section>
-        <h3 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-foreground gods:border-b gods:border-border gods:pb-2 gods:mb-4">
-          Techniques de Combat Débloquées
-        </h3>
-        {techniques.length > 0 ? (
-          <div className="gods:grid gods:grid-cols-2 gods:gap-4">
-            {techniques.map((t, i) => (
-              <div key={i} className="gods:bg-card/20 gods:border gods:border-border gods:rounded-md gods:p-3">
-                <span className="gods:text-base gods:text-primary gods:font-semibold gods:block">{t.n}</span>
-                <span className="gods:text-base gods:text-muted-foreground">{t.d}</span>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="gods:text-base gods:text-muted-foreground gods:italic">Aucune technique de combat débloquée. Augmentez vos compétences (Niv. 3+).</p>
-        )}
-      </section>
     </div>
   );
 }
