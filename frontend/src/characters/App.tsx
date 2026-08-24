@@ -1,4 +1,6 @@
-import { Plus } from "lucide-react";
+import React from "react";
+import { Plus, ArrowRight } from "lucide-react";
+import { SectionLabel, PageTitle, PageDescription } from "../shared/Typography";
 
 interface Character {
   id_Character: number | string;
@@ -20,21 +22,19 @@ export default function App({ characters }: { characters: Character[] }) {
   };
 
   return (
-    // Removed specific font class here since body inherently applies var(--font-body) via your base layer
-    <div className="gods:min-h-[calc(100vh-4rem)] gods:bg-background">
-      <div className="gods:max-w-7xl gods:mx-auto gods:px-6 gods:py-24">
+    // Added gods:pt-16 to offset the fixed header and changed to min-h-screen
+    <div className="gods:pt-16 gods:min-h-screen gods:bg-background gods:relative gods:z-10 gods:flex gods:flex-col">
+      {/* Unified max-width, responsive padding, and flex behavior */}
+      <main className="gods:flex-1 gods:w-full gods:max-w-7xl gods:mx-auto gods:px-6 gods:py-12 lg:gods:px-12 lg:gods:py-24">
         
         {/* ── EN-TÊTE ── */}
-        <div className="gods:text-center gods:mb-16">
-          {/* Removed explicit font-display, mapped to text-3xl per guidelines */}
-          <h1 className="gods:text-3xl gods:tracking-wider gods:uppercase gods:text-foreground gods:mb-5">
-            Vos Personnages
-          </h1>
-          {/* Mapped to text-base and semantic text-muted-foreground */}
-          <p className="gods:text-muted-foreground gods:text-base gods:max-w-2xl gods:mx-auto gods:leading-relaxed">
+        <header className="gods:mb-12">
+          <SectionLabel>Le Panthéon</SectionLabel>
+          <PageTitle>Vos Personnages</PageTitle>
+          <PageDescription>
             Sélectionnez un Élu pour poursuivre l'aventure ou créez-en un nouveau.
-          </p>
-        </div>
+          </PageDescription>
+        </header>
 
         {/* ── GRILLE ── */}
         <div className="gods:grid gods:grid-cols-1 gods:sm:grid-cols-2 gods:md:grid-cols-3 gods:lg:grid-cols-4 gods:gap-6">
@@ -42,15 +42,25 @@ export default function App({ characters }: { characters: Character[] }) {
           {/* Carte Création */}
           <a
             href="/newcharacter"
-            className="gods:group gods:flex gods:flex-col gods:items-center gods:justify-center gods:p-8 gods:rounded-lg gods:border-2 gods:border-dashed gods:border-primary/30 gods:bg-primary/5 gods:hover:bg-primary/10 gods:hover:border-primary/60 gods:transition-all gods:duration-300 gods:min-h-[350px] gods:cursor-pointer gods:text-center"
+            className="gods:group gods:relative gods:p-6 gods:xl:p-8 gods:flex gods:flex-col gods:rounded-lg gods:border-2 gods:border-dashed gods:border-border gods:bg-card hover:gods:border-primary/40 hover:gods:shadow-lg gods:transition-all gods:duration-300 !gods:outline-none"
           >
-            <div className="gods:w-16 gods:h-16 gods:rounded-full gods:bg-primary/20 gods:border gods:border-primary/30 gods:flex gods:items-center gods:justify-center gods:mb-5 gods:group-hover:scale-110 gods:transition-transform gods:duration-300 gods:text-primary">
-              <Plus size={32} />
+            <div className="gods:relative gods:w-full gods:aspect-[3/4] gods:rounded-md gods:border gods:border-dashed gods:border-primary/30 gods:bg-primary/5 gods:group-hover:bg-primary/10 gods:group-hover:border-primary/50 gods:flex gods:items-center gods:justify-center gods:overflow-hidden gods:mb-6 gods:transition-colors gods:duration-300">
+              <div className="gods:w-16 gods:h-16 gods:rounded-full gods:bg-background gods:border gods:border-border gods:flex gods:items-center gods:justify-center gods:group-hover:scale-110 gods:group-hover:border-primary/40 gods:transition-all gods:duration-300 gods:text-primary">
+                <Plus size={32} />
+              </div>
             </div>
-            {/* Standardized to text-xl and tracking-wider, explicit font removed */}
-            <h3 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-foreground gods:group-hover:text-primary gods:transition-colors">
+            
+            <p className="gods:text-xs gods:font-display gods:tracking-widest gods:uppercase gods:text-primary gods:mb-2">
+              Nouveau
+            </p>
+            
+            <h3 className="gods:text-xl gods:tracking-wider gods:mb-3 gods:text-foreground gods:group-hover:text-primary gods:transition-colors gods:duration-200">
               Créer un Élu
             </h3>
+
+            <div className="gods:flex gods:items-center gods:gap-2 gods:text-xs gods:tracking-widest gods:uppercase gods:text-muted-foreground gods:group-hover:text-primary gods:transition-colors gods:duration-200 gods:font-display gods:mt-auto">
+              Invoquer <ArrowRight size={14} className="gods:group-hover:translate-x-1 gods:transition-transform" />
+            </div>
           </a>
 
           {/* Cartes Personnages */}
@@ -58,37 +68,33 @@ export default function App({ characters }: { characters: Character[] }) {
             <a
               key={char.id_Character}
               href={`/Character/show/${char.id_Character}`}
-              className="gods:group gods:relative gods:rounded-lg gods:overflow-hidden gods:border gods:border-border gods:bg-card gods:hover:border-primary/50 gods:hover:shadow-lg gods:transition-all gods:duration-300 gods:min-h-[350px] gods:flex gods:flex-col gods:cursor-pointer"
+              className="gods:group gods:relative gods:p-6 gods:xl:p-8 gods:flex gods:flex-col gods:rounded-lg gods:border gods:border-border gods:bg-card hover:gods:border-primary/40 hover:gods:shadow-lg gods:transition-all gods:duration-300 !gods:outline-none"
             >
-              {/* Image & Gradient */}
-              <div className="gods:relative gods:h-[250px] gods:w-full gods:overflow-hidden">
+              <div className="gods:relative gods:w-full gods:aspect-[3/4] gods:rounded-md gods:border gods:border-border/50 gods:group-hover:border-primary/40 gods:overflow-hidden gods:mb-6 gods:transition-colors gods:duration-300">
                 <img
                   src={getAvatar(char)}
                   alt={char.nom}
-                  className="gods:w-full gods:h-full gods:object-cover gods:object-top gods:transition-transform gods:duration-700 gods:group-hover:scale-105"
+                  className="gods:absolute gods:inset-0 gods:w-full gods:h-full gods:object-cover gods:object-top gods:transition-transform gods:duration-500 gods:group-hover:scale-105"
                 />
-                <div className="gods:absolute gods:inset-0 gods:bg-gradient-to-t gods:from-card gods:via-card/40 gods:to-transparent" />
               </div>
 
-              {/* Textes (superposés sur la fin du dégradé) */}
-              <div className="gods:p-5 gods:text-center gods:flex-1 gods:flex gods:flex-col gods:justify-center gods:-mt-10 gods:relative gods:z-10">
-                {/* Standardized to text-xl to match other cards, explicit font removed */}
-                <h2 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-foreground gods:drop-shadow-md">
-                  {char.nom}
-                </h2>
-                
-                {(char.origine || char.instinct) && (
-                  <p className="gods:text-xs gods:text-primary gods:mt-2 gods:uppercase gods:tracking-widest gods:font-display">
-                    {char.origine || "Inconnu"}
-                    {char.instinct ? ` • ${char.instinct}` : ""}
-                  </p>
-                )}
+              <p className="gods:text-xs gods:font-display gods:tracking-widest gods:uppercase gods:text-primary gods:mb-2">
+                {char.origine || "Inconnu"}
+                {char.instinct ? ` • ${char.instinct}` : ""}
+              </p>
+              
+              <h3 className="gods:text-xl gods:tracking-wider gods:mb-3 gods:text-foreground gods:group-hover:text-primary gods:transition-colors gods:duration-200">
+                {char.nom}
+              </h3>
+
+              <div className="gods:flex gods:items-center gods:gap-2 gods:text-xs gods:tracking-widest gods:uppercase gods:text-muted-foreground gods:group-hover:text-primary gods:transition-colors gods:duration-200 gods:font-display gods:mt-auto">
+                Incarner <ArrowRight size={14} className="gods:group-hover:translate-x-1 gods:transition-transform" />
               </div>
             </a>
           ))}
 
         </div>
-      </div>
+      </main>
     </div>
   );
 }

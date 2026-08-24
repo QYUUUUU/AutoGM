@@ -1,0 +1,183 @@
+/*
+  CountryLanding is the menu screen you see BEFORE entering a country's
+  show — it should still look like the rest of the site, not like the
+  dark cinematic takeover OriginExperience becomes once you pick one.
+  So unlike scrollytelling.css, this pulls the app's actual design
+  tokens directly (cream background, gold primary, Cinzel/EB Garamond)
+  rather than a resaturated dark variant of them.
+
+  Import this in whatever renders <CountryLanding /> — e.g.:
+    import "../styles/landing.css";
+*/
+
+.monde-landing {
+  position: relative;
+  min-height: 100vh;
+  background: var(--background, #f6f2ec);
+  color: var(--foreground, #1c1320);
+  font-family: var(--font-body, "EB Garamond", Georgia, serif);
+  padding: 9vh 6vw 10vh;
+  overflow: hidden;
+}
+
+.monde-landing-noise {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190' viewBox='0 0 190 190'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.monde-landing-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4vw;
+  max-width: 1200px;
+  margin: 0 auto 6vh;
+  padding-bottom: 4vh;
+  border-bottom: 1px solid var(--border, rgba(28, 19, 32, 0.13));
+}
+
+.monde-eyebrow {
+  display: inline-block;
+  font: 600 12px/1.2 ui-monospace, "SF Mono", monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--primary, #9a7818);
+  margin-bottom: 1rem;
+}
+
+.monde-landing-header h1 {
+  font: 400 clamp(38px, 5vw, 72px) / 1.1 var(--font-display, "Cinzel", "Times New Roman", serif);
+  color: var(--foreground, #1c1320);
+  margin: 0 0 0.7rem;
+  letter-spacing: 0.005em;
+}
+
+.monde-landing-header p {
+  font-size: 1.15rem;
+  color: var(--muted-foreground, #5c4e38);
+  margin: 0;
+  max-width: 46ch;
+}
+
+.monde-count {
+  font: 12px/1 ui-monospace, "SF Mono", monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-foreground, #5c4e38);
+  white-space: nowrap;
+  padding-bottom: 0.3rem;
+}
+
+.country-grid {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1px;
+  background: var(--border, rgba(28, 19, 32, 0.13));
+  border: 1px solid var(--border, rgba(28, 19, 32, 0.13));
+}
+
+.country-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  min-height: 168px;
+  padding: 2.1rem 1.6rem;
+  background: var(--card, #ede8df);
+  border: none;
+  border-radius: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--foreground, #1c1320);
+  opacity: 0;
+  animation: country-card-in 480ms ease both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+  transition: background-color 200ms ease;
+}
+
+@keyframes country-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.country-index {
+  font: 600 12px/1 ui-monospace, "SF Mono", monospace;
+  letter-spacing: 0.1em;
+  color: var(--muted-foreground, #5c4e38);
+}
+.country-card.is-authored .country-index {
+  color: var(--primary, #9a7818);
+}
+
+.country-name {
+  font: 400 1.5rem/1.15 var(--font-display, "Cinzel", "Times New Roman", serif);
+  margin-top: 0.15rem;
+  color: var(--muted-foreground, #5c4e38);
+}
+.country-card.is-authored .country-name {
+  color: var(--foreground, #1c1320);
+}
+
+.country-region {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--muted-foreground, #5c4e38);
+}
+
+.country-arrow {
+  margin-top: auto;
+  padding-top: 1rem;
+  font-size: 1.1rem;
+  color: var(--muted-foreground, #5c4e38);
+  transition: transform 200ms ease;
+}
+.country-card.is-authored .country-arrow {
+  color: var(--primary, #9a7818);
+}
+
+.country-card.is-authored:hover,
+.country-card.is-authored:focus-visible {
+  background: var(--background, #f6f2ec);
+}
+.country-card.is-authored:hover .country-arrow,
+.country-card.is-authored:focus-visible .country-arrow {
+  transform: translate(3px, -3px);
+}
+.country-card.is-authored:focus-visible {
+  outline: 2px solid var(--primary, #9a7818);
+  outline-offset: -2px;
+}
+
+.country-card.is-locked {
+  cursor: default;
+}
+
+@media (max-width: 720px) {
+  .monde-landing-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .monde-count {
+    padding-bottom: 0;
+  }
+}

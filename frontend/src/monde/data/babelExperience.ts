@@ -74,10 +74,10 @@ export const babelExperience: CountryExperience = {
       watermark: "TAERHONIS",
       imageSide: "right",
       paragraphs: [
-        "Elle avait quinze ans lorsqu'on lui posa sur le crâne le heaume ancestral de la royauté arkadienne — quinze ans, et déjà le poids d'une agonie : celle de sa mère, rongée pendant des mois par un mal que ni médecins ni charlatans ne surent nommer. Taerhonis savait, dit-on, ce qui l'attendait bien avant que la couronne ne devienne sienne.",
-        "Six ans plus tard, son pouvoir tient encore sur un fil. Influençable, murmure-t-on à la cour — mais méfiante, aussi, envers quiconque multiplie les promesses. Sa conversion au Dieu Unique fut-elle un choix du cœur, ou le prix à payer pour s'assurer le soutien d'un Culte déjà solidement installé à Sabaah ?",
+        "Elle avait quinze ans lorsqu'on lui posa sur le crâne le heaume ancestral de la royauté arkadienne — quinze ans, et déjà le poids d'une agonie : celle de sa mère, rongée pendant des mois par un mal que ni médecins ni charlatans ne surent nommer. Taerhonis savait ce qui l'attendait bien avant que la couronne ne devienne sienne.",
+        "Six ans plus tard, son pouvoir tient encore sur un fil. Influençable à la cour, méfiante envers quiconque multiplie les promesses — sa conversion au Dieu Unique tenait sans doute autant du choix sincère que du calcul : s'assurer le soutien d'un Culte déjà solidement installé à Sabaah.",
         "D'autres racontent une histoire plus sombre encore : celle d'une reine que l'archiprêtre Severus Quirinus tiendrait en son pouvoir, et celle d'une épée, offerte par ses soins, dont on chuchote qu'elle n'est peut-être pas tout à fait innocente.",
-        "Marionnette ? Calculatrice ? Simplement désespérée ? Elle brise les Amuzazels d'une main et protège Uruk, la cité rebelle, de l'autre — et le visage qu'elle présente à sa cour ne trahit jamais lequel de ces mots est le bon.",
+        "Marionnette, calculatrice, ou simplement désespérée — personne à la cour ne s'accorde. Elle brise les Amuzazels d'une main et protège Uruk, la cité rebelle, de l'autre, et son visage, impassible, ne trahit jamais lequel de ces mots est le bon.",
       ],
     },
     {
@@ -127,7 +127,7 @@ export const babelExperience: CountryExperience = {
       paragraphs: [
         "Avant que l'Unique n'impose sa loi, les prostituées sacrées d'Amura constituaient à elles seules toute une caste, à qui l'on prêtait un don peu ordinaire : celui d'entrevoir l'avenir au comble du plaisir.",
         "Lorsque la reine se convertit au Soleil Noir, elle ordonna la dissolution pure et simple de la caste. La langue tranchée, les lèvres cousues, le fer rouge sur le visage — les Filles d'Amura furent chassées de leur temple, le seul quartier sacré de Sabaah qui n'avait jamais désempli.",
-        "Certains y voient un calcul politique, une preuve de fidélité offerte au nouveau dieu. D'autres, moins nombreux mais plus insistants, murmurent une autre vérité : que Taerhonis n'a pas agi par foi, mais par peur — car plus d'une Amuzazel, dit-on, jurait pendant l'extase qu'elle causerait la perte du royaume.",
+        "Certains y voient un calcul politique, une preuve de fidélité offerte au nouveau dieu. Une minorité tenace raconte tout autre chose : que Taerhonis n'a pas agi par foi, mais par peur, car plus d'une Amuzazel jurait, pendant l'extase, qu'elle causerait la perte du royaume.",
       ],
     },
     {

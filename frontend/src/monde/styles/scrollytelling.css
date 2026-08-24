@@ -3,14 +3,19 @@
   anything scene-related. Every animated value is driven by GSAP from
   OriginExperience.tsx.
 
-  Fonts reference the app's own tokens (`--font-display` / `--font-body`,
-  defined globally by the shared fonts.css this app already loads) with
-  the exact same fallback stack the app itself uses, so this still
-  renders correctly even if that stylesheet isn't present for some
-  reason. Colors are NOT pulled directly from the app's tokens — those
-  are tuned for a cream background and go muddy on a near-black one —
-  but every hue used here (gold, oxblood, purple, blue) is the same
-  hue family, just resaturated for a dark stage. See composition.ts.
+  IMPORTANT: `.flow-stage` lives INSIDE `.scene-inner`, not as a
+  sibling of it. The text column is constrained by max-width:1440px
+  + padding, not the raw viewport — a shape positioned against the
+  viewport drifts out of alignment with the text on wide screens.
+  Nesting it here means its percentages resolve against the exact
+  same box the text lives in. Don't move it back out.
+
+  Fonts reference the app's own tokens (`--font-display` / `--font-body`)
+  with the exact same fallback stack the app itself uses. Colors are
+  NOT pulled directly from the app's tokens — those are tuned for a
+  cream background and go muddy on a near-black one — but every hue
+  here is the same hue family, resaturated for a dark stage. See
+  composition.ts.
 */
 
 .monde-show {
@@ -78,14 +83,71 @@
   border: none;
 }
 
-/* PERSISTENT CAST — GSAP tweens every visible property directly on
-   these nodes. No border-radius, no default border: these are
-   architectural planes and crisp lines, not UI cards. */
+/* CONTENT STAGE */
+.scene-content-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+}
+
+.scene-content-stage .scene-inner {
+  position: relative; /* containing block for .flow-stage below */
+  height: 100%;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 6vw;
+  display: flex;
+  align-items: flex-start; /* top-anchored, not centered: centering was clipping equally off both the top AND bottom whenever a scene's content ran tall, which is worse than clipping the bottom only */
+  gap: 6vw;
+}
+
+.scene-content-stage[data-image-side="left"] .scene-inner {
+  flex-direction: row-reverse;
+}
+
+.scene-content-stage[data-image-side="center"] .scene-inner {
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+.scene-content-stage[data-image-side="center"] .content-text-col {
+  max-width: 62ch;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.scene-content-stage[data-image-side="center"] .content-visual-col {
+  max-width: 66vw;
+}
+
+.scene-content-stage[data-kind="rupture-black-sun"] .scene-inner {
+  justify-content: space-between;
+}
+.scene-content-stage[data-kind="rupture-black-sun"] .content-text-col {
+  max-width: 42ch;
+}
+
+.scene-content-stage[data-emphasis="overlap"] .content-title {
+  margin-right: -8vw;
+  position: relative;
+  z-index: 3;
+  text-shadow: 0 8px 34px rgba(0, 0, 0, 0.6);
+}
+
+/* PERSISTENT CAST — nested inside `.scene-inner` (see note at top of
+   file). GSAP tweens every visible property directly on these nodes.
+   No border-radius, no border: architectural planes and crisp lines,
+   not UI cards. `mask-image` (set inline, per-scene, from
+   FADE_GRADIENTS) is what turns a flat-opacity rectangle into a wash
+   of color that dissolves into the scene instead of stopping at a
+   hard second edge. */
 .flow-stage {
   position: absolute;
   inset: 0;
+  z-index: -1; /* behind the text-col/visual-col siblings painted after it */
   pointer-events: none;
-  z-index: 2;
 }
 
 .flow-carrier,
@@ -95,10 +157,16 @@
   border: none;
   border-radius: 0;
   will-change: transform, width, height, background-color, border-color, border-width, opacity;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
 }
 
 .flow-spine {
   transform-origin: top center;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 96%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 96%);
 }
 
 .flow-ring {
@@ -110,68 +178,24 @@
   transform-origin: center;
 }
 
-/* CONTENT STAGE */
-.scene-content-stage {
-  position: absolute;
-  inset: 0;
-  z-index: 8;
-  display: flex;
-  align-items: center;
-}
-
-.scene-content-stage .scene-inner {
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 6vw;
-  display: flex;
-  align-items: center;
-  gap: 6vw;
-}
-
-.scene-content-stage[data-image-side="left"] .scene-inner {
-  flex-direction: row-reverse;
-}
-
-/* The closing image: still `contain`, still showing the whole frame —
-   just stacked under the text rather than beside it. */
-.scene-content-stage[data-image-side="center"] .scene-inner {
-  flex-direction: column;
-  text-align: center;
-}
-.scene-content-stage[data-image-side="center"] .content-text-col {
-  max-width: 62ch;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-.scene-content-stage[data-image-side="center"] .content-visual-col {
-  max-width: 62vw;
-}
-
-.scene-content-stage[data-kind="rupture-black-sun"] .scene-inner {
-  justify-content: space-between;
-}
-.scene-content-stage[data-kind="rupture-black-sun"] .content-text-col {
-  max-width: 42ch;
-}
-
-/* A title allowed to spill into the visual column instead of staying
-   in its own lane. Used for exactly two beats. */
-.scene-content-stage[data-emphasis="overlap"] .content-title {
-  margin-right: -8vw;
-  position: relative;
-  z-index: 3;
-  text-shadow: 0 8px 34px rgba(0, 0, 0, 0.6);
-}
-
-/* Reading measure & typography — sized up: this is long-form reading,
-   not app UI, and should feel like it. */
+/* Reading measure & typography — sized up for long-form reading. */
 .content-text-col {
   flex: 1 1 480px;
-  min-width: 0;
+  min-width: 380px;
   max-width: 640px;
+  margin-top: max(92px, 12vh); /* clears the 80px HUD with room to spare, scales on tall screens */
   display: flex;
   flex-direction: column;
+}
+
+.content-visual-col {
+  align-self: center; /* images still center nicely even though the row itself is now top-anchored */
+  flex: 1 1 440px;
+  min-width: 0;
+  max-width: 58vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .content-kicker-row {
@@ -198,37 +222,31 @@
 }
 
 .content-title {
-  font: 400 clamp(40px, 5vw, 72px) / 1.1 var(--font-display, "Cinzel", "Times New Roman", serif);
+  font: 400 clamp(38px, 4.6vw, 68px) / 1.1 var(--font-display, "Cinzel", "Times New Roman", serif);
   letter-spacing: 0.005em;
   max-width: 18ch;
-  margin: 0 0 1.35rem;
+  margin: 0 0 1.2rem;
 }
 
-/* Per-`kind` scale, so the show has real typographic rhythm instead
-   of one size doing every job. */
 .scene-content-stage[data-kind="cinematic-hero"] .content-title,
 .scene-content-stage[data-kind="cinematic-finale"] .content-title {
-  font-size: clamp(48px, 6.4vw, 100px);
+  font-size: clamp(44px, 5.8vw, 92px);
 }
 .scene-content-stage[data-kind="rupture-black-sun"] .content-title {
-  font-size: clamp(44px, 5.6vw, 88px);
+  font-size: clamp(40px, 5vw, 80px);
 }
 .scene-content-stage[data-kind="reading-quiet"] .content-title {
-  font-size: clamp(36px, 4vw, 56px);
+  font-size: clamp(32px, 3.6vw, 50px);
   max-width: 16ch;
 }
-/* Overlap beats get the last word on size — placed after the `kind`
-   rules above so it wins on source order. */
 .scene-content-stage[data-emphasis="overlap"] .content-title {
-  font-size: clamp(56px, 7.2vw, 112px);
+  font-size: clamp(50px, 6.6vw, 100px);
 }
 
 .content-title .accent {
   color: var(--scene-accent, #caa034);
 }
 
-/* Word-reveal mask, used only for the high-impact kinds (see
-   SPLIT_TITLE_KINDS in OriginExperience.tsx). */
 .content-title .word-mask {
   display: inline-block;
   overflow: hidden;
@@ -241,12 +259,12 @@
 
 .content-subtitle {
   font-family: var(--font-body, "EB Garamond", Georgia, serif);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-style: italic;
-  line-height: 1.55;
+  line-height: 1.5;
   color: #d6cdbd;
   max-width: 58ch;
-  margin: 0 0 1.85rem;
+  margin: 0 0 1.6rem;
 }
 
 .content-paragraphs {
@@ -255,28 +273,31 @@
 
 .content-paragraphs p {
   font-family: var(--font-body, "EB Garamond", Georgia, serif);
-  font-size: 1.3rem;
-  line-height: 1.72;
-  color: #c4bbaa;
-  margin: 0 0 1.2rem;
+  font-size: 1.22rem;
+  line-height: 1.6;
+  color: #c9c0af;
+  margin: 0 0 0.95rem;
 }
 
 .content-paragraphs p:last-child {
   margin-bottom: 0;
 }
 
-/* Visual column — images always use `contain`, never `cover`: the art
-   is a composed element, not wallpaper, and nothing gets aggressively
-   cropped. */
-.content-visual-col {
-  flex: 1 1 420px;
-  min-width: 0;
-  max-width: 46vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Drop cap on the opening paragraph — a page-design device standing
+   in for a shape, since not every reading beat has an illustration to
+   lean on. */
+.content-paragraphs p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-display, "Cinzel", "Times New Roman", serif);
+  font-size: 3.6em;
+  line-height: 0.78;
+  padding: 0.03em 0.09em 0 0;
+  color: var(--scene-accent, #caa034);
 }
 
+/* Images always use `contain`, never `cover` — the art is a composed
+   element, not wallpaper — but sized up substantially so it actually
+   reads as the illustration it is, not a thumbnail next to the text. */
 .content-image-wrap {
   margin: 0;
   width: 100%;
@@ -288,19 +309,19 @@
 .content-image-wrap img {
   display: block;
   max-width: 100%;
-  max-height: 72vh;
+  max-height: 86vh;
   width: auto;
   height: auto;
   object-fit: contain;
   border: none;
-  filter: saturate(0.94) brightness(0.95);
+  filter: saturate(0.95) brightness(0.96);
 }
 
-/* THE BLACK SUN — no white glow anywhere. Obsidian shading through
-   blood, near-black, and a barely-visible dashed boundary at the end. */
+/* THE BLACK SUN — an irregular char spreads across the disc before
+   the base color itself ever commits to black; no white glow. */
 .black-sun-stage {
   position: relative;
-  width: 36vw;
+  width: 38vw;
   aspect-ratio: 1;
   pointer-events: none;
 }
@@ -336,6 +357,14 @@
   overflow: hidden;
   border: none;
   box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9);
+}
+
+.eclipse-char-patch {
+  position: absolute;
+  border-radius: 42% 58% 61% 39% / 47% 44% 56% 53%;
+  background: #010101;
+  opacity: 0;
+  will-change: transform, opacity;
 }
 
 .eclipse-grain {
@@ -410,25 +439,26 @@
   text-transform: uppercase;
 }
 
-/* Layout adjustments for narrower desktop widths so text never
-   collides with the persistent carrier/art column. */
+/* Layout adjustments for narrower desktop widths. */
 @media (max-width: 1180px) {
   .scene-content-stage .scene-inner {
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
     gap: 3vh;
-    padding-top: 10vh;
   }
   .scene-content-stage[data-image-side="left"] .scene-inner {
     flex-direction: column;
   }
-  .content-text-col,
-  .content-visual-col {
+  .content-text-col {
+    margin-top: max(88px, 10vh);
+    min-width: 0;
     max-width: 100%;
     flex: none;
   }
   .content-visual-col {
+    max-width: 100%;
     max-height: 40vh;
+    flex: none;
   }
   .scene-content-stage[data-emphasis="overlap"] .content-title {
     margin-right: 0;

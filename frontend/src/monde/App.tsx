@@ -20,17 +20,23 @@ export default function App({ isAdmin }: { isAdmin: boolean }) {
 
   if (country) {
     return (
-      <OriginExperience
-        country={country}
-        isAdmin={isAdmin}
-        onExit={() => { window.location.hash = "#/monde"; }}
-      />
+      // Updated to standard wrapper (pt-16 offset, min-h-screen, flex behavior)
+      <div className="gods:pt-16 gods:min-h-screen gods:bg-background gods:relative gods:z-10 gods:flex gods:flex-col">
+        <OriginExperience
+          country={country}
+          isAdmin={isAdmin}
+          onExit={() => { window.location.hash = "#/monde"; }}
+        />
+      </div>
     );
   }
 
   return (
-    <CountryLanding
-      onSelect={(id) => { window.location.hash = `#/monde/${id}`; }}
-    />
+    // Updated to standard wrapper (pt-16 offset, min-h-screen, flex behavior)
+    <div className="gods:pt-16 gods:min-h-screen gods:bg-background gods:relative gods:z-10 gods:flex gods:flex-col">
+      <CountryLanding
+        onSelect={(id) => { window.location.hash = `#/monde/${id}`; }}
+      />
+    </div>
   );
 }

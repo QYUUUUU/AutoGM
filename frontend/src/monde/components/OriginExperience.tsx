@@ -10,6 +10,7 @@ import {
   type CarrierTarget,
   type SpineTarget,
   type RingTarget,
+  type FadeDirection,
 } from "../data/composition";
 
 const images: Record<string, string> = {
@@ -30,8 +31,38 @@ const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
  * of them would read as a climax. */
 const SPLIT_TITLE_KINDS = new Set<SceneKind>(["cinematic-hero", "rupture-black-sun", "cinematic-finale"]);
 
+/** A shape is solid near the edge it's anchored to and dissolves into
+ * the scene rather than stopping at a hard second edge — a wash of
+ * color/light, not a rectangle with a fill under it. */
+const FADE_GRADIENTS: Record<FadeDirection, string> = {
+  right: "linear-gradient(to right, #000 0%, #000 32%, transparent 84%)",
+  left: "linear-gradient(to left, #000 0%, #000 32%, transparent 84%)",
+  down: "linear-gradient(to bottom, #000 0%, #000 32%, transparent 84%)",
+  up: "linear-gradient(to top, #000 0%, #000 32%, transparent 84%)",
+  none: "none",
+};
+
+/** Scattered, irregular char-patches for the black sun (see
+ * buildEclipseTimeline). Positions/sizes are hand-placed once rather
+ * than randomized at runtime, so the burn pattern is consistent and
+ * art-directed rather than jittery between renders. */
+const BURN_PATCHES = [
+  { top: "16%", left: "60%", size: 30 },
+  { top: "52%", left: "20%", size: 36 },
+  { top: "70%", left: "66%", size: 26 },
+  { top: "28%", left: "36%", size: 42 },
+  { top: "10%", left: "28%", size: 22 },
+  { top: "60%", left: "46%", size: 34 },
+  { top: "38%", left: "72%", size: 28 },
+  { top: "80%", left: "38%", size: 24 },
+  { top: "22%", left: "78%", size: 20 },
+  { top: "46%", left: "10%", size: 26 },
+  { top: "6%", left: "52%", size: 18 },
+  { top: "86%", left: "60%", size: 22 },
+];
+
 function carrierVars(t: CarrierTarget) {
-  return { top: t.top, left: t.left, width: t.width, height: t.height, borderRadius: t.borderRadius, backgroundColor: t.background, opacity: t.opacity };
+  return { top: t.top, left: t.left, width: t.width, height: t.height, backgroundColor: t.background, opacity: t.opacity };
 }
 function spineVars(t: SpineTarget) {
   return { top: t.top, left: t.left, width: t.width, height: t.height, backgroundColor: t.color, opacity: t.opacity, scaleY: t.scaleY };
@@ -125,6 +156,7 @@ export function OriginExperience({ country, onExit }: Props) {
   const eclipseBurnRef = useRef<HTMLDivElement | null>(null);
   const eclipseDiscRef = useRef<HTMLDivElement | null>(null);
   const eclipseBoundaryRef = useRef<HTMLDivElement | null>(null);
+  const charPatchRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const track = (tl: gsap.core.Timeline) => {
     activeTimelines.current.push(tl);
@@ -155,28 +187,53 @@ export function OriginExperience({ country, onExit }: Props) {
   }
 
   // ---- the black sun climax -----------------------------------------------------
+  // "The fire from within shutting off, part by part" — not a single
+  // opacity fade. A dozen irregular patches char across the disc in
+  // randomized order first, like flame eating into paper; only once
+  // most of it has gone dark does the base color itself commit to
+  // near-black, and only at the very end does the faint boundary
+  // confirm the shape. ~4.6s, deliberately unhurried.
 
   function buildEclipseTimeline(): gsap.core.Timeline {
     const rm = prefersReducedMotion.current;
-    const total = rm ? 0.3 : 2.3;
+    const total = rm ? 0.35 : 4.6;
     const tl = gsap.timeline();
 
     if (eclipseEnvRef.current) {
       gsap.set(eclipseEnvRef.current, { opacity: 0 });
-      tl.to(eclipseEnvRef.current, { opacity: rm ? 0.55 : 0.82, duration: total, ease: "power2.inOut" }, 0);
+      tl.to(eclipseEnvRef.current, { opacity: rm ? 0.55 : 0.85, duration: total * 0.92, ease: "power1.inOut" }, 0);
     }
     if (eclipseDiscRef.current) {
       gsap.set(eclipseDiscRef.current, { opacity: 0, scale: rm ? 1 : 1.04, backgroundColor: "#caa06a" });
-      tl.to(eclipseDiscRef.current, { opacity: 1, scale: rm ? 1 : 0.985, duration: total * 0.4, ease: "power2.out" }, 0);
-      tl.to(eclipseDiscRef.current, { backgroundColor: "#050405", duration: total * 0.75, ease: "power2.inOut" }, rm ? 0 : total * 0.15);
+      tl.to(eclipseDiscRef.current, { opacity: 1, scale: rm ? 1 : 0.985, duration: total * 0.22, ease: "power2.out" }, 0);
+      // The base color only fully commits to black late — for most of
+      // the sequence the darkening reads through the patches below,
+      // not through this tween.
+      tl.to(eclipseDiscRef.current, { backgroundColor: "#050403", duration: total * 0.4, ease: "power2.inOut" }, rm ? 0 : total * 0.55);
+    }
+    const patches = charPatchRefs.current.filter((el): el is HTMLDivElement => el !== null);
+    if (patches.length) {
+      gsap.set(patches, { scale: 0, opacity: 0, rotate: 0 });
+      tl.to(
+        patches,
+        {
+          scale: () => 0.8 + Math.random() * 0.55,
+          rotate: () => (Math.random() - 0.5) * 46,
+          opacity: 1,
+          duration: rm ? 0.05 : total * 0.16,
+          ease: "power2.out",
+          stagger: rm ? 0 : { each: total * 0.055, from: "random" },
+        },
+        rm ? 0 : total * 0.06
+      );
     }
     if (eclipseBurnRef.current) {
       gsap.set(eclipseBurnRef.current, { opacity: 0, rotate: rm ? 0 : -22, scale: rm ? 1 : 0.9 });
-      tl.to(eclipseBurnRef.current, { opacity: 1, rotate: rm ? 0 : 14, scale: rm ? 1 : 1.02, duration: total * 0.6, ease: "power2.inOut" }, rm ? 0 : total * 0.22);
+      tl.to(eclipseBurnRef.current, { opacity: 1, rotate: rm ? 0 : 14, scale: rm ? 1 : 1.02, duration: total * 0.5, ease: "power2.inOut" }, rm ? 0 : total * 0.35);
     }
     if (eclipseBoundaryRef.current) {
       gsap.set(eclipseBoundaryRef.current, { opacity: 0 });
-      tl.to(eclipseBoundaryRef.current, { opacity: 1, duration: total * 0.3, ease: "power1.out" }, rm ? 0 : total * 0.6);
+      tl.to(eclipseBoundaryRef.current, { opacity: 1, duration: total * 0.22, ease: "power1.out" }, rm ? 0 : total * 0.82);
     }
     return tl;
   }
@@ -206,6 +263,8 @@ export function OriginExperience({ country, onExit }: Props) {
       if (eclipseBurnRef.current) tl.to(eclipseBurnRef.current, { opacity: 0, duration: d, ease: "power2.in" }, 0);
       if (eclipseDiscRef.current) tl.to(eclipseDiscRef.current, { opacity: 0, scale: rm ? 1 : 0.96, duration: d, ease: "power2.in" }, 0);
       if (eclipseBoundaryRef.current) tl.to(eclipseBoundaryRef.current, { opacity: 0, duration: d, ease: "power2.in" }, 0);
+      const patches = charPatchRefs.current.filter((el): el is HTMLDivElement => el !== null);
+      if (patches.length) tl.to(patches, { opacity: 0, duration: d, ease: "power2.in" }, 0);
     } else if (imgRef.current) {
       const outX = rm ? 0 : current.imageSide === "left" ? -48 : 48;
       tl.to(imgRef.current, { opacity: 0, x: outX, scale: rm ? 1 : 0.97, duration: d, ease: "power2.in" }, 0);
@@ -424,14 +483,6 @@ export function OriginExperience({ country, onExit }: Props) {
         {getCastFrame(displayed).showNumeral ? deriveNumeral(displayed) : ""}
       </div>
 
-      {/* PERSISTENT CAST — never unmounts. Only geometry morphs, and
-          not every member is "on" for every scene. */}
-      <div className="flow-stage" aria-hidden="true">
-        <div className="flow-carrier" ref={carrierRef} />
-        <div className="flow-spine" ref={spineRef} />
-        <div className="flow-ring" ref={ringRef} />
-      </div>
-
       <div
         className="scene-content-stage"
         data-image-side={displayed.imageSide ?? "right"}
@@ -439,6 +490,19 @@ export function OriginExperience({ country, onExit }: Props) {
         data-emphasis={displayed.emphasis ?? "none"}
       >
         <div className="scene-inner">
+          {/* PERSISTENT CAST — never unmounts. Nested inside the same
+              padded/max-width frame the text lives in (not the raw
+              viewport), so its geometry always means the same thing
+              the text column's geometry means — this is what keeps a
+              shape from drifting into, or through, the text on wide
+              screens. Only geometry morphs, and not every member is
+              "on" for every scene. */}
+          <div className="flow-stage" aria-hidden="true">
+            <div className="flow-carrier" ref={carrierRef} style={{ maskImage: FADE_GRADIENTS[getCastFrame(displayed).carrier.fade], WebkitMaskImage: FADE_GRADIENTS[getCastFrame(displayed).carrier.fade] }} />
+            <div className="flow-spine" ref={spineRef} />
+            <div className="flow-ring" ref={ringRef} />
+          </div>
+
           <div className="content-text-col">
             {displayed.kicker && (
               <span className="content-kicker-row">
@@ -474,6 +538,16 @@ export function OriginExperience({ country, onExit }: Props) {
                 <div className="eclipse-burn" ref={eclipseBurnRef} />
                 <div className="eclipse-disc" ref={eclipseDiscRef}>
                   <div className="eclipse-grain" />
+                  {BURN_PATCHES.map((p, i) => (
+                    <div
+                      key={i}
+                      className="eclipse-char-patch"
+                      ref={(el) => {
+                        charPatchRefs.current[i] = el;
+                      }}
+                      style={{ top: p.top, left: p.left, width: `${p.size}%`, height: `${p.size}%` }}
+                    />
+                  ))}
                 </div>
                 <div className="eclipse-boundary" ref={eclipseBoundaryRef} />
               </div>
