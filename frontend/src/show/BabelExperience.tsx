@@ -104,56 +104,15 @@ function visibleSampleSlice(cameraY: number, halfWorld: number) {
   return { samples: SAMPLES.slice(from, to + 1), from };
 }
 
-type Vegetation = { s: number; side: -1 | 1; offset: number; kind: 0 | 1 | 2; scale: number; phase: number };
-type Sandbar = { s: number; side: -1 | 1; offset: number; size: number; phase: number };
-
-const VEGETATION: Vegetation[] = (() => {
-  const out: Vegetation[] = [];
-  let seed = 9371;
-  const rand = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
-  for (let i = 0; i < 1100; i += 1) {
-    const s = 0.012 + rand() * 0.972;
-    const sectionDensity = s < 0.20 ? 0.72 : s < 0.42 ? 1.02 : s < 0.68 ? 1.28 : s < 0.84 ? 1.12 : 0.92;
-    if (rand() > sectionDensity * 0.68) continue;
-    const side = rand() > 0.5 ? 1 : -1;
-    const p = pointAt(s);
-    const nearWater = rand() ** 1.7;
-    const offset = p.width + 55 + (nearWater * 2.45 * p.width) + rand() * 40;
-    const kind = rand() < 0.68 ? 0 : 1;
-    const scale = 0.72 + rand() * 1.45;
-    out.push({ s, side, offset, kind, scale, phase: rand() * Math.PI * 2 });
-  }
-  return out.sort((a, b) => a.s - b.s);
-})();
-
-const SANDBARS: Sandbar[] = (() => {
-  const out: Sandbar[] = [];
-  let seed = 4451;
-  const rand = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
-  for (let i = 0; i < 75; i += 1) {
-    const s = 0.02 + rand() * 0.96;
-    const p = pointAt(s);
-    const side = rand() > 0.5 ? 1 : -1;
-    const offset = rand() * p.width * 0.55; 
-    const size = 0.5 + rand() * 1.2;
-    out.push({ s, side, offset, size, phase: rand() * Math.PI * 2 });
-  }
-  return out.sort((a, b) => a.s - b.s);
-})();
-
 // Generate thousands of lightweight procedural strokes to give it a rich painterly feel
 type Stroke = { sBase: number, sideRel: number, len: number, width: number, alpha: number, color: string, speed: number };
-const WATER_STROKES: Stroke[] = Array.from({ length: 2500 }).map(() => {
-  return {
-    sBase: Math.random(),
-    sideRel: (Math.random() - 0.5) * 1.8, 
-    len: 15 + Math.random() * 50,
-    width: 2.5 + Math.random() * 8,
-    alpha: 0.15 + Math.random() * 0.25,
-    color: ['#a8dadc', '#457b9d', '#1d3557', '#2a9d8f', '#264653'][Math.floor(Math.random() * 5)],
-    speed: 0.0005 + Math.random() * 0.0015
-  };
-});
+
+const WATER_STROKES: Stroke[] = Array.from({ length: 6200 }).map(() => ({
+  sBase: Math.random(), sideRel: (Math.random() - 0.5) * 1.92, len: 22 + Math.random() ** 0.65 * 150,
+  width: 1.2 + Math.random() ** 1.7 * 10, alpha: 0.08 + Math.random() * 0.28,
+  color: ['#d8f3dc','#b7e4c7','#74c69d','#52b69a','#168aad','#1a759f','#184e77'][Math.floor(Math.random()*7)],
+  speed: 0.00025 + Math.random() * 0.00125, phase: Math.random() * Math.PI * 2
+}));
 
 const DESERT_STROKES: Stroke[] = Array.from({ length: 4000 }).map(() => {
   const side = Math.random() > 0.5 ? 1 : -1;
@@ -169,70 +128,21 @@ const DESERT_STROKES: Stroke[] = Array.from({ length: 4000 }).map(() => {
   };
 });
 
-function visibleVegetation(cameraY: number, viewHalfWorld: number) {
-  return VEGETATION.filter((v) => Math.abs(pointAt(v.s).y - cameraY) < viewHalfWorld * 1.35);
-}
-
-function visibleSandbars(cameraY: number, viewHalfWorld: number) {
-  return SANDBARS.filter((b) => Math.abs(pointAt(b.s).y - cameraY) < viewHalfWorld * 1.35);
-}
-
 function drawFastCurveStroke(ctx: CanvasRenderingContext2D, sBase: number, offsetRel: number, len: number, width: number, alpha: number, color: string) {
-  const s = clamp(sBase);
-  const sMid = clamp(sBase + len / 60000);
-  const sEnd = clamp(sBase + len / 30000);
-  const p1 = pointAt(s);
-  const pMid = pointAt(sMid);
-  const p2 = pointAt(sEnd);
-  
-  ctx.globalAlpha = alpha;
-  ctx.strokeStyle = color;
-  ctx.lineWidth = width;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(p1.x + p1.nx * (offsetRel * p1.width), p1.y + p1.ny * (offsetRel * p1.width));
-  ctx.quadraticCurveTo(
-     pMid.x + pMid.nx * (offsetRel * pMid.width), pMid.y + pMid.ny * (offsetRel * pMid.width),
-     p2.x + p2.nx * (offsetRel * p2.width), p2.y + p2.ny * (offsetRel * p2.width)
-  );
-  ctx.stroke();
+  const s = clamp(sBase), sMid = clamp(sBase + len / 70000), sEnd = clamp(sBase + len / 34000);
+  const p1 = pointAt(s), pm = pointAt(sMid), p2 = pointAt(sEnd);
+  ctx.globalAlpha = alpha; ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.beginPath();
+  ctx.moveTo(p1.x + p1.nx * offsetRel * p1.width, p1.y + p1.ny * offsetRel * p1.width);
+  ctx.quadraticCurveTo(pm.x + pm.nx * offsetRel * pm.width, pm.y + pm.ny * offsetRel * pm.width, p2.x + p2.nx * offsetRel * p2.width, p2.y + p2.ny * offsetRel * p2.width); ctx.stroke();
 }
 
-function drawShrub(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number, phase: number, riverWidth: number) {
+function drawRiverBrushField(ctx: CanvasRenderingContext2D, localSamples: Sample[], time: number, cameraY: number, viewHalfWorld: number) {
   ctx.save();
-  ctx.translate(x, y);
-  const size = Math.max(0.65, riverWidth / 150) * scale;
-  ctx.scale(size, size * (0.72 + 0.18 * Math.sin(phase)));
-  ctx.globalAlpha = 0.85;
-  ctx.fillStyle = '#3a4b27'; // richer green
-  ctx.beginPath();
-  ctx.ellipse(-26, 4, 30, 15, phase * 0.6, 0, Math.PI * 2);
-  ctx.ellipse(2, -4, 34, 18, -phase * 0.35, 0, Math.PI * 2);
-  ctx.ellipse(29, 5, 27, 14, phase * 0.42, 0, Math.PI * 2);
-  ctx.ellipse(0, -15, 25, 17, phase * 0.2, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 0.60;
-  ctx.fillStyle = '#606c38';
-  ctx.beginPath();
-  ctx.ellipse(-6, -14, 22, 7, phase, 0, Math.PI * 2);
-  ctx.ellipse(25, 0, 14, 5, -phase, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-}
-
-function drawReeds(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number, phase: number) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.scale(scale, scale);
-  ctx.strokeStyle = '#606c38';
-  ctx.lineWidth = 1.8;
-  ctx.globalAlpha = 0.75;
-  for (let i = -3; i <= 3; i += 1) {
-    ctx.beginPath();
-    ctx.moveTo(i * 3, 7);
-    ctx.quadraticCurveTo(i * 2 + Math.sin(phase + i) * 3, -2, i * 2.2 + Math.sin(phase + i) * 4, -13 - (i % 2) * 4);
-    ctx.stroke();
-  }
+  polygonPath(ctx, [...localSamples.map(s=>({x:s.x+s.nx*s.width,y:s.y+s.ny*s.width})), ...localSamples.slice().reverse().map(s=>({x:s.x-s.nx*s.width,y:s.y-s.ny*s.width}))]);
+  ctx.clip();
+  for (let i=0;i<950;i++) { const ss=(i*0.00113+time*0.00008)%1,p=pointAt(ss); if(Math.abs(p.y-cameraY)>viewHalfWorld*1.35) continue; drawFastCurveStroke(ctx,ss,Math.sin(i*2.17)*0.42,90+(i%7)*35,16+(i%11)*2.2,0.035,i%2?'#74c69d':'#1a759f'); }
+  for (const stroke of WATER_STROKES) { const ss=(stroke.sBase+time*stroke.speed)%1,p=pointAt(ss); if(Math.abs(p.y-cameraY)>viewHalfWorld*1.45) continue; drawFastCurveStroke(ctx,ss,stroke.sideRel,stroke.len,stroke.width,stroke.alpha,stroke.color); if(stroke.width>5&&Math.floor(stroke.sBase*997)%5===0) drawFastCurveStroke(ctx,ss+0.0004,stroke.sideRel*0.94,stroke.len*0.72,stroke.width*0.42,stroke.alpha*0.6,'#d8f3dc'); }
+  for (let i=0;i<1900;i++) { const ss=(i*0.00057+time*0.00035)%1,p=pointAt(ss); if(Math.abs(p.y-cameraY)>viewHalfWorld*1.35) continue; drawFastCurveStroke(ctx,ss,Math.sin(i*1.71)*0.78,12+(i%8)*7,1+(i%4)*0.75,0.10+(i%5)*0.025,i%3?'#b7e4c7':'#e9f5db'); }
   ctx.restore();
 }
 
@@ -353,16 +263,9 @@ function RiverCanvas() {
       ctx.fill();
       ctx.globalAlpha = 1;
 
-      // Fertile green corridor
-      polygonPath(ctx, [...leftFertile, ...leftOuter.slice().reverse()]);
-      ctx.fillStyle = "#606c38"; // Desert Oasis Green
-      ctx.globalAlpha = 0.65;
-      ctx.fill();
-      polygonPath(ctx, [...rightFertile, ...rightOuter.slice().reverse()]);
-      ctx.fillStyle = "#798c4a";
-      ctx.globalAlpha = 0.45;
-      ctx.fill();
-      ctx.globalAlpha = 1;
+      // Dry desert transition bands — no vegetation corridor.
+      polygonPath(ctx, [...leftFertile, ...leftOuter.slice().reverse()]); ctx.fillStyle = "#c8935a"; ctx.globalAlpha = 0.20; ctx.fill();
+      polygonPath(ctx, [...rightFertile, ...rightOuter.slice().reverse()]); ctx.fillStyle = "#b57c42"; ctx.globalAlpha = 0.16; ctx.fill(); ctx.globalAlpha = 1;
 
       // Water body contour
       const waterLeft: Point[] = [];
@@ -376,7 +279,7 @@ function RiverCanvas() {
       }
       
       polygonPath(ctx, [...waterLeft, ...waterRight.reverse()]);
-      ctx.fillStyle = "#2a9d8f"; // Striking Teal Water
+      ctx.fillStyle = "#216f82"; // Deep painted river base
       ctx.fill();
 
       // Shallow water edges
@@ -398,45 +301,9 @@ function RiverCanvas() {
         ctx.fill();
       }
       
-      // Draw thousands of flowing water strokes to build the painterly texture inside the clip area
-      for (const stroke of WATER_STROKES) {
-        const currentS = (stroke.sBase + time * stroke.speed) % 1.0;
-        if (Math.abs(pointAt(currentS).y - state.camera.y) < viewHalfWorld * 1.5) {
-          drawFastCurveStroke(ctx, currentS, stroke.sideRel, stroke.len, stroke.width, stroke.alpha, stroke.color);
-        }
-      }
+      drawRiverBrushField(ctx, localSamples, time, state.camera.y, viewHalfWorld);
+
       ctx.restore(); // Exit clip
-
-      // Occasional small internal sandbars (without overlapping clip bounds, acting naturally)
-      for (const b of visibleSandbars(state.camera.y, viewHalfWorld)) {
-        const p = pointAt(b.s);
-        ctx.save();
-        ctx.translate(p.x + p.nx * b.side * b.offset, p.y + p.ny * b.side * b.offset);
-        ctx.rotate(p.angle);
-        ctx.scale(b.size * 1.5, b.size * 0.65);
-        ctx.globalAlpha = 0.95;
-        
-        ctx.fillStyle = "#c8935a"; // Sandbar color matching desert
-        ctx.beginPath();
-        ctx.ellipse(0, 0, 24, 14, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "#b57c42";
-        ctx.beginPath();
-        ctx.ellipse(3, -2, 16, 9, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // Small authored vocabulary of reeds, shrubs strictly placed on the banks
-      for (const v of visibleVegetation(state.camera.y, viewHalfWorld)) {
-        const p = pointAt(v.s);
-        const ecological = clamp(1.35 - v.offset / Math.max(1, p.width * 3.3), 0, 1);
-        const x = p.x - p.nx * v.side * v.offset;
-        const y = p.y - p.ny * v.side * v.offset;
-        if (v.kind === 1 && ecological > 0.12) drawReeds(ctx, x, y, v.scale * (0.72 + ecological * 0.55), v.phase);
-        else if (ecological > 0.035) drawShrub(ctx, x, y, v.scale * (0.72 + ecological * 0.72), v.phase, p.width);
-      }
 
       // Soft bank edge highlights
       ctx.save();

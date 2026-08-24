@@ -25,8 +25,7 @@ export default function Header({ isAdmin = false }: { isAdmin?: boolean }) {
           : "gods:bg-transparent gods:border-b gods:border-transparent"
       }`}
     >
-      <nav className="gods:max-w-7xl gods:mx-auto gods:px-6 gods:flex gods:items-center gods:justify-between gods:h-16">
-        <a
+      <nav className="gods:max-w-7xl gods:mx-auto gods:-mx-[34px] gods:flex gods:items-center gods:justify-between gods:h-16">        <a
           href={ROUTES.home}
           className="gods:font-display gods:text-3xl gods:tracking-widest gods:text-primary gods:uppercase gods:select-none"
         >

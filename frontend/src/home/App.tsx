@@ -53,8 +53,8 @@ const COUNTRIES = [
     img: "/images/banners/bannerbabel.png",
   },
   {
-    name: "Empire du Soleil Noir",
-    subtitle: "Théocratie Militaire",
+    name: "Lux",
+    subtitle: "L'Empire du Soleil Noir",
     lore: "Née d'un coup d'État sanglant, l'Empire est le cœur d'une expansion impitoyable portée par ses redoutables légions impériales.",
     badge: "Lux",
     img: "/images/banners/bannercultedusoleil.png",
