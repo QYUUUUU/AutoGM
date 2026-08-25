@@ -131,7 +131,7 @@ function AvatarImage({ src, fallback, color, className, style }: { src: string; 
   if (error || !src) {
     return (
       <div className={`gods:flex gods:items-center gods:justify-center gods:text-xs gods:font-bold gods:shrink-0 gods:font-display ${className}`}
-        style={{ backgroundColor: color, color: "#F6F2EC", ...style }}>
+        style={{ backgroundColor: color, color: "#F0ECE3", ...style }}>
         {fallback}
       </div>
     );
@@ -160,7 +160,7 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
   const [diceCounts, setDiceCounts] = useState<Record<string, number>>(
     Object.fromEntries(DICE_TYPES.map(({ die }) => [die, 0]))
   );
-  const [diceColor, setDiceColor] = useState("#9A7818");
+  const [diceColor, setDiceColor] = useState("#B18416");
   const colorRef = useRef<HTMLInputElement>(null);
 
   const [openCharIdx, setOpenCharIdx] = useState<number | null>(null);
@@ -310,7 +310,7 @@ export default function DashboardApp({ initialCharacter, characters, weapons, ar
 
   const formatBackendRoll = (r: any): RollResult => {
     let rawContent = r.content || "";
-    let color = "#9A7818";
+    let color = "#B18416";
     const metaMatch = rawContent.match(/<!--meta:(.*?)-->/);
     if (metaMatch) {
       try { color = JSON.parse(metaMatch[1]).color || color; } catch(e){}

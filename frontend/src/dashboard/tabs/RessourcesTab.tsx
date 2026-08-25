@@ -66,7 +66,7 @@ export default function RessourcesTab({ character, onUpdate }: Props) {
 
         <div className="gods:grid gods:grid-cols-1 gods:md:grid-cols-2 gods:gap-8 gods:mb-12">
           {/* Effort */}
-          <div className="gods:p-8 gods:rounded-lg gods:border gods:border-[#9A7818]/30 gods:bg-card gods:text-center gods:hover:shadow-lg gods:transition-all gods:duration-300">
+          <div className="gods:p-8 gods:rounded-lg gods:border gods:border-primary/30 gods:bg-card gods:text-center gods:hover:shadow-md gods:transition-all gods:duration-300">
             <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-primary gods:mb-6">Effort</h4>
             <div className="gods:flex gods:items-center gods:justify-center gods:gap-6">
               <button onClick={() => updateResource("effort", -1, character.maxeffort || 15)} className="gods:w-12 gods:h-12 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-background hover:gods:border-primary/50 gods:text-foreground gods:transition-all !gods:outline-none">
@@ -82,16 +82,16 @@ export default function RessourcesTab({ character, onUpdate }: Props) {
           </div>
 
           {/* Sang Froid */}
-          <div className="gods:p-8 gods:rounded-lg gods:border gods:border-[#5A3A8A]/30 gods:bg-card gods:text-center gods:hover:shadow-lg gods:transition-all gods:duration-300">
-            <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-[#5A3A8A] gods:mb-6">Sang Froid</h4>
+          <div className="gods:p-8 gods:rounded-lg gods:border gods:border-secondary/30 gods:bg-card gods:text-center gods:hover:shadow-md gods:transition-all gods:duration-300">
+            <h4 className="gods:text-xl gods:tracking-wider gods:uppercase gods:text-secondary gods:mb-6">Sang Froid</h4>
             <div className="gods:flex gods:items-center gods:justify-center gods:gap-6">
-              <button onClick={() => updateResource("sangfroid", -1, character.maxsangfroid || 8)} className="gods:w-12 gods:h-12 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-background hover:gods:border-[#5A3A8A]/50 gods:text-foreground gods:transition-all !gods:outline-none">
+              <button onClick={() => updateResource("sangfroid", -1, character.maxsangfroid || 8)} className="gods:w-12 gods:h-12 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-background hover:gods:border-secondary/50 gods:text-foreground gods:transition-all !gods:outline-none">
                 <Minus size={20} />
               </button>
               <span className="gods:text-5xl gods:tracking-wider gods:font-medium gods:font-display gods:text-foreground">
                 {character.sangfroid ?? 8} <span className="gods:text-muted-foreground gods:text-2xl">/ {character.maxsangfroid || 8}</span>
               </span>
-              <button onClick={() => updateResource("sangfroid", 1, character.maxsangfroid || 8)} className="gods:w-12 gods:h-12 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-background hover:gods:border-[#5A3A8A]/50 gods:text-foreground gods:transition-all !gods:outline-none">
+              <button onClick={() => updateResource("sangfroid", 1, character.maxsangfroid || 8)} className="gods:w-12 gods:h-12 gods:rounded-full gods:border gods:border-border gods:flex gods:items-center gods:justify-center hover:gods:bg-background hover:gods:border-secondary/50 gods:text-foreground gods:transition-all !gods:outline-none">
                 <Plus size={20} />
               </button>
             </div>

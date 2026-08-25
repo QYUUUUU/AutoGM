@@ -19,6 +19,7 @@ body {
   font-family: var(--gods-font-body), serif;
 }
 
+
 h1, h2, h3, h4 {
   font-family: var(--gods-font-display), serif;
   letter-spacing: 0.02em;

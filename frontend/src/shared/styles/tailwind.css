@@ -7,15 +7,15 @@
   --font-display: "Cinzel", serif;
   --font-body: "EB Garamond", serif;
 
-  --color-background: #F6F2EC;
+  --color-background: #EDE8DF;
   --color-foreground: #1C1320;
-  --color-card: #EDE8DF;
-  --color-popover: #EDE8DF;
-  --color-primary: #C79916;
+  --color-card: #E3DDD2;
+  --color-popover: #F0ECE3;
+  --color-primary: #B18416;
   --color-primary-foreground: #F6F2EC;
-  --color-secondary: #5A3A8A;
-  --color-muted: #E2DDD2;
-  --color-muted-foreground: #5C4E38;
+  --color-secondary: #684878;
+  --color-muted: #DCD6CA;
+  --color-muted-foreground: #625746;
   --color-destructive: #8B2635;
-  --color-border: rgba(28, 19, 32, 0.13);
+  --color-border: rgba(28, 19, 32, 0.10);
 }

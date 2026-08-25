@@ -107,8 +107,8 @@ export default function RituelsTab({ character }: { character: any }) {
                     {details && (
                       <span className={`gods:shrink-0 gods:text-xs gods:px-2 gods:py-0.5 gods:rounded gods:font-display gods:uppercase gods:tracking-widest gods:border ${
                         details.level.toLowerCase() === 'mineur' 
-                          ? 'gods:bg-blue-500/5 gods:text-blue-500 gods:border-blue-500/20' 
-                          : 'gods:bg-orange-500/5 gods:text-orange-500 gods:border-orange-500/20'
+                          ? 'gods:bg-secondary/5 gods:text-secondary gods:border-secondary/20' 
+                          : 'gods:bg-primary/5 gods:text-primary gods:border-primary/20'
                       }`}>
                         {details.level}
                       </span>

@@ -39,7 +39,7 @@ const IconMap: Record<string, React.FC<any>> = {
 // Reusable typography components based on the new landing page design
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-primary gods:font-display">
+    <span className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-secondary gods:font-display">
       {children}
     </span>
   );
@@ -146,7 +146,7 @@ export default function RitualsApp({ characters }: { characters: any[] }) {
             onClick={() => selectCategory("rules")}
             className={`gods-ritual-tab gods:w-full gods:flex gods:items-center gods:gap-3 gods:px-4 gods:py-3 gods:rounded-md gods:transition-all gods:duration-300 !gods:outline-none ${
               activeCategory === "rules" 
-                ? "gods:bg-primary/5 gods:text-primary gods:border gods:border-primary/20" 
+                ? "gods:bg-secondary/5 gods:text-secondary gods:border gods:border-secondary/20" 
                 : "gods:text-muted-foreground hover:gods:bg-muted/50 hover:gods:text-foreground gods:border gods:border-transparent"
             }`}
           >
@@ -155,7 +155,7 @@ export default function RitualsApp({ characters }: { characters: any[] }) {
           </button>
 
           <div className="gods:pt-6 gods:pb-2 gods:px-4">
-            <span className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-primary gods:font-display">
+            <span className="gods:text-xs gods:tracking-widest gods:uppercase gods:text-secondary gods:font-display">
               Catégories de Rituels
             </span>
           </div>
@@ -169,7 +169,7 @@ export default function RitualsApp({ characters }: { characters: any[] }) {
                 onClick={() => selectCategory(category.id)}
                 className={`gods-ritual-tab gods:group gods:w-full gods:flex gods:items-center gods:justify-between gods:px-4 gods:py-3 gods:rounded-md gods:transition-all gods:duration-300 !gods:outline-none ${
                   activeCategory === category.id 
-                    ? "gods:bg-primary/5 gods:text-primary gods:border gods:border-primary/20" 
+                    ? "gods:bg-secondary/5 gods:text-secondary gods:border gods:border-secondary/20" 
                     : "gods:text-muted-foreground hover:gods:bg-muted/50 hover:gods:text-foreground gods:border gods:border-transparent"
                 }`}
               >
@@ -213,7 +213,7 @@ export default function RitualsApp({ characters }: { characters: any[] }) {
               <div className="gods:grid gods:grid-cols-1 gods:md:grid-cols-2 gods:gap-6 gods:text-base gods:text-muted-foreground gods:leading-relaxed">
                 
                 <div className="gods:p-6 gods:xl:p-8 gods:rounded-lg gods:border gods:border-border gods:bg-card">
-                  <div className="gods:inline-flex gods:p-3 gods:rounded-md gods:border gods:border-primary/20 gods:bg-primary/5 gods:text-primary gods:mb-6">
+                  <div className="gods:inline-flex gods:p-3 gods:rounded-md gods:border gods:border-secondary/20 gods:bg-secondary/5 gods:text-secondary gods:mb-6">
                     <Flame size={24} />
                   </div>
                   <h3 className="gods:text-xl gods:tracking-wider gods:mb-3 gods:text-foreground">
@@ -223,7 +223,7 @@ export default function RitualsApp({ characters }: { characters: any[] }) {
                 </div>
 
                 <div className="gods:p-6 gods:xl:p-8 gods:rounded-lg gods:border gods:border-border gods:bg-card">
-                  <div className="gods:inline-flex gods:p-3 gods:rounded-md gods:border gods:border-primary/20 gods:bg-primary/5 gods:text-primary gods:mb-6">
+                  <div className="gods:inline-flex gods:p-3 gods:rounded-md gods:border gods:border-secondary/20 gods:bg-secondary/5 gods:text-secondary gods:mb-6">
                     <Droplets size={24} />
                   </div>
                   <h3 className="gods:text-xl gods:tracking-wider gods:mb-3 gods:text-foreground">
@@ -238,7 +238,7 @@ export default function RitualsApp({ characters }: { characters: any[] }) {
                 </div>
 
                 <div className="gods:p-6 gods:xl:p-8 gods:rounded-lg gods:border gods:border-border gods:bg-card gods:md:col-span-2">
-                  <div className="gods:inline-flex gods:p-3 gods:rounded-md gods:border gods:border-primary/20 gods:bg-primary/5 gods:text-primary gods:mb-6">
+                  <div className="gods:inline-flex gods:p-3 gods:rounded-md gods:border gods:border-secondary/20 gods:bg-secondary/5 gods:text-secondary gods:mb-6">
                     <Skull size={24} />
                   </div>
                   <h3 className="gods:text-xl gods:tracking-wider gods:mb-3 gods:text-foreground">
@@ -258,7 +258,7 @@ export default function RitualsApp({ characters }: { characters: any[] }) {
           {activeData && (
             <div className="gods:animate-in gods:fade-in gods:slide-in-from-bottom-4 gods:duration-500">
               <div className="gods:mb-12">
-                <div className="gods:inline-flex gods:p-3 gods:rounded-md gods:border gods:border-primary/20 gods:bg-primary/5 gods:text-primary gods:mb-4">
+                <div className="gods:inline-flex gods:p-3 gods:rounded-md gods:border gods:border-secondary/20 gods:bg-secondary/5 gods:text-secondary gods:mb-4">
                   {React.createElement(IconMap[activeData.icon] || Info, { size: 28 })}
                 </div>
                 <SectionTitle>{activeData.title}</SectionTitle>

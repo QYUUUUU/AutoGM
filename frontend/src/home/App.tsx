@@ -122,7 +122,7 @@ export default function App({ isAdmin = false }: { isAdmin?: boolean }) {
       {/* ── HERO ────────────────────────────────────────────────── */}
       <section className="gods:relative gods:min-h-[85vh] gods:pt-20 gods:flex gods:flex-col gods:items-center gods:justify-center gods:text-center gods:overflow-hidden">
         <div className="gods:absolute gods:inset-0 gods:pointer-events-none gods:select-none gods:overflow-hidden">
-          <div className="gods:absolute gods:inset-0 gods:bg-gradient-to-b gods:from-[#E8C97A]/12 gods:via-transparent gods:to-transparent" />
+          <div className="gods:absolute gods:inset-0 gods:bg-gradient-to-b gods:from-primary/8 gods:via-transparent gods:to-transparent" />
           <div className="gods:absolute gods:z-0 gods:left-0 gods:bottom-0 gods:h-[100%] gods:w-auto gods:max-w-[85vw] gods:hidden gods:[@media(min-width:1350px)]:block">
             <img src="/images/background_illustration.png" alt="" aria-hidden="true" className="gods:w-auto gods:h-full gods:max-w-none gods:object-contain gods:object-left-bottom gods:opacity-90" />
           </div>
@@ -190,7 +190,7 @@ export default function App({ isAdmin = false }: { isAdmin?: boolean }) {
               <a
                 key={card.title}
                 href={card.href}
-                className="gods:group gods:relative gods:p-6 gods:xl:p-8 gods:rounded-lg gods:border gods:border-border gods:bg-card gods:hover:border-primary/40 gods:hover:shadow-lg gods:transition-all gods:duration-300"
+                className="gods:group gods:relative gods:p-6 gods:xl:p-8 gods:rounded-lg gods:border gods:border-border gods:bg-card gods:hover:border-primary/40 gods:hover:shadow-md gods:transition-all gods:duration-300"
               >
                 <div className="gods:inline-flex gods:p-3 gods:rounded-md gods:border gods:border-primary/20 gods:bg-primary/5 gods:text-primary gods:mb-6">
                   <card.Icon size={24} />
@@ -218,7 +218,7 @@ export default function App({ isAdmin = false }: { isAdmin?: boolean }) {
                   <a
                     key={a.href}
                     href={a.href}
-                    className="gods:group gods:relative gods:p-6 gods:rounded-lg gods:border gods:border-primary/20 gods:bg-primary/5 gods:hover:border-primary/40 gods:hover:shadow-lg gods:transition-all gods:duration-300 gods:flex gods:items-center gods:justify-between"
+                    className="gods:group gods:relative gods:p-6 gods:rounded-lg gods:border gods:border-primary/20 gods:bg-primary/5 gods:hover:border-primary/40 gods:hover:shadow-md gods:transition-all gods:duration-300 gods:flex gods:items-center gods:justify-between"
                   >
                     <span className="gods:font-display gods:text-xl gods:tracking-wider gods:text-primary">
                       {a.label}
@@ -248,7 +248,7 @@ export default function App({ isAdmin = false }: { isAdmin?: boolean }) {
               <a
                 key={country.name}
                 href={ROUTES.monde}
-                className="gods:group gods:relative gods:p-6 gods:xl:p-8 gods:flex gods:flex-col gods:rounded-lg gods:border gods:border-border gods:bg-card gods:hover:border-primary/40 gods:hover:shadow-lg gods:transition-all gods:duration-300"
+                className="gods:group gods:relative gods:p-6 gods:xl:p-8 gods:flex gods:flex-col gods:rounded-lg gods:border gods:border-border gods:bg-card gods:hover:border-primary/40 gods:hover:shadow-md gods:transition-all gods:duration-300"
               >
                 <div className="gods:relative gods:w-full gods:aspect-[3/4] gods:rounded-md gods:border gods:border-border/50 gods:group-hover:border-primary/40 gods:overflow-hidden gods:mb-6 gods:transition-colors gods:duration-300">
                   <img
@@ -290,7 +290,7 @@ export default function App({ isAdmin = false }: { isAdmin?: boolean }) {
             </p>
           </div>
 
-          <div className="gods:relative gods:overflow-hidden gods:rounded-lg gods:border gods:border-border gods:bg-card gods:hover:border-primary/40 gods:hover:shadow-lg gods:transition-all gods:duration-300">
+          <div className="gods:relative gods:overflow-hidden gods:rounded-lg gods:border gods:border-border gods:bg-card gods:hover:border-primary/40 gods:hover:shadow-md gods:transition-all gods:duration-300">
             <div className="gods:relative gods:aspect-video gods:bg-muted gods:overflow-hidden gods:border-b gods:border-border/50">
               {MAPS.map((map, i) => (
                 <img
