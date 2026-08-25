@@ -1,0 +1,100 @@
+services:
+
+  web:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    restart: unless-stopped
+
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+
+    secrets:
+      - database_url
+      - session_secret
+      - jwt_secret
+      - openai_api_key
+
+    volumes:
+      - app_uploads:/app/uploads
+
+    ports:
+      - "127.0.0.1:3000:3000"
+
+    command:
+      - sh
+      - -c
+      - |
+        export DATABASE_URL="$$(cat /run/secrets/database_url)"
+        export SESSION_SECRET="$$(cat /run/secrets/session_secret)"
+        export JWT_SECRET="$$(cat /run/secrets/jwt_secret)"
+        export OPENAI_API_KEY="$$(cat /run/secrets/openai_api_key)"
+        npm start
+
+  mariadb:
+    image: mariadb:11.4
+    restart: unless-stopped
+
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+    secrets:
+      - mariadb_root_password
+      - mariadb_password
+
+    environment:
+      MARIADB_DATABASE: anetdb
+      MARIADB_USER: appuser
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
+      MARIADB_PASSWORD_FILE: /run/secrets/mariadb_password
+
+    expose:
+      - "3306"
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+
+    expose:
+      - "6379"
+
+volumes:
+  mariadb_data:
+  app_uploads:
+
+secrets:
+
+  database_url:
+    file: ./secrets/database_url
+
+  session_secret:
+    file: ./secrets/session_secret
+
+  jwt_secret:
+    file: ./secrets/jwt_secret
+
+  openai_api_key:
+    file: ./secrets/openai_api_key
+
+  mariadb_root_password:
+    file: ./secrets/mariadb_root_password
+
+  mariadb_password:
+    file: ./secrets/mariadb_password

@@ -1,0 +1,63 @@
+services:
+
+  web:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile.dev
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+      - redis
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - .env.local
+    command:
+      - sh
+      - -c
+      - |
+        npm install --legacy-peer-deps &&
+        npx prisma generate --schema=/app/app/prisma/schema.prisma &&
+        npm start
+
+  mariadb:
+    image: mariadb:11.4
+    restart: unless-stopped
+    volumes:
+      - ./.data_mysql:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MARIADB_DATABASE: anetdb
+      MARIADB_USER: ${MYSQL_USER:-userdb}
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD:-passdb}
+    ports:
+      - "127.0.0.1:3306:3306"
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: ${MYSQL_USER:-userdb}
+      PMA_PASSWORD: ${MYSQL_PASSWORD:-passdb}
+    ports:
+      - "127.0.0.1:8080:80"
+
+  maildev:
+    image: maildev/maildev
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1080:80"
+      - "127.0.0.1:1025:25"
