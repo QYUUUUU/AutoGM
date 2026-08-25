@@ -1,6 +1,10 @@
 FROM node:22-alpine
 
-RUN apk add --no-cache openssl
+RUN apk add --no-cache \
+    build-base \
+    python3 \
+    py3-pip \
+    openssl
 
 WORKDIR /app
 
@@ -13,7 +17,6 @@ COPY . .
 RUN npx prisma generate --schema=/app/app/prisma/schema.prisma
 
 ENV NODE_ENV=production
-ENV PORT=3000
 
 EXPOSE 3000
 
