@@ -9,3 +9,4 @@ group_instincts.txt
 group_instincts_full.txt
 
 *.db
+.data_mysql

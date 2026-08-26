@@ -93,15 +93,28 @@ const BABEL_CAST: Record<string, CastFrame> = {
     ring: RING_OFF,
     showNumeral: false,
   },
-  kingdom: {
-    // A full-bleed dark reading panel, edge to edge on three sides,
-    // with a bold gold seam marking its edge — not a floating card.
+  "kingdom-1": {
     carrier: { top: "0", left: "0", width: "43vw", height: "100vh", borderRadius: "0px", background: MOOD_PALETTE.sand.panel, opacity: 0.92 },
     spine: { top: "0", left: "43vw", width: "3px", height: "100vh", color: MOOD_PALETTE.sand.accent, opacity: 0.7, scaleY: 1 },
     ring: RING_OFF,
     showNumeral: true,
   },
-  siirh: {
+  "kingdom-2": {
+    // Identical to kingdom-1 so the shapes don't move
+    carrier: { top: "0", left: "0", width: "43vw", height: "100vh", borderRadius: "0px", background: MOOD_PALETTE.sand.panel, opacity: 0.92 },
+    spine: { top: "0", left: "43vw", width: "3px", height: "100vh", color: MOOD_PALETTE.sand.accent, opacity: 0.7, scaleY: 1 },
+    ring: RING_OFF,
+    showNumeral: true, // This keeps the "01" numeral alive in the corner
+  },
+  "siirh-1": {
+    // A different shape register entirely: a wide horizon-band across
+    // the top, like a skyline over the desert, text settling below it.
+    carrier: { top: "0", left: "0", width: "100vw", height: "30vh", borderRadius: "0px", background: "#171009", opacity: 0.85 },
+    spine: { top: "0", left: "70vw", width: "2px", height: "100vh", color: MOOD_PALETTE.stone.accent, opacity: 0.45, scaleY: 1 },
+    ring: RING_OFF,
+    showNumeral: true,
+  }, 
+  "siirh-2": {
     // A different shape register entirely: a wide horizon-band across
     // the top, like a skyline over the desert, text settling below it.
     carrier: { top: "0", left: "0", width: "100vw", height: "30vh", borderRadius: "0px", background: "#171009", opacity: 0.85 },
@@ -109,7 +122,7 @@ const BABEL_CAST: Record<string, CastFrame> = {
     ring: RING_OFF,
     showNumeral: true,
   },
-  taerhonis: {
+  "taerhonis-1": {
     // A tall, narrow, dark presence standing beside her — a shadow
     // more than a panel. Nothing else on stage; the ambiguity is the
     // whole composition.
@@ -118,7 +131,24 @@ const BABEL_CAST: Record<string, CastFrame> = {
     ring: RING_OFF,
     showNumeral: true,
   },
-  society: {
+  "taerhonis-2": {
+    // A tall, narrow, dark presence standing beside her — a shadow
+    // more than a panel. Nothing else on stage; the ambiguity is the
+    // whole composition.
+    carrier: { top: "0", left: "78vw", width: "22vw", height: "100vh", borderRadius: "0px", background: MOOD_PALETTE.night.panel, opacity: 0.9 },
+    spine: SPINE_OFF,
+    ring: RING_OFF,
+    showNumeral: true,
+  },
+  "society-1": {
+    // Castes as rings of status, not a rectangle — a real diagram, the
+    // one graphic statement in this scene. The carrier only mats the
+    // image; it is not asked to carry meaning on its own.
+    carrier: { top: "0", left: "56vw", width: "44vw", height: "100vh", borderRadius: "0px", background: MOOD_PALETTE.stone.accent, opacity: 0.22 },
+    spine: SPINE_OFF,
+    ring: { top: "48vh", left: "78vw", size: "36vw", borderWidth: "3px", color: MOOD_PALETTE.stone.accent, opacity: 0.55, scale: 1 },
+    showNumeral: true,
+  },"society-2": {
     // Castes as rings of status, not a rectangle — a real diagram, the
     // one graphic statement in this scene. The carrier only mats the
     // image; it is not asked to carry meaning on its own.
@@ -149,7 +179,15 @@ const BABEL_CAST: Record<string, CastFrame> = {
     ring: RING_OFF,
     showNumeral: true,
   },
-  nashee: {
+  "nashee-1": {
+    // Mirrors `kingdom`'s shape on the opposite edge, deliberately —
+    // Act I's divine thread closes with the same architecture that
+    // opened the show.
+    carrier: { top: "0", left: "57vw", width: "43vw", height: "100vh", borderRadius: "0px", background: MOOD_PALETTE.night.panel, opacity: 0.92 },
+    spine: { top: "0", left: "57vw", width: "3px", height: "100vh", color: MOOD_PALETTE.night.accent, opacity: 0.6, scaleY: 1 },
+    ring: RING_OFF,
+    showNumeral: true,
+  },  "nashee-2": {
     // Mirrors `kingdom`'s shape on the opposite edge, deliberately —
     // Act I's divine thread closes with the same architecture that
     // opened the show.
@@ -174,7 +212,14 @@ const BABEL_CAST: Record<string, CastFrame> = {
     ring: RING_OFF,
     showNumeral: true,
   },
-  sabaah: {
+  "sabaah-1": {
+    // The sourcebook itself describes Sabaah as three concentric
+    // sectors — so the ring returns, larger, as an actual diagram.
+    carrier: { top: "0", left: "54vw", width: "46vw", height: "100vh", borderRadius: "0px", background: MOOD_PALETTE.water.accent, opacity: 0.16 },
+    spine: SPINE_OFF,
+    ring: { top: "50vh", left: "77vw", size: "46vw", borderWidth: "4px", color: MOOD_PALETTE.water.accent, opacity: 0.6, scale: 1 },
+    showNumeral: true,
+  },  "sabaah-2": {
     // The sourcebook itself describes Sabaah as three concentric
     // sectors — so the ring returns, larger, as an actual diagram.
     carrier: { top: "0", left: "54vw", width: "46vw", height: "100vh", borderRadius: "0px", background: MOOD_PALETTE.water.accent, opacity: 0.16 },
@@ -189,7 +234,13 @@ const BABEL_CAST: Record<string, CastFrame> = {
     ring: RING_OFF,
     showNumeral: true,
   },
-  khep: {
+  "khep-1": {
+    carrier: { top: "0", left: "0", width: "42vw", height: "100vh", borderRadius: "0px", background: MOOD_PALETTE.blood.accent, opacity: 0.2 },
+    spine: { top: "0", left: "42vw", width: "3px", height: "100vh", color: MOOD_PALETTE.blood.accent, opacity: 0.6, scaleY: 1 },
+    ring: RING_OFF,
+    showNumeral: true,
+  }, 
+  "khep-2": {
     carrier: { top: "0", left: "0", width: "42vw", height: "100vh", borderRadius: "0px", background: MOOD_PALETTE.blood.accent, opacity: 0.2 },
     spine: { top: "0", left: "42vw", width: "3px", height: "100vh", color: MOOD_PALETTE.blood.accent, opacity: 0.6, scaleY: 1 },
     ring: RING_OFF,

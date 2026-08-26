@@ -12,8 +12,13 @@ import backendRoutes from './app/routes/backendRoutes.js';
 import authRoutes from './app/routes/authRoutes.js';
 import adminRoutes from './app/routes/adminRoutes.js';
 import eclatsRoutes from './app/routes/eclatsRoutes.js';
-
+import crypto from 'node:crypto';
 import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 function loadSecret(name) {
   const path = `/run/secrets/${name}`;
@@ -40,20 +45,77 @@ if (process.env.NODE_ENV === 'production') {
 const app = express();
 const prisma = new PrismaClient();
 
+app.use((req, res, next) => {
+  res.locals.cspNonce = crypto.randomBytes(16).toString('base64');
+  next();
+});
+
 app.disable('x-powered-by');
 
 app.set('trust proxy', 1);
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+
+        scriptSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          (req, res) => `'nonce-${res.locals.cspNonce}'`
+        ],
+
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://maxcdn.bootstrapcdn.com",
+          "https://cdnjs.cloudflare.com",
+          "https://fonts.googleapis.com"
+
+        ],
+
+        fontSrc: [
+          "'self'",
+          "https://cdnjs.cloudflare.com",
+          "https://maxcdn.bootstrapcdn.com",
+          "data:"
+        ],
+
+        imgSrc: [
+          "'self'",
+          "data:",
+          "blob:"
+        ],
+
+        connectSrc: [
+          "'self'"
+        ],
+
+        objectSrc: ["'none'"],
+
+        baseUri: ["'self'"],
+
+        frameAncestors: ["'self'"]
+      }
+    }
+  })
+);
 
 app.use(express.json({
-  limit: '1mb'
+  limit: '4mb'
 }));
 
 app.use(express.urlencoded({
   extended: true,
   limit: '100kb'
 }));
+
+
+// Explicit route for the favicon
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(__dirname, 'favicon.ico'));
+});
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -90,7 +152,10 @@ app.use(
 app.set('views', './app/views');
 
 app.use((req, res, next) => {
-  res.locals.isAdmin = req.session?.userId === 1;
+  const role = req.session?.role;
+
+  res.locals.isAdmin = role === 'admin';
+
   next();
 });
 

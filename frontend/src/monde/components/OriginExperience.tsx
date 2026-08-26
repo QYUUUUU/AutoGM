@@ -10,7 +10,6 @@ import {
   type CarrierTarget,
   type SpineTarget,
   type RingTarget,
-  type FadeDirection,
 } from "../data/composition";
 
 const images: Record<string, string> = {
@@ -34,7 +33,7 @@ const SPLIT_TITLE_KINDS = new Set<SceneKind>(["cinematic-hero", "rupture-black-s
 /** A shape is solid near the edge it's anchored to and dissolves into
  * the scene rather than stopping at a hard second edge — a wash of
  * color/light, not a rectangle with a fill under it. */
-const FADE_GRADIENTS: Record<FadeDirection, string> = {
+const FADE_GRADIENTS = {
   right: "linear-gradient(to right, #000 0%, #000 32%, transparent 84%)",
   left: "linear-gradient(to left, #000 0%, #000 32%, transparent 84%)",
   down: "linear-gradient(to bottom, #000 0%, #000 32%, transparent 84%)",
@@ -277,6 +276,12 @@ export function OriginExperience({ country, onExit }: Props) {
     const rm = prefersReducedMotion.current;
     const d = rm ? 0.15 : 0.6;
     const tl = gsap.timeline();
+
+    // ADD THIS: Reset the title wrapper so it isn't stuck invisible from the exit animation
+    if (titleRef.current) {
+      gsap.set(titleRef.current, { clearProps: "all" });
+    }
+
     const cast = getCastFrame(next);
     const numeralValue = cast.showNumeral ? deriveNumeral(next) : null;
     const watermarkWord = resolveWatermark(next);

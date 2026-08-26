@@ -20,8 +20,8 @@ export default function App({ isAdmin }: { isAdmin: boolean }) {
 
   if (country) {
     return (
-      // Updated to standard wrapper (pt-16 offset, min-h-screen, flex behavior)
-      <div className="gods:pt-16 gods:min-h-screen gods:bg-background gods:relative gods:z-10 gods:flex gods:flex-col">
+      // Changed: Removed gods:relative and gods:z-10 so the fixed modal can escape to the top
+      <div className="gods:pt-16 gods:min-h-screen gods:bg-background gods:flex gods:flex-col">
         <OriginExperience
           country={country}
           isAdmin={isAdmin}

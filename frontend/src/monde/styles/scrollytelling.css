@@ -183,7 +183,7 @@
   flex: 1 1 480px;
   min-width: 380px;
   max-width: 640px;
-  margin-top: max(92px, 12vh); /* clears the 80px HUD with room to spare, scales on tall screens */
+  margin-top: max(92px, 8vh); /* clears the 80px HUD with room to spare, scales on tall screens */
   display: flex;
   flex-direction: column;
 }

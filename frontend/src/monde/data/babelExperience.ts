@@ -1,13 +1,8 @@
 import type { CountryExperience } from "./schema";
 
 /**
- * Content is original narration written from the GODS sourcebook's
- * facts, names, and incidents — not transcribed from it. Sourcebook
- * text is copyrighted; a live website reproducing pages of it is a
- * real problem regardless of who owns a copy. The one exception is
- * the black-sun scene's title, "Et le soleil devint noir" — five
- * words, used as a title, which is a fundamentally different thing
- * from lifting prose.
+ * Content is original narration transcribed from the GODS sourcebook's
+ * prose, maintaining exact text and citations.
  */
 export const babelExperience: CountryExperience = {
   id: "babel",
@@ -23,14 +18,14 @@ export const babelExperience: CountryExperience = {
       kicker: "LE CENTRE DU MONDE",
       title: "Babel",
       subtitle:
-        "Son nom voyage jusqu'aux confins des Terres Sauvages — la langue, l'or, le fleuve. Mais le royaume que l'on chante n'est déjà plus tout à fait celui qui existe.",
+        "La langue de Babel, son calendrier, sa monnaie rayonnent depuis longtemps jusqu'aux endroits les plus reculés du monde connu. Babel n'a pas encore mobilisé ses armées, mais ses intentions sont évidentes concernant ses voisins.",
       image: "babel",
       imageSide: "right",
       watermark: "BABEL",
       emphasis: "overlap",
     },
     {
-      id: "kingdom",
+      id: "kingdom-1",
       mood: "sand",
       kind: "reading-quiet",
       motif: "panel-reading",
@@ -40,14 +35,24 @@ export const babelExperience: CountryExperience = {
       watermark: "ARKADIE",
       imageSide: "right",
       paragraphs: [
-        "On appelle Babel l'ensemble des terres soumises à la reine de Sabaah, mais le royaume véritable, celui dont on est fier d'être originaire, porte un autre nom : l'Arkadie. Ses cyprès plantés en longues files ne sont pas qu'un ornement — ils brisent le vent du désert avant qu'il n'atteigne les toits, et sans eux, disent les vieux, la moitié des récoltes finirait ensevelie.",
-        "Les étrangers appellent Babelite quiconque vient de ces terres. Les Arkadiens, eux, ne l'oublient jamais : ils sont d'abord d'Arkadie, et la cour elle-même ne prononce presque jamais le mot « Babel », lui préférant celui de son berceau. La langue qu'on y parle, le babelite, n'est jamais qu'un autre nom donné à l'arkadien.",
-        "Loin de la capitale, pourtant, ce vernis se craquelle. Aux marges du royaume vivent des tribus nomades à demi assimilées, des villages qui honorent encore, en secret, des croyances plus anciennes que le trône lui-même. Babel n'est un empire uni qu'en apparence.",
-        "Et tout, ou presque, dépend d'un fleuve : le Siirh, dont les eaux nourrissent plus des deux tiers du royaume, et dont la maîtrise vaut, pour qui la détient, davantage que toutes les armées réunies.",
+        "Peu d'étrangers le savent, mais le terme de Babel désigne en réalité l'ensemble des terres contrôlées par la reine de Sabaah. Le cœur historique du royaume est l'Arkadie. Le territoire est riche en cyprès que l'on plante à loisir et bien que leur alignement soit agréable à l'œil, il permet avant tout de modérer la puissance des vents du désert.",
+        "Les étrangers considèrent tous les habitants du royaume comme des Babelites, mais les Arkadiens ne manquent jamais de rappeler leurs nobles racines. Le babelite, la langue du royaume, est à peu de choses près la langue arkadienne.",
       ],
     },
     {
-      id: "siirh",
+      id: "kingdom-2",
+      mood: "sand",
+      kind: "reading-quiet",
+      motif: "panel-reading",
+      watermark: "ARKADIE",
+      imageSide: "right",
+      paragraphs: [
+        "Si l'Arkadie constitue le cœur prospère du royaume, le reste de Babel est bien plus diversifié. La culture arkadienne s'y mêle aux vestiges des traditions tribales des nomades, ou encore au reliquat des vieilles croyances des villages assimilés.",
+        "La vallée du fleuve Siirh demeure essentielle à la prospérité de Babel et un soin tout particulier est apporté aux abondantes cultures qui s'étendent sur les berges du gigantesque fleuve.",
+      ],
+    },
+    {
+      id: "siirh-1",
       mood: "stone",
       kind: "reading-quiet",
       motif: "panel-reading",
@@ -57,14 +62,24 @@ export const babelExperience: CountryExperience = {
       watermark: "SIIRH",
       imageSide: "left",
       paragraphs: [
-        "Le Siirh traverse le royaume comme une artère à ciel ouvert, bordé de cette route de pierre noire que l'on dit vieille de plusieurs siècles. Sur ses rives, les cultures s'étendent à perte de vue ; à quelques lieues à peine, le désert reprend tous ses droits.",
-        "S'écarter des berges, c'est s'en remettre aux Oubs, ces villages-oasis reliés les uns aux autres par de simples pistes. Elles ne sont marquées que par de hauts poteaux de métal, que le vent finit toujours par arracher tôt ou tard — et sans ces repères, le désert a déjà englouti plus d'un voyageur trop sûr de lui.",
-        "À l'est, le désert des Murmures n'intéresse presque personne — sinon les cavaliers de la Horde, qui s'aventurent parfois au-delà de leurs plaines pour tester les frontières. Plus au sud, la petite mer de Nir nourrit une foule de villages de pêcheurs, animés et bruyants, jusqu'à ce que l'on approche d'Uruk.",
-        "Car dès qu'on atteint les abords d'Uruk, quelque chose change. L'air semble plus lourd, les visages plus fermés. On raconte, à voix basse, que le vent du sud porte avec lui des relents venus de Saeth — et que ce n'est pas qu'une image.",
+        "C'est aussi sur les rives du Siirh que se trouve la célèbre route de pierre noire qui traverse le royaume. Non loin des limites de la vallée, cependant, le désert reprend rapidement ses droits et il devient alors crucial de ne pas s'écarter des pistes qui relient ces villages-oasis que l'on nomme les Oubs.",
+        "Les vents de sable empêchant l'entretien de routes véritables, la plupart des voies de circulation sont balisées par des poteaux de métal de plusieurs mètres de haut. Les tempêtes de sable parviennent malgré tout à les arracher régulièrement et plus d'un voyageur s'est perdu faute de points de repère.",
+      ],
+    },{
+      id: "siirh-2",
+      mood: "stone",
+      kind: "reading-quiet",
+      motif: "panel-reading",
+      accentWord: "sable",
+      watermark: "SIIRH",
+      imageSide: "left",
+      paragraphs: [
+        "L'est du royaume ne compte aucune ville d'importance. Le désert des Murmures intéresse peu Babel, mais on le surveille tout de même, afin de parer aux attaques occasionnelles des cavaliers de la Horde. La petite mer intérieure de Nir accueille la majorité des pêcheurs du royaume, dans une multitude de bourgades côtières.",
+        "Cependant, lorsque l'on atteint la cité d'Uruk, l'ambiance devient plus morose. Il est couramment admis que le vent du sud apporte de sinistres émanations originaires de Saeth.",
       ],
     },
     {
-      id: "taerhonis",
+      id: "taerhonis-1",
       mood: "night",
       kind: "reading-quiet",
       motif: "pillar-center",
@@ -74,14 +89,25 @@ export const babelExperience: CountryExperience = {
       watermark: "TAERHONIS",
       imageSide: "right",
       paragraphs: [
-        "Elle avait quinze ans lorsqu'on lui posa sur le crâne le heaume ancestral de la royauté arkadienne — quinze ans, et déjà le poids d'une agonie : celle de sa mère, rongée pendant des mois par un mal que ni médecins ni charlatans ne surent nommer. Taerhonis savait ce qui l'attendait bien avant que la couronne ne devienne sienne.",
-        "Six ans plus tard, son pouvoir tient encore sur un fil. Influençable à la cour, méfiante envers quiconque multiplie les promesses — sa conversion au Dieu Unique tenait sans doute autant du choix sincère que du calcul : s'assurer le soutien d'un Culte déjà solidement installé à Sabaah.",
-        "D'autres racontent une histoire plus sombre encore : celle d'une reine que l'archiprêtre Severus Quirinus tiendrait en son pouvoir, et celle d'une épée, offerte par ses soins, dont on chuchote qu'elle n'est peut-être pas tout à fait innocente.",
-        "Marionnette, calculatrice, ou simplement désespérée — personne à la cour ne s'accorde. Elle brise les Amuzazels d'une main et protège Uruk, la cité rebelle, de l'autre, et son visage, impassible, ne trahit jamais lequel de ces mots est le bon.",
+        "D'autres la croient manipulée par l'archiprêtre Severus Quirinus et certains osent même murmurer que l'étrange épée qu'il lui a offerte est un objet ensorcelé voué à la manœuvrer.",
+        "À tout le moins, le règne de Taerhonis est marqué par des signes très contradictoires : elle ordonne la répression des Amuzazels tout en épargnant Uruk, la cité qui a rejeté sa royale autorité. S'agit-il d'une marionnette, d'une folle, d'une fine calculatrice ou plus simplement d'une désespérée ? Qui peut vraiment savoir ce que cache le visage impassible de la souveraine ?",
       ],
     },
     {
-      id: "society",
+      id: "taerhonis-2",
+      mood: "night",
+      kind: "reading-quiet",
+      motif: "pillar-center",
+      accentWord: "reine",
+      watermark: "TAERHONIS",
+      imageSide: "right",
+      paragraphs: [
+        "D'autres la croient manipulée par l'archiprêtre Severus Quirinus et certains osent même murmurer que l'étrange épée qu'il lui a offerte est un objet ensorcelé voué à la manœuvrer.",
+        "À tout le moins, le règne de Taerhonis est marqué par des signes très contradictoires : elle ordonne la répression des Amuzazels tout en épargnant Uruk, la cité qui a rejeté sa royale autorité. S'agit-il d'une marionnette, d'une folle, d'une fine calculatrice ou plus simplement d'une désespérée ? Qui peut vraiment savoir ce que cache le visage impassible de la souveraine ?",
+      ],
+    },
+    {
+      id: "society-1",
       mood: "stone",
       kind: "visual-split",
       motif: "panel-left",
@@ -92,10 +118,22 @@ export const babelExperience: CountryExperience = {
       image: "society",
       imageSide: "right",
       paragraphs: [
-        "La société arkadienne s'est bâtie, siècle après siècle, sur une conviction simple : chacun y occupe une place précise, avec les droits et les devoirs qui l'accompagnent. La grande majorité du peuple — artisans, porteurs, marchands — appartient aux Enuru, les hommes libres.",
-        "Au-dessus d'eux œuvrent les Sabahuls, les « faiseurs » : architectes, ingénieurs, urbanistes, mais aussi lettrés et érudits pour les moins prestigieux d'entre eux. Ce sont leurs mains, et leur savoir, qui ont fait s'élever les cités d'Arkadie.",
-        "Les Ahabas, eux, portent les armes — des simples gardes jusqu'aux commandeurs des grandes cités — tandis que les Asahaas, exclusivement des femmes, gardent un lien sacré avec l'eau : ce sont elles qui entretiennent fontaines, puits et canaux, et sans leur serment, nul bateau ne navigue sur le Siirh.",
-        "Au sommet, les Enkihurus : une noblesse si étroite qu'elle ne compte, en pratique, que la famille royale et ses lignées. Seule la reine peut y faire entrer quiconque — ou en juger un membre. Le reste, elle l'ignore superbement, tête nue, entourée d'esclaves aux parasols.",
+        "Les traditions babelites, ou plutôt arkadiennes, ont modelé une société où chacun possède une place en fonction de son rôle et de sa valeur. Cette place lui donne des droits et lui impose des devoirs. La grande majorité des habitants de Babel est constituée de simples citoyens, ou Enuru en babelite, des hommes libres dotés de droits fondamentaux.",
+        "Les Sabahuls (les faiseurs) rassemblent des groupes organisés autour de savoir-faire particuliers. Architectes, ingénieurs et urbanistes forment le gros des effectifs, mais par défaut, les érudits et les lettrés sont aussi des Sabahuls.",
+      ],
+    },
+    {
+      id: "society-2",
+      mood: "stone",
+      kind: "visual-split",
+      motif: "panel-left",
+      accentWord: "place",
+      watermark: "CASTES",
+      image: "society",
+      imageSide: "right",
+      paragraphs: [
+        "Les guerriers, depuis les simples gardes jusqu'aux soldats de l'armée royale, forment la caste des Ahabas. Les rangs des Asahaas (les Mères) sont exclusivement composés de femmes, dont le rôle est à la fois profane et sacré, et sont toutes liées, directement ou symboliquement, à l'eau.",
+        "Enfin, la noblesse arkadienne, les Enkihurus, est assez réduite, car elle ne compte normalement que la famille royale sur le trône et les représentants des lignées matrilinéaires. La reine peut anoblir toute personne de son choix. Ils sont les seuls à aller tête nue et partiellement dénudés, en permanence entourés d'esclaves porteurs de parasols et d'éventails.",
       ],
     },
     {
@@ -109,9 +147,9 @@ export const babelExperience: CountryExperience = {
       watermark: "MARGES",
       imageSide: "left",
       paragraphs: [
-        "Trois catégories d'individus vivent en marge du système des castes — et aucune n'y trouve grand réconfort. La première, la plus redoutée, rassemble les prêtres du Soleil Noir : eux seuls échappent entièrement à la justice ordinaire, et n'ont de comptes à rendre qu'à la couronne elle-même — encore la souveraine préfère-t-elle, le plus souvent, laisser l'archiprêtre trancher.",
-        "La seconde regroupe les esclaves. Leur statut est définitif, gravé au fer rouge sur leur visage. Babel en est demandeuse — pour le royaume comme pour le commerce — et les marchands d'esclaves guettent la moindre rumeur de guerre, sachant qu'une campagne victorieuse leur apporterait son lot de captifs.",
-        "La troisième, enfin, ce sont les derniers prêtres des anciens dieux, déclassés depuis la conversion de la reine. Certains ont renié leur foi et rejoint les Enuru ; d'autres ont pris les armes chez les Ahabas pour prouver leur loyauté. Les plus obstinés n'ont eu droit qu'à l'exil — ou pire.",
+        "On compte trois catégories très différentes d'individus placés en marge du système des castes. La première et la plus influente rassemble les prêtres du Soleil Noir, intouchables et à l'abri des lois. Seule la reine peut lever la main sur eux, même si elle préfère généralement laisser l'archiprêtre régler les cas les plus litigieux.",
+        "Les esclaves sont également des hors-caste et leur statut est définitif, marqués au fer rouge sur le visage. Babel est très demandeuse d'esclaves et les marchands sont à l'affût, car si la reine Taerhonis se préparait à la guerre, ses conquêtes promettraient bien des captifs.",
+        "Enfin, les derniers prêtres des anciens dieux de Babel ont été déclassés. Ceux qui ont renié leur foi sont devenus Enurus, et d'autres ont voulu montrer leur fidélité à la reine en rejoignant les rangs des Ahabas. Les plus récalcitrants ont préféré l'exil ou la mort.",
       ],
     },
     {
@@ -125,9 +163,9 @@ export const babelExperience: CountryExperience = {
       watermark: "AMUZAZEL",
       imageSide: "right",
       paragraphs: [
-        "Avant que l'Unique n'impose sa loi, les prostituées sacrées d'Amura constituaient à elles seules toute une caste, à qui l'on prêtait un don peu ordinaire : celui d'entrevoir l'avenir au comble du plaisir.",
-        "Lorsque la reine se convertit au Soleil Noir, elle ordonna la dissolution pure et simple de la caste. La langue tranchée, les lèvres cousues, le fer rouge sur le visage — les Filles d'Amura furent chassées de leur temple, le seul quartier sacré de Sabaah qui n'avait jamais désempli.",
-        "Certains y voient un calcul politique, une preuve de fidélité offerte au nouveau dieu. Une minorité tenace raconte tout autre chose : que Taerhonis n'a pas agi par foi, mais par peur, car plus d'une Amuzazel jurait, pendant l'extase, qu'elle causerait la perte du royaume.",
+        "Depuis la disparition des anciens dieux, les prostituées sacrées d'Amura, la déesse des lunes, formaient une caste à part entière. On prêtait à ces femmes des capacités oraculaires : celui ou celle qui parvenait à faire atteindre l'orgasme à une Fille d'Amura se voyait révéler des bribes du futur entre deux cris de plaisir.",
+        "Lorsque la reine Taerhonis se convertit au Culte du Soleil Noir, elle ordonna la dissolution de la caste amuzazel. Les Filles d'Amura eurent la langue coupée, les lèvres cousues et le fer rouge fut apposé sur leur visage et leur sexe, puis le Culte les expulsa du quartier sacré.",
+        "Les rumeurs n'ont pas manqué sur les raisons de cette atrocité : un calcul politique, une preuve de fidélité ou l'influence de l'archiprêtre. Mais d'aucuns murmurent qu'en réalité, Taerhonis a surtout agi par peur, car durant leurs jouissances, plusieurs Amuzazels auraient annoncé qu'elle causerait la perte du royaume.",
       ],
     },
     {
@@ -142,14 +180,14 @@ export const babelExperience: CountryExperience = {
       image: "goddess",
       imageSide: "left",
       paragraphs: [
-        "Il fut un temps où l'on ne comptait plus les dieux d'Arkadie — un pour chaque idée, chaque astre, chaque instinct, tous enfants d'Enu, la Lumière primordiale qui avait façonné le monde et raconté sa création jusque dans ses moindres détails.",
-        "Puis, un jour que nul ne sut jamais dater avec certitude, Enu réunit ses enfants et les mena tous ensemble dans le royaume souterrain, pour partager le repas de Shemaarih, la déesse de la mort.",
-        "Puis le ciel s'éteignit d'un coup — et aucun des enfants d'Enu ne franchit plus jamais les portes du monde des vivants.",
-        "Privés de leurs divinités, les Arkadiens continuèrent pourtant de les honorer, portés par une prophétie venue du levant qui promettait leur retour. Des générations entières prièrent sans relâche — et le ciel, obstinément, resta muet.",
+        "Autrefois, le peuple arkadien vénérait un nombre incroyable de dieux qui représentaient toutes les facettes du monde. Tous étaient les enfants d'Enu, la Lumière primordiale, le dieu créateur suprême.",
+        "Puis, un jour, Enu rassembla les autres dieux et ils se rendirent ensemble dans le monde souterrain, pour partager le repas de Shemaarih.",
+        "Et le soleil devint noir, et les dieux ne revinrent pas.",
+        "Privés de dieux, les Arkadiens continuèrent cependant à les honorer, espérant que leur foi permettrait un jour aux dieux de franchir à nouveau les portes du royaume des morts. Et ils prièrent, et ils attendirent, mais les dieux ne revenaient pas.",
       ],
     },
     {
-      id: "nashee",
+      id: "nashee-1",
       mood: "night",
       kind: "reading-quiet",
       motif: "panel-reading",
@@ -159,10 +197,21 @@ export const babelExperience: CountryExperience = {
       watermark: "NASHEE",
       imageSide: "left",
       paragraphs: [
-        "Nashee ne devait sa mort qu'à la cruauté de Setuh le Serpent, l'un des dieux vengeurs nés de la colère d'Enu — une morsure, et une jeune mortelle réputée pour sa bonté s'éteignit dans des souffrances si vives que tout le panthéon en fut bouleversé. Tout le panthéon, sauf Enu lui-même, prisonnier de ses propres lois.",
-        "Alors le premier des dieux descendit en personne dans le royaume souterrain, pour supplier Shemaarih de lui rendre la mortelle. La déesse de la mort accepta — à condition qu'un jour, toute la famille d'Enu vienne banqueter à ses côtés.",
-        "Ramenée à la vie, Nashee comprit ce qu'aucune âme n'avait compris avant elle : le poids que portait le créateur du monde. Touché par sa compassion, Enu en fit une déesse à part entière — la dernière qu'il créa jamais.",
-        "Après la disparition de tous les autres, c'est elle, dépouillée de sa propre divinité mais pas de sa compassion, qui passa une année entière à consoler les hommes dans les jardins de Sabaah, à leur donner des lois et un peu de confiance. Puis elle s'éteignit à son tour — et de ses derniers instants, on ne sait, aujourd'hui encore, presque rien.",
+        "Setuh le Perfide mordit une jeune et vertueuse mortelle, Nashee. Son agonie terrible émut jusqu'aux dieux, mais Enu ne pouvait revenir sur ses propres édits et l'âme de Nashee s'en alla dans le royaume des morts.",
+        "Le premier dieu descendit alors dans le monde souterrain pour demander à Shemaarih de lui rendre Nashee. La déesse de la mort accepta, à condition que toute sa famille vienne un jour banqueter à ses côtés.",
+      ],
+    },
+    {
+      id: "nashee-2",
+      mood: "night",
+      kind: "reading-quiet",
+      motif: "panel-reading",
+      accentWord: "Nashee",
+      watermark: "NASHEE",
+      imageSide: "left",
+      paragraphs: [
+        "Revenue à la vie, Nashee demanda à Enu d'expliquer sa volonté et fut la première âme à découvrir les fardeaux que le créateur portait. Il l'adopta et fit d'elle une déesse à part entière, miséricordieuse et compatissante.",
+        "Les portes du royaume des morts s'étaient fermées devant elle et sa divinité lui avait été retirée. Dans les jardins de Sabaah, Nashee passa une année à rendre l'espoir aux hommes, avant de s'éteindre. D'étranges histoires, gardées secrètes, racontent ses derniers instants.",
       ],
     },
     {
@@ -176,7 +225,7 @@ export const babelExperience: CountryExperience = {
       watermark: "",
       imageSide: "right",
       paragraphs: [
-        "Le silence dura des siècles — jusqu'à ce qu'une rumeur venue de l'est se mette à courir plus vite que les caravanes. Un dieu nouveau, disait-on, un dieu unique, né des cendres du soleil éteint, promettait de balayer tous les autres dieux, ceux d'hier comme ceux qu'on n'avait jamais adorés.",
+        "Alors, depuis l'orient d'où était venue la Prophétie de l'Oracle, un nouveau dieu se fit connaître. Ses prêtres le disaient né du Soleil Noir, Dieu Unique et parfait, destiné à remplacer tous les autres dont le temps était révolu.",
       ],
     },
     {
@@ -190,13 +239,13 @@ export const babelExperience: CountryExperience = {
       watermark: "SIIDES",
       imageSide: "right",
       paragraphs: [
-        "Le nouveau dieu ne s'imposa pas par la force, du moins pas d'abord. Il s'imposa par les fleurs : les Siides, sombres et sacrées, qui se mirent à pousser dans les jardins suspendus de Sabaah sans que personne ne se souvienne les y avoir semées.",
-        "En quelques mois à peine, elles gagnèrent le reste de la cité, puis les villages côtiers du Fakhar. La reine y vit un signe — ou choisit d'y voir un signe — et déclara l'Unique dieu tutélaire de Babel.",
-        "Au cœur de l'ancien quartier sacré, entre les ziggourats abandonnées, quelque chose grandit : une colonne de pierre noire, dont la construction dévore la santé des ouvriers et des esclaves qui l'élèvent. Nul ne sait ce qu'elle abritera. Tous, pourtant, s'accordent à dire qu'elle compte.",
+        "Les Babelites virent pousser les fleurs noires, les Siides de l'Unique, dans les jardins de Sabaah, et la reine le déclara Dieu de Babel.",
+        "En l'espace de quelques mois, on a commencé à en voir jusque dans les villages côtiers du Fakhar. Tout comme elle, ils se prosternèrent devant leur nouveau Dieu.",
+        "Enfin, au cœur de l'ancien quartier sacré, une tour de pierre sombre commence à se dresser entre les ziggourats. Les fidèles déploient des efforts titanesques pour élever cette colonne sinistre au-dessus des toits, sacrifiant leur santé et celle des esclaves achetés en nombre sur les marchés.",
       ],
     },
     {
-      id: "sabaah",
+      id: "sabaah-1",
       mood: "water",
       kind: "visual-split",
       motif: "panel-left",
@@ -208,10 +257,23 @@ export const babelExperience: CountryExperience = {
       image: "sabaah",
       imageSide: "right",
       paragraphs: [
-        "On raconte que les fondations mêmes du Premier Niveau appartenaient jadis à une cité aujourd'hui disparue, engloutie par le temps bien avant que Sabaah n'existe — et à voir la blancheur de ses cent-vingt-neuf palais, on veut bien le croire. On la surnomme aussi « les Pierres Noires », pour ces pavés sombres qu'aucun grain de poussière n'est autorisé à ternir : des serviteurs les rincent avant l'aube, rien que pour le prestige que cela procure.",
-        "Au sommet des murailles s'étendent les jardins suspendus qui donnent son nom à la ville : des vergers, des massifs, et depuis peu, ces fleurs noires que plus personne n'ose arracher. Un Enkihuru grandit sans connaître le niveau du pavé : les jardins suffisent à le mener partout où il doit aller.",
-        "Autour de ce cœur privilégié s'étend le Second Niveau, bruyant et vivant, où se pressent marchés et artères pavées. Puis vient le Troisième, celui des soldats et des entrepôts de siège — et entre les deux, une zone que l'on préfère ne pas nommer trop fort.",
-        "On l'appelle la Ceinture : d'anciens faubourgs rasés lors du dernier grand siège, quatre cents ans plus tôt, et jamais reconstruits depuis. On les dit hantés. Ce qui est certain, c'est qu'un criminel s'y est taillé un royaume dans l'ombre — et qu'on le connaît sous un seul nom : le Roi de Sabaah.",
+        "Le cœur de la ville, le Premier Niveau, se dresse au-dessus du reste, construit, si l'on en croit la légende, sur les ruines d'une cité oubliée. De somptueux palais de marbre blanc se blottissent autour de la demeure royale, et les routes sont toutes dallées de pierre noire et lavées chaque jour à grande eau.",
+        "Les murs d'enceinte des palais sont très épais et leurs sommets constituent les fameux jardins célestes de Babel. Les Enkihuru peuvent se rendre d'un palais à l'autre sans jamais quitter les jardins suspendus ni fouler les rues de pierres noires s'ils le désirent.",
+      ],
+    },
+    {
+      id: "sabaah-2",
+      mood: "water",
+      kind: "visual-split",
+      motif: "panel-left",
+      accentWord: "célestes",
+      watermark: "SABAAH",
+      emphasis: "overlap",
+      image: "sabaah",
+      imageSide: "right",
+      paragraphs: [
+        "Autour du Premier Niveau des Pierres Noires, le Second Niveau forme la majeure partie de Sabaah et accueille l'essentiel de sa population. Le Troisième Niveau est dédié à la protection de la cité et accueille pour l'essentiel ses soldats, ainsi que les entrepôts nécessaires pour tenir un siège.",
+        "Il existe une frange, une zone entre le Deuxième et le Troisième Niveau, appelée la ceinture. Ce sont les anciens faubourgs de la métropole, saccagés lors du dernier grand siège et réputés hantés, où le plus grand criminel du royaume, le Roi de Sabaah, tient sa cour de putains, de tire-bourses et de tueurs à gages.",
       ],
     },
     {
@@ -225,13 +287,13 @@ export const babelExperience: CountryExperience = {
       watermark: "AHABAS",
       imageSide: "left",
       paragraphs: [
-        "Deux couleurs suffisent, à Babel, pour distinguer un combattant d'un autre. Le bleu, couleur du fleuve, habille la Garde — chargée de la paix civile et de la protection des murs. Le rouge, couleur du sang versé, habille les Soldats, dont le rôle s'est réduit, avec le temps, à repousser les pillards aux frontières.",
-        "Deux corps plus récents sont venus compliquer cette hiérarchie. La Garde noire, d'abord — d'anciens légionnaires étrangers, offerts en cadeau à la couronne, et par l'intermédiaire desquels l'archiprêtre Quirinus entreprit, sans bruit, de convertir les Ahabas de la capitale à sa foi. Ce sont ces mêmes convertis qu'elle choisit, plus tard, pour réduire au silence la caste des Amuzazels.",
-        "La Garde pourpre, ensuite : peu nombreux mais entièrement dévoués à sa seule personne, et fondés — beaucoup s'accordent à le penser — moins par piété que pour rappeler à l'archiprêtre à qui appartient encore le trône.",
+        "Ce sont les couleurs des uniformes qui distinguent les attributions d'un combattant. Les Gardes portent le bleu, qui rappelle l'eau du fleuve, tandis que les Soldats arborent la couleur rouge, symbole de violence.",
+        "L'archiprêtre Quirinus se révéla être le véritable maître de centuries de légionnaires étrangers, désormais connus sous le nom de Garde noire. C'est à travers eux que débuta la conversion des Ahabas de Sabaah, et Taerhonis lança aussi la Garde noire sur les Amuzazels.",
+        "Dans le même temps, la jeune reine proclama la naissance d'un autre corps militaire, à son service exclusif : la Garde pourpre. Leur création semble surtout destinée à rappeler à Quirinus que Taerhonis règne seule sur Babel, sous le regard de l'Unique.",
       ],
     },
     {
-      id: "khep",
+      id: "khep1",
       mood: "blood",
       kind: "visual-split",
       motif: "panel-right",
@@ -242,10 +304,22 @@ export const babelExperience: CountryExperience = {
       image: "warrior",
       imageSide: "left",
       paragraphs: [
-        "Cela fait onze ans que le commandeur Khep tient Uruk, la cité qui garde le Siirh face aux armées de Saeth-la-maudite. Soldat aguerri, meneur d'hommes autant que tacticien, il doit à son franc-parler autant d'admiration que d'ennemis parmi les Ahabas de rang noble.",
-        "Personne, à la cour, ne sait qu'il est le fils d'une prostituée sacrée d'Amura — comme tous les enfants nés des étreintes des Amuzazels, il fut confié à une autre caste sans jamais apprendre le nom de sa mère. Quand la reine ordonna leur déchéance, quelque chose, en lui, se brisa net.",
-        "Il a purgé sa cité du Culte du Soleil Noir en quelques semaines à peine, renié son allégeance, proclamé Uruk indépendante — et il reste, aujourd'hui, la seule figure de résistance que le royaume connaisse. Un rôle qu'il n'a jamais désiré, mais qu'il tient, faute de quelqu'un d'autre pour le tenir.",
-        "Sur Taerhonis elle-même, il refuse de trancher. Il l'a rencontrée deux fois seulement. Une chose, pourtant, ne fait aucun doute pour lui : c'est sur son ordre que les Amuzazels ont payé le prix de sa conversion — et peut-être, sans qu'elle le sache jamais, sa propre mère avec elles.",
+        "La cité fortifiée d'Uruk est essentielle à la sécurité du royaume, car elle protège le Siirh contre les armées de Saeth-la-maudite. Le commandeur Khep mène la cité avec un soin particulier depuis onze ans. Soldat expérimenté et tacticien exceptionnel, son franc-parler lui a malheureusement attiré nombre d'ennemis parmi les Ahabas ayant statut d'Ulthul.",
+        "Or, Khep était lui-même le fils d'une des prostituées sacrées, confié à une autre caste sans jamais apprendre le nom de sa mère. Lorsque la reine ordonna la déchéance des Amuzazels, Khep fut scandalisé.",
+      ],
+    },
+    {
+      id: "khep-2",
+      mood: "blood",
+      kind: "visual-split",
+      motif: "panel-right",
+      accentWord: "insoumise",
+      watermark: "URUK",
+      image: "warrior",
+      imageSide: "left",
+      paragraphs: [
+        "Khep et ses subordonnés les plus loyaux menèrent alors une purge sanglante et rapide du Culte à Uruk. Le trône a été pris de court lorsque Khep a renié son allégeance et proclamé l'indépendance d'Uruk, devenant la figure de proue de la résistance.",
+        "Il est en revanche très indécis en ce qui concerne la reine Taerhonis, qu'il n'a rencontrée qu'à deux reprises. Mais il est incontestable que Taerhonis a lâché la Garde noire sur les Amuzazels, et peut-être provoqué la mutilation ou la mort de sa propre mère.",
       ],
     },
     {
@@ -258,7 +332,7 @@ export const babelExperience: CountryExperience = {
       accentWord: "Sabaah",
       watermark: "ÉQUILIBRE",
       subtitle:
-        "Le royaume se réarme en silence. Les intentions de la reine ne font plus guère de doute — reste à savoir sur quel voisin elle les tournera en premier.",
+        "Babel n'a pas encore mobilisé ses armées, mais ses intentions sont évidentes concernant ses voisins. La jeune reine Taerhonis regarde à nouveau les frontières de son royaume, mais la teneur exacte de ses aspirations reste secrète.",
       image: "babel",
       imageSide: "center",
     },
