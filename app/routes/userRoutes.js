@@ -628,6 +628,18 @@ function safeWriteToCharClient(client, data) {
   }
 }
 
+// ─── SSE des Groupes ───────────────────────────────────────────────
+const groupeClients = new Set();
+
+function safeWriteToGroupeClient(client, data) {
+  try {
+    client.res.write(data);
+  } catch (e) {
+    clearInterval(client.heartbeat);
+    groupeClients.delete(client);
+  }
+}
+
 // ─── 2. Nouvelle route pour s'abonner au flux des personnages ─────────
 /**
  * @route GET /stream/characters
@@ -1006,6 +1018,83 @@ router.get('/Favorite/Character/get/:userId', async (req, res) => {
   }
 });
 
+/**
+ * @route GET /stream/groupe/:id
+ * @description SSE stream for real-time Groupe updates.
+ */
+router.get('/stream/groupe/:id', async (req, res) => {
+  const id_User = req.session.userId;
+
+  if (!id_User) {
+    return res.status(401).send('Unauthorized');
+  }
+
+  try {
+    const groupeId = parseInt(req.params.id, 10);
+
+    if (isNaN(groupeId)) {
+      return res.status(400).send('Invalid group ID');
+    }
+
+    const groupe = await prisma.groupe.findUnique({
+      where: { id: groupeId }
+    });
+
+    if (!groupe) {
+      return res.status(404).send('Groupe not found');
+    }
+
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no'
+    });
+
+    if (typeof res.flushHeaders === 'function') {
+      res.flushHeaders();
+    }
+
+    res.write('retry: 5000\n\n');
+    res.write(': connected\n\n');
+
+    const client = {
+      res,
+      groupeId,
+      userId: id_User,
+      heartbeat: null
+    };
+
+    const cleanup = () => {
+      if (client.heartbeat) {
+        clearInterval(client.heartbeat);
+      }
+
+      groupeClients.delete(client);
+    };
+
+    client.heartbeat = setInterval(() => {
+      safeWriteToGroupeClient(client, ': ping\n\n');
+    }, 10000);
+
+    groupeClients.add(client);
+
+    req.on('close', cleanup);
+    req.on('aborted', cleanup);
+    res.on('error', cleanup);
+
+  } catch (error) {
+    console.error('SSE Groupe error:', error);
+
+    if (!res.headersSent) {
+      return res.status(500).json({
+        error: 'Internal server error'
+      });
+    }
+
+    res.end();
+  }
+});
 
 /**
  * @route GET /Conversation/new/
@@ -1471,56 +1560,107 @@ router.post('/Groupe', async (req, res) => {
 
 /**
  * @route GET /Groupe/:id
- * @description Retrieves a specific "Groupe" configuration entity using its database ID.
- * Features:
- * - Parses `req.params.id`.
- * - Locates via Prisma `findUnique`.
- * - Replies with JSON object representing group stats.
- * 
- * Wait for obsolete code confirmation: Once again, no auth check. MORE IMPORTANTLY: The exact same route function `router.get('/Groupe/:id', ...)` was duplicated below. Please confirm deleting the duplicate.
+ * @description Retrieves a specific Groupe by its database ID.
  */
 router.get('/Groupe/:id', async (req, res) => {
   try {
-    const groupe = await prisma.groupe.findUnique({
-      where: { id: parseInt(req.params.id) }
-    });
-    res.json(groupe);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+    const groupeId = parseInt(req.params.id, 10);
 
-// [!] DUPLICATE ROUTE DETECTED. Please confirm if I can delete this second /Groupe/:id block entirely.
-router.get('/Groupe/:id', async (req, res) => {
-  try {
+    if (isNaN(groupeId)) {
+      return res.status(400).json({
+        error: 'Invalid group ID'
+      });
+    }
+
     const groupe = await prisma.groupe.findUnique({
-      where: { id: parseInt(req.params.id) }
+      where: {
+        id: groupeId
+      }
     });
-    res.json(groupe);
+
+    if (!groupe) {
+      return res.status(404).json({
+        error: 'Groupe not found'
+      });
+    }
+
+    return res.json(groupe);
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('GET /Groupe/:id error:', error);
+
+    return res.status(500).json({
+      error: 'Internal server error'
+    });
   }
 });
 
 /**
  * @route PUT /Groupe/:id
- * @description Modifies existing attributes of a group.
- * Features:
- * - Identifies target `id` by parsing the URL parameter.
- * - Extracts updated properties from JSON `req.body` directly.
- * - Merges target entity fields in Prisma with `update`.
- * 
- * Wait for obsolete code confirmation: Like POST/Groupe, missing authentication and ownership validation allows ANY user (or unauthenticated request) to rename or modify the stats of ANY existing group!
+ * @description Updates the group's dice reserve and broadcasts the change via SSE.
  */
 router.put('/Groupe/:id', async (req, res) => {
   try {
-    const updated = await prisma.groupe.update({
-      where: { id: parseInt(req.params.id) },
-      data: req.body
+    const groupeId = parseInt(req.params.id, 10);
+    const { reserveDes } = req.body;
+
+    if (isNaN(groupeId)) {
+      return res.status(400).json({
+        error: 'Invalid group ID'
+      });
+    }
+
+    if (typeof reserveDes !== 'number') {
+      return res.status(400).json({
+        error: 'reserveDes must be a number'
+      });
+    }
+
+    const groupe = await prisma.groupe.findUnique({
+      where: {
+        id: groupeId
+      }
     });
-    res.json(updated);
-  } catch (err) {
-    res.status(500).json({error: err.message});
+
+    if (!groupe) {
+      return res.status(404).json({
+        error: 'Groupe not found'
+      });
+    }
+
+    const updatedGroupe = await prisma.groupe.update({
+      where: {
+        id: groupeId
+      },
+      data: {
+        reserveDes: reserveDes
+      }
+    });
+
+    // ─── SSE : prévenir tous les clients du même groupe ───────────
+
+    const payload = JSON.stringify({
+      groupeId: updatedGroupe.id,
+      reserveDes: updatedGroupe.reserveDes
+    });
+
+    for (const client of Array.from(groupeClients)) {
+      if (client.groupeId === updatedGroupe.id) {
+        safeWriteToGroupeClient(
+          client,
+          `data: ${payload}\n\n`
+        );
+      }
+    }
+
+    return res.json(updatedGroupe);
+
+  } catch (error) {
+    console.error('PUT /Groupe/:id error:', error);
+
+    return res.status(500).json({
+      error: 'Internal server error'
+    });
   }
 });
 

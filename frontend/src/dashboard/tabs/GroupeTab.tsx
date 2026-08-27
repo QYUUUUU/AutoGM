@@ -194,13 +194,20 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
   };
 
   const modifierDes = async (action: 'add' | 'remove') => {
+    const previousReserve = reserveDes;
     let nextReserve = reserveDes;
-    
+
     if (action === 'add') {
-      if (reserveDes >= maxDes) return alert("La réserve est au maximum !");
+      if (reserveDes >= maxDes) {
+        return alert("La réserve est au maximum !");
+      }
+
       nextReserve++;
     } else {
-      if (reserveDes <= 0) return alert("La réserve est vide !");
+      if (reserveDes <= 0) {
+        return alert("La réserve est vide !");
+      }
+
       nextReserve--;
     }
 
@@ -210,13 +217,28 @@ export default function GroupeTab({ character, allGroupes = [] }: GroupeTabProps
     try {
       const res = await fetch(`/Groupe/${groupe.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reserveDes: nextReserve })
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          reserveDes: nextReserve
+        })
       });
-      if (!res.ok) throw new Error("Erreur serveur lors de la mise à jour");
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("PUT /Groupe error:", res.status, errorText);
+
+        throw new Error(
+          `Erreur serveur (${res.status}): ${errorText}`
+        );
+      }
+
     } catch (e: any) {
       alert("Erreur de MAJ: " + e.message);
-      setReserveDes(reserveDes); // Rollback
+
+      // Rollback
+      setReserveDes(previousReserve);
     }
   };
 
