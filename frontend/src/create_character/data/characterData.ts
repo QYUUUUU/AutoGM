@@ -101,85 +101,85 @@ export const signData: Record<string, any> = {
 
 export const originData: Record<string, any> = {
     Aon: {
-        banner: "/images/banners/banneraon.png",
+        banner: "/images/banners/banneraon.jpg",
         title: "Aon",
         text: `Aux yeux du reste du monde, les insulaires d’Aon sont des gens taiseux, vêtus de couleurs ternes, qui vivent dans un archipel pluvieux. Ils forment un peuple sévère, quittant rarement ses îles natales, si ce n’est pour se livrer à la piraterie. Les charpentiers qui construisent les bateaux d’Aon sont renommés, mais plus encore les maîtres-forgerons, ainsi que les Hommes d’Acier, seuls à connaître le secret pour obtenir l’Acier Véritable, métal incomparable dans lequel sont forgées des épées rarissimes.<br>S’ils ne s’opposent pas à ce que les étrangers accostent dans leurs ports, les gens d’Aon ne se montrent guère hospitaliers. Qui plus est, la rigueur du climat, le caractère farouche des autochtones et le peu d’importance qu’ils attachent à la cuisine ne contribuent pas à rendre leurs auberges attrayantes. Néanmoins, ceux qui parviennent à se lier aux natifs d’Aon découvrent rapidement des gens attentifs, dotés d’une ironie tranquille et d’une parole on ne peut plus fiable.`,
         stats: "<b>Champ de compétences de prédilection :</b> les Terres Sauvages<br><b>Compétence de Débutant bonus :</b> Voyage ou Lunes<br><br><b>Avantage – Art de la forge :</b> le personnage bénéficie d’une relance gratuite sur ses jets d’Armurerie et cette compétence n’est pas considérée comme Rare pour les gens d’Aon.<br><br><b>Avantage – Marin :</b> bonus de +1D sur tous les jets liés à la navigation (y compris pour s’orienter).<br><br><b>Désavantage – Bourru :</b> d’un naturel rugueux, le personnage subit un malus de -1D sur tous ses jets de Relationnel avec les autres peuples.<br><br><b>Désavantage – Marin d’eau douce :</b> le personnage est malade dès qu’il est sur une embarcation. Il doit réussir un jet de Résistance Difficile (7) ou vomir tripes et boyaux, subissant une Blessure Légère et perdant 2D de Réserve au lieu de 1D à cause de cette Blessure."
     },
     Avhorae: {
-        banner: "/images/banners/banneravhorae.png",
+        banner: "/images/banners/banneravhorae.jpg",
         title: "Avhorae",
         text: "Avhorae (prononcé « Avhoré ») a toujours été une nation paradoxale : riche et fruste, civilisée et violente, moderne et superstitieuse. Ses villes de belle taille sont prospères et abritent nombre de centres d’érudition et de marchés importants, alors que ses paysans illettrés vivent pauvrement, en bordure de forêts impénétrables, sous la menace de bêtes sauvages.",
         stats: "<b>Champ de compétences de prédilection :</b> l’Arme<br><b>Compétence de Débutant bonus :</b> Corps à corps ou Mêlée<br><br><b>Avantage – Combattant :</b> possède la spécialité Poings (Corps à corps) ou Épée (Mêlée). Il doit posséder la compétence liée au niveau Débutant et cette spécialité ne compte pas comme un Handicap sur le jet d’Expérience.<br><br><b>Avantage – D’un sang ancien :</b> le sang des anciennes druidesses coule dans les veines du personnage. Les compétences Lunes et Rituels ne sont pas considérées comme Rares pour lui.<br><br><b>Désavantage – Haine du Culte :</b> malus de -1D sur tous les jets de Relationnel avec les membres du Culte et doit dépenser 1D de Sang-Froid pour ne pas attaquer immédiatement s’il est provoqué par un serviteur du Soleil Noir.<br><br><b>Désavantage – Marqué par le Sacrilège :</b> la lignée a été « infectée » par l’un des Sept Sacrilèges."
     },
     Babel: {
-        banner: "/images/banners/bannerbabel.png",
+        banner: "/images/banners/bannerbabel.jpg",
         title: "Babel",
         text: "Babel, surnommé le Centre du Monde, est un royaume d’une richesse et d’une influence inégalées, dont la capitale, Sabaah-aux-jardins-célestes, éblouit par sa splendeur. Au cœur de l'Arkadie, région historique et prospère, la culture raffinée de Babel rayonne.",
         stats: "<b>Champ de compétences de prédilection :</b> l’Homme<br><b>Compétence de Débutant bonus :</b> Civilisations ou Soins<br><br><b>Avantage – Grâce du Siirh :</b> grâce et beauté exceptionnelles. Sur un jet lié à Arts (chant, danse) ou Relationnel (charme), bénéficie d’un bonus de +1D.<br><br><b>Avantage – Issu du peuple :</b> bonus de +1D sur les jets de Relationnel.<br><br><b>Avantage – Lien essentiel :</b> lié à l’Essence de l’Eau ou du Soleil (choix). La difficulté des jets d’Expérience pour acquérir les Faveurs de l'Essence choisie est abaissée de 1.<br><br><b>Désavantage – Haine du Culte :</b> malus de -1D sur les jets de Relationnel avec le Culte et doit dépenser 1D de Sang-Froid pour ne pas attaquer immédiatement si provoqué.<br><br><b>Désavantage – Lié au fleuve sacré :</b> porte un objet issu du Siirh. S’il le perd et qu’il est loin du Siirh, subit un malus de -1D sur tous ses jets sociaux et mentaux jusqu’à ce qu’il puisse le remplacer."
     },
     Fakhar: {
-        banner: "/images/banners/bannerkhalistan.png",
+        banner: "/images/banners/bannerkhalistan.jpg",
         title: "Fakhar",
         text: "Autrefois rival de Sabaah, le Fakhar fait aujourd'hui partie du Khalistan. C'est un pays de contrastes, soumis aux vents maritimes et désertiques, qui se distingue par ses cités richement décorées.",
         stats: "<b>Champ de compétences de prédilection :</b> l’Homme<br><b>Compétence de Débutant bonus :</b> Civilisations ou Relationnel<br><br><b>Avantage – Négociant né :</b> bonus de +1D sur tous les jets liés au commerce ou à la négociation.<br><br><b>Avantage – Optimisme :</b> une fois par jour, le personnage peut regagner 1D de Réserve au choix.<br><br><b>Désavantage – Apparences :</b> goût prononcé pour les beaux habits. S'il n'est pas présentable (sale, crotté), subit un malus de -1D sur ses jets sociaux.<br><br><b>Désavantage – Mépris de la violence :</b> la difficulté du jet de Réaction en état « offensif » passe à 6 au lieu de 5. Si l'adversaire n'est pas menaçant, il ne peut jamais être en état offensif (au mieux « actif »)."
     },
     Khashan: {
-        banner: "/images/banners/bannerkhalistan.png",
+        banner: "/images/banners/bannerkhalistan.jpg",
         title: "Khashan",
         text: "Le Khashan forme l'autre moitié du Khalistan. Contrairement au Fakhar coloré, le Khashan se distingue par son austérité silencieuse. Ses terres excelent dans la production de fer et d'acier, et ses habitants sont imprégnés par les mystères du désert.",
         stats: "<b>Champ de compétences de prédilection :</b> l’Inconnu<br><b>Compétence de Débutant bonus :</b> Lunes ou Mythes (non Rares pour Khashan).<br><br><b>Avantage – Maître de son destin :</b> une fois par jour, peut utiliser une relance gratuite sur le jet de son choix.<br><br><b>Avantage – Maître des arts :</b> bonus de +1D sur tous les jets liés à la poésie et aux arts.<br><br><b>Avantage – Science céleste :</b> spécialité gratuite parmi : Astrologie (Lunes), Légendes (Mythes) ou Anciens Dieux (Panthéons).<br><br><b>Désavantage – Marqué par le destin :</b> une fois par jour, l’Oracle peut faire relancer un dé de son choix au joueur. Si la relance est une réussite et que le personnage est un Élu, il gagne 1D d’Humanité.<br><br><b>Désavantage – Réservé :</b> malus de -1D sur tous les jets de Relationnel avec les non-Khashani.<br><br><b>Désavantage – Voilé :</b> masque son visage en toutes circonstances. Se dévoiler coûte 2D de Sang-Froid. Parler fort demande un jet de Volonté Difficile (7)."
     },
     "Empire du Soleil Noir": {
-        banner: "/images/banners/bannercultedusoleil.png",
+        banner: "/images/banners/bannercultedusoleil.jpg",
         title: "Empire du Soleil Noir",
         text: "Dominé par la puissante cité de Lux, l'Empire est une théocratie militaire née d'un coup d'État sanglant. Le Culte du Soleil Noir y impose sa loi absolue.",
         stats: "<b>Champ de compétences de prédilection :</b> l’Homme<br><b>Compétence de Débutant bonus :</b> Cité ou Relationnel<br><br><b>Avantage – Entraînement militaire :</b> spécialité gratuite dans une compétence de l’Arme (niveau Débutant requis).<br><br><b>Avantage – Peuple du Culte :</b> bonus de +1D sur tous les jets liés à la connaissance du Culte ou de ses serviteurs.<br><br><b>Avantage – Esclave des mines :</b> relance gratuite sur tous les jets de Résistance.<br><br><b>Désavantage – Crainte du Culte :</b> malus de -1D sur les jets sociaux face à un membre du Culte de statut supérieur.<br><br><b>Désavantage – Marque du Soleil Noir :</b> tache de naissance noire qui inflige des douleurs (-1D global) durant 1d5 tours chaque fois que le joueur obtient deux « 10 » sur un jet."
     },
     Horde: {
-        banner: "/images/banners/bannerhorde.png",
+        banner: "/images/banners/bannerhorde.jpg",
         title: "Horde",
         text: "Le peuple katai vivait autrefois dans la cité de Khokhan. Aujourd'hui nomades exilés dans le Grand Au-Delà, ils forment la Horde. C'est un peuple de cavaliers fiers et redoutés.",
         stats: "<b>Champ de compétences de prédilection :</b> les Terres Sauvages<br><b>Compétence de Débutant bonus :</b> Monture ou Voyage<br><br><b>Avantage – Né sur un cheval :</b> spécialité Équitation (Monture) ou Campement (Voyage) gratuite.<br><br><b>Avantage – Terrifiante réputation :</b> bonus de +1D sur les jets d'intimidation contre les non-membres de la Horde.<br><br><b>Désavantage – Aura de la mort :</b> aura quasi surnaturelle. Malus de -1D en Relationnel (séduire, négocier, mentir) avec les gens extérieurs à la Horde.<br><br><b>Désavantage – Marginal :</b> malus de -1D sur les compétences Cité ou Civilisations.<br><br><b>Désavantage – Tribal :</b> s'il est sans allié à proximité, subit un malus de -1D sur tous ses jets mentaux et sociaux."
     },
     "Royaumes divisés": {
-        banner: "/images/banners/bannerroyaumedivises.png",
+        banner: "/images/banners/bannerroyaumedivises.jpg",
         title: "Royaumes Divisés",
         text: "Les Cetomagus partagent un héritage commun avec Avhorae mais vivent dans une instabilité constante. Divisés en clans et fédérations menés par les Teutater, ils sont marqués par une culture de survie.",
         stats: "<b>Champ de compétences de prédilection :</b> l’Outil<br><b>Compétence de Débutant bonus :</b> Armurerie ou Artisanat (non Rares).<br><br><b>Avantage – D’un sang glorieux :</b> relance gratuite sur les jets de Volonté pour résister à la manipulation ou donner des ordres.<br><br><b>Avantage – Manuel :</b> relance gratuite sur tout jet impliquant un travail manuel artisanal.<br><br><b>Avantage – Paranoïa positive :</b> bonus de +1D en Vigilance et considéré comme « actif » (au lieu de passif) lors d’un jet de Réaction.<br><br><b>Désavantage – Anxiété :</b> malus de -1D sur les jets mentaux et sociaux dès qu’une situation lui échappe ou que le chaos s’installe.<br><br><b>Désavantage – Corruption physique :</b> malus permanent (-1D ou perte de PV) dû à une malédiction physique (membre atrophié, sens déficient)."
     },
     Ool: {
-        banner: "/images/banners/bannerool.png",
+        banner: "/images/banners/bannerool.jpg",
         title: "Ool",
         text: "Terre des Maléfices, Ool abrite neuf cités dirigées par des Maîtres Sorciers masqués. On y pratique la Matsenga, une magie sombre.",
         stats: "<b>Champ de compétences de prédilection :</b> l’Inconnu<br><b>Compétence de Débutant bonus :</b> Mythes ou Rituels (Rituels est Rare I, Mythes n'est pas Rare).<br><br><b>Avantage – Inébranlable :</b> bonus de +1D pour résister à l’intimidation ou à la peur.<br><br><b>Avantage – Lien funeste :</b> difficulté d'Expérience réduite de 1 pour les Faveurs liées à la Mort.<br><br><b>Avantage – Terrifiante réputation :</b> bonus de +1D pour intimider ou effrayer ceux qui ne sont pas de Ool.<br><br><b>Désavantage – Hématophage :</b> doit consommer du sang ou de la viande crue chaque jour. Sinon, jet de Résistance ou Volonté (le plus bas) Difficile (7) pour ne pas régurgiter tout autre aliment.<br><br><b>Désavantage – Marqué par la mort :</b> apparence cadavérique (peau grise/froide). Malus possible de -1D en Relationnel. Ne peut pas utiliser l'Essence de la Vie ni posséder la sphère de Miséricorde."
     },
     Saeth: {
-        banner: "/images/banners/bannersaeth.png",
+        banner: "/images/banners/bannersaeth.jpg",
         title: "Saeth",
         text: "Surnommé le Pays des Cendres, Saeth est dominé par un grand volcan et la métropole verticale de Dhaar. Les Saethites vivent dans une hiérarchie de castes impitoyable.",
         stats: "<b>Champ de compétences de prédilection :</b> l’Outil<br><b>Compétence de Débutant bonus :</b> Artisanat ou Runes (non Rares).<br><br><b>Avantage – Caste inférieure (Adaman) :</b> spécialité gratuite en Adresse, Artisanat ou Discrétion.<br><br><b>Avantage – Détaché :</b> bonus de +1D et relance gratuite pour résister à la peur.<br><br><b>Désavantage – Accro :</b> dépendant d'une drogue locale. Malus de -1D sur tous les jets en cas de manque hebdomadaire.<br><br><b>Désavantage – Caste élevée (Uttaman) :</b> doit réussir un jet de Volonté Difficile (7) ou dépenser 1D de Sang-Froid pour ne pas perdre son calme face aux personnes jugées inférieures.<br><br><b>Désavantage – Insensible :</b> malus de -1D sur tous ses jets d’Empathie."
     },
     Tégée: {
-        banner: "/images/banners/bannertegee.png",
+        banner: "/images/banners/bannertegee.jpg",
         title: "Tégée",
         text: "Tégée, la cité-état de la philosophie et de la démocratie naissante, s'élève sur les plaines balayées par les vents. Fiers de leur indépendance et de leur culture intellectuelle...",
         stats: "<b>Champ de compétences de prédilection :</b> le Mental<br><b>Compétence de Débutant bonus :</b> Érudition ou Relationnel<br><br><b>Avantage – Éducation Supérieure :</b> spécialité gratuite dans n'importe quelle compétence de l'Homme ou du Mental.<br><br><b>Avantage – Débatteur né :</b> relance gratuite sur tous les jets de Persuasion.<br><br><b>Désavantage – Aristocrate :</b> malus de -1D sur les jets d'adaptation dans les Terres Sauvages.<br><br><b>Désavantage – Cynique :</b> jet de Volonté Difficile (7) pour ne pas blesser par arrogance un interlocuteur lors d'un désaccord."
     },
     Tuuhle: {
-        banner: "/images/banners/bannertuuhle.png",
+        banner: "/images/banners/bannertuuhle.jpg",
         title: "Tuuhle",
         text: "Surnommée l’Océan d’Arbres, Tuuhle est une jungle immense et inexplorée. Les tribus Tuuhls y vivent en équilibre fragile avec une nature toute-puissante.",
         stats: "<b>Champ de compétences de prédilection :</b> l’Animal<br><b>Compétence de Débutant bonus :</b> Pistage ou Territoire (Animalisme n'est pas Rare).<br><br><b>Avantage – Né de la Mère :</b> spécialité gratuite parmi : Animaux (Pistage), Forêt (Territoire), Plantes médicinales ou toxiques (Flore).<br><br><b>Avantage – Résistance aux intoxications :</b> diminue de 1 la Virulence des poisons et gagne +1D pour y résister.<br><br><b>Désavantage – Aversion pour le métal :</b> malus de -1D aux actions physiques/manuelles si utilisation d'équipement en métal (arme, bouclier, armure ; cumulable).<br><br><b>Désavantage – Esprit sauvage :</b> malus de -1D sur les jets sociaux et mentaux en ville.<br><br><b>Désavantage – Marginal :</b> malus de -1D sur les compétences Cité ou Civilisations.<br><br><b>Désavantage – Proie facile :</b> en zone trop exposée (plaines, déserts), subit un malus de -1D en Perception et Vigilance."
     },
     Vaelor: {
-        banner: "/images/banners/bannervaelor.png",
+        banner: "/images/banners/bannervaelor.jpg",
         title: "Vaelor",
         text: "Les Vaelkyrs adorent Varna, la Mère des Glaces. Forgés dans un glacier millénaire, ils forment un peuple froid et dur. Marqué par la stérilité et le Néant qui a ravagé leurs terres...",
         stats: "<b>Champ de compétences de prédilection :</b> l’Arme<br><b>Compétence de Débutant bonus :</b> Bouclier ou Mêlée (Bouclier n'est pas Rare).<br><br><b>Avantage – Armure des ancêtres :</b> bonus de +1D en Volonté contre la peur tant qu'il porte son armure ornée d'os.<br><br><b>Avantage – Emprunt du néant :</b> peut tenter un jet de Volonté Très Difficile (9) pour annuler un effet d'Essence (attaque/rituel). Un seul essai par repos complet.<br><br><b>Avantage – Résistance à l’alcool :</b> bonus de +1D en Résistance contre l'alcool et les drogues ingérées.<br><br><b>Désavantage – Impulsivité :</b> jet de Volonté Très Difficile (9) ou dépense d'1D de Sang-Froid pour ne pas attaquer immédiatement en cas de provocation.<br><br><b>Désavantage – Indiscipliné :</b> doit dépenser 1D d’Effort ou de Sang-Froid supplémentaire pour utiliser une capacité de Groupe."
     },
     Valdheim: {
-        banner: "/images/banners/bannervaldheim.png",
+        banner: "/images/banners/bannervaldheim.jpg",
         title: "Valdheim",
         text: "Descendants des exilés de Vaelor, les Valdhs sont un peuple pragmatique, aventureux et fier. Navigateurs audacieux et pillards occasionnels, ils sont connus pour leur sens de l'honneur ombrageux et leur rancune tenace.",
         stats: "<b>Champ de compétences de prédilection :</b> les Terres Sauvages<br><b>Compétence de Débutant bonus :</b> Athlétisme ou Vigilance<br><br><b>Avantage – Athlétique :</b> caractéristiques de Puissance et Résistance augmentées de 1 pour le mouvement et la charge.<br><br><b>Avantage – Résistance à l’alcool :</b> bonus de +1D en Résistance contre l'alcool et les drogues ingérées.<br><br><b>Désavantage – Affranchi :</b> s'il vit en marge du peuple, malus de -1D en Volonté et Empathie face aux autres Valdhs.<br><br><b>Désavantage – Puissance du riche :</b> malus de -1D en Volonté face aux personnes portant de nombreux bijoux.<br><br><b>Désavantage – Sens de l’honneur :</b> en cas d'affront, doit défier en duel à mort. Sinon, humilié (-1D social/mental) jusqu'à réparation. Peut dépenser 3D de Sang-Froid pour ignorer l'injure (malus temporaire)."

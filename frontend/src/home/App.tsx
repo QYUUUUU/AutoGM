@@ -50,28 +50,28 @@ const COUNTRIES = [
     subtitle: "Le Centre du Monde",
     lore: "Royaume d'une richesse et d'une influence inégalées, dont la culture rayonne en mêlant traditions anciennes et innovations.",
     badge: "Arkadie",
-    img: "/images/banners/bannerbabel.png",
+    img: "/images/banners/bannerbabel.jpg",
   },
   {
     name: "Lux",
     subtitle: "L'Empire du Soleil Noir",
     lore: "Née d'un coup d'État sanglant, l'Empire est le cœur d'une expansion impitoyable portée par ses redoutables légions impériales.",
     badge: "Lux",
-    img: "/images/banners/bannercultedusoleil.png",
+    img: "/images/banners/bannercultedusoleil.jpg",
   },
   {
     name: "Horde",
     subtitle: "Les Nomades Exilés",
     lore: "Peuple de cavaliers fiers et redoutés du Grand Au-Delà, dont l'aura est marquée par la rigueur impitoyable de la vie sauvage.",
     badge: "Grand Au-Delà",
-    img: "/images/banners/bannerhorde.png",
+    img: "/images/banners/bannerhorde.jpg",
   },
   {
     name: "Aon",
     subtitle: "Archipel Pluvieux",
     lore: "Insulaires taiseux et maîtres-forgerons, ils sont les seuls de ce monde à détenir le secret de l'Acier Véritable.",
     badge: "Îles d'Aon",
-    img: "/images/banners/banneraon.png",
+    img: "/images/banners/banneraon.jpg",
   },
 ];
 
@@ -79,19 +79,19 @@ const MAPS = [
   {
     title: "Carte de Saeth",
     description: "Les Terres Sauvages, telles que relevées par les cartographes d'Empyrion.",
-    img: "/images/maps/saeth.png",
+    img: "/images/maps/saeth.jpg",
     alt: "Carte de Saeth",
   },
   {
     title: "Le Centre du Monde (Babel)",
     description: "Cartographie détaillée de la région d'Arkadie et des jardins suspendus de Sabaah.",
-    img: "/images/maps/babel.png",
+    img: "/images/maps/babel.jpg",
     alt: "Carte de Babel",
   },
   {
     title: "L'Empire du Soleil Noir",
     description: "Relevé stratégique des territoires et de la cité de Lux, sous le contrôle des légions impériales.",
-    img: "/images/maps/soleilnoir.png",
+    img: "/images/maps/soleilnoir.jpg",
     alt: "Carte de l'Empire du Soleil Noir",
   },
 ];

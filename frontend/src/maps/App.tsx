@@ -4,14 +4,14 @@ import { SectionLabel, PageTitle } from "../shared/Typography";
 
 const MAPS = [
   { file: "aon", alt: "Aon" },
-  { file: "avhorae", alt: "avhorae" },
-  { file: "royaumesdivises", alt: "royaumesdivises" },
+  { file: "avhorae", alt: "Avhorae" },
+  { file: "royaumesdivises", alt: "royaumes divises" },
   { file: "fakhar", alt: "fakhar" },
   { file: "horde", alt: "horde" },
   { file: "khashan", alt: "khashan" },
   { file: "ool", alt: "ool" },
   { file: "saeth", alt: "saeth" },
-  { file: "soleilnoir", alt: "soleilnoir" },
+  { file: "soleilnoir", alt: "L'empire du soleil noir" },
   { file: "babel", alt: "babel" },
   { file: "tuuhle", alt: "tuuhle" },
   { file: "vaelor", alt: "vaelor" },
@@ -25,10 +25,7 @@ export default function App() {
   const selectedMap = MAPS.find((map) => map.file === lightboxMap);
 
   return (
-    // Added gods:pt-16 to offset the fixed header and changed to min-h-screen
-    <div className="gods:pt-16 gods:min-h-screen gods:bg-background gods:relative gods:z-10 gods:flex gods:flex-col">
-      
-      {/* Standardized max-w-7xl wrapper with responsive padding */}
+    <div className="gods:pt-16 gods:min-h-screen gods:bg-background gods:flex gods:flex-col">
       <main className="gods:flex-1 gods:w-full gods:max-w-7xl gods:mx-auto gods:px-6 gods:py-12 lg:gods:px-12 lg:gods:py-24">
         
         <header className="gods:mb-12">
@@ -46,7 +43,7 @@ export default function App() {
               aria-label={`Afficher la carte ${map.alt}`}
             >
               <img
-                src={`/images/maps/thumbnails/${map.file}_thumb.png`}
+                src={`/images/maps/thumbnails/${map.file}_thumb.jpg`}
                 alt={map.alt}
                 className="gods:block gods:w-full gods:h-full gods:object-cover gods:transition-transform gods:duration-500 gods:group-hover:scale-105"
               />
@@ -60,10 +57,8 @@ export default function App() {
           ))}
         </div>
 
-        {/* Lightbox Modal */}
         {selectedMap && (
           <div
-            // z-[200] ensures the modal passes ABOVE the header (which is at z-[100])
             className="gods:fixed gods:inset-0 gods:z-[200] gods:flex gods:items-center gods:justify-center gods:bg-black/95 gods:backdrop-blur-sm gods:p-6 gods:animate-in gods:fade-in gods:duration-300"
             role="dialog"
             aria-modal="true"
@@ -81,7 +76,7 @@ export default function App() {
             </button>
 
             <img
-              src={`/images/maps/${selectedMap.file}.png`}
+              src={`/images/maps/${selectedMap.file}.jpg`}
               alt={selectedMap.alt}
               className="gods:max-h-[90vh] gods:max-w-[95vw] gods:w-auto gods:h-auto gods:object-contain gods:rounded-md gods:shadow-2xl gods:animate-in gods:zoom-in-95 gods:duration-300"
               onClick={(event) => event.stopPropagation()}
